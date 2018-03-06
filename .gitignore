@@ -1,0 +1,15 @@
+.gradle/**
+.settings/**
+.project
+.classpath
+Torcherino_Client.launch
+Torcherino_Server.launch
+bin/**
+build/**
+eclipse/**
+gradle/**
+run/**
+gradle.properties
+gradlew
+gradlew.bat
+.gitattributes
