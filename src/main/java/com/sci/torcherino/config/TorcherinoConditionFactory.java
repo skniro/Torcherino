@@ -1,10 +1,7 @@
 package com.sci.torcherino.config;
 
 import java.util.function.BooleanSupplier;
-
 import com.google.gson.JsonObject;
-import com.sci.torcherino.Torcherino;
-
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -18,13 +15,13 @@ public class TorcherinoConditionFactory implements IConditionFactory
 		String key = JsonUtils.getString(json, "type");
 		
 		if (key.equals("torcherino:torcherino_overpowered")) {
-			return () -> Torcherino.overPoweredRecipe == value;
+			return () -> ConfigR.overPoweredRecipe == value;
 		}
 		else if (key.equals("torcherino:compressed_torcherino_enabled")) {
-			return () -> Torcherino.compressedTorcherino == value;
+			return () -> ConfigR.compressedTorcherino == value;
 		}
 		else if (key.equals("torcherino:double_compressed_torcherino_enabled")){
-			return () -> Torcherino.doubleCompressedTorcherino == value;
+			return () -> ConfigR.doubleCompressedTorcherino == value;
 		}
 		return () -> false;
 	}

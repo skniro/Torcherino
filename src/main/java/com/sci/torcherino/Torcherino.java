@@ -1,5 +1,6 @@
 package com.sci.torcherino;
 
+import com.sci.torcherino.config.ConfigR;
 import com.sci.torcherino.init.ModBlocks;
 import com.sci.torcherino.proxy.CommonProxy;
 import com.sci.torcherino.tile.TileCompressedTorcherino;
@@ -35,15 +36,6 @@ public final class Torcherino {
 
     @SidedProxy(clientSide = "com.sci.torcherino.proxy.ClientProxy", serverSide = "com.sci.torcherino.proxy.ServerProxy")
     public static CommonProxy proxy;
-
-    public static boolean logPlacement;
-    public static boolean overPoweredRecipe;
-    public static boolean compressedTorcherino;
-    public static boolean doubleCompressedTorcherino;
-
-    private String[] blacklistedBlocks;
-    private String[] blacklistedTiles;
-
     public static Logger logger;
 
     @Mod.EventHandler
@@ -56,41 +48,22 @@ public final class Torcherino {
             folder.mkdir();
 
         final Configuration cfg = new Configuration(new File(folder, "Torcherino.cfg"));
-        try {
-            cfg.load();
-
-            Torcherino.logPlacement = cfg.getBoolean("logPlacement", "general", false, "(For Server Owners) Is it logged when someone places a Torcherino?");
-            Torcherino.overPoweredRecipe = cfg.getBoolean("overPoweredRecipe", "general", true, "Is the recipe for Torcherino extremely OP?");
-            Torcherino.compressedTorcherino = cfg.getBoolean("compressedTorcherino", "general", false, "Is the recipe for the Compressed Torcherino enabled?");
-            Torcherino.doubleCompressedTorcherino = cfg.getBoolean("doubleCompressedTorcherino", "general", false, "Is the recipe for the Double Compressed Torcherino enabled? Only takes effect if Compressed Torcherinos are enabled.");
-
-            this.blacklistedBlocks = cfg.getStringList("blacklistedBlocks", "blacklist", new String[]{}, "modid:unlocalized");
-            this.blacklistedTiles = cfg.getStringList("blacklistedTiles", "blacklist", new String[]{}, "Fully qualified class name");
-        } finally {
-            if (cfg.hasChanged())
-                cfg.save();
-        }
-
+        ConfigR.init(cfg);
         ModBlocks.init();
-
         Torcherino.proxy.preInit();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
         TorcherinoRegistry.blacklistBlock(Blocks.AIR);
-
         TorcherinoRegistry.blacklistBlock(ModBlocks.torcherino);
         TorcherinoRegistry.blacklistBlock(ModBlocks.compressedTorcherino);
         TorcherinoRegistry.blacklistBlock(ModBlocks.doubleCompressedTorcherino);
-
         TorcherinoRegistry.blacklistTile(TileTorcherino.class);
         TorcherinoRegistry.blacklistTile(TileCompressedTorcherino.class);
         TorcherinoRegistry.blacklistTile(TileDoubleCompressedTorcherino.class);
-
         TorcherinoRegistry.blacklistBlock(Blocks.WATER);
         TorcherinoRegistry.blacklistBlock(Blocks.FLOWING_WATER);
-
         TorcherinoRegistry.blacklistBlock(Blocks.LAVA);
         TorcherinoRegistry.blacklistBlock(Blocks.FLOWING_LAVA);
 
@@ -99,12 +72,7 @@ public final class Torcherino {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent evt) {
-        for (final String block : this.blacklistedBlocks)
-            this.blacklistBlock(block);
-
-        for (final String tile : this.blacklistedTiles)
-            this.blacklistTile(tile);
-
+        ConfigR.postInit();
         Torcherino.proxy.postInit();
     }
 
@@ -119,54 +87,8 @@ public final class Torcherino {
                 System.out.println("Received non-string message! Ignoring");
                 continue;
             }
-
             final String s = message.getStringValue();
-
-            if (message.key.equals("blacklist-block"))
-                this.blacklistBlock(s);
-            else if (message.key.equals("blacklist-tile"))
-                this.blacklistTile(s);
-        }
-    }
-
-    private void blacklistBlock(String s) {
-        final String[] parts = s.split(":");
-
-        if (parts.length != 2) {
-            System.out.println("Received malformed message: " + s);
-            return;
-        }
-
-        final Block block = Block.REGISTRY.getObject(new ResourceLocation(parts[0], parts[1]));
-
-        if (block == null) {
-            System.out.println("Could not find block: " + s + ", ignoring");
-            return;
-        }
-
-        System.out.println("Blacklisting block: " + block.getUnlocalizedName());
-
-        TorcherinoRegistry.blacklistBlock(block);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void blacklistTile(String s) {
-        try {
-            final Class<?> clazz = this.getClass().getClassLoader().loadClass(s);
-
-            if (clazz == null) {
-                System.out.println("Class null: " + s);
-                return;
-            }
-
-            if (!TileEntity.class.isAssignableFrom(clazz)) {
-                System.out.println("Class not a TileEntity: " + s);
-                return;
-            }
-
-            TorcherinoRegistry.blacklistTile((Class<? extends TileEntity>) clazz);
-        } catch (final ClassNotFoundException e) {
-            System.out.println("Class not found: " + s + ", ignoring");
+            TorcherinoRegistry.blacklistString(s);
         }
     }
 }

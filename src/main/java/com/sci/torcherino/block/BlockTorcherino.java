@@ -1,6 +1,7 @@
 package com.sci.torcherino.block;
 
 import com.sci.torcherino.Torcherino;
+import com.sci.torcherino.config.ConfigR;
 import com.sci.torcherino.tile.TileTorcherino;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
@@ -34,7 +35,7 @@ public class BlockTorcherino extends BlockTorch implements ITileEntityProvider {
 
         super.onBlockAdded(world, pos, state);
 
-        if (Torcherino.logPlacement)
+        if (ConfigR.logPlacement)
             Torcherino.logger.log(Level.INFO, "Torcherino was placed at " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ());
     }
 
