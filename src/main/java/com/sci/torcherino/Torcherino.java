@@ -1,7 +1,6 @@
 package com.sci.torcherino;
 
 import com.sci.torcherino.init.ModBlocks;
-import com.sci.torcherino.init.ModRecipes;
 import com.sci.torcherino.proxy.CommonProxy;
 import com.sci.torcherino.tile.TileCompressedTorcherino;
 import com.sci.torcherino.tile.TileDoubleCompressedTorcherino;
@@ -73,7 +72,6 @@ public final class Torcherino {
         }
 
         ModBlocks.init();
-        ModRecipes.init();
 
         Torcherino.proxy.preInit();
     }

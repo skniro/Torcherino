@@ -1,0 +1,20 @@
+{
+	"conditions": [{
+		"type": "torcherino:torcherino_overpowered",
+		"value": true
+	}],
+	"result": {
+		"item": "torcherino:blocktorcherino"
+	},
+	"pattern" : [
+		" C ",
+		"CTC",
+		" C "
+	],
+	"type" : "minecraft:crafting_shaped",
+	"group": "torcherino:blocktorcherino",
+	"key" : {
+		"C": {"item": "minecraft:clock"},
+		"T": {"item": "minecraft:torch"} 
+	}
+}

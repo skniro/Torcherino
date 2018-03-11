@@ -1,0 +1,19 @@
+{
+	"conditions": [{
+		"type": "torcherino:compressed_torcherino_enabled",
+		"value": true
+	}],
+	"result": {
+		"item": "torcherino:blockcompressedtorcherino"
+	},
+	"pattern" : [
+		"TTT",
+		"TTT",
+		"TTT"
+	],
+	"type" : "minecraft:crafting_shaped",
+	"group": "torcherino:blockcompressedtorcherino",
+	"key" : {
+		"T": {"item": "torcherino:blocktorcherino"} 
+	}
+}
