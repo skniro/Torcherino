@@ -1,20 +1,16 @@
 [
-{
-  "modid": "torcherino",
-  "name": "Torcherino",
-  "description": "Simple mod that adds OP torches.",
-  "version": "${version}",
-  "mcversion": "${minecraft_version}",
-  "url": "http://minecraft.curseforge.com/projects/torcherino",
-  "updateUrl": "",
-  "authorList": ["Moze_Intel", "sci4me", "NinjaPhenix1"],
-  "credits": "
-            Moze Intel for 99.9% of the mod. 
-            sci4me for continuing the mod. 
-            NinjaPhenix1 for continuing the mod past 1.11.
-",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+	{
+		"modid": "torcherino",
+		"name": "Torcherino",
+		"description": "Simple mod that adds OP torches.",
+		"version": "7.2",
+		"mcversion": "1.11.2",
+		"url": "http://minecraft.curseforge.com/projects/torcherino",
+		"updateUrl": "",
+		"authorList": ["Moze_Intel", "sci4me", "NinjaPhenix1"],
+		"credits": "Moze Intel for 99.9% of the mod. sci4me for continuing the mod. NinjaPhenix1 for continuing the mod past 1.11.",
+		"logoFile": "",
+		"screenshots": [],
+		"dependencies": []
+	}
 ]

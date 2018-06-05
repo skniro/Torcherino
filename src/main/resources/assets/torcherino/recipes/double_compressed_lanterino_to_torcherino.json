@@ -1,0 +1,12 @@
+{
+	"result": {
+		"item": "torcherino:blockdoublecompressedtorcherino"
+	},
+	"ingredients": [
+		{
+			"item": "torcherino:blockdoublecompressedlanterino"
+		}
+	],
+	"type" : "minecraft:crafting_shapeless",
+	"group": "torcherino:blockdoublecompressedtorcherino"
+}

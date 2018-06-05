@@ -13,3 +13,4 @@ gradle.properties
 gradlew
 gradlew.bat
 .gitattributes
+*.txt
