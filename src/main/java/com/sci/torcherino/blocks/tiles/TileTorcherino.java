@@ -2,6 +2,7 @@ package com.sci.torcherino.blocks.tiles;
 
 import java.util.Random;
 
+import com.sci.torcherino.Torcherino;
 import com.sci.torcherino.TorcherinoRegistry;
 
 import net.minecraft.block.Block;
@@ -79,11 +80,12 @@ public class TileTorcherino extends TileEntity implements ITickable
     
     private void tickBlock(BlockPos pos)
     {
-        IBlockState blockState = this.world.getBlockState(pos);
+    	IBlockState blockState = this.world.getBlockState(pos);
         Block block = blockState.getBlock();
-        if(block == null) return;
-        if(TorcherinoRegistry.isBlockBlacklisted(block)) return;
-        if(block instanceof BlockFluidBase) return;
+        if(block == null || block instanceof BlockFluidBase || TorcherinoRegistry.isBlockBlacklisted(block))
+        {
+        	return;
+        }
         if(block.getTickRandomly())
         {
             for(int i = 0; i < this.speed(this.speed); i++)
@@ -95,13 +97,20 @@ public class TileTorcherino extends TileEntity implements ITickable
         if(block.hasTileEntity(this.world.getBlockState(pos)))
         {
             TileEntity tile = this.world.getTileEntity(pos);
-            if(tile != null && !tile.isInvalid())
+            if(tile == null || tile.isInvalid())
             {
-                if(TorcherinoRegistry.isTileBlacklisted(tile.getClass())) return;
-                for(int i = 0; i < this.speed(this.speed); i++)
+            	return;
+            }
+            if(TorcherinoRegistry.isTileBlacklisted(tile.getClass())) return;
+            for(int i = 0; i < this.speed(this.speed); i++)
+            {
+                if(tile.isInvalid())
                 {
-                    if(tile.isInvalid()) break;
-                    if(tile instanceof ITickable) ((ITickable) tile).update();
+                	break;
+                }
+                if(tile instanceof ITickable)
+                {
+                	((ITickable) tile).update();
                 }
             }
         }

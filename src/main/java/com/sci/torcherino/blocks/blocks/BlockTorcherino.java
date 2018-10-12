@@ -45,21 +45,6 @@ public class BlockTorcherino extends BlockTorch
         }
         super.neighborChanged(state, world, pos, block, fromPos);
     }
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-        if(!world.isRemote)
-        {
-            if(hand != EnumHand.MAIN_HAND) return false;
-            TileEntity tile = world.getTileEntity(pos);
-            if(tile == null || !(tile instanceof TileTorcherino)) return false;
-            TileTorcherino torch = (TileTorcherino) tile;
-            if(Torcherino.keyStates.get(player) == null) torch.changeMode(false);
-            else torch.changeMode(Torcherino.keyStates.get(player).booleanValue()==true);
-            player.sendStatusMessage(torch.getDescription(), true);
-        }
-        return false;
-    }
     
     @Override
     public boolean hasTileEntity(IBlockState state){return true;}

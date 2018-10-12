@@ -54,9 +54,14 @@ public final class ModBlocks{
         ForgeRegistries.ITEMS.register(new ItemBlock(lanterino).setRegistryName(lanterino.getRegistryName()));
         ForgeRegistries.ITEMS.register(new ItemBlock(compressedLanterino).setRegistryName(compressedLanterino.getRegistryName()));
         ForgeRegistries.ITEMS.register(new ItemBlock(doubleCompressedLanterino).setRegistryName(doubleCompressedLanterino.getRegistryName()));
-        GameRegistry.registerTileEntity(TileTorcherino.class, new ResourceLocation(Torcherino.MOD_ID, "torcherino_tile"));
-        GameRegistry.registerTileEntity(TileCompressedTorcherino.class, new ResourceLocation(Torcherino.MOD_ID, "compressed_torcherino_tile"));
-        GameRegistry.registerTileEntity(TileDoubleCompressedTorcherino.class, new ResourceLocation(Torcherino.MOD_ID, "double_compressed_torcherino_tile"));
+        // For 1.12 - 1.12.2 compat
+        GameRegistry.registerTileEntity(TileTorcherino.class, "torcherino_tile");
+        GameRegistry.registerTileEntity(TileCompressedTorcherino.class, "compressed_torcherino_tile");
+        GameRegistry.registerTileEntity(TileDoubleCompressedTorcherino.class, "double_compressed_torcherino_tile");
+        // Todo: enable in 1.13.x
+        //GameRegistry.registerTileEntity(TileTorcherino.class, new ResourceLocation(Torcherino.MOD_ID, "torcherino_tile"));
+        //GameRegistry.registerTileEntity(TileCompressedTorcherino.class, new ResourceLocation(Torcherino.MOD_ID, "compressed_torcherino_tile"));
+        //GameRegistry.registerTileEntity(TileDoubleCompressedTorcherino.class, new ResourceLocation(Torcherino.MOD_ID, "double_compressed_torcherino_tile"));
     }
     public static void initRenders()
     {

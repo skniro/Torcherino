@@ -8,17 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Filter.Result;
 
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.blocks.tiles.TileCompressedTorcherino;
 import com.sci.torcherino.blocks.tiles.TileDoubleCompressedTorcherino;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -27,6 +30,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,6 +63,7 @@ public class Torcherino
 	public void construction(FMLConstructionEvent event)
 	{
 		// Because carryon wont add torcherino to the default config
+		// TODO: look into using reflection.
 		if(Loader.isModLoaded("carryon"))
 		{
 			File carryOnConfigFile = new File(Loader.instance().getConfigDir(), "carryon.cfg");
@@ -184,28 +190,38 @@ public class Torcherino
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event)
 	{
+		logger.info(TileTorcherino.class);
 		TorcherinoRegistry.blacklistBlock(Blocks.AIR);
-        TorcherinoRegistry.blacklistBlock(Blocks.WATER);
-        TorcherinoRegistry.blacklistBlock(Blocks.FLOWING_WATER);
-        TorcherinoRegistry.blacklistBlock(Blocks.LAVA);
-        TorcherinoRegistry.blacklistBlock(Blocks.FLOWING_LAVA);
-        TorcherinoRegistry.blacklistBlock(Blocks.GRASS);
-        TorcherinoRegistry.blacklistBlock(ModBlocks.torcherino);
-        TorcherinoRegistry.blacklistBlock(ModBlocks.compressedTorcherino);
-        TorcherinoRegistry.blacklistBlock(ModBlocks.doubleCompressedTorcherino);
-        TorcherinoRegistry.blacklistBlock(ModBlocks.lanterino);
-        TorcherinoRegistry.blacklistBlock(ModBlocks.compressedLanterino);
-        TorcherinoRegistry.blacklistBlock(ModBlocks.doubleCompressedLanterino);
-        TorcherinoRegistry.blacklistTile(TileTorcherino.class);
-        TorcherinoRegistry.blacklistTile(TileCompressedTorcherino.class);
-        TorcherinoRegistry.blacklistTile(TileDoubleCompressedTorcherino.class);
+		TorcherinoRegistry.blacklistBlock(Blocks.WATER);
+		TorcherinoRegistry.blacklistBlock(Blocks.FLOWING_WATER);
+		TorcherinoRegistry.blacklistBlock(Blocks.LAVA);
+		TorcherinoRegistry.blacklistBlock(Blocks.FLOWING_LAVA);
+		TorcherinoRegistry.blacklistBlock(ModBlocks.torcherino);
+		TorcherinoRegistry.blacklistBlock(ModBlocks.compressedTorcherino);
+		TorcherinoRegistry.blacklistBlock(ModBlocks.doubleCompressedTorcherino);
+		TorcherinoRegistry.blacklistBlock(ModBlocks.lanterino);
+		TorcherinoRegistry.blacklistBlock(ModBlocks.compressedLanterino);
+		TorcherinoRegistry.blacklistBlock(ModBlocks.doubleCompressedLanterino);
+		TorcherinoRegistry.blacklistTile(TileTorcherino.class);
+		TorcherinoRegistry.blacklistTile(TileCompressedTorcherino.class);
+		TorcherinoRegistry.blacklistTile(TileDoubleCompressedTorcherino.class);
 	}
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		for(String block : blacklistedBlocks) TorcherinoRegistry.blacklistString(block);
-        for(String tile : blacklistedTiles) TorcherinoRegistry.blacklistString(tile);
+		if(Loader.isModLoaded("projecte"))
+		{
+			TorcherinoRegistry.blacklistString("projecte:dm_pedestal");
+		}
+		for(String block : blacklistedBlocks)
+		{
+			TorcherinoRegistry.blacklistString(block);
+		}
+        for(String tile : blacklistedTiles)
+        {
+        	TorcherinoRegistry.blacklistString(tile);
+        }
 	}
 	
 	@Mod.EventHandler

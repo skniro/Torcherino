@@ -14,6 +14,6 @@ public class ClientProxy extends CommonProxy
 		super.preInit();
 		ModBlocks.initRenders();
 		KeyHandler.preInit();
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
+		
 	}
 }

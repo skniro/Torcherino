@@ -10,7 +10,7 @@ public class KeyHandler
 	public static KeyBinding usageKey;
 	public static void preInit()
 	{
-		usageKey = new KeyBinding("key.torcherino.useage_key", Keyboard.KEY_LCONTROL, "key.categories.gameplay");
+		usageKey = new KeyBinding("key.torcherino.useage_key", Keyboard.KEY_LSHIFT, "key.categories.gameplay");
         ClientRegistry.registerKeyBinding(usageKey);
 	}
 }

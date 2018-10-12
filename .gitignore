@@ -14,3 +14,4 @@ gradlew
 gradlew.bat
 .gitattributes
 *.txt
+*.launch
