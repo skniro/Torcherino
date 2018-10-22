@@ -1,17 +1,26 @@
-.gradle/**
-.settings/**
-.project
+# eclipse
+bin
+*.launch
+.settings
+.metadata
 .classpath
-Torcherino_Client.launch
-Torcherino_Server.launch
-bin/**
-build/**
-eclipse/**
-gradle/**
-run/**
-gradle.properties
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+
+classes
 gradlew
 gradlew.bat
-.gitattributes
-*.txt
-*.launch

@@ -1,6 +1,6 @@
 {
-    "pack": {
-        "description": "Torcherino Resources",
-        "pack_format": 3
-    }
+   "pack": {
+      "pack_format": 4,
+      "description": "Torcherino Resources"
+   }
 }

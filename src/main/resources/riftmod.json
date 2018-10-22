@@ -1,0 +1,10 @@
+{
+    "id": "torcherino",
+    "name": "Torcherino",
+    "authors": [
+        "NinjaPhenix", "sci4me", "Moze_Intel"
+    ],
+    "listeners": [
+        "io.github.ninjaphenix.torcherino.Torcherino"
+    ]
+}
