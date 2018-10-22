@@ -1,6 +1,7 @@
 package io.github.ninjaphenix.torcherino;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
@@ -11,15 +12,13 @@ import java.util.Set;
 
 public class Utils
 {
-    public static final String MOD_ID = "torcherino";
-    public static final String MOD_NAME = "Torcherino";
-    public static final String MOD_VERSION = "0.0.1";
-    public static final Logger MOD_LOGGER = LogManager.getLogger(MOD_NAME);
-    public static void info(String msg)
+    static final String MOD_ID = "torcherino";
+    private static final String MOD_NAME = "test";
+    private static final Logger MOD_LOGGER = LogManager.getLogger(MOD_NAME);
+    static void info(String msg)
     {
         MOD_LOGGER.info("Torcherino: "+msg);
     }
-
 
     // Blacklist
     public static void blacklistString(String string)
@@ -55,7 +54,7 @@ public class Utils
                 return;
             }
             Block block = Block.REGISTRY.get(new ResourceLocation(parts[0], parts[1]));
-            if(block == null)
+            if(block == Blocks.AIR)
             {
                 info("Could not find block: " + string + ", ignoring");
                 return;
@@ -64,24 +63,24 @@ public class Utils
             blacklistBlock(block);
         }
     }
-    public static void blacklistBlock(Block block)
+    static void blacklistBlock(Block block)
     {
         blacklistedBlocks.add(block);
     }
-    public static void blacklistTile(Class<? extends TileEntity> tile)
+    static void blacklistTile(Class<? extends TileEntity> tile)
     {
         blacklistedTiles.add(tile);
     }
-    public static boolean isBlockBlacklisted(Block block)
+    protected static boolean isBlockBlacklisted(Block block)
     {
         return blacklistedBlocks.contains(block);
     }
-    public static boolean isTileBlacklisted(Class<? extends TileEntity> tile)
+    protected static boolean isTileBlacklisted(Class<? extends TileEntity> tile)
     {
         return blacklistedTiles.contains(tile);
     }
-    private static Set<Block> blacklistedBlocks = new HashSet<Block>();
-    private static Set<Class<? extends TileEntity>> blacklistedTiles = new HashSet<Class<? extends TileEntity>>();
+    private static Set<Block> blacklistedBlocks = new HashSet<>();
+    private static Set<Class<? extends TileEntity>> blacklistedTiles = new HashSet<>();
 
 
 }

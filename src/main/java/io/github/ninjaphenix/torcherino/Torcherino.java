@@ -21,7 +21,7 @@ public class Torcherino implements BlockAdder, ItemAdder
 {
 
     public static final TileEntityType<TileTorcherino> TORCHERINO = TileEntityType.registerTileEntityType("torcherino", TileEntityType.Builder.create(() -> new TileTorcherino()));
-    ArrayList<ItemBlock> b = new ArrayList<ItemBlock>();
+    private ArrayList<ItemBlock> b = new ArrayList<>();
     @Override
     public void registerBlocks()
     {
@@ -36,14 +36,10 @@ public class Torcherino implements BlockAdder, ItemAdder
         Utils.blacklistBlock(Blocks.AIR);
         Utils.blacklistBlock(Blocks.WATER);
         Utils.blacklistBlock(Blocks.LAVA);
-
-        //Utils.blacklistBlock(ModBlocks.lanterino);
-        //Utils.blacklistBlock(ModBlocks.compressedLanterino);
-        //Utils.blacklistBlock(ModBlocks.doubleCompressedLanterino);
         Utils.blacklistTile(TileTorcherino.class);
     }
 
-    public void registerTorcherino(String type, int speed)
+    private void registerTorcherino(String type, int speed)
     {
         Block blockTorcherino = new BlockTorcherino(speed);
         Block blockTorcherinoWall = new BlockTorcherinoWall(speed);
@@ -54,7 +50,7 @@ public class Torcherino implements BlockAdder, ItemAdder
         Utils.blacklistBlock(blockTorcherino);
         Utils.blacklistBlock(blockTorcherinoWall);
     }
-    public void registerLanterino(String type, int speed)
+    private void registerLanterino(String type, int speed)
     {
         Block blockLanterino = new BlockLanterino(speed);
         Block.register(new ResourceLocation(Utils.MOD_ID, type), blockLanterino);
