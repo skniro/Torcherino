@@ -15,3 +15,6 @@ gradlew.bat
 .gitattributes
 *.txt
 *.launch
+*.iml
+*.ipr
+*.iws
