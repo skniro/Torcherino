@@ -2,42 +2,26 @@ package com.sci.torcherino;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.Filter.Result;
-
 import com.sci.torcherino.blocks.ModBlocks;
 import com.sci.torcherino.blocks.tiles.TileCompressedTorcherino;
 import com.sci.torcherino.blocks.tiles.TileDoubleCompressedTorcherino;
 import com.sci.torcherino.blocks.tiles.TileTorcherino;
-
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid=Torcherino.MOD_ID, name=Torcherino.MOD_NAME, version="7.2", acceptedMinecraftVersions="[1.12,1.12.2]", useMetadata=true, dependencies = "before:carryon")
+@Mod(modid=Torcherino.MOD_ID, name=Torcherino.MOD_NAME, version="7.5", acceptedMinecraftVersions="[1.12,1.12.2]", useMetadata=true)
 public class Torcherino 
 {
 	public static boolean logPlacement;
@@ -58,110 +42,7 @@ public class Torcherino
 	
 	@SidedProxy(clientSide="com.sci.torcherino.ClientProxy", serverSide="com.sci.torcherino.CommonProxy")
 	public static CommonProxy proxy;
-	
-	@Mod.EventHandler
-	public void construction(FMLConstructionEvent event)
-	{
-		// Because carryon wont add torcherino to the default config
-		// TODO: look into using reflection.
-		if(Loader.isModLoaded("carryon"))
-		{
-			File carryOnConfigFile = new File(Loader.instance().getConfigDir(), "carryon.cfg");
-			if(!carryOnConfigFile.exists())
-			{
-				String[] forbiddenTiles = new String[]
-		    	{
-		    		"minecraft:end_portal",
-		    		"minecraft:end_gateway",
-		    		"minecraft:double_plant",
-		    		"minecraft:bed",
-		    		"minecraft:wooden_door",
-		    		"minecraft:iron_door",
-		    		"minecraft:spruce_door",
-		    		"minecraft:birch_door",
-		    		"minecraft:jungle_door",
-		    		"minecraft:acacia_door",
-		    		"minecraft:dark_oak_door",
-		    		"minecraft:waterlily",
-		    		"minecraft:cake",
-		    		"animania:block_trough",
-		    		"animania:block_invisiblock",
-		    		"colossalchests:*",
-		    		"ic2:*",
-		    		"bigreactors:*",
-		    		"forestry:*",
-		    		"tconstruct:*",
-		    		"rustic:*",
-		    		"botania:*",
-		    		"astralsorcery:*",
-		    		"quark:colored_bed_*",
-		    		"immersiveengineering:*",
-		    		"embers:block_furnace",
-		    		"embers:ember_bore",
-		    		"embers:ember_activator",
-		    		"embers:mixer",
-		    		"embers:heat_coil",
-		    		"embers:large_tank",
-		    		"embers:crystal_cell",
-		    		"embers:alchemy_pedestal",
-		    		"embers:boiler",
-		    		"embers:combustor",
-		    		"embers:catalzyer",
-		    		"embers:field_chart",
-		    		"embers:inferno_forge",
-		    		"storagedrawers:framingtable",
-		    		"skyresources:*",
-		    		"lootbags:*",
-		    		"exsartagine:*",
-		    		"aquamunda:tank",
-		    		"torcherino:*"
-		    	};
-				try
-				{
-					carryOnConfigFile.createNewFile();
-					Configuration carryonConfig = new Configuration(carryOnConfigFile);
-					carryonConfig.load();
-					Property forbiddenTilesProp = carryonConfig.get("general.blacklist", "forbiddenTiles", forbiddenTiles);
-					carryonConfig.save();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-			else
-			{
-				Configuration carryonConfig = new Configuration(carryOnConfigFile);
-				try
-				{
-					carryonConfig.load();
-			        Property forbiddenTiles = carryonConfig.getCategory("general.blacklist").get("forbiddenTiles");
-			        String[] newValues = forbiddenTiles.getStringList();
-			        boolean found = false;
-			        for(String name: newValues)
-			        {
-			        	if(name == "torcherino:*")
-			        	{
-			        		found = true;
-			        		break;
-			        	}
-			        }
-			        if(!found)
-			        {
-			        	StringBuilder sb = new StringBuilder();
-			        	sb.append("torcherino:*");
-			        	for(String name : newValues) sb.append(","+name);
-			        	newValues = sb.toString().split("[,]");
-			        	forbiddenTiles.set(newValues);
-			        }
-			    }
-				finally
-				{
-			        if(carryonConfig.hasChanged()) carryonConfig.save();
-			    }
-			}
-		}
-	}
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
