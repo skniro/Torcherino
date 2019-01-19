@@ -1,0 +1,16 @@
+{
+  "id": "torcherino",
+  "name": "Torcherino",
+  "description": "Adds torches which speeds up tiles around them.",
+  "version": "1.0.0",
+  "side": "universal",
+  "initializers": [
+    "torcherino.Torcherino"
+  ],
+  "requires": {
+    "fabric": "*"
+  },
+  "mixins": {
+
+  }
+}
