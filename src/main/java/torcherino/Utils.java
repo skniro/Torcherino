@@ -3,7 +3,6 @@ package torcherino;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
-
 import java.util.HashSet;
 import java.util.Set;
 

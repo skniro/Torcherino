@@ -10,7 +10,6 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import torcherino.Torcherino;
 import torcherino.Utils;
-
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
@@ -79,21 +78,18 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         if(block == null) return;
         if(Utils.isBlockBlacklisted(block)) return;
         if(block.hasRandomTicks(blockState))
-        {
             for(int i = 0; i < speed; i++)
-            {
                 block.scheduledTick(blockState, world, pos, rand);
-            }
-        }
         if(block.hasBlockEntity())
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if(blockEntity == null || blockEntity.isInvalid()) return;
             if(Utils.isBlockEntityBlacklisted(blockEntity.getType())) return;
+            if(!(blockEntity instanceof Tickable)) return;
             for(int i = 0; i < speed; i++)
             {
                 if(blockEntity.isInvalid()) break;
-                if(blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();
+                ((Tickable) blockEntity).tick();
             }
         }
     }
