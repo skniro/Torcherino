@@ -1,10 +1,7 @@
 package torcherino.block;
 
 import net.fabricmc.fabric.block.FabricBlockSettings;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
-import net.minecraft.block.TorchBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import torcherino.block.entity.TorcherinoBlockEntity;
@@ -68,5 +66,15 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     public PistonBehavior getPistonBehavior(BlockState blockState_1)
     {
         return PistonBehavior.IGNORE;
+    }
+
+
+    @Override
+    public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
+    {
+        if(world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(selfPos);
+        if(blockEntity == null) return;
+        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(selfPos.down(), Direction.DOWN));
     }
 }

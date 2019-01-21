@@ -10,7 +10,8 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 
 public class Torcherino implements ModInitializer
 {
-	public static final BlockEntityType<TorcherinoBlockEntity> TorcherinoBlockEntity = Registry.register(Registry.BLOCK_ENTITY, Utils.getId("torcherino"), BlockEntityType.Builder.create(torcherino.block.entity.TorcherinoBlockEntity::new).build(null));
+	public static final BlockEntityType<TorcherinoBlockEntity> TorcherinoBlockEntity = Registry.register(Registry.BLOCK_ENTITY,
+            Utils.getId("torcherino"), BlockEntityType.Builder.create(torcherino.block.entity.TorcherinoBlockEntity::new).build(null));
 
 	@Override
 	public void onInitialize()

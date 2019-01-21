@@ -66,4 +66,13 @@ public class LanterinoBlock extends PumpkinCarvedBlock implements BlockEntityPro
     {
         return PistonBehavior.IGNORE;
     }
+
+    @Override
+    public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
+    {
+        if(world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(selfPos);
+        if(blockEntity == null) return;
+        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(selfPos));
+    }
 }

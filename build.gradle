@@ -8,9 +8,9 @@ targetCompatibility = 1.8
 archivesBaseName = "torcherino"
 version = "1.0.0"
 def mcVer = "19w03c"
-def yarnVer = "${mcVer}.1"
-def loadVer = "0.3.2.96"
-def fabricVer = "0.1.4.77"
+def yarnVer = "${mcVer}.4"
+def loadVer = "0.3.3.99"
+def fabricVer = "0.1.4.78"
 
 minecraft {
 }

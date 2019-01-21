@@ -10,6 +10,7 @@ import net.minecraft.util.BlockHitResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import torcherino.block.entity.TorcherinoBlockEntity;
@@ -64,4 +65,15 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
     {
         return PistonBehavior.IGNORE;
     }
+
+    @Override
+    public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
+    {
+        if(world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(selfPos);
+        if(blockEntity == null) return;
+        Direction oppositeFacing = selfState.get(FACING).getOpposite();
+        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(selfPos.offset(oppositeFacing), oppositeFacing));
+    }
+
 }
