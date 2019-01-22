@@ -1,7 +1,7 @@
 {
   "id": "torcherino",
   "name": "Torcherino",
-  "description": "Adds torches which speeds up tiles around them.",
+  "description": "Adds torches which speeds up block entities around them.",
   "version": "1.0.0",
   "side": "universal",
   "initializers": [

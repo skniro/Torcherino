@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Set;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.loot.condition.LootCondition;
 import net.minecraft.world.loot.context.LootContext;
 import net.minecraft.world.loot.context.Parameter;
