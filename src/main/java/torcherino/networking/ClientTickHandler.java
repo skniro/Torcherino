@@ -15,6 +15,7 @@ public class ClientTickHandler implements Consumer<MinecraftClient>
     private boolean pressed = false;
     public void accept(MinecraftClient client)
     {
+        if(client.getGame().getCurrentSession() == null) return;
         // detects if the key is pressed even if they is a keybind conflict.
         boolean keyBindPressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().window.getHandle(), InputUtil.fromName(Torcherino.torcherinoKeyBind.getName()).getKeyCode());
         if(keyBindPressed && !pressed)
@@ -22,14 +23,14 @@ public class ClientTickHandler implements Consumer<MinecraftClient>
             pressed = true;
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
             buffer.writeBoolean(true);
-            MinecraftClient.getInstance().player.networkHandler.sendPacket(new CustomPayloadServerPacket(Utils.getId("modifier"), buffer));
+            client.getNetworkHandler().sendPacket(new CustomPayloadServerPacket(Utils.getId("modifier"), buffer));
         }
         else if(!keyBindPressed && pressed)
         {
             pressed = false;
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
             buffer.writeBoolean(false);
-            MinecraftClient.getInstance().player.networkHandler.sendPacket(new CustomPayloadServerPacket(Utils.getId("modifier"), buffer));
+            client.getNetworkHandler().sendPacket(new CustomPayloadServerPacket(Utils.getId("modifier"), buffer));
         }
     }
 }
