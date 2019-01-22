@@ -11,7 +11,7 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "torcherino:player_sneaking"
+                  "condition": "torcherino:player_modifier"
                 }
               ],
               "name": "minecraft:carved_pumpkin"
@@ -36,7 +36,7 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "condition": "torcherino:player_sneaking"
+              "condition": "torcherino:player_modifier"
             }
           ],
           "name": "torcherino:compressed_torcherino"

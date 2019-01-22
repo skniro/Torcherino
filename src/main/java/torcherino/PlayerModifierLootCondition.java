@@ -32,13 +32,14 @@ public class PlayerModifierLootCondition implements LootCondition
     {
         Factory()
         {
-            super(new Identifier("torcherino", "player_sneaking"), PlayerModifierLootCondition.class);
+            super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class);
         }
 
         public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context)
         {
 
         }
+
         public PlayerModifierLootCondition fromJson(JsonObject jsonObject_1, JsonDeserializationContext jsonDeserializationContext_1)
         {
             return PlayerModifierLootCondition.INSTANCE;
