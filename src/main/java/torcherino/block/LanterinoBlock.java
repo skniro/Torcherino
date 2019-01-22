@@ -4,7 +4,10 @@ import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.BlockHitResult;
 import net.minecraft.util.Hand;
@@ -13,6 +16,7 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Random;
@@ -27,18 +31,18 @@ public class LanterinoBlock extends PumpkinCarvedBlock implements BlockEntityPro
     }
 
     @Override
-    public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult hitResult)
+    public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
     {
-        if(hand == Hand.OFF) return true;
-        BlockEntity blockEntity = world.getBlockEntity(blockPos);
-        if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
-        if(!world.isClient)
-        {
-            TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
-            torch.changeMode(playerEntity.isSneaking());
-            playerEntity.addChatMessage(torch.getDescription(), true);
-        }
-        return true;
+        if(world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(selfPos);
+        if(blockEntity == null) return;
+        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(selfPos));
+    }
+
+    @Override
+    public PistonBehavior getPistonBehavior(BlockState blockState)
+    {
+        return PistonBehavior.IGNORE;
     }
 
     public BlockEntity createBlockEntity(BlockView blockView)
@@ -51,28 +55,37 @@ public class LanterinoBlock extends PumpkinCarvedBlock implements BlockEntityPro
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();
-
     }
 
     @Override
-    public void onBlockRemoved(BlockState blockState1, World world, BlockPos blockPos, BlockState blockState2, boolean bool)
+    public void onBlockRemoved(BlockState blockState, World world, BlockPos blockPos, BlockState newBlockState, boolean bool)
     {
         BlockEntity blockEntity = world.getBlockEntity(blockPos);
         if(blockEntity != null) blockEntity.invalidate();
     }
 
     @Override
-    public PistonBehavior getPistonBehavior(BlockState blockState_1)
+    public void onPlaced(World world, BlockPos blockPos, BlockState oldState, LivingEntity placingEntity, ItemStack handItemStack)
     {
-        return PistonBehavior.IGNORE;
+        if(world.isClient) return;
+        String prefix = "Something";
+        if(placingEntity != null) prefix = placingEntity.getDisplayName().getText() + "(" + placingEntity.getUuidAsString() + ")";
+
+        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, I18n.translate(getTranslationKey()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Override
-    public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
+    public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult hitResult)
     {
-        if(world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(selfPos);
-        if(blockEntity == null) return;
-        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(selfPos));
+        if(hand == Hand.OFF) return true;
+        BlockEntity blockEntity = world.getBlockEntity(blockPos);
+        if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
+        if(!world.isClient)
+        {
+            TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
+            torch.changeMode(Utils.keyStates.getOrDefault(playerEntity, false));
+            playerEntity.addChatMessage(torch.getDescription(), true);
+        }
+        return true;
     }
 }

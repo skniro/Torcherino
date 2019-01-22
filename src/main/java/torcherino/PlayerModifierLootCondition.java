@@ -12,9 +12,9 @@ import net.minecraft.world.loot.context.LootContext;
 import net.minecraft.world.loot.context.Parameter;
 import net.minecraft.world.loot.context.Parameters;
 
-public class PlayerSneakingLootCondition implements LootCondition
+public class PlayerModifierLootCondition implements LootCondition
 {
-    private static final PlayerSneakingLootCondition INSTANCE = new PlayerSneakingLootCondition();
+    private static final PlayerModifierLootCondition INSTANCE = new PlayerModifierLootCondition();
 
     public Set<Parameter<?>> getRequiredParameters()
     {
@@ -25,23 +25,23 @@ public class PlayerSneakingLootCondition implements LootCondition
     {
         Entity player = lootContext_1.get(Parameters.THIS_ENTITY);
         if(player == null) return false;
-        return player.isSneaking();
+        return Utils.keyStates.getOrDefault(player, false);
     }
 
-    public static class Factory extends net.minecraft.world.loot.condition.LootCondition.Factory<PlayerSneakingLootCondition>
+    public static class Factory extends net.minecraft.world.loot.condition.LootCondition.Factory<PlayerModifierLootCondition>
     {
         Factory()
         {
-            super(new Identifier("torcherino", "player_sneaking"), PlayerSneakingLootCondition.class);
+            super(new Identifier("torcherino", "player_sneaking"), PlayerModifierLootCondition.class);
         }
 
-        public void toJson(JsonObject jsonObject, PlayerSneakingLootCondition lootCondition, JsonSerializationContext context)
+        public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context)
         {
 
         }
-        public PlayerSneakingLootCondition fromJson(JsonObject jsonObject_1, JsonDeserializationContext jsonDeserializationContext_1)
+        public PlayerModifierLootCondition fromJson(JsonObject jsonObject_1, JsonDeserializationContext jsonDeserializationContext_1)
         {
-            return PlayerSneakingLootCondition.INSTANCE;
+            return PlayerModifierLootCondition.INSTANCE;
         }
     }
 }

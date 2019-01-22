@@ -4,6 +4,7 @@
 	"block.torcherino.double_compressed_torcherino": "Double Compressed Torcherino",
 	"block.torcherino.lanterino": "Jack o'Lanterino",
 	"block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
-	"block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino"
+	"block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
+	"key.torcherino.modifier": "Torcherino Modifier"
 }
 
