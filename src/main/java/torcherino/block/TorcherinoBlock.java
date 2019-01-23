@@ -4,7 +4,6 @@ import net.fabricmc.fabric.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -17,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
 import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.Random;
@@ -70,7 +70,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
         if(world.isClient) return;
         String prefix = "Something";
         if(placingEntity != null) prefix = placingEntity.getDisplayName().getText() + "(" + placingEntity.getUuidAsString() + ")";
-        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, getTranslationKey(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Override
