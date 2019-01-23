@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.network.packet.BlockEntityUpdateClientPacket;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.text.StringTextComponent;
+import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import torcherino.Torcherino;
@@ -14,18 +14,13 @@ import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    private static final String[] MODES = new String[]{"Stopped", "Area: 3x3x3", "Area: 5x3x5", "Area: 7x3x7", "Area: 9x3x9"};
+    private static final String[] MODES = new String[]{"tip.torcherino.area.stopped", "tip.torcherino.area.n",
+            "tip.torcherino.area.n", "tip.torcherino.area.n", "tip.torcherino.area.n"};
     private boolean poweredByRedstone;
-    private int maxSpeed;
-    private int speed;
-    private byte mode;
-    private byte cachedMode;
-    private int xMin;
-    private int yMin;
-    private int zMin;
-    private int xMax;
-    private int yMax;
-    private int zMax;
+    private int speed, maxSpeed;
+    private byte cachedMode, mode;
+    private int xMin, yMin, zMin;
+    private int xMax, yMax, zMax;
     private Random rand;
 
     public TorcherinoBlockEntity()
@@ -102,29 +97,16 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     public void changeMode(boolean modifier)
     {
         if(modifier)
-        {
-            if(speed < maxSpeed)
-                speed += maxSpeed / 4;
-            else
-                speed = 0;
-        }
+            if(speed < maxSpeed) speed += maxSpeed / 4; else speed = 0;
         else
-        {
-            if(mode < MODES.length - 1)
-                mode++;
-            else
-                mode = 0;
-        }
+            if(mode < MODES.length - 1) mode++; else mode = 0;
     }
 
-    public StringTextComponent getDescription()
+    public TranslatableTextComponent getDescription()
     {
-        return new StringTextComponent(TorcherinoBlockEntity.MODES[mode] + " | Speed: " + speed*100 + "%");
-    }
-
-    public String getMode()
-    {
-        return TorcherinoBlockEntity.MODES[mode];
+        return new TranslatableTextComponent("tip.torcherino.layout",
+                new TranslatableTextComponent(MODES[mode], 2*mode + 1),
+                new TranslatableTextComponent("tip.torcherino.speed",speed*100));
     }
 
     @Override
@@ -151,9 +133,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     @Override
     public BlockEntityUpdateClientPacket toUpdatePacket()
     {
-        CompoundTag tag = new CompoundTag();
-        toTag(tag);
-        return new BlockEntityUpdateClientPacket(getPos(), -999, tag);
+        return new BlockEntityUpdateClientPacket(getPos(), -999, toTag(new CompoundTag()));
     }
 
 }

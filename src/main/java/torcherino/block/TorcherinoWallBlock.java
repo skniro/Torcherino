@@ -78,15 +78,13 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
     @Override
     public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult hitResult)
     {
+        if(world.isClient) return true;
         if(hand == Hand.OFF) return true;
         BlockEntity blockEntity = world.getBlockEntity(blockPos);
         if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
-        if(!world.isClient)
-        {
-            TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
-            torch.changeMode(Utils.keyStates.getOrDefault(playerEntity, false));
-            playerEntity.addChatMessage(torch.getDescription(), true);
-        }
+        TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
+        torch.changeMode(Utils.keyStates.getOrDefault(playerEntity, false));
+        playerEntity.addChatMessage(torch.getDescription(), true);
         return true;
     }
 }

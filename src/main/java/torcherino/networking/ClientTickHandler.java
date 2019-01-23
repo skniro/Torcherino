@@ -6,7 +6,6 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.server.network.packet.CustomPayloadServerPacket;
 import net.minecraft.util.PacketByteBuf;
 import torcherino.ClientTorcherino;
-import torcherino.Torcherino;
 import torcherino.Utils;
 
 import java.util.function.Consumer;
@@ -19,18 +18,11 @@ public class ClientTickHandler implements Consumer<MinecraftClient>
         if(client.getGame().getCurrentSession() == null) return;
         // detects if the key is pressed even if they is a keybind conflict.
         boolean keyBindPressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().window.getHandle(), InputUtil.fromName(ClientTorcherino.torcherinoKeyBind.getName()).getKeyCode());
-        if(keyBindPressed && !pressed)
+        if((keyBindPressed && !pressed) || (!keyBindPressed && pressed))
         {
-            pressed = true;
+            pressed = !pressed;
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-            buffer.writeBoolean(true);
-            client.getNetworkHandler().sendPacket(new CustomPayloadServerPacket(Utils.getId("modifier"), buffer));
-        }
-        else if(!keyBindPressed && pressed)
-        {
-            pressed = false;
-            PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-            buffer.writeBoolean(false);
+            buffer.writeBoolean(pressed);
             client.getNetworkHandler().sendPacket(new CustomPayloadServerPacket(Utils.getId("modifier"), buffer));
         }
     }

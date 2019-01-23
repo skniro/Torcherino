@@ -8,7 +8,7 @@ targetCompatibility = 1.8
 archivesBaseName = "torcherino"
 version = "1.0.0"
 def mcVer = "19w03c"
-def yarnVer = "${mcVer}.4"
+def yarnVer = "${mcVer}.5"
 def loadVer = "0.3.3.101"
 def fabricVer = "0.1.4.78"
 
