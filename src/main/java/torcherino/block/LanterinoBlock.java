@@ -71,7 +71,7 @@ public class LanterinoBlock extends PumpkinCarvedBlock implements BlockEntityPro
         String prefix = "Something";
         if(placingEntity != null) prefix = placingEntity.getDisplayName().getText() + "(" + placingEntity.getUuidAsString() + ")";
 
-        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, I18n.translate(getTranslationKey()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, getTranslationKey(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Override
