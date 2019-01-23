@@ -5,7 +5,8 @@
   "version": "1.0.0",
   "side": "universal",
   "initializers": [
-    "torcherino.Torcherino"
+    "torcherino.Torcherino",
+	"torcherino.ClientTorcherino"
   ],
   "requires": {
     "fabric": "*"
