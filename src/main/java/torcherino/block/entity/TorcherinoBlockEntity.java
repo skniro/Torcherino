@@ -14,8 +14,8 @@ import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    private static final String[] MODES = new String[]{"tip.torcherino.area.stopped", "tip.torcherino.area.n",
-            "tip.torcherino.area.n", "tip.torcherino.area.n", "tip.torcherino.area.n"};
+    private static final String[] MODES = new String[]{"chat.torcherino.hint.area.stopped", "chat.torcherino.hint.area.n",
+            "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n"};
     private boolean poweredByRedstone;
     private int speed, maxSpeed;
     private byte cachedMode, mode;
@@ -104,9 +104,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 
     public TranslatableTextComponent getDescription()
     {
-        return new TranslatableTextComponent("tip.torcherino.layout",
+        return new TranslatableTextComponent("chat.torcherino.hint.layout",
                 new TranslatableTextComponent(MODES[mode], 2*mode + 1),
-                new TranslatableTextComponent("tip.torcherino.speed",speed*100));
+                new TranslatableTextComponent("chat.torcherino.hint.speed",speed*100));
     }
 
     @Override

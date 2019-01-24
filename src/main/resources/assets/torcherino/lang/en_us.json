@@ -6,9 +6,9 @@
 	"block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
 	"block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
 	"key.torcherino.modifier": "Torcherino Modifier",
-	"tip.torcherino.area.stopped": "Stopped",
-	"tip.torcherino.area.n": "Area: %1$dx3x%1$d",
-	"tip.torcherino.speed": "Speed: %d%%",
-	"tip.torcherino.layout": "%s | %s"
+	"chat.torcherino.hint.area.stopped": "Stopped",
+	"chat.torcherino.hint.area.n": "Area: %1$dx3x%1$d",
+	"chat.torcherino.hint.speed": "Speed: %d%%",
+	"chat.torcherino.hint.layout": "%s | %s"
 }
 
