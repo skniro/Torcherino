@@ -27,7 +27,8 @@ public class ModBlocks
         Block TorcherinoWallBlock = new TorcherinoWallBlock(speed, TorcherinoBlock);
         Registry.register(Registry.BLOCK, Utils.getId("%storcherino", name), TorcherinoBlock);
         Registry.register(Registry.BLOCK, Utils.getId("wall_%storcherino", name), TorcherinoWallBlock);
-        Registry.register(Registry.ITEM, Utils.getId("%storcherino", name), new WallStandingBlockItem(TorcherinoBlock, TorcherinoWallBlock, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
+        Registry.register(Registry.ITEM, Utils.getId("%storcherino", name), new WallStandingBlockItem(TorcherinoBlock,
+                TorcherinoWallBlock, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
         Utils.blacklistBlock(TorcherinoBlock);
         Utils.blacklistBlock(TorcherinoWallBlock);
 
@@ -37,7 +38,8 @@ public class ModBlocks
     {
         Block LanterinoBlock = new LanterinoBlock(speed, Utils.getId("block/%slanterino", name));
         Registry.register(Registry.BLOCK, Utils.getId("%slanterino", name), LanterinoBlock);
-        Registry.register(Registry.ITEM, Utils.getId("%slanterino", name), new BlockItem(LanterinoBlock, new Item.Settings().itemGroup(ItemGroup.BUILDING_BLOCKS)));
+        Registry.register(Registry.ITEM, Utils.getId("%slanterino", name), new BlockItem(LanterinoBlock,
+                new Item.Settings().itemGroup(ItemGroup.BUILDING_BLOCKS)));
         Utils.blacklistBlock(LanterinoBlock);
     }
 
