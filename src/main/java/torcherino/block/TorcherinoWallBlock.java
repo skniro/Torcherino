@@ -62,7 +62,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
     }
 
     @Override
-    public void scheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
+    public void onScheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();

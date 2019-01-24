@@ -20,7 +20,7 @@ import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.Random;
 
-public class LanterinoBlock extends PumpkinCarvedBlock implements BlockEntityProvider
+public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
 {
     private int maxSpeed;
     LanterinoBlock(int speed, Identifier id)
@@ -59,7 +59,7 @@ public class LanterinoBlock extends PumpkinCarvedBlock implements BlockEntityPro
     }
 
     @Override
-    public void scheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
+    public void onScheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();
