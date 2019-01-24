@@ -1,6 +1,6 @@
 package torcherino;
 
-import net.fabricmc.api.*;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.networking.CustomPayloadPacketRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
