@@ -40,6 +40,15 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     }
 
     @Override
+    public void onBlockAdded(BlockState blockState, World world, BlockPos blockPos, BlockState oldState)
+    {
+        if(world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(blockPos);
+        if(blockEntity == null) return;
+        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(blockPos.down(), Direction.DOWN));
+    }
+
+    @Override
     public PistonBehavior getPistonBehavior(BlockState blockState)
     {
         return PistonBehavior.IGNORE;

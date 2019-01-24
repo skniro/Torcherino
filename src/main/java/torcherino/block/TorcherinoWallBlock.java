@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
-
 import java.util.Random;
 
 public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityProvider
@@ -39,6 +38,16 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
         if(blockEntity == null) return;
         Direction oppositeFacing = selfState.get(FACING).getOpposite();
         ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(selfPos.offset(oppositeFacing), oppositeFacing));
+    }
+
+    @Override
+    public void onBlockAdded(BlockState blockState, World world, BlockPos blockPos, BlockState oldState)
+    {
+        if(world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(blockPos);
+        if(blockEntity == null) return;
+        Direction oppositeFacing = blockState.get(FACING).getOpposite();
+        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(blockPos.offset(oppositeFacing), oppositeFacing));
     }
 
     @Override
