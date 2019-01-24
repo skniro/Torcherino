@@ -4,12 +4,13 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.loot.condition.LootCondition;
 import net.minecraft.world.loot.context.LootContext;
 import net.minecraft.world.loot.context.Parameter;
 import net.minecraft.world.loot.context.Parameters;
+
+import java.util.Set;
 
 public class PlayerModifierLootCondition implements LootCondition
 {
@@ -27,7 +28,7 @@ public class PlayerModifierLootCondition implements LootCondition
         return Utils.keyStates.getOrDefault(player, false);
     }
 
-    public static class Factory extends net.minecraft.world.loot.condition.LootCondition.Factory<PlayerModifierLootCondition>
+    public static class Factory extends LootCondition.Factory<PlayerModifierLootCondition>
     {
         Factory()
         {
@@ -39,7 +40,7 @@ public class PlayerModifierLootCondition implements LootCondition
 
         }
 
-        public PlayerModifierLootCondition fromJson(JsonObject jsonObject_1, JsonDeserializationContext jsonDeserializationContext_1)
+        public PlayerModifierLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext context)
         {
             return PlayerModifierLootCondition.INSTANCE;
         }
