@@ -1,15 +1,17 @@
 package torcherino.networking;
 
 import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.server.network.packet.CustomPayloadServerPacket;
 import net.minecraft.util.PacketByteBuf;
 import torcherino.ClientTorcherino;
 import torcherino.Utils;
-
 import java.util.function.Consumer;
 
+@Environment(EnvType.CLIENT)
 public class ClientTickHandler implements Consumer<MinecraftClient>
 {
     private boolean pressed = false;
