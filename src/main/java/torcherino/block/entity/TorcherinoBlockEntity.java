@@ -10,6 +10,7 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import torcherino.Torcherino;
 import torcherino.Utils;
+
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
@@ -39,12 +40,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     {
         if(world.isClient) return;
         if(poweredByRedstone || mode == 0 || speed == 0) return;
-        updateCachedModeIfNeeded();
-        tickNeighbors();
-    }
-
-    private void updateCachedModeIfNeeded()
-    {
         if(cachedMode != mode)
         {
             xMin = pos.getX() - mode;
@@ -55,15 +50,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
             zMax = pos.getZ() + mode;
             cachedMode = mode;
         }
-    }
-
-    private void tickNeighbors()
-    {
         for(int x = xMin; x <= xMax; x++)
             for(int y = yMin; y <= yMax; y++)
                 for(int z = zMin; z <= zMax; z++)
                     tickBlock(new BlockPos(x, y, z));
-
     }
 
     private void tickBlock(BlockPos pos)

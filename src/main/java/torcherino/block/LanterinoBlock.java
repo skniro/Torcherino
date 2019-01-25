@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
+
 import java.util.Random;
 
 public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
@@ -41,10 +42,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     @Override
     public void onBlockAdded(BlockState blockState, World world, BlockPos blockPos, BlockState oldState)
     {
-        if(world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(blockPos);
-        if(blockEntity == null) return;
-        ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(blockPos));
+        this.neighborUpdate(blockState, world, blockPos, null, null);
     }
 
     @Override

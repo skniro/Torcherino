@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = "torcherino"
+archivesBaseName = "Torcherino"
 version = "1.0.0"
 def mcVer = "19w04a"
 def yarnVer = "${mcVer}.1"
