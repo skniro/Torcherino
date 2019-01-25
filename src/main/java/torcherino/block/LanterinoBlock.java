@@ -10,12 +10,15 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +43,21 @@ public class LanterinoBlock extends BlockCarvedPumpkin implements ITileEntityPro
         TileEntity tileEntity = world.getTileEntity(selfPos);
         if (tileEntity == null) return;
         ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(world.isBlockPowered(selfPos));
+    }
+
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+    {
+        player.addStat(StatList.BLOCK_MINED.get(this));
+        player.addExhaustion(0.005F);
+        if(player.isSneaking())
+        {
+            spawnAsEntity(world, pos, new ItemStack(Blocks.CARVED_PUMPKIN.asItem()));
+            spawnAsEntity(world, pos, new ItemStack(IRegistry.ITEM.get(Utils.getId(IRegistry.BLOCK.getKey(this).getPath().replace("lanterino", "torcherino")))));
+        }
+        else
+            spawnAsEntity(world, pos, new ItemStack(this.asItem()));
+
     }
 
     @Override
