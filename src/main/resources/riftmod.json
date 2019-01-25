@@ -1,0 +1,10 @@
+{
+    "id": "torcherino",
+    "name": "Torcherino",
+    "authors": [
+        "NinjaPhenix"
+    ],
+    "listeners": [
+        "torcherino.Torcherino"
+    ]
+}
