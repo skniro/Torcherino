@@ -31,7 +31,6 @@ public class TorcherinoMessage extends Message
     @Override
     public void process(ServerMessageContext context)
     {
-        Utils.logger.info("New keystate update received from " + context.getSender().getDisplayName().getString() + ": " + pressed);
         Utils.keyStates.put(context.getSender(), pressed);
     }
 }

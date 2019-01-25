@@ -2,6 +2,7 @@ package torcherino;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +16,7 @@ public class Utils
     public static final Logger logger = LogManager.getLogger();
     private static HashSet<Block> blacklistedBlocks = new HashSet<>();
     private static HashSet<TileEntityType> blacklistedBlockEntities = new HashSet<>();
-    public static HashMap<EntityPlayer, Boolean> keyStates = new HashMap<>();
+    public static HashMap<EntityPlayerMP, Boolean> keyStates = new HashMap<>();
 
     public static boolean isBlockBlacklisted(Block block)
     {
