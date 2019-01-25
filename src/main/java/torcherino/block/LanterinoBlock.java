@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
-
 import java.util.Random;
 
 public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider

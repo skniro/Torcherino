@@ -9,7 +9,6 @@ import net.minecraft.server.network.packet.CustomPayloadServerPacket;
 import net.minecraft.util.PacketByteBuf;
 import torcherino.ClientTorcherino;
 import torcherino.Utils;
-
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)

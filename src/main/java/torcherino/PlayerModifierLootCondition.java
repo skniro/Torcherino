@@ -9,7 +9,6 @@ import net.minecraft.world.loot.condition.LootCondition;
 import net.minecraft.world.loot.context.LootContext;
 import net.minecraft.world.loot.context.Parameter;
 import net.minecraft.world.loot.context.Parameters;
-
 import java.util.Set;
 
 public class PlayerModifierLootCondition implements LootCondition

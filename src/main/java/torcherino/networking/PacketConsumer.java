@@ -3,7 +3,6 @@ package torcherino.networking;
 import net.fabricmc.fabric.networking.PacketContext;
 import net.minecraft.util.PacketByteBuf;
 import torcherino.Utils;
-
 import java.util.function.BiConsumer;
 
 public class PacketConsumer implements BiConsumer<PacketContext, PacketByteBuf>

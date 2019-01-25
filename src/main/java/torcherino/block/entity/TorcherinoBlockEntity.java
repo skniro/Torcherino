@@ -10,7 +10,6 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import torcherino.Torcherino;
 import torcherino.Utils;
-
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
