@@ -32,12 +32,12 @@ public class TorcherinoTileEntity extends TileEntity implements ITickable
 
     public TorcherinoTileEntity()
     {
-        this(Torcherino.TORCHERINO);
+        this(Torcherino.TORCHERINO_TILEENTITY);
     }
 
     public TorcherinoTileEntity(int speed)
     {
-        this(Torcherino.TORCHERINO);
+        this(Torcherino.TORCHERINO_TILEENTITY);
         maxSpeed = speed;
     }
 

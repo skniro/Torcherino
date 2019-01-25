@@ -50,7 +50,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin implements ITileEntityPro
     {
         player.addStat(StatList.BLOCK_MINED.get(this));
         player.addExhaustion(0.005F);
-        if(player.isSneaking())
+        if(Utils.keyStates.getOrDefault(player, false))
         {
             spawnAsEntity(world, pos, new ItemStack(Blocks.CARVED_PUMPKIN.asItem()));
             spawnAsEntity(world, pos, new ItemStack(IRegistry.ITEM.get(Utils.getId(IRegistry.BLOCK.getKey(this).getPath().replace("lanterino", "torcherino")))));
@@ -109,7 +109,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin implements ITileEntityPro
         TileEntity tile = world.getTileEntity(pos);
         if (!(tile instanceof TorcherinoTileEntity)) return true;
         TorcherinoTileEntity torch = (TorcherinoTileEntity) tile;
-        torch.changeMode(player.isSneaking());
+        torch.changeMode(Utils.keyStates.getOrDefault(player, false));
         player.sendStatusMessage(torch.getDescription(), true);
         return true;
     }

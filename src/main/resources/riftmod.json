@@ -5,6 +5,7 @@
         "NinjaPhenix"
     ],
     "listeners": [
-        "torcherino.Torcherino"
+        "torcherino.Torcherino",
+        "torcherino.TorcherinoClientListener"
     ]
 }
