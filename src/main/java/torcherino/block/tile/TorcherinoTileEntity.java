@@ -77,8 +77,6 @@ public class TorcherinoTileEntity extends TileEntity implements ITickable
     {
         IBlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
-        // todo: verify if this is actually needed
-        if(block == null) return;
         if(Utils.isBlockBlacklisted(block)) return;
         if(block.getTickRandomly(blockState))
             for(int i = 0; i < speed; i++)
@@ -104,8 +102,7 @@ public class TorcherinoTileEntity extends TileEntity implements ITickable
     {
         if(modifier)
             if(speed < maxSpeed) speed += maxSpeed / 4; else speed = 0;
-        else
-        if(mode < MODES.length - 1) mode++; else mode = 0;
+        else if(mode < MODES.length - 1) mode++; else mode = 0;
     }
 
     public TextComponentTranslation getDescription()
