@@ -11,7 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import torcherino.Torcherino;
 import torcherino.Utils;
-
 import java.util.Random;
 
 public class TorcherinoTileEntity extends TileEntity implements ITickable
@@ -42,18 +41,10 @@ public class TorcherinoTileEntity extends TileEntity implements ITickable
         maxSpeed = speed;
     }
 
-    public void tick()
-    {
-        if(world.isRemote) return;
-        if(poweredByRedstone || mode == 0 || speed == 0) return;
-        updateCachedModeIfNeeded();
-        tickNeighbors();
-    }
-
-    private void updateCachedModeIfNeeded()
-    {
-        if(cachedMode != mode)
-        {
+    public void tick() {
+        if (world.isRemote) return;
+        if (poweredByRedstone || mode == 0 || speed == 0) return;
+        if (cachedMode != mode) {
             xMin = pos.getX() - mode;
             xMax = pos.getX() + mode;
             yMin = pos.getY() - 1;
@@ -62,15 +53,10 @@ public class TorcherinoTileEntity extends TileEntity implements ITickable
             zMax = pos.getZ() + mode;
             cachedMode = mode;
         }
-    }
-
-    private void tickNeighbors()
-    {
-        for(int x = xMin; x <= xMax; x++)
-            for(int y = yMin; y <= yMax; y++)
-                for(int z = zMin; z <= zMax; z++)
+        for (int x = xMin; x <= xMax; x++)
+            for (int y = yMin; y <= yMax; y++)
+                for (int z = zMin; z <= zMax; z++)
                     tickBlock(new BlockPos(x, y, z));
-
     }
 
     private void tickBlock(BlockPos pos)
