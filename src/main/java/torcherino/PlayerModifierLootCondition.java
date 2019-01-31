@@ -7,22 +7,22 @@ import com.google.gson.JsonSerializationContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.loot.condition.LootCondition;
 import net.minecraft.world.loot.context.LootContext;
-import net.minecraft.world.loot.context.Parameter;
-import net.minecraft.world.loot.context.Parameters;
+import net.minecraft.world.loot.context.LootContextParameter;
+import net.minecraft.world.loot.context.LootContextParameters;
 import java.util.Set;
 
 public class PlayerModifierLootCondition implements LootCondition
 {
     private static final PlayerModifierLootCondition INSTANCE = new PlayerModifierLootCondition();
 
-    public Set<Parameter<?>> getRequiredParameters()
+    public Set<LootContextParameter<?>> getRequiredParameters()
     {
-        return ImmutableSet.of(Parameters.THIS_ENTITY);
+        return ImmutableSet.of(LootContextParameters.THIS_ENTITY);
     }
 
     public boolean test(LootContext lootContext_1)
     {
-        Entity player = lootContext_1.get(Parameters.THIS_ENTITY);
+        Entity player = lootContext_1.get(LootContextParameters.THIS_ENTITY);
         if(player == null) return false;
         return Utils.keyStates.getOrDefault(player, false);
     }
