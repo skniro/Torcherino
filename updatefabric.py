@@ -3,9 +3,11 @@ import xml.etree.ElementTree as ET
 import sys
 import string
 
+
 class CustomTemplate(string.Template):
     delimiter = "@"
-    
+
+
 def main(args):
     mavenRepo = "https://maven.fabricmc.net/net/fabricmc/{}/maven-metadata.xml"
     templateargs = {}
@@ -29,16 +31,15 @@ def main(args):
     print("Downloading fabric-loader data")
     templateargs["fabric_loader_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loader"))
     print("Downloading yarn data")
-    mcyarn = getReleaseOrLatest(mavenRepo.format("yarn")).split(".")
-    templateargs["minecraft_version"] = mcyarn[0]
-    templateargs["yarn_version"] = mcyarn[1]
+    templateargs["minecraft_version"], templateargs["yarn_version"] = getReleaseOrLatest(mavenRepo.format("yarn")).split(".")
     print("Reading input file({0}).".format(input_file))
     with open(input_file, "r+") as f:
             templateContents = CustomTemplate(f.read())
     print("Saving to output file({0}).".format(output_file))
     with open(output_file, "w+") as f:
         f.write(templateContents.safe_substitute(templateargs))
-                  
+
+
 def getReleaseOrLatest(mavenURL: str) -> str:
     mavenData = request.urlopen(mavenURL).read()
     elementTree = ET.fromstring(mavenData)
@@ -52,7 +53,6 @@ def getReleaseOrLatest(mavenURL: str) -> str:
         else:
             raise ValueError("Maven doesnt have version data???")
 
+
 if __name__ == "__main__":
     main(sys.argv[1::])
-    
-            
