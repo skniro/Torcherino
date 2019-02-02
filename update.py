@@ -1,6 +1,6 @@
-import os
-os.system("python updatefabric.py -template template_build.gradle")
-os.system("gradlew cleanLoomBinaries cleanLoomMappings")
-os.system("gradlew")
-os.system("gradlew cleanIdea openIdea")
+from os import system as cmd
+cmd("python updatefabric.py -in template_build.gradle")
+cmd("gradlew cleanLoomBinaries cleanLoomMappings")
+cmd("gradlew")
+cmd("gradlew cleanIdea openIdea")
 input("Press any key to exit.")
