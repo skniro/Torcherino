@@ -15,10 +15,7 @@ public class PlayerModifierLootCondition implements LootCondition
 {
     private static final PlayerModifierLootCondition INSTANCE = new PlayerModifierLootCondition();
 
-    public Set<LootContextParameter<?>> getRequiredParameters()
-    {
-        return ImmutableSet.of(LootContextParameters.THIS_ENTITY);
-    }
+    public Set<LootContextParameter<?>> getRequiredParameters() { return ImmutableSet.of(LootContextParameters.THIS_ENTITY); }
 
     public boolean test(LootContext lootContext_1)
     {
@@ -34,10 +31,7 @@ public class PlayerModifierLootCondition implements LootCondition
             super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class);
         }
 
-        public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context)
-        {
-
-        }
+        public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context) { }
 
         public PlayerModifierLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext context)
         {
