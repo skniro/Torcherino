@@ -120,7 +120,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     @Override
     public BlockEntityUpdateClientPacket toUpdatePacket()
     {
-        return new BlockEntityUpdateClientPacket(getPos(), -999, toTag(new CompoundTag()));
+        return new BlockEntityUpdateClientPacket(getPos(), 126, toTag(new CompoundTag()));
     }
 
 }
