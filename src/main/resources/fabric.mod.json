@@ -2,7 +2,7 @@
   "id": "torcherino",
   "name": "Torcherino",
   "description": "Adds torches which speeds up block entities around them.",
-  "version": "1.0.0",
+  "version": "0.5.31",
   "side": "universal",
   "initializers": [
     "torcherino.Torcherino",
