@@ -5,7 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
-import net.fabricmc.fabric.events.client.ClientTickEvent;
+import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import torcherino.networking.ClientTickHandler;
@@ -20,7 +20,6 @@ public class ClientTorcherino implements ClientModInitializer
     public void onInitializeClient()
     {
         KeyBindingRegistry.INSTANCE.register(torcherinoKeyBind);
-        ClientTickEvent.CLIENT.register(new ClientTickHandler());
+        ClientTickCallback.EVENT.register(new ClientTickHandler());
     }
-
 }

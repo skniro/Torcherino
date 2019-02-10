@@ -1,13 +1,13 @@
 package torcherino;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.networking.CustomPayloadPacketRegistry;
+import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.loot.condition.LootConditions;
 import torcherino.block.ModBlocks;
 import torcherino.block.entity.TorcherinoBlockEntity;
-import torcherino.networking.PacketConsumer;
+import torcherino.networking.TorcherinoPacketConsumer;
 
 public class Torcherino implements ModInitializer
 {
@@ -18,9 +18,8 @@ public class Torcherino implements ModInitializer
 	public void onInitialize()
 	{
 		LootConditions.register(new PlayerModifierLootCondition.Factory());
-		CustomPayloadPacketRegistry.SERVER.register(Utils.getId("modifier"), new PacketConsumer());
+		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("modifier"), new TorcherinoPacketConsumer());
 		ModBlocks.onInitialize();
 		Utils.blacklistBlockEntity(TorcherinoBlockEntity);
 	}
-
 }

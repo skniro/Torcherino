@@ -45,5 +45,4 @@ public class Utils
     {
         return getId(String.format(format, args));
     }
-
 }

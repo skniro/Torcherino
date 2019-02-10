@@ -122,5 +122,4 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     {
         return new BlockEntityUpdateClientPacket(getPos(), 126, toTag(new CompoundTag()));
     }
-
 }
