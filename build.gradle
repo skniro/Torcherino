@@ -5,15 +5,15 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 archivesBaseName = "Torcherino"
-version = "0.5.31"
+version = "0.5.32"
 
 dependencies {
 	minecraft "com.mojang:minecraft:19w06a"
-	mappings "net.fabricmc:yarn:19w06a.3"
-	modCompile "net.fabricmc:fabric-loader:0.3.5.106"
+	mappings "net.fabricmc:yarn:19w06a.6"
+	modCompile "net.fabricmc:fabric-loader:0.3.6.107"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modCompile "net.fabricmc:fabric:0.2.0.90"
+	modCompile "net.fabricmc:fabric:0.2.0.92"
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
