@@ -19,7 +19,7 @@ public class ClientTickHandler implements ClientTickCallback
     {
         if(client.getGame().getCurrentSession() == null) return;
         boolean keyBindPressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().window.getHandle(),
-                InputUtil.fromName(ClientTorcherino.torcherinoKeyBind.getName()).getKeyCode());
+                InputUtil.fromName(ClientTorcherino.modifierBind.getName()).getKeyCode());
         if(keyBindPressed ^ pressed)
         {
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());

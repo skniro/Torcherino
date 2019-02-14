@@ -13,13 +13,13 @@ import torcherino.networking.ClientTickHandler;
 @Environment(EnvType.CLIENT)
 public class ClientTorcherino implements ClientModInitializer
 {
-    public static final FabricKeyBinding torcherinoKeyBind = FabricKeyBinding.Builder.create(Utils.getId("modifier"),
+    public static final FabricKeyBinding modifierBind= FabricKeyBinding.Builder.create(Utils.getId("modifier"),
             InputUtil.Type.KEY_KEYBOARD, GLFW.GLFW_KEY_LEFT_SHIFT, "key.categories.misc").build();
 
     @Override
     public void onInitializeClient()
     {
-        KeyBindingRegistry.INSTANCE.register(torcherinoKeyBind);
+        KeyBindingRegistry.INSTANCE.register(modifierBind);
         ClientTickCallback.EVENT.register(new ClientTickHandler());
     }
 }

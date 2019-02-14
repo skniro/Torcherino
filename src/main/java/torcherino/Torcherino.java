@@ -11,8 +11,8 @@ import torcherino.networking.TorcherinoPacketConsumer;
 
 public class Torcherino implements ModInitializer
 {
-	public static final BlockEntityType<TorcherinoBlockEntity> TorcherinoBlockEntity = Registry.register(Registry.BLOCK_ENTITY,
-            Utils.getId("torcherino"), BlockEntityType.Builder.create(torcherino.block.entity.TorcherinoBlockEntity::new).build(null));
+	public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE= Registry.register(Registry.BLOCK_ENTITY,
+            Utils.getId("torcherino"), BlockEntityType.Builder.create(TorcherinoBlockEntity::new).build(null));
 
 	@Override
 	public void onInitialize()
@@ -20,6 +20,6 @@ public class Torcherino implements ModInitializer
 		LootConditions.register(new PlayerModifierLootCondition.Factory());
 		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("modifier"), new TorcherinoPacketConsumer());
 		ModBlocks.onInitialize();
-		Utils.blacklistBlockEntity(TorcherinoBlockEntity);
+		Utils.blacklistBlockEntity(TORCHERINO_BLOCK_ENTITY_TYPE);
 	}
 }

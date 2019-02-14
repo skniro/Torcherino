@@ -3,7 +3,7 @@ package torcherino.block.entity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.network.packet.BlockEntityUpdateClientPacket;
+import net.minecraft.client.network.packet.BlockEntityUpdateS2CPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.Tickable;
@@ -25,7 +25,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 
     public TorcherinoBlockEntity()
     {
-        super(Torcherino.TorcherinoBlockEntity);
+        super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE);
         rand = new Random();
     }
 
@@ -118,8 +118,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     }
 
     @Override
-    public BlockEntityUpdateClientPacket toUpdatePacket()
+    public BlockEntityUpdateS2CPacket toUpdatePacket()
     {
-        return new BlockEntityUpdateClientPacket(getPos(), 126, toTag(new CompoundTag()));
+        return new BlockEntityUpdateS2CPacket(getPos(), 126, toTag(new CompoundTag()));
     }
 }

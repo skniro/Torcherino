@@ -18,21 +18,21 @@ def main(args):
         else:
             templateargs[index] = value
             index = ""
-    input_file = "template_build.gradle"
-    output_file = "build.gradle"
+    input_file = "template.properties"
+    output_file = "gradle.properties"
     if "in" in templateargs:
         input_file = templateargs.pop("in")
     if "out" in templateargs:
         output_file = templateargs.pop("out")
-    print("Downloading loom data")
-    templateargs["fabric_loom_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loom"))
-    print("    Found version "+templateargs["fabric_loom_version"])
+    #print("Downloading loom data")
+    #templateargs["loom_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loom"))
+    #print("    Found version "+templateargs["loom_version"])
     print("Downloading fabric data")
     templateargs["fabric_version"] = getReleaseOrLatest(mavenRepo.format("fabric"))
     print("    Found version "+templateargs["fabric_version"])
     print("Downloading fabric-loader data")
-    templateargs["fabric_loader_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loader"))
-    print("    Found version "+templateargs["fabric_loader_version"])
+    templateargs["loader_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loader"))
+    print("    Found version "+templateargs["loader_version"])
     print("Downloading yarn data")
     templateargs["minecraft_version"], templateargs["yarn_version"] = getReleaseOrLatest(mavenRepo.format("yarn")).split(".")
     print("    Found version "+templateargs["minecraft_version"]+"."+templateargs["yarn_version"])

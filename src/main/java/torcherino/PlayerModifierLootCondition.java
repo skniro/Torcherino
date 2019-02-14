@@ -17,9 +17,9 @@ public class PlayerModifierLootCondition implements LootCondition
 
     public Set<LootContextParameter<?>> getRequiredParameters() { return ImmutableSet.of(LootContextParameters.THIS_ENTITY); }
 
-    public boolean test(LootContext lootContext_1)
+    public boolean test(LootContext context)
     {
-        Entity player = lootContext_1.get(LootContextParameters.THIS_ENTITY);
+        Entity player = context.get(LootContextParameters.THIS_ENTITY);
         if(player == null) return false;
         return Utils.keyStates.getOrDefault(player, false);
     }
