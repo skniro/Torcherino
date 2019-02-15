@@ -7,7 +7,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.loot.condition.LootConditions;
 import torcherino.block.ModBlocks;
 import torcherino.block.entity.TorcherinoBlockEntity;
-import torcherino.networking.TorcherinoPacketConsumer;
+import torcherino.networking.PacketConsumers;
 
 public class Torcherino implements ModInitializer
 {
@@ -18,7 +18,8 @@ public class Torcherino implements ModInitializer
 	public void onInitialize()
 	{
 		LootConditions.register(new PlayerModifierLootCondition.Factory());
-		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("modifier"), new TorcherinoPacketConsumer());
+		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatemodifierstate"), new PacketConsumers.ModifierBind());
+		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatetorcherinostate"), new PacketConsumers.UpdateTorcherino());
 		ModBlocks.onInitialize();
 		Utils.blacklistBlockEntity(TORCHERINO_BLOCK_ENTITY_TYPE);
 	}

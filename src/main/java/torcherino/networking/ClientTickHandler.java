@@ -24,7 +24,7 @@ public class ClientTickHandler implements ClientTickCallback
         {
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
             buffer.writeBoolean(pressed = !pressed);
-            ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("modifier"), buffer);
+            ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("updatemodifierstate"), buffer);
         }
     }
 }

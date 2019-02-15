@@ -1,15 +1,19 @@
 package torcherino.block;
 
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -87,8 +91,10 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
         BlockEntity blockEntity = world.getBlockEntity(blockPos);
         if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
         TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
-        torch.changeMode(Utils.keyStates.getOrDefault(playerEntity, false));
-        playerEntity.addChatMessage(torch.getDescription(), true);
+        CompoundTag tag = torch.toTag(new CompoundTag());
+        PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+        buffer.writeCompoundTag(tag);
+        ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(playerEntity, Utils.getId("openscreen"), buffer);
         return true;
     }
 }

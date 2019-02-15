@@ -19,18 +19,18 @@ public class ModBlocks
 
     private static void register(String name, int speed)
     {
-        Block TorcherinoBlock = new TorcherinoBlock(speed, Utils.getId("block/%storcherino", name));
-        Block TorcherinoWallBlock = new TorcherinoWallBlock(speed, TorcherinoBlock);
-        Block LanterinoBlock = new LanterinoBlock(speed, Utils.getId("block/%slanterino", name));
-        Registry.register(Registry.BLOCK, Utils.getId("%storcherino", name), TorcherinoBlock);
-        Registry.register(Registry.BLOCK, Utils.getId("wall_%storcherino", name), TorcherinoWallBlock);
-        Registry.register(Registry.ITEM, Utils.getId("%storcherino", name), new WallStandingBlockItem(TorcherinoBlock,
-                TorcherinoWallBlock, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
-        Registry.register(Registry.BLOCK, Utils.getId("%slanterino", name), LanterinoBlock);
-        Registry.register(Registry.ITEM, Utils.getId("%slanterino", name), new BlockItem(LanterinoBlock,
+        Block torcherinoBlock = new TorcherinoBlock(speed, Utils.getId("block/%storcherino", name));
+        Block torcherinoWallBlock = new TorcherinoWallBlock(speed, torcherinoBlock);
+        Block lanterinoBlock = new LanterinoBlock(speed, Utils.getId("block/%slanterino", name));
+        Registry.register(Registry.BLOCK, Utils.getId("%storcherino", name), torcherinoBlock);
+        Registry.register(Registry.BLOCK, Utils.getId("wall_%storcherino", name), torcherinoWallBlock);
+        Registry.register(Registry.ITEM, Utils.getId("%storcherino", name), new WallStandingBlockItem(torcherinoBlock,
+                torcherinoWallBlock, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
+        Registry.register(Registry.BLOCK, Utils.getId("%slanterino", name), lanterinoBlock);
+        Registry.register(Registry.ITEM, Utils.getId("%slanterino", name), new BlockItem(lanterinoBlock,
                 new Item.Settings().itemGroup(ItemGroup.BUILDING_BLOCKS)));
-        Utils.blacklistBlock(TorcherinoBlock);
-        Utils.blacklistBlock(TorcherinoWallBlock);
-        Utils.blacklistBlock(LanterinoBlock);
+        Utils.blacklistBlock(torcherinoBlock);
+        Utils.blacklistBlock(torcherinoWallBlock);
+        Utils.blacklistBlock(lanterinoBlock);
     }
 }

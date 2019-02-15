@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.network.packet.BlockEntityUpdateS2CPacket;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import torcherino.Torcherino;
@@ -14,9 +13,8 @@ import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    private static final String[] MODES = new String[]{"chat.torcherino.hint.area.stopped", "chat.torcherino.hint.area.n",
-            "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n"};
     private boolean poweredByRedstone;
+    private byte MODES = 4;
     private int speed, maxSpeed;
     private byte cachedMode, mode;
     private int xMin, yMin, zMin;
@@ -81,20 +79,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         poweredByRedstone = powered;
     }
 
-    public void changeMode(boolean modifier)
-    {
-        if(modifier)
-            if(speed < maxSpeed) speed += maxSpeed / 4; else speed = 0;
-        else
-            if(mode < MODES.length - 1) mode++; else mode = 0;
-    }
+    public void setSpeed(int sp) { speed = sp > maxSpeed ? maxSpeed : sp < 0 ? 0 : sp; }
 
-    public TranslatableTextComponent getDescription()
-    {
-        return new TranslatableTextComponent("chat.torcherino.hint.layout",
-                new TranslatableTextComponent(MODES[mode], 2*mode + 1),
-                new TranslatableTextComponent("chat.torcherino.hint.speed",speed*100));
-    }
+    public void setMode(byte mo) { mode = mo > MODES ? MODES : mo < 0 ? 0 : mo; }
 
     @Override
     public CompoundTag toTag(CompoundTag tag)
