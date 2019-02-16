@@ -13,7 +13,7 @@ public class ModItems
 {
 	public static HashSet<Item> items = new HashSet<>();
 	@SubscribeEvent
-	public static void onItemRegistry( RegistryEvent.Register<Item> registryEvent)
+	public static void onItemRegistry(final RegistryEvent.Register<Item> registryEvent)
 	{
 		IForgeRegistry<Item> registry = registryEvent.getRegistry();
 		for(Item item : items)

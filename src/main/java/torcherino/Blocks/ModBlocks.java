@@ -16,7 +16,7 @@ public class ModBlocks
 {
 
 	@SubscribeEvent
-	public static void onBlockRegistry( RegistryEvent.Register<Block> registryEvent)
+	public static void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
 	{
 		IForgeRegistry<Block> registry = registryEvent.getRegistry();
 		register(registry, "");
