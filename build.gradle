@@ -2,7 +2,8 @@ plugins {
     id 'fabric-loom' version '0.2.0-SNAPSHOT'
 }
 
-sourceCompatibility = targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = "Torcherino"
 version = "0.6.34"
 
