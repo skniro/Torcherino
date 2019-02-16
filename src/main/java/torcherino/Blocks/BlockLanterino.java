@@ -1,13 +1,18 @@
 package torcherino.Blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorchWall;
+import net.minecraft.block.BlockCarvedPumpkin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -15,6 +20,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Blocks.Tiles.TileEntityTorcherino;
 import torcherino.Utils;
@@ -22,19 +28,25 @@ import torcherino.Utils;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockTorcherinoWall extends BlockTorchWall
+public class BlockLanterino extends BlockCarvedPumpkin
 {
-	private BlockTorcherino BASE;
-	BlockTorcherinoWall(BlockTorcherino base)
+	private int MAX_SPEED;
+	private Item itemAs;
+	BlockLanterino(int speed)
 	{
-		super(Properties.from(base));
-		this.BASE = base;
+		super(Block.Properties.create(Material.GROUND, MaterialColor.ADOBE).hardnessAndResistance(1.0F).sound(SoundType.WOOD).lightValue(15));
+		MAX_SPEED = speed;
+	}
+
+	public void setItem(Item item)
+	{
+		itemAs = item;
 	}
 
 	@Override
 	public Item asItem()
 	{
-		return BASE.asItem();
+		return itemAs;
 	}
 
 	@Override
@@ -45,7 +57,30 @@ public class BlockTorcherinoWall extends BlockTorchWall
 
 	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
 	{
-		return BASE.createTileEntity(state, world);
+		return new TileEntityTorcherino(MAX_SPEED);
+	}
+
+	@Override
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+	{
+		player.addStat(StatList.BLOCK_MINED.get(this));
+		player.addExhaustion(0.005F);
+		if(player.isSneaking())
+		{
+			Item item = GameRegistry.findRegistry(Item.class).getValue(Utils.getId(this.getRegistryName().getPath().replace("lanterino", "torcherino")));
+			if(item != null)
+			{
+				spawnAsEntity(world, pos, new ItemStack(Blocks.CARVED_PUMPKIN.asItem()));
+				spawnAsEntity(world, pos, new ItemStack(item));
+			}
+			else
+			{
+				spawnAsEntity(world, pos, new ItemStack(this.asItem()));
+			}
+		}
+		else
+			spawnAsEntity(world, pos, new ItemStack(this.asItem()));
+
 	}
 
 	@Override
@@ -54,8 +89,7 @@ public class BlockTorcherinoWall extends BlockTorchWall
 		if (world.isRemote) return;
 		TileEntity tileEntity = world.getTileEntity(selfPos);
 		if (tileEntity == null) return;
-		EnumFacing oppositeFacing = selfState.get(HORIZONTAL_FACING).getOpposite();
-		((TileEntityTorcherino) tileEntity).setPoweredByRedstone(world.isSidePowered(selfPos.offset(oppositeFacing), oppositeFacing));
+		((TileEntityTorcherino) tileEntity).setPoweredByRedstone(world.isBlockPowered(selfPos));
 	}
 
 	@Override
@@ -106,4 +140,5 @@ public class BlockTorcherinoWall extends BlockTorchWall
 		player.sendStatusMessage(torch.getDescription(), true);
 		return true;
 	}
+
 }

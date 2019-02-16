@@ -1,57 +1,46 @@
 package torcherino;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemWallOrFloor;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.IForgeRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import torcherino.Blocks.BlockTorcherino;
-import torcherino.Blocks.BlockTorcherinoWall;
+import net.minecraftforge.registries.GameData;
 import torcherino.Blocks.ModBlocks;
+import torcherino.Blocks.Tiles.TileEntityTorcherino;
 import torcherino.Items.ModItems;
-
-import javax.annotation.Resource;
-import java.rmi.registry.Registry;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Mod("torcherino")
 public class Torcherino
 {
-	// Directly reference a log4j logger.
-	private static final Logger LOGGER = LogManager.getLogger();
-
-	public Torcherino() {
-		// Register the processIMC method for modloading
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-
-		FMLJavaModLoadingContext.get().getModEventBus().register(new ModBlocks());
-		FMLJavaModLoadingContext.get().getModEventBus().register(new ModItems());
-		// Register ourselves for server, registry and other game events we are interested in
+	public static TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
+	public Torcherino()
+	{
+		Utils.blacklistTileEntity(TileEntityTorcherino.class);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorcherinoConfig.commonSpec);
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.register(TorcherinoConfig.class);
+		modEventBus.addListener(this::processIMC);
+		modEventBus.register(new ModBlocks());
+		modEventBus.register(new ModItems());
+		modEventBus.addListener((final RegistryEvent.Register<TileEntityType<?>> registryEvent) -> {
+			if(registryEvent.getName() != GameData.TILEENTITIES) return;
+			TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TileEntityTorcherino::new).build(null);
+			TORCHERINO_TILE_ENTITY_TYPE.setRegistryName(Utils.getId("torcherino"));
+			registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
+		});
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	private void processIMC(final InterModProcessEvent event)
 	{
 		// some example code to receive and process InterModComms from other mods
-		LOGGER.info("Got IMC", event.getIMCStream().
+		Utils.LOGGER.info("Got IMC", event.getIMCStream().
 				map(m->m.getMessageSupplier().get()).
 				collect(Collectors.toList()));
 
