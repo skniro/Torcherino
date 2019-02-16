@@ -4,6 +4,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -13,7 +14,6 @@ import net.minecraftforge.registries.GameData;
 import torcherino.Blocks.ModBlocks;
 import torcherino.Blocks.Tiles.TileEntityTorcherino;
 import torcherino.Items.ModItems;
-import java.util.stream.Collectors;
 
 @Mod("torcherino")
 public class Torcherino
@@ -39,12 +39,17 @@ public class Torcherino
 
 	private void processIMC(final InterModProcessEvent event)
 	{
-		// some example code to receive and process InterModComms from other mods
-		Utils.LOGGER.info("Got IMC", event.getIMCStream().
-				map(m->m.getMessageSupplier().get()).
-				collect(Collectors.toList()));
-
-
+		// To use:
+		// in InterModEnqueueEvent call
+		// InterModComms.sendTo("torcherino", "blacklist", supplier);
+		// where supplier has a get method which returns a String of either:
+		// a block's resource location e.g. "minecraft:furnace"
+		// or a tile entity class path e.g. net.minecraft.tileentity.TileEntityFurnace
+		event.getIMCStream().forEach((InterModComms.IMCMessage message) -> {
+			if(message.getMethod().equalsIgnoreCase("blacklist"))
+			{
+				Utils.blacklistString((String) message.getMessageSupplier().get());
+			}
+		});
 	}
-
 }
