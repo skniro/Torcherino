@@ -52,7 +52,7 @@ public class BlockLanterino extends BlockCarvedPumpkin
 	{
 		player.addStat(StatList.BLOCK_MINED.get(this));
 		player.addExhaustion(0.005F);
-		if(player.isSneaking())
+		if(Utils.keyStates.getOrDefault(player, false))
 		{
 			Item item = GameRegistry.findRegistry(Item.class).getValue(Utils.getId(this.getRegistryName().getPath().replace("lanterino", "torcherino")));
 			if(item != null)
@@ -115,7 +115,7 @@ public class BlockLanterino extends BlockCarvedPumpkin
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileEntityTorcherino)) return true;
 		TileEntityTorcherino torch = (TileEntityTorcherino) tile;
-		torch.changeMode(player.isSneaking());
+		torch.changeMode(Utils.keyStates.getOrDefault(player, false));
 		player.sendStatusMessage(torch.getDescription(), true);
 		return true;
 	}

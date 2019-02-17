@@ -90,7 +90,7 @@ public class BlockTorcherino extends BlockTorch
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileEntityTorcherino)) return true;
 		TileEntityTorcherino torch = (TileEntityTorcherino) tile;
-		torch.changeMode(player.isSneaking());
+		torch.changeMode(Utils.keyStates.getOrDefault(player, false));
 		player.sendStatusMessage(torch.getDescription(), true);
 		return true;
 	}

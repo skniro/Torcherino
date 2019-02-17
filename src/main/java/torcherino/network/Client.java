@@ -1,13 +1,16 @@
 package torcherino.network;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import torcherino.Torcherino;
 
 public class Client
 {
@@ -32,7 +35,7 @@ public class Client
 				if(bindPressed ^ pressed)
 				{
 					pressed = !pressed;
-					System.out.println("Keybind state updated!");
+					Torcherino.torcherinoNetworkChannel.sendToServer(new Messages.KeystateUpdate(pressed, new PacketBuffer(Unpooled.buffer())));
 				}
 			}
 		}
