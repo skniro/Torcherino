@@ -30,6 +30,7 @@ public class Torcherino
 {
 	private KeyBinding modifierBind;
 	public static TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
+
 	public Torcherino()
 	{
 		MinecraftForge.EVENT_BUS.register(Client.class);
@@ -47,6 +48,7 @@ public class Torcherino
 			registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
 		});
 	}
+
 	private void processIMC(final InterModProcessEvent event)
 	{
 		// To use:

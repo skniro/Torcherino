@@ -9,12 +9,14 @@ import java.util.List;
 
 public class TorcherinoConfig
 {
-	public static class COMMON{
+	public static class COMMON
+	{
 		final ForgeConfigSpec.BooleanValue compressedEnabled;
 		final ForgeConfigSpec.BooleanValue doubleCompressedEnabled;
 		final ForgeConfigSpec.BooleanValue logPlacement;
 		final ForgeConfigSpec.ConfigValue<List<String>> blacklistedBlocks;
 		final ForgeConfigSpec.ConfigValue<List<String>> blacklistedTiles;
+
 		COMMON(ForgeConfigSpec.Builder builder)
 		{
 			compressedEnabled = builder.comment("Set this to true to enable compressed torcherino and lanterinos")
@@ -33,17 +35,11 @@ public class TorcherinoConfig
 					.translation("torcherino.configgui.logplacement")
 					.define("logPlacement", false);
 		}
-
 	}
 
-	static final ForgeConfigSpec commonSpec;
-	static final COMMON common;
-	static
-	{
-		final Pair<COMMON, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(COMMON::new);
-		commonSpec = specPair.getRight();
-		common = specPair.getLeft();
-	}
+	private static final Pair<COMMON, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(COMMON::new);
+	static final ForgeConfigSpec commonSpec = specPair.getRight();
+	private static final COMMON common = specPair.getLeft();
 
 	@SubscribeEvent
 	public static void onLoad(final ModConfig.Loading configEvent)

@@ -24,7 +24,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Blocks.Tiles.TileEntityTorcherino;
 import torcherino.Utils;
-
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -62,9 +61,7 @@ public class BlockLanterino extends BlockCarvedPumpkin
 				spawnAsEntity(world, pos, new ItemStack(item));
 			}
 			else
-			{
 				spawnAsEntity(world, pos, new ItemStack(this.asItem()));
-			}
 		}
 		else
 			spawnAsEntity(world, pos, new ItemStack(this.asItem()));

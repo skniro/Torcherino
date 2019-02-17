@@ -26,6 +26,8 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 
 	public TileEntityTorcherino(int speed) { this(); MAX_SPEED = speed; }
 
+	public void setPoweredByRedstone(boolean powered) { poweredByRedstone = powered; }
+
 	public void tick() {
 		if (world.isRemote) return;
 		if (poweredByRedstone || mode == 0 || speed == 0) return;
@@ -64,14 +66,10 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 		}
 	}
 
-	public void setPoweredByRedstone(boolean powered) { poweredByRedstone = powered; }
-
 	public void changeMode(boolean modifier)
 	{
-		if(modifier)
-			if(speed < MAX_SPEED) speed += MAX_SPEED / 4; else speed = 0;
-		else
-			if(mode < MODES.length - 1) mode++; else mode = 0;
+		if(modifier) if(speed < MAX_SPEED) speed += MAX_SPEED / 4; else speed = 0;
+		else if(mode < MODES.length - 1) mode++; else mode = 0;
 	}
 
 	public TextComponentTranslation getDescription()

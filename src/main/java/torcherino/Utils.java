@@ -30,6 +30,8 @@ public class Utils
 
 	public static void blacklistTileEntity(TileEntity tileEntity) { blacklistedBlockEntities.add(tileEntity.getClass()); }
 
+	public static ResourceLocation getId(String path) { return new ResourceLocation("torcherino", path); }
+
 	static void blacklistString(String string)
 	{
 		if (string.indexOf(':') == -1)
@@ -55,6 +57,4 @@ public class Utils
 			blacklistBlock(block);
 		}
 	}
-
-	public static ResourceLocation getId(String path) { return new ResourceLocation("torcherino", path); }
 }
