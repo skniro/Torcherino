@@ -38,27 +38,15 @@ public class BlockLanterino extends BlockCarvedPumpkin
 		MAX_SPEED = speed;
 	}
 
-	public void setItem(Item item)
-	{
-		itemAs = item;
-	}
+	public void setItem(Item item) { itemAs = item; }
 
 	@Override
-	public Item asItem()
-	{
-		return itemAs;
-	}
+	public Item asItem() { return itemAs; }
 
 	@Override
-	public boolean hasTileEntity(IBlockState state)
-	{
-		return true;
-	}
+	public boolean hasTileEntity(IBlockState state) { return true; }
 
-	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
-	{
-		return new TileEntityTorcherino(MAX_SPEED);
-	}
+	public TileEntity createTileEntity(IBlockState state, IBlockReader world) { return new TileEntityTorcherino(MAX_SPEED); }
 
 	@Override
 	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
@@ -93,16 +81,10 @@ public class BlockLanterino extends BlockCarvedPumpkin
 	}
 
 	@Override
-	public void onBlockAdded(IBlockState state, World world, BlockPos blockPos, IBlockState oldState)
-	{
-		neighborChanged(state, world, blockPos, null, null);
-	}
+	public void onBlockAdded(IBlockState state, World world, BlockPos blockPos, IBlockState oldState) { neighborChanged(state, world, blockPos, null, null); }
 
 	@Override
-	public EnumPushReaction getPushReaction(IBlockState state)
-	{
-		return EnumPushReaction.IGNORE;
-	}
+	public EnumPushReaction getPushReaction(IBlockState state) { return EnumPushReaction.IGNORE; }
 
 	@Override
 	public void tick(IBlockState state, World world, BlockPos pos, Random random)

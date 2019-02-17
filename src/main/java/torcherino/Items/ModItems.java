@@ -11,16 +11,11 @@ import org.antlr.v4.runtime.misc.OrderedHashSet;
 public class ModItems
 {
 	public static OrderedHashSet<Item> items = new OrderedHashSet<>();
+
 	@SubscribeEvent
 	public static void onItemRegistry(final RegistryEvent.Register<Item> registryEvent)
 	{
 		IForgeRegistry<Item> registry = registryEvent.getRegistry();
-		for(Item item : items)
-		{
-			System.out.println(item.getTranslationKey());
-			registry.register(item);
-		}
-
+		for(Item item : items) registry.register(item);
 	}
-
 }

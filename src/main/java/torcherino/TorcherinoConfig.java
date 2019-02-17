@@ -38,7 +38,8 @@ public class TorcherinoConfig
 
 	static final ForgeConfigSpec commonSpec;
 	static final COMMON common;
-	static {
+	static
+	{
 		final Pair<COMMON, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(COMMON::new);
 		commonSpec = specPair.getRight();
 		common = specPair.getLeft();
@@ -51,16 +52,8 @@ public class TorcherinoConfig
 		Utils.logPlacement = config.getConfigData().get("logPlacement");
 		Utils.LOGGER.info("Torcherino config has been loaded from {}", config.getFileName());
 		List<String> blocks = config.getConfigData().get("blacklistedBlocks");
-		for(String block : blocks)
-		{
-			Utils.blacklistString(block);
-		}
+		for(String block : blocks) Utils.blacklistString(block);
 		List<String> tiles = config.getConfigData().get("blacklistedTiles");
-		for(String tile : tiles)
-		{
-			Utils.blacklistString(tile);
-		}
-
+		for(String tile : tiles) Utils.blacklistString(tile);
 	}
-
 }

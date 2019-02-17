@@ -22,16 +22,9 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 	private int xMin, yMin, zMin;
 	private int xMax, yMax, zMax;
 
-	public TileEntityTorcherino()
-	{
-		super(TORCHERINO_TILE_ENTITY_TYPE);
-	}
+	public TileEntityTorcherino() { super(TORCHERINO_TILE_ENTITY_TYPE); }
 
-	public TileEntityTorcherino(int speed)
-	{
-		this();
-		MAX_SPEED = speed;
-	}
+	public TileEntityTorcherino(int speed) { this(); MAX_SPEED = speed; }
 
 	public void tick() {
 		if (world.isRemote) return;
@@ -71,16 +64,14 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 		}
 	}
 
-	public void setPoweredByRedstone(boolean powered)
-	{
-		poweredByRedstone = powered;
-	}
+	public void setPoweredByRedstone(boolean powered) { poweredByRedstone = powered; }
 
 	public void changeMode(boolean modifier)
 	{
 		if(modifier)
 			if(speed < MAX_SPEED) speed += MAX_SPEED / 4; else speed = 0;
-		else if(mode < MODES.length - 1) mode++; else mode = 0;
+		else
+			if(mode < MODES.length - 1) mode++; else mode = 0;
 	}
 
 	public TextComponentTranslation getDescription()
@@ -112,9 +103,5 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
-	{
-		return new SPacketUpdateTileEntity(getPos(), 126, write(new NBTTagCompound()));
-	}
-
+	public SPacketUpdateTileEntity getUpdatePacket() { return new SPacketUpdateTileEntity(getPos(), 126, write(new NBTTagCompound())); }
 }

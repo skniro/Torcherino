@@ -25,28 +25,15 @@ import java.util.Random;
 public class BlockTorcherinoWall extends BlockTorchWall
 {
 	private BlockTorcherino BASE;
-	BlockTorcherinoWall(BlockTorcherino base)
-	{
-		super(Properties.from(base));
-		this.BASE = base;
-	}
+	BlockTorcherinoWall(BlockTorcherino base) { super(Properties.from(base)); this.BASE = base; }
 
 	@Override
-	public Item asItem()
-	{
-		return BASE.asItem();
-	}
+	public Item asItem() { return BASE.asItem(); }
 
 	@Override
-	public boolean hasTileEntity(IBlockState state)
-	{
-		return true;
-	}
+	public boolean hasTileEntity(IBlockState state) { return true; }
 
-	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
-	{
-		return BASE.createTileEntity(state, world);
-	}
+	public TileEntity createTileEntity(IBlockState state, IBlockReader world) { return BASE.createTileEntity(state, world); }
 
 	@Override
 	public void neighborChanged(IBlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
@@ -59,16 +46,10 @@ public class BlockTorcherinoWall extends BlockTorchWall
 	}
 
 	@Override
-	public void onBlockAdded(IBlockState state, World world, BlockPos blockPos, IBlockState oldState)
-	{
-		neighborChanged(state, world, blockPos, null, null);
-	}
+	public void onBlockAdded(IBlockState state, World world, BlockPos blockPos, IBlockState oldState) { neighborChanged(state, world, blockPos, null, null); }
 
 	@Override
-	public EnumPushReaction getPushReaction(IBlockState state)
-	{
-		return EnumPushReaction.IGNORE;
-	}
+	public EnumPushReaction getPushReaction(IBlockState state) { return EnumPushReaction.IGNORE; }
 
 	@Override
 	public void tick(IBlockState state, World world, BlockPos pos, Random random)

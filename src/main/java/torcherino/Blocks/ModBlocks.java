@@ -15,7 +15,6 @@ import torcherino.Utils;
 @Mod.EventBusSubscriber( modid = "torcherino", bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModBlocks
 {
-
 	@SubscribeEvent
 	public static void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
 	{
@@ -23,7 +22,6 @@ public class ModBlocks
 		register(registry, "", 4);
 		register(registry, "compressed_", 36);
 		register(registry, "double_compressed_", 324);
-
 	}
 
 	private static void register(IForgeRegistry<Block> registry, String name, int speed)
@@ -49,5 +47,4 @@ public class ModBlocks
 		ModItems.items.add(itemTorcherino);
 		ModItems.items.add(itemLanterino);
 	}
-
 }
