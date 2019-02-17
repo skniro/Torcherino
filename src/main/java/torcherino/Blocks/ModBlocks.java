@@ -34,10 +34,8 @@ public class ModBlocks
 		itemTorcherino.setRegistryName(Utils.getId(name+"torcherino"));
 		itemLanterino.setRegistryName(Utils.getId(name+"lanterino"));
 		blockTorcherino.setRegistryName(Utils.getId(name+"torcherino"));
-		blockTorcherino.setItem(itemTorcherino);
 		blockTorcherinoWall.setRegistryName(Utils.getId("wall_"+name+"torcherino"));
 		blockLanterino.setRegistryName(Utils.getId(name+"lanterino"));
-		blockLanterino.setItem(itemLanterino);
 		registry.register(blockTorcherino);
 		registry.register(blockTorcherinoWall);
 		registry.register(blockLanterino);

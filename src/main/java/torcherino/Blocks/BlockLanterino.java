@@ -30,17 +30,11 @@ import java.util.Random;
 public class BlockLanterino extends BlockCarvedPumpkin
 {
 	private int MAX_SPEED;
-	private Item itemAs;
 	BlockLanterino(int speed)
 	{
 		super(Block.Properties.create(Material.GROUND, MaterialColor.ADOBE).hardnessAndResistance(1.0F).sound(SoundType.WOOD).lightValue(15));
 		MAX_SPEED = speed;
 	}
-
-	public void setItem(Item item) { itemAs = item; }
-
-	@Override
-	public Item asItem() { return itemAs; }
 
 	@Override
 	public boolean hasTileEntity(IBlockState state) { return true; }

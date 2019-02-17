@@ -25,18 +25,12 @@ import java.util.Random;
 
 public class BlockTorcherino extends BlockTorch
 {
-	private Item itemAs;
 	private int MAX_SPEED;
 	public BlockTorcherino(int speed)
 	{
 		super(Properties.create(Material.CIRCUITS).doesNotBlockMovement().hardnessAndResistance(0).lightValue(14).sound(SoundType.WOOD));
 		MAX_SPEED = speed;
 	}
-
-	public void setItem(Item item) { itemAs = item; }
-
-	@Override
-	public Item asItem() { return itemAs; }
 
 	@Override
 	public boolean hasTileEntity(IBlockState state) { return true; }

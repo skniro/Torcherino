@@ -27,9 +27,6 @@ public class BlockTorcherinoWall extends BlockTorchWall
 	BlockTorcherinoWall(BlockTorcherino base) { super(Properties.from(base)); this.BASE = base; }
 
 	@Override
-	public Item asItem() { return BASE.asItem(); }
-
-	@Override
 	public boolean hasTileEntity(IBlockState state) { return true; }
 
 	public TileEntity createTileEntity(IBlockState state, IBlockReader world) { return BASE.createTileEntity(state, world); }

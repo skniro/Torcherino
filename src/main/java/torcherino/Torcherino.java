@@ -36,8 +36,8 @@ public class Torcherino
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.register(Client.class);
 		modEventBus.addListener(this::processIMC);
-		modEventBus.register(new ModBlocks());
-		modEventBus.register(new ModItems());
+		modEventBus.register(ModBlocks.class);
+		modEventBus.register(ModItems.class);
 		modEventBus.addListener((final RegistryEvent.Register<TileEntityType<?>> registryEvent) -> {
 			if(registryEvent.getName() != GameData.TILEENTITIES) return;
 			TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TileEntityTorcherino::new).build(null);
