@@ -3,6 +3,7 @@ package torcherino;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class TorcherinoConfig
 					.define("blacklistedTiles", new ArrayList<>());
 			logPlacement = builder.comment("Log torcherino placement (Intended for server use)")
 					.translation("torcherino.configgui.logplacement")
-					.define("logPlacement", false);
+					.define("logPlacement", FMLEnvironment.dist.isDedicatedServer());
 		}
 	}
 
