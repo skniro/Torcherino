@@ -12,20 +12,20 @@ public class TorcherinoConfig
 {
 	public static class COMMON
 	{
-		final ForgeConfigSpec.BooleanValue compressedEnabled;
-		final ForgeConfigSpec.BooleanValue doubleCompressedEnabled;
+		//final ForgeConfigSpec.BooleanValue compressedEnabled;
+		//final ForgeConfigSpec.BooleanValue doubleCompressedEnabled;
 		final ForgeConfigSpec.BooleanValue logPlacement;
 		final ForgeConfigSpec.ConfigValue<List<String>> blacklistedBlocks;
 		final ForgeConfigSpec.ConfigValue<List<String>> blacklistedTiles;
 
 		COMMON(ForgeConfigSpec.Builder builder)
 		{
-			compressedEnabled = builder.comment("Set this to true to enable compressed torcherino and lanterinos")
-					.translation("torcherino.configgui.compressedenabled")
-					.define("enableCompressed", false);
-			doubleCompressedEnabled = builder.comment("Set this to true to enable double compressed torcherino and lanterinos")
-					.translation("torcherino.configgui.doublecompressedenabled")
-					.define("enableDoubleCompressed", false);
+			//compressedEnabled = builder.comment("Set this to true to enable compressed torcherino and lanterinos")
+			//		.translation("torcherino.configgui.compressedenabled")
+			//		.define("enableCompressed", false);
+			//doubleCompressedEnabled = builder.comment("Set this to true to enable double compressed torcherino and lanterinos")
+			//		.translation("torcherino.configgui.doublecompressedenabled")
+			//		.define("enableDoubleCompressed", false);
 			blacklistedBlocks = builder.comment("Add block by resource location to the blacklist\nExample: [\"minecraft:furnace\", \"minecraft:grass_block\"]")
 					.translation("torcherino.configgui.blacklistedblocks")
 					.define("blacklistedBlocks", new ArrayList<>());
