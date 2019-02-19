@@ -4,6 +4,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +29,8 @@ public class Torcherino
 			.serverAcceptedVersions((String version) -> version.equals("1.0"))
 			.simpleChannel();
 	public static TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
-
+	// todo: move to sided proxy
+	// also move to using @Mod.EventBusSubscriber instead of modEventBus.register
 	public Torcherino()
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorcherinoConfig.commonSpec);
