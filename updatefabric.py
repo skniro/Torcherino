@@ -1,58 +1,52 @@
 import urllib.request as request
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElementTree
 import sys
 import string
-
-
-class CustomTemplate(string.Template):
-    delimiter = "@"
-
 
 def main(args):
     mavenRepo = "https://maven.fabricmc.net/net/fabricmc/{}/maven-metadata.xml"
     templateargs = {}
     index = ""
+    output = []
+    file = "gradle.properties"
     for value in args:
         if value[0] == "-":
             index = value[1::]
         else:
             templateargs[index] = value
-            index = ""
-    input_file = "template.properties"
-    output_file = "gradle.properties"
-    if "in" in templateargs:
-        input_file = templateargs.pop("in")
-    if "out" in templateargs:
-        output_file = templateargs.pop("out")
-    #print("Downloading loom data")
-    #templateargs["loom_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loom"))
-    #print("    Found version "+templateargs["loom_version"])
-    print("Downloading fabric data")
-    templateargs["fabric_version"] = getReleaseOrLatest(mavenRepo.format("fabric"))
-    print("    Found version "+templateargs["fabric_version"])
-    print("Downloading fabric-loader data")
-    templateargs["loader_version"] = getReleaseOrLatest(mavenRepo.format("fabric-loader"))
-    print("    Found version "+templateargs["loader_version"])
-    print("Downloading yarn data")
-    templateargs["minecraft_version"], templateargs["yarn_version"] = getReleaseOrLatest(mavenRepo.format("yarn")).split(".")
-    print("    Found version "+templateargs["minecraft_version"]+"."+templateargs["yarn_version"])
-    print("Reading input file({0}).".format(input_file))
-    with open(input_file, "r+") as f:
-            templateContents = CustomTemplate(f.read())
-    print("Saving to output file({0}).".format(output_file))
-    with open(output_file, "w+") as f:
-        f.write(templateContents.safe_substitute(templateargs))
+            index = ""   
+    if "file" in templateargs:
+        file = templateargs.pop("file")
+    templateargs["fabric_version"] = getReleaseOrLatest(mavenRepo, "fabric")
+    templateargs["loader_version"] = getReleaseOrLatest(mavenRepo, "fabric-loader")
+    templateargs["minecraft_version"], templateargs["yarn_version"] = getReleaseOrLatest(mavenRepo, "yarn").split(".")
+    print("Reading from file({0}).".format(file))
+    with open(file, "r+") as f:
+        while True:
+            line = f.readline().split(" ")
+            if line[0] == "": break
+            if line[0] in templateargs:
+                output += ["{} = {}{}".format(line[0], templateargs[line[0]], ("\n" if "\n" in line[2] else ""))]
+            else:
+                output += [" ".join(line)]
+    print("Saving to file({0}).".format(file))
+    with open(file, "w+") as f:
+        f.writelines(output)
 
 
-def getReleaseOrLatest(mavenURL: str) -> str:
-    mavenData = request.urlopen(mavenURL).read()
-    elementTree = ET.fromstring(mavenData)
+def getReleaseOrLatest(mavenURL: str, package: str) -> str:
+    print("Downloading {} data".format(package))
+    URL = mavenURL.format(package)
+    mavenData = request.urlopen(URL).read()
+    elementTree = ElementTree.fromstring(mavenData)
     version = elementTree.find("versioning/release")
     if version is not None:
+        print("    Found version {}".format(version.text))
         return version.text
     else:
         version = elementTree.find("versioning/versions")
         if version is not None:
+            print("    Found version {}".format(version[-1].text))
             return version[-1].text
         else:
             raise ValueError("Maven doesnt have version data???")
