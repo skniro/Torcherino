@@ -8,7 +8,6 @@ import torcherino.Utils;
 
 public class TorcherinoPacketConsumer implements PacketConsumer
 {
-
     public void accept(PacketContext t, PacketByteBuf u)
     {
         PlayerEntity player = t.getPlayer();

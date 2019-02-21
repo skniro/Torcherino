@@ -23,10 +23,7 @@ public class PlayerModifierLootCondition implements LootCondition
 
     public static class Factory extends LootCondition.Factory<PlayerModifierLootCondition>
     {
-        Factory()
-        {
-            super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class);
-        }
+        Factory() { super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class); }
 
         public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context) { }
 

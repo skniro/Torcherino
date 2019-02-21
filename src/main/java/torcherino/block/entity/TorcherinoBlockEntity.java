@@ -64,10 +64,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         for(int i = 0; i < speed; i++) { if(blockEntity.isInvalid()) break; ((Tickable) blockEntity).tick(); }
     }
 
-    public void setPoweredByRedstone(boolean powered)
-    {
-        poweredByRedstone = powered;
-    }
+    public void setPoweredByRedstone(boolean powered) { poweredByRedstone = powered; }
 
     public void changeMode(boolean modifier)
     {
