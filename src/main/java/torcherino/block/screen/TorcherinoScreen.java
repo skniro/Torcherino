@@ -1,6 +1,5 @@
 package torcherino.block.screen;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.impl.network.ClientSidePacketRegistryImpl;
