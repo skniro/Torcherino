@@ -19,7 +19,8 @@ public class TorcherinoScreen extends Screen
 	private int speed, MAX_SPEED, WIDTH, HEIGHT, LEFT, TOP;
 	private String[] MODES = {"chat.torcherino.hint.area.stopped", "chat.torcherino.hint.area.n",
 			"chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n"};
-	private SliderWidget speedSlider, modeSlider;
+	private SliderWidget speedSlider;
+
 	public TorcherinoScreen(BlockPos pos, int speed, int maxspeed, byte mode)
 	{
 		this.POS = pos;
@@ -37,6 +38,7 @@ public class TorcherinoScreen extends Screen
 		LEFT = (width - WIDTH) / 2;
 		TOP = (height - HEIGHT) / 2;
 		int sliderWidth = (int) (WIDTH * 0.9);
+
 		speedSlider = this.addButton(new SliderWidget(width/2-sliderWidth/2, height/2-15, sliderWidth, 20, ((double) speed)/((double) MAX_SPEED))
 		{
 			@Override
@@ -52,7 +54,7 @@ public class TorcherinoScreen extends Screen
 				this.setProgress(((double) speed) / ((double) MAX_SPEED));
 			}
 		});
-		modeSlider = this.addButton(new SliderWidget(width/2-sliderWidth/2, height/2+10, sliderWidth, 20, ((double) mode) / ((double) MODES.length - 1))
+		this.addButton(new SliderWidget(width/2-sliderWidth/2, height/2+10, sliderWidth, 20, ((double) mode) / ((double) MODES.length - 1))
 		{
 			@Override
 			protected void updateText()
@@ -122,5 +124,4 @@ public class TorcherinoScreen extends Screen
 			return super.keyPressed(int_1, int_2, int_3);
 		}
 	}
-
 }

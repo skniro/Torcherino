@@ -49,15 +49,9 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     }
 
     @Override
-    public PistonBehavior getPistonBehavior(BlockState blockState)
-    {
-        return PistonBehavior.IGNORE;
-    }
+    public PistonBehavior getPistonBehavior(BlockState blockState) { return PistonBehavior.IGNORE; }
 
-    public BlockEntity createBlockEntity(BlockView blockView)
-    {
-        return new TorcherinoBlockEntity(maxSpeed);
-    }
+    public BlockEntity createBlockEntity(BlockView blockView) { return new TorcherinoBlockEntity(maxSpeed); }
 
     @Override
     public void onScheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)

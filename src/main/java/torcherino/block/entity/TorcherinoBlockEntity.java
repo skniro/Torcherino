@@ -21,17 +21,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     private int xMax, yMax, zMax;
     private Random rand;
 
-    public TorcherinoBlockEntity()
-    {
-        super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE);
-        rand = new Random();
-    }
+    public TorcherinoBlockEntity() { super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE); rand = new Random(); }
 
-    public TorcherinoBlockEntity(int speed)
-    {
-        this();
-        maxSpeed = speed;
-    }
+    public TorcherinoBlockEntity(int speed) { this(); maxSpeed = speed; }
 
     public void tick()
     {
@@ -74,10 +66,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         }
     }
 
-    public void setPoweredByRedstone(boolean powered)
-    {
-        poweredByRedstone = powered;
-    }
+    public void setPoweredByRedstone(boolean powered) { poweredByRedstone = powered; }
 
     public void setSpeed(int sp) { speed = sp > maxSpeed ? maxSpeed : sp < 0 ? 0 : sp; }
 
