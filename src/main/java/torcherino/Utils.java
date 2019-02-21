@@ -16,33 +16,18 @@ public class Utils
     private static HashSet<BlockEntityType> blacklistedBlockEntities = new HashSet<>();
     public static HashMap<PlayerEntity, Boolean> keyStates = new HashMap<>();
 
-    public static boolean isBlockBlacklisted(Block block)
-    {
-        return blacklistedBlocks.contains(block);
-    }
+    public static boolean isBlockBlacklisted(Block block) { return blacklistedBlocks.contains(block); }
 
     public static boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType)
     {
         return blacklistedBlockEntities.contains(blockEntityType);
     }
 
-    public static void blacklistBlock(Block block)
-    {
-        blacklistedBlocks.add(block);
-    }
+    public static void blacklistBlock(Block block) { blacklistedBlocks.add(block); }
 
-    public static void blacklistBlockEntity(BlockEntityType blockEntityType)
-    {
-        blacklistedBlockEntities.add(blockEntityType);
-    }
+    public static void blacklistBlockEntity(BlockEntityType blockEntityType) { blacklistedBlockEntities.add(blockEntityType); }
 
-    public static Identifier getId(String name)
-    {
-        return new Identifier("torcherino", name);
-    }
+    public static Identifier getId(String name) { return new Identifier("torcherino", name); }
 
-    public static Identifier getId(String format, Object... args)
-    {
-        return getId(String.format(format, args));
-    }
+    public static Identifier getId(String format, Object... args) { return getId(String.format(format, args)); }
 }

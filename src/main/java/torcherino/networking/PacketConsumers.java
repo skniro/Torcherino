@@ -17,7 +17,6 @@ public class PacketConsumers
 
 	public static class ModifierBind implements PacketConsumer
 	{
-
 		@Override
 		public void accept(PacketContext context, PacketByteBuf buffer)
 		{
@@ -29,7 +28,6 @@ public class PacketConsumers
 
 	public static class TorcherinoScreen implements PacketConsumer
 	{
-
 		@Override
 		public void accept(PacketContext context, PacketByteBuf buffer)
 		{
@@ -44,7 +42,6 @@ public class PacketConsumers
 
 	public static class UpdateTorcherino implements PacketConsumer
 	{
-
 		@Override
 		public void accept(PacketContext context, PacketByteBuf buffer)
 		{
