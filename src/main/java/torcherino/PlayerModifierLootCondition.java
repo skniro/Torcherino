@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.loot.condition.LootCondition;
 import net.minecraft.world.loot.context.LootContext;
 import net.minecraft.world.loot.context.LootContextParameter;
@@ -19,9 +18,7 @@ public class PlayerModifierLootCondition implements LootCondition
 
     public boolean test(LootContext context)
     {
-        Entity player = context.get(LootContextParameters.THIS_ENTITY);
-        if(player == null) return false;
-        return Utils.keyStates.getOrDefault(player, false);
+        return Utils.keyStates.getOrDefault(context.get(LootContextParameters.THIS_ENTITY), false);
     }
 
     public static class Factory extends LootCondition.Factory<PlayerModifierLootCondition>
