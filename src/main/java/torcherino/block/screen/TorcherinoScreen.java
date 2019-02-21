@@ -79,14 +79,14 @@ public class TorcherinoScreen extends Screen
 		super.close();
 	}
 
-	public void method_18326(int int_1, int int_2, float float_1)
+	public void draw(int int_1, int int_2, float float_1)
 	{
 		this.drawBackground();
 		this.client.getTextureManager().bindTexture(SCREEN_TEXTURE);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.drawTexturedRect(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
 		this.fontRenderer.draw(BLOCK_NAME, (float)(width / 2 - this.fontRenderer.getStringWidth(BLOCK_NAME) / 2), height/2.0F - 35, 4210752);
-		super.method_18326(int_1, int_2, float_1);
+		super.draw(int_1, int_2, float_1);
 	}
 
 	@Override
