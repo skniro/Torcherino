@@ -49,6 +49,7 @@ public class TorcherinoScreen extends Screen
 			protected void onProgressChanged()
 			{
 				speed = (int) Math.round(MAX_SPEED * this.progress);
+				this.setProgress(((double) speed) / ((double) MAX_SPEED));
 			}
 		});
 		modeSlider = this.addButton(new SliderWidget(width/2-sliderWidth/2, height/2+10, sliderWidth, 20, ((double) mode) / ((double) MODES.length - 1))
@@ -97,7 +98,12 @@ public class TorcherinoScreen extends Screen
 	@Override
 	public boolean keyPressed(int int_1, int int_2, int int_3)
 	{
-		if(int_1 == 262)
+		if(int_1 == 69)
+		{
+			this.close();
+			return true;
+		}
+		else if(int_1 == 262)
 		{
 			speed++;
 			if(speed > MAX_SPEED){speed = MAX_SPEED;}
