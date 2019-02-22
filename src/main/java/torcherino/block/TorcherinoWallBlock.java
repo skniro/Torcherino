@@ -1,14 +1,18 @@
 package torcherino.block;
 
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Hand;
+import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -22,13 +26,17 @@ import java.util.Random;
 
 public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityProvider
 {
-    private int maxSpeed;
-    TorcherinoWallBlock(int speed, Block TorchBlock)
+    private final int MAX_SPEED;
+
+    TorcherinoWallBlock(int maxSpeed, Block TorchBlock)
     {
         super(FabricBlockSettings.of(Material.PART).lightLevel(14).noCollision().sounds(BlockSoundGroup.WOOD).breakInstantly().dropsLike(TorchBlock).build());
-        maxSpeed = speed;
-
+        MAX_SPEED = maxSpeed;
     }
+
+    @Override
+    public PistonBehavior getPistonBehavior(BlockState blockState) { return PistonBehavior.IGNORE; }
+    public BlockEntity createBlockEntity(BlockView blockView) { return new TorcherinoBlockEntity(MAX_SPEED); }
 
     @Override
     public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
@@ -45,11 +53,6 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
     {
         this.neighborUpdate(blockState, world, blockPos, null, null);
     }
-
-    @Override
-    public PistonBehavior getPistonBehavior(BlockState blockState) { return PistonBehavior.IGNORE; }
-
-    public BlockEntity createBlockEntity(BlockView blockView) { return new TorcherinoBlockEntity(maxSpeed); }
 
     @Override
     public void onScheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
@@ -71,7 +74,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
         if(world.isClient) return;
         String prefix = "Something";
         if(placingEntity != null) prefix = placingEntity.getDisplayName().getText() + "(" + placingEntity.getUuidAsString() + ")";
-        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Override
@@ -82,8 +85,10 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
         BlockEntity blockEntity = world.getBlockEntity(blockPos);
         if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
         TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
-        torch.changeMode(Utils.keyStates.getOrDefault(playerEntity, false));
-        playerEntity.addChatMessage(torch.getDescription(), true);
+        CompoundTag tag = torch.toTag(new CompoundTag());
+        PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+        buffer.writeCompoundTag(tag);
+        ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(playerEntity, Utils.getId("openscreen"), buffer);
         return true;
     }
 }

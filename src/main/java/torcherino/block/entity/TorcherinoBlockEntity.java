@@ -5,27 +5,50 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.network.packet.BlockEntityUpdateS2CPacket;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import torcherino.Torcherino;
 import torcherino.Utils;
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    private static final String[] MODES = new String[]{"chat.torcherino.hint.area.stopped", "chat.torcherino.hint.area.n",
-            "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n", "chat.torcherino.hint.area.n"};
+    public enum PowerState
+    {
+        NORMAL, INVERTED, IGNORE;
+
+        public static PowerState fromByte(byte i)
+        {
+            switch(i)
+            {
+                case 0: return PowerState.NORMAL;
+                case 1: return PowerState.INVERTED;
+                case 2: return PowerState.IGNORE;
+                default: return null;
+            }
+        }
+    }
+
     private boolean poweredByRedstone;
-    private int speed, maxSpeed;
+    private PowerState redstonePowerMode;
+    private int speed, MAX_SPEED;
     private byte cachedMode, mode;
     private int xMin, yMin, zMin;
     private int xMax, yMax, zMax;
-    private Random rand;
+    private final Random RANDOM;
 
-    public TorcherinoBlockEntity() { super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE); rand = new Random(); }
+    public TorcherinoBlockEntity()
+    {
+        super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE);
+        RANDOM= new Random();
+        redstonePowerMode = PowerState.NORMAL;
+    }
 
-    public TorcherinoBlockEntity(int speed) { this(); maxSpeed = speed; }
+    public TorcherinoBlockEntity(int speed) { this(); MAX_SPEED = speed; }
+
+    public void setSpeed(int speed) { this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
+    public void setMode(byte mode) { this.mode = mode > 4 ? 4 : mode < 0 ? 0 : mode; }
 
     public void tick()
     {
@@ -33,12 +56,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         if(poweredByRedstone || mode == 0 || speed == 0) return;
         if(cachedMode != mode)
         {
-            xMin = pos.getX() - mode;
-            xMax = pos.getX() + mode;
-            yMin = pos.getY() - 1;
-            yMax = pos.getY() + 1;
-            zMin = pos.getZ() - mode;
-            zMax = pos.getZ() + mode;
+            xMin = pos.getX() - mode; yMin = pos.getY() - 1; zMin = pos.getZ() - mode;
+            xMax = pos.getX() + mode; yMax = pos.getY() + 1; zMax = pos.getZ() + mode;
             cachedMode = mode;
         }
         for(int x = xMin; x <= xMax; x++)
@@ -54,31 +73,28 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         if(block == null) return;
         if(Utils.isBlockBlacklisted(block)) return;
         if(block.hasRandomTicks(blockState))
-            for(int i = 0; i < speed; i++)
-                block.onScheduledTick(blockState, world, pos, rand);
+        	for(int i = 0; i < speed; i++) block.onScheduledTick(blockState, world, pos, RANDOM);
         if(!block.hasBlockEntity()) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if(blockEntity == null || blockEntity.isInvalid()) return;
         if(Utils.isBlockEntityBlacklisted(blockEntity.getType())) return;
         if(!(blockEntity instanceof Tickable)) return;
-        for(int i = 0; i < speed; i++) { if(blockEntity.isInvalid()) break; ((Tickable) blockEntity).tick(); }
+        if(blockEntity.isInvalid()) return;
+        for(int i = 0; i < speed; i++) ((Tickable) blockEntity).tick();
     }
 
-    public void setPoweredByRedstone(boolean powered) { poweredByRedstone = powered; }
-
-    public void changeMode(boolean modifier)
+    public void setPoweredByRedstone(boolean powered)
     {
-        if(modifier)
-            if(speed < maxSpeed) speed += maxSpeed / 4; else speed = 0;
-        else
-            if(mode < MODES.length - 1) mode++; else mode = 0;
+        if(redstonePowerMode == PowerState.NORMAL) poweredByRedstone = powered;
+        else if(redstonePowerMode == PowerState.INVERTED) poweredByRedstone = !powered;
+        else if(redstonePowerMode == PowerState.IGNORE) poweredByRedstone = false;
     }
 
-    public TranslatableTextComponent getDescription()
+    public void setRedstonePowerMode(PowerState state)
     {
-        return new TranslatableTextComponent("chat.torcherino.hint.layout",
-                new TranslatableTextComponent(MODES[mode], 2*mode + 1),
-                new TranslatableTextComponent("chat.torcherino.hint.speed",speed*100));
+        redstonePowerMode = state;
+        BlockState blockState = world.getBlockState(pos);
+        blockState.getBlock().neighborUpdate(blockState, world, pos, null, null);
     }
 
     @Override
@@ -86,8 +102,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     {
         super.toTag(tag);
         tag.putInt("Speed", speed);
-        tag.putInt("MaxSpeed", maxSpeed);
+        tag.putInt("MaxSpeed", MAX_SPEED);
         tag.putByte("Mode", mode);
+        tag.putByte("RedstonePowerMode", new Integer(redstonePowerMode.ordinal()).byteValue());
         tag.putBoolean("PoweredByRedstone", poweredByRedstone);
         return tag;
     }
@@ -97,8 +114,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     {
         super.fromTag(tag);
         speed = tag.getInt("Speed");
-        maxSpeed = tag.getInt("MaxSpeed");
+	    MAX_SPEED = tag.getInt("MaxSpeed");
         mode = tag.getByte("Mode");
+        redstonePowerMode = PowerState.fromByte(tag.getByte("RedstonePowerMode"));
         poweredByRedstone = tag.getBoolean("PoweredByRedstone");
     }
 

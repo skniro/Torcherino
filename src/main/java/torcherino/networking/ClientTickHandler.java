@@ -15,16 +15,17 @@ import torcherino.Utils;
 public class ClientTickHandler implements ClientTickCallback
 {
     private boolean pressed = false;
+    
     public void tick(MinecraftClient client)
     {
         if(client.getGame().getCurrentSession() == null) return;
         boolean keyBindPressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().window.getHandle(),
-                InputUtil.fromName(ClientTorcherino.modifierBind.getName()).getKeyCode());
+                InputUtil.fromName(ClientTorcherino.MODIFIER_BIND.getName()).getKeyCode());
         if(keyBindPressed ^ pressed)
         {
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
             buffer.writeBoolean(pressed = !pressed);
-            ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("modifier"), buffer);
+            ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("updatemodifierstate"), buffer);
         }
     }
 }

@@ -5,6 +5,7 @@ Torcherino is a mod which provides torches and now jack o' lanterns which speed 
 - Recipe to convert a lanterino back to a torcherino is gone, now you can break the lanterino whilst holding the modifier key to get both the carved pumpkin and torcherino.
 - Updated assets to look like the new minecraft resources.
 - Overpowered recipe configuration option is gone, recipes can now be changed through data packs.
+- Screen for changing speed and mode (speed can be changed in increments of 100%'s using left and right arrow keys)
 
 ## TODO List
 - [x] Basic mod functionality
