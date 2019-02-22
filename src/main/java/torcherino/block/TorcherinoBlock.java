@@ -27,12 +27,16 @@ import java.util.Random;
 
 public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
 {
-    private int maxSpeed;
-    TorcherinoBlock(int speed, Identifier id)
+    private final int MAX_SPEED;
+
+    TorcherinoBlock(int maxSpeed, Identifier id)
     {
         super(FabricBlockSettings.of(Material.PART).lightLevel(14).noCollision().sounds(BlockSoundGroup.WOOD).breakInstantly().drops(id).build());
-        maxSpeed = speed;
+        MAX_SPEED = maxSpeed;
     }
+
+    @Override public PistonBehavior getPistonBehavior(BlockState blockState) { return PistonBehavior.IGNORE; }
+    public BlockEntity createBlockEntity(BlockView blockView) { return new TorcherinoBlockEntity(MAX_SPEED); }
 
     @Override
     public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
@@ -48,11 +52,6 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     {
         this.neighborUpdate(blockState, world, blockPos, null, null);
     }
-
-    @Override
-    public PistonBehavior getPistonBehavior(BlockState blockState) { return PistonBehavior.IGNORE; }
-
-    public BlockEntity createBlockEntity(BlockView blockView) { return new TorcherinoBlockEntity(maxSpeed); }
 
     @Override
     public void onScheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
@@ -74,7 +73,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
         if(world.isClient) return;
         String prefix = "Something";
         if(placingEntity != null) prefix = placingEntity.getDisplayName().getText() + "(" + placingEntity.getUuidAsString() + ")";
-        Utils.logger.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Override

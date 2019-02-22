@@ -11,7 +11,7 @@ import torcherino.networking.PacketConsumers;
 
 public class Torcherino implements ModInitializer
 {
-	public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE= Registry.register(Registry.BLOCK_ENTITY,
+	public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE = Registry.register(Registry.BLOCK_ENTITY,
             Utils.getId("torcherino"), BlockEntityType.Builder.create(TorcherinoBlockEntity::new).build(null));
 
 	@Override

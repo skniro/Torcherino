@@ -14,7 +14,6 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 
 public class PacketConsumers
 {
-
 	public static class ModifierBind implements PacketConsumer
 	{
 		@Override
@@ -36,7 +35,8 @@ public class PacketConsumers
 			int Speed = tag.getInt("Speed");
 			int MaxSpeed = tag.getInt("MaxSpeed");
 			byte Mode = tag.getByte("Mode");
-			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new torcherino.block.screen.TorcherinoScreen(pos, Speed, MaxSpeed, Mode)));
+			byte state = tag.getByte("RedstonePowerMode");
+			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new torcherino.block.screen.TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
 		}
 	}
 
@@ -49,17 +49,18 @@ public class PacketConsumers
 			BlockPos pos = buffer.readBlockPos();
 			int speed = buffer.readInt();
 			byte mode = buffer.readByte();
-			context.getTaskQueue().execute(() -> {
+			byte state = buffer.readByte();
+			context.getTaskQueue().execute(() ->
+			{
 				BlockEntity blockEntity = world.getBlockEntity(pos);
 				if(blockEntity instanceof TorcherinoBlockEntity)
 				{
 					TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
 					torch.setSpeed(speed);
 					torch.setMode(mode);
+					torch.setRedstonePowerMode(TorcherinoBlockEntity.PowerState.fromByte(state));
 				}
 			});
-
 		}
 	}
-
 }
