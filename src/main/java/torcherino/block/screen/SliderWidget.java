@@ -24,7 +24,6 @@ public abstract class SliderWidget extends ButtonWidget
 	protected int getTextureId(boolean boolean_1) { return 0; }
 	public final void onPressed(double x, double y) { this.changeProgress(x); }
 	private void changeProgress(double x) { this.setProgress((x - this.x - 4) / (double)(width - 8)); }
-	public void onReleased(double x, double y) { super.playPressedSound(MinecraftClient.getInstance().getSoundLoader()); }
 	protected void onDragged(double toX, double toY, double fromX, double fromY) { this.changeProgress(toX); }
 
 	protected void drawBackground(MinecraftClient client, int cursorX, int cursorY)
