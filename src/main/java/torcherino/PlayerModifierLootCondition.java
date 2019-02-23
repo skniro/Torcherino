@@ -12,24 +12,24 @@ import java.util.Set;
 
 public class PlayerModifierLootCondition implements LootCondition
 {
-    private static final PlayerModifierLootCondition INSTANCE = new PlayerModifierLootCondition();
+	private static final PlayerModifierLootCondition INSTANCE = new PlayerModifierLootCondition();
 
-    public Set<LootContextParameter<?>> getRequiredParameters() { return ImmutableSet.of(LootContextParameters.THIS_ENTITY); }
+	public Set<LootContextParameter<?>> getRequiredParameters() { return ImmutableSet.of(LootContextParameters.THIS_ENTITY); }
 
-    public boolean test(LootContext context)
-    {
-        return Utils.keyStates.getOrDefault(context.get(LootContextParameters.THIS_ENTITY), false);
-    }
+	public boolean test(LootContext context)
+	{
+		return Utils.keyStates.getOrDefault(context.get(LootContextParameters.THIS_ENTITY), false);
+	}
 
-    public static class Factory extends LootCondition.Factory<PlayerModifierLootCondition>
-    {
-        Factory() { super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class); }
+	public static class Factory extends LootCondition.Factory<PlayerModifierLootCondition>
+	{
+		Factory() { super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class); }
 
-        public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context) { }
+		public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context) { }
 
-        public PlayerModifierLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext context)
-        {
-            return PlayerModifierLootCondition.INSTANCE;
-        }
-    }
+		public PlayerModifierLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext context)
+		{
+			return PlayerModifierLootCondition.INSTANCE;
+		}
+	}
 }
