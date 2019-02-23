@@ -1,5 +1,5 @@
 {
-    "variants": {
-        "": { "model": "torcherino:block/compressed_torcherino" }
-    }
+	"variants": {
+		"": { "model": "torcherino:block/compressed_torcherino" }
+	}
 }

@@ -1,17 +1,17 @@
 {
-  "id": "torcherino",
-  "name": "Torcherino",
-  "description": "Adds torches which speeds up block entities around them.",
-  "version": "${version}",
-  "side": "universal",
-  "initializers": [
-    "torcherino.Torcherino",
-	"torcherino.ClientTorcherino"
-  ],
-  "requires": {
-    "fabric": "*"
-  },
-  "mixins": {
+	"id": "torcherino",
+	"name": "Torcherino",
+	"description": "Adds torches which speeds up block entities around them.",
+	"version": "${version}",
+	"side": "universal",
+	"initializers": [
+		"torcherino.Torcherino",
+		"torcherino.ClientTorcherino"
+	],
+	"requires": {
+		"fabric": "*"
+	},
+	"mixins": {
 
-  }
+	}
 }
