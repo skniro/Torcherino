@@ -19,7 +19,7 @@ public class TorcherinoScreen extends Screen
 	private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
 	private String BLOCK_NAME;
 	private final BlockPos POS;
-	private byte mode, redstoneState;
+	private byte mode, redstoneInteractionMode;
 	private int speed, LEFT, TOP;
 	private final int MAX_SPEED;
 	private static final int WIDTH = 256, HEIGHT = 88;
@@ -27,13 +27,13 @@ public class TorcherinoScreen extends Screen
 			"chat.torcherino.area.n", "chat.torcherino.area.n"};
 	private SliderWidget speedSlider;
 
-	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte state)
+	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte redstoneInteractionMode)
 	{
 		this.POS = pos;
 		this.speed = speed;
 		this.MAX_SPEED = maxSpeed;
 		this.mode = mode;
-		this.redstoneState = state;
+		this.redstoneInteractionMode = redstoneInteractionMode;
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class TorcherinoScreen extends Screen
 			}
 		});
 
-		this.addButton(new StateButtonWidget(this, width/2+95, height/2-40, redstoneState, new Integer(STATE_ITEMS.length).byteValue())
+		this.addButton(new StateButtonWidget(this, width/2+95, height/2-40, redstoneInteractionMode, new Integer(STATE_ITEMS.length).byteValue())
 		{
 			@Override
 			protected Item getStateItem(byte state) { return STATE_ITEMS[state]; }
@@ -74,7 +74,7 @@ public class TorcherinoScreen extends Screen
 			protected String getStateName(byte state) { return I18n.translate(STATE_NAMES[state]); }
 
 			@Override
-			protected void onStateChange(byte state) { redstoneState = state; }
+			protected void onStateChange(byte state) { redstoneInteractionMode = state; }
 		});
 	}
 
@@ -85,7 +85,7 @@ public class TorcherinoScreen extends Screen
 		packetByteBuf.writeBlockPos(POS);
 		packetByteBuf.writeInt(speed);
 		packetByteBuf.writeByte(mode);
-		packetByteBuf.writeByte(redstoneState);
+		packetByteBuf.writeByte(redstoneInteractionMode);
 		ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("updatetorcherinostate"), packetByteBuf);
 		super.close();
 	}

@@ -14,26 +14,9 @@ import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    public enum PowerState
-    {
-        NORMAL, INVERTED, IGNORE;
-
-        public static PowerState fromByte(byte i)
-        {
-            switch(i)
-            {
-                case 0: return PowerState.NORMAL;
-                case 1: return PowerState.INVERTED;
-                case 2: return PowerState.IGNORE;
-                default: return null;
-            }
-        }
-    }
-
     private boolean poweredByRedstone;
-    private PowerState redstonePowerMode;
     private int speed, MAX_SPEED;
-    private byte cachedMode, mode;
+    private byte cachedMode, mode, redstoneInteractionMode;
     private int xMin, yMin, zMin;
     private int xMax, yMax, zMax;
     private final Random RANDOM;
@@ -41,11 +24,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     public TorcherinoBlockEntity()
     {
         super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE);
-        RANDOM= new Random();
-        redstonePowerMode = PowerState.NORMAL;
+        RANDOM = new Random();
     }
 
-    public TorcherinoBlockEntity(int speed) { this(); MAX_SPEED = speed; }
+    public TorcherinoBlockEntity(int speed) { this(); MAX_SPEED = speed; redstoneInteractionMode = 0; }
 
     public void setSpeed(int speed) { this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
     public void setMode(byte mode) { this.mode = mode > 4 ? 4 : mode < 0 ? 0 : mode; }
@@ -85,14 +67,14 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 
     public void setPoweredByRedstone(boolean powered)
     {
-        if(redstonePowerMode == PowerState.NORMAL) poweredByRedstone = powered;
-        else if(redstonePowerMode == PowerState.INVERTED) poweredByRedstone = !powered;
-        else if(redstonePowerMode == PowerState.IGNORE) poweredByRedstone = false;
+        if(redstoneInteractionMode== 0) poweredByRedstone = powered;
+        else if(redstoneInteractionMode== 1) poweredByRedstone = !powered;
+        else if(redstoneInteractionMode== 2) poweredByRedstone = false;
     }
 
-    public void setRedstonePowerMode(PowerState state)
+    public void setRedstoneInteractionMode(byte mode)
     {
-        redstonePowerMode = state;
+        redstoneInteractionMode = mode;
         BlockState blockState = world.getBlockState(pos);
         blockState.getBlock().neighborUpdate(blockState, world, pos, null, null);
     }
@@ -104,7 +86,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         tag.putInt("Speed", speed);
         tag.putInt("MaxSpeed", MAX_SPEED);
         tag.putByte("Mode", mode);
-        tag.putByte("RedstonePowerMode", new Integer(redstonePowerMode.ordinal()).byteValue());
+        tag.putByte("RedstoneInteractionMode", redstoneInteractionMode);
         tag.putBoolean("PoweredByRedstone", poweredByRedstone);
         return tag;
     }
@@ -116,7 +98,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         speed = tag.getInt("Speed");
 	    MAX_SPEED = tag.getInt("MaxSpeed");
         mode = tag.getByte("Mode");
-        redstonePowerMode = PowerState.fromByte(tag.getByte("RedstonePowerMode"));
+        redstoneInteractionMode = tag.getByte("RedstoneInteractionMode");
         poweredByRedstone = tag.getBoolean("PoweredByRedstone");
     }
 

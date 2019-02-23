@@ -1,6 +1,5 @@
 package torcherino.block.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -33,19 +32,12 @@ public abstract class StateButtonWidget extends ButtonWidget
 		super.draw(cursorX, cursorY, unused);
 
 		GuiLighting.enableForItems();
-		GlStateManager.disableLighting();
 		itemRenderer.renderGuiItem(getStateItem(state).getDefaultStack(), x + 2, y + 2);
-		GlStateManager.enableLighting();
 		GuiLighting.disable();
 
 		if(this.isHovered()) screen.drawTooltip(this.getStateName(state),x + 14, y + 18);
 	}
 
 	@Override
-	public void onPressed(double cursorX, double cursorY)
-	{
-		state++;
-		if(state == MAX_STATES){ state = 0; }
-		onStateChange(state);
-	}
+	public void onPressed(double cursorX, double cursorY) { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }

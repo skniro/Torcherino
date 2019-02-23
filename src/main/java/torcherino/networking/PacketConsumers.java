@@ -35,7 +35,7 @@ public class PacketConsumers
 			int Speed = tag.getInt("Speed");
 			int MaxSpeed = tag.getInt("MaxSpeed");
 			byte Mode = tag.getByte("Mode");
-			byte state = tag.getByte("RedstonePowerMode");
+			byte state = tag.getByte("RedstoneInteractionMode");
 			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new torcherino.block.screen.TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
 		}
 	}
@@ -49,7 +49,7 @@ public class PacketConsumers
 			BlockPos pos = buffer.readBlockPos();
 			int speed = buffer.readInt();
 			byte mode = buffer.readByte();
-			byte state = buffer.readByte();
+			byte redstoneInteractionMode = buffer.readByte();
 			context.getTaskQueue().execute(() ->
 			{
 				BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -58,7 +58,7 @@ public class PacketConsumers
 					TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
 					torch.setSpeed(speed);
 					torch.setMode(mode);
-					torch.setRedstonePowerMode(TorcherinoBlockEntity.PowerState.fromByte(state));
+					torch.setRedstoneInteractionMode(redstoneInteractionMode);
 				}
 			});
 		}
