@@ -15,7 +15,7 @@ import torcherino.Utils;
 public class TorcherinoScreen extends Screen
 {
 	private static final Item[] STATE_ITEMS = new Item[]{Items.REDSTONE, Items.field_8530, Items.GUNPOWDER};
-	private static final String[] STATE_NAMES = new String[]{"screen.torcherino.normal", "screen.torcherino.inverted", "screen.torcherino.ignore"};
+	private static final String[] STATE_NAMES = new String[]{"screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted", "screen.torcherino.redstoneinteraction.ignore"};
 	private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
 	private String BLOCK_NAME;
 	private final BlockPos POS;
@@ -23,8 +23,8 @@ public class TorcherinoScreen extends Screen
 	private int speed, LEFT, TOP;
 	private final int MAX_SPEED;
 	private static final int WIDTH = 256, HEIGHT = 88;
-	private String[] MODES = {"chat.torcherino.area.stopped", "chat.torcherino.area.n", "chat.torcherino.area.n",
-			"chat.torcherino.area.n", "chat.torcherino.area.n"};
+	private String[] MODES = {"screen.torcherino.area.stopped", "screen.torcherino.area.n", "screen.torcherino.area.n",
+			"screen.torcherino.area.n", "screen.torcherino.area.n"};
 	private SliderWidget speedSlider;
 
 	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte redstoneInteractionMode)
@@ -51,7 +51,7 @@ public class TorcherinoScreen extends Screen
 			{
 				speed = (int) Math.round(MAX_SPEED * this.progress);
 				this.setProgress(((double) speed) / ((double) MAX_SPEED));
-				this.setText(I18n.translate("chat.torcherino.speed", 100*speed));
+				this.setText(I18n.translate("screen.torcherino.speed", 100*speed));
 			}
 		});
 		this.addButton(new SliderWidget(width/2-sliderWidth/2, height/2+10, sliderWidth, 20, ((double) mode) / ((double) MODES.length - 1))
