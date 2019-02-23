@@ -6,6 +6,10 @@ Torcherino is a mod which provides torches and now jack o' lanterns which speed 
 - Updated assets to look like the new minecraft resources.
 - Overpowered recipe configuration option is gone, recipes can now be changed through data packs.
 - Screen for changing speed and mode (speed can be changed in increments of 100%'s using left and right arrow keys)
+- Ability to change how torcherino's interact with redstone, can now be:
+  - Normal (Torcherino is enabled when there is no signal present)
+  - Inverted (Torcherino is enabled when there is a signal present)
+  - Ignore (Torcherino is always enabled)
 
 ## TODO List
 - [x] Basic mod functionality
