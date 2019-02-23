@@ -14,6 +14,7 @@ import torcherino.Utils;
 
 public class TorcherinoScreen extends Screen
 {
+	// TODO: Items.REDSTONE_TORCH
 	private static final Item[] STATE_ITEMS = new Item[]{Items.REDSTONE, Items.field_8530, Items.GUNPOWDER};
 	private static final String[] STATE_NAMES = new String[]{"screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted", "screen.torcherino.redstoneinteraction.ignore"};
 	private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
@@ -111,17 +112,11 @@ public class TorcherinoScreen extends Screen
 		}
 		else if(key == 262)
 		{
-			speed++;
-			if(speed > MAX_SPEED){speed = MAX_SPEED;}
-			speedSlider.setProgress(((double) speed) / ((double) MAX_SPEED));
-			return true;
+			speedSlider.setProgress(((double) speed+1) / MAX_SPEED); return true;
 		}
 		else if(key == 263)
 		{
-			speed--;
-			if(speed < 0){speed = 0;}
-			speedSlider.setProgress(((double) speed) / ((double) MAX_SPEED));
-			return true;
+			speedSlider.setProgress(((double) speed-1) / MAX_SPEED); return true;
 		}
 		else
 		{

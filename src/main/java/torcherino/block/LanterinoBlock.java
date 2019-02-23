@@ -82,11 +82,8 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
 		if(hand == Hand.OFF) return true;
 		BlockEntity blockEntity = world.getBlockEntity(blockPos);
 		if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
-		TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
-		CompoundTag tag = torch.toTag(new CompoundTag());
-		PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-		buffer.writeCompoundTag(tag);
-		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(playerEntity, Utils.getId("openscreen"), buffer);
+		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(playerEntity, Utils.getId("openscreen"),
+				new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
 		return true;
 	}
 }

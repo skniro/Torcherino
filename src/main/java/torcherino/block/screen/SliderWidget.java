@@ -23,7 +23,7 @@ public abstract class SliderWidget extends ButtonWidget
 
 	protected int getTextureId(boolean boolean_1) { return 0; }
 	public final void onPressed(double x, double y) { this.changeProgress(x); }
-	private void changeProgress(double x) { this.setProgress((x - this.x - 4) / (double)(width - 8)); }
+	private void changeProgress(double x) { this.setProgress((x - this.x - 4) / (width - 8)); }
 	protected void onDragged(double toX, double toY, double fromX, double fromY) { this.changeProgress(toX); }
 
 	protected void drawBackground(MinecraftClient client, int cursorX, int cursorY)
@@ -32,8 +32,8 @@ public abstract class SliderWidget extends ButtonWidget
 		{
 			client.getTextureManager().bindTexture(WIDGET_TEX);
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.drawTexturedRect(x+(int) (progress*(double) (width-8)), y, 0, 66, 4, 20);
-			this.drawTexturedRect(x+(int) (progress*(double) (width-8))+4, y, 196, 66, 4, 20);
+			this.drawTexturedRect(x+(int) (progress*(width-8)), y, 0, 66, 4, 20);
+			this.drawTexturedRect(4+x+(int) (progress*(width-8)), y, 196, 66, 4, 20);
 		}
 	}
 
