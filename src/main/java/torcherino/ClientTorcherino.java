@@ -18,8 +18,7 @@ public class ClientTorcherino implements ClientModInitializer
 	public static final FabricKeyBinding MODIFIER_BIND= FabricKeyBinding.Builder.create(Utils.getId("modifier"),
 			InputUtil.Type.KEY_KEYBOARD, GLFW.GLFW_KEY_LEFT_SHIFT, "key.categories.misc").build();
 
-	@Override
-	public void onInitializeClient()
+	@Override public void onInitializeClient()
 	{
 		KeyBindingRegistry.INSTANCE.register(MODIFIER_BIND);
 		ClientTickCallback.EVENT.register(new ClientTickHandler());

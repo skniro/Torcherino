@@ -14,8 +14,7 @@ public class Torcherino implements ModInitializer
 	public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE = Registry.register(Registry.BLOCK_ENTITY,
             Utils.getId("torcherino"), BlockEntityType.Builder.create(TorcherinoBlockEntity::new).build(null));
 
-	@Override
-	public void onInitialize()
+	@Override public void onInitialize()
 	{
 		LootConditions.register(new PlayerModifierLootCondition.Factory());
 		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatemodifierstate"), new PacketConsumers.ModifierBind());

@@ -16,8 +16,7 @@ public class PacketConsumers
 {
 	public static class ModifierBind implements PacketConsumer
 	{
-		@Override
-		public void accept(PacketContext context, PacketByteBuf buffer)
+		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
 			PlayerEntity player = context.getPlayer();
 			boolean pressed = buffer.readBoolean();
@@ -27,8 +26,7 @@ public class PacketConsumers
 
 	public static class TorcherinoScreen implements PacketConsumer
 	{
-		@Override
-		public void accept(PacketContext context, PacketByteBuf buffer)
+		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
 			CompoundTag tag = buffer.readCompoundTag();
 			BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
@@ -42,8 +40,7 @@ public class PacketConsumers
 
 	public static class UpdateTorcherino implements PacketConsumer
 	{
-		@Override
-		public void accept(PacketContext context, PacketByteBuf buffer)
+		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
 			World world = context.getPlayer().world;
 			BlockPos pos = buffer.readBlockPos();

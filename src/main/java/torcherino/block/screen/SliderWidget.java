@@ -21,12 +21,12 @@ public abstract class SliderWidget extends ButtonWidget
 
 	protected abstract void onProgressChanged();
 
-	protected int getTextureId(boolean boolean_1) { return 0; }
-	public final void onPressed(double x, double y) { this.changeProgress(x); }
+	@Override protected int getTextureId(boolean boolean_1) { return 0; }
+	@Override public final void onPressed(double x, double y) { this.changeProgress(x); }
 	private void changeProgress(double x) { this.setProgress((x - this.x - 4) / (width - 8)); }
-	protected void onDragged(double toX, double toY, double fromX, double fromY) { this.changeProgress(toX); }
+	@Override protected void onDragged(double toX, double toY, double fromX, double fromY) { this.changeProgress(toX); }
 
-	protected void drawBackground(MinecraftClient client, int cursorX, int cursorY)
+	@Override protected void drawBackground(MinecraftClient client, int cursorX, int cursorY)
 	{
 		if(visible)
 		{

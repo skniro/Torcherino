@@ -35,55 +35,51 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
 		MAX_SPEED = maxSpeed;
 	}
 
-	@Override public PistonBehavior getPistonBehavior(BlockState blockState) { return PistonBehavior.IGNORE; }
-	public BlockEntity createBlockEntity(BlockView blockView) { return new TorcherinoBlockEntity(MAX_SPEED); }
+	@Override public PistonBehavior getPistonBehavior(BlockState state) { return PistonBehavior.IGNORE; }
+	@Override public BlockEntity createBlockEntity(BlockView view) { return new TorcherinoBlockEntity(MAX_SPEED); }
 
-	@Override
-	public void neighborUpdate(BlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
+	@Override public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
 	{
 		if (world.isClient) return;
-		BlockEntity blockEntity = world.getBlockEntity(selfPos);
+		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity == null) return;
-		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(selfPos.down(), Direction.DOWN));
+		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.down(), Direction.DOWN));
 	}
 
-	@Override
-	public void onBlockAdded(BlockState blockState, World world, BlockPos blockPos, BlockState oldState)
+	@Override public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state)
 	{
-		this.neighborUpdate(blockState, world, blockPos, null, null);
+		this.neighborUpdate(newState, world, pos, null, null);
 	}
 
-	@Override
-	public void onScheduledTick(BlockState blockState, World world, BlockPos pos, Random rand)
+	@Override public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
 	{
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if(blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();
 	}
 
-	@Override
-	public void onBlockRemoved(BlockState blockState, World world, BlockPos blockPos, BlockState newBlockState, boolean bool)
+	@Override public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean bool)
 	{
-		BlockEntity blockEntity = world.getBlockEntity(blockPos);
+		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if(blockEntity != null) blockEntity.invalidate();
 	}
 
-	@Override
-	public void onPlaced(World world, BlockPos blockPos, BlockState oldState, LivingEntity placingEntity, ItemStack handItemStack)
+	@Override public void onPlaced(World world, BlockPos pos, BlockState oldState, LivingEntity placer, ItemStack handStack)
 	{
 		if(world.isClient) return;
 		String prefix = "Something";
-		if(placingEntity != null) prefix = placingEntity.getDisplayName().getText() + "(" + placingEntity.getUuidAsString() + ")";
-		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		if(placer != null) prefix = placer.getDisplayName().getText() + " (" + placer.getUuidAsString() + ")";
+		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix,
+				StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")),
+				pos.getX(), pos.getY(), pos.getZ());
 	}
 
-	@Override
-	public boolean activate(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult hitResult)
+	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		if(world.isClient) return true;
 		if(hand == Hand.OFF) return true;
-		BlockEntity blockEntity = world.getBlockEntity(blockPos);
+		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
-		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(playerEntity, Utils.getId("openscreen"),
+		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, Utils.getId("openscreen"),
 				new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
 		return true;
 	}

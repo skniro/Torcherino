@@ -26,18 +26,14 @@ public abstract class StateButtonWidget extends ButtonWidget
 	protected abstract String getStateName(byte state);
 	protected abstract void onStateChange(byte state);
 
-	@Override
-	public void draw(int cursorX, int cursorY, float unused)
+	@Override public void draw(int cursorX, int cursorY, float unused)
 	{
 		super.draw(cursorX, cursorY, unused);
-
 		GuiLighting.enableForItems();
 		itemRenderer.renderGuiItem(getStateItem(state).getDefaultStack(), x + 2, y + 2);
 		GuiLighting.disable();
-
 		if(this.isHovered()) screen.drawTooltip(this.getStateName(state),x + 14, y + 18);
 	}
 
-	@Override
-	public void onPressed(double cursorX, double cursorY) { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
+	@Override public void onPressed(double cursorX, double cursorY) { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }

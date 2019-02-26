@@ -19,20 +19,15 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	private byte cachedMode, mode, redstoneInteractionMode;
 	private int xMin, yMin, zMin;
 	private int xMax, yMax, zMax;
-	private final Random RANDOM;
+	private static final Random RANDOM = new Random();
 
-	public TorcherinoBlockEntity()
-	{
-		super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE);
-		RANDOM = new Random();
-	}
-
+	public TorcherinoBlockEntity() { super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE); }
 	public TorcherinoBlockEntity(int speed) { this(); MAX_SPEED = speed; redstoneInteractionMode = 0; }
 
 	public void setSpeed(int speed) { this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
 	public void setMode(byte mode) { this.mode = mode > 4 ? 4 : mode < 0 ? 0 : mode; }
 
-	public void tick()
+	@Override public void tick()
 	{
 		if(world.isClient) return;
 		if(poweredByRedstone || mode == 0 || speed == 0) return;
@@ -79,8 +74,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 		blockState.getBlock().neighborUpdate(blockState, world, pos, null, null);
 	}
 
-	@Override
-	public CompoundTag toTag(CompoundTag tag)
+	@Override public CompoundTag toTag(CompoundTag tag)
 	{
 		super.toTag(tag);
 		tag.putInt("Speed", speed);
@@ -91,8 +85,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 		return tag;
 	}
 
-	@Override
-	public void fromTag(CompoundTag tag)
+	@Override public void fromTag(CompoundTag tag)
 	{
 		super.fromTag(tag);
 		speed = tag.getInt("Speed");
@@ -102,8 +95,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 		poweredByRedstone = tag.getBoolean("PoweredByRedstone");
 	}
 
-	@Override
-	public BlockEntityUpdateS2CPacket toUpdatePacket()
+	@Override public BlockEntityUpdateS2CPacket toUpdatePacket()
 	{
 		return new BlockEntityUpdateS2CPacket(getPos(), 126, toTag(new CompoundTag()));
 	}
