@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = "Torcherino"
-version = "0.6.37"
+version = "0.6.38"
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
