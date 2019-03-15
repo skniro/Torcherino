@@ -14,14 +14,16 @@ public abstract class StateButtonWidget extends ButtonWidget
 	private byte state;
 	private final byte MAX_STATES;
 	private final Screen screen;
+	private final String narrationKey;
 	private static ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
-	public StateButtonWidget(Screen screen, int x, int y, byte state, byte maxStates)
+	public StateButtonWidget(Screen screen, int x, int y, byte state, byte maxStates, String narrationKey)
 	{
 		super(x, y, 20, 20, "");
 		this.screen = screen;
 		this.state = state;
 		this.MAX_STATES = maxStates;
+		this.narrationKey = narrationKey;
 	}
 
 	protected abstract Item getStateItem(byte state);
@@ -39,7 +41,7 @@ public abstract class StateButtonWidget extends ButtonWidget
 		GlStateManager.disableDepthTest();
 	}
 
-	@Override protected String getNarrationString() { return I18n.translate("gui.narrate.button", this.getStateName(state)); }
+	@Override protected String getNarrationString() { return I18n.translate(this.narrationKey, getStateName(state)); }
 
 	public void onPressed() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }

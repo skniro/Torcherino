@@ -24,8 +24,7 @@ public class TorcherinoScreen extends Screen
 	private int speed, LEFT, TOP;
 	private final int MAX_SPEED;
 	private static final int WIDTH = 256, HEIGHT = 88;
-	private String[] MODES = {"screen.torcherino.area.stopped", "screen.torcherino.area.n", "screen.torcherino.area.n",
-			"screen.torcherino.area.n", "screen.torcherino.area.n"};
+	private String[] MODES = {"area.stopped", "area.n", "area.n", "area.n", "area.n"};
 
 	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte redstoneInteractionMode)
 	{
@@ -43,7 +42,8 @@ public class TorcherinoScreen extends Screen
 		LEFT = (screenWidth - WIDTH) / 2;
 		TOP = (screenHeight - HEIGHT) / 2;
 
-		this.addButton(new StateButtonWidget(this, screenWidth/2+95, screenHeight/2-40, redstoneInteractionMode, new Integer(STATE_ITEMS.length).byteValue())
+		this.addButton(new StateButtonWidget(this, screenWidth/2+95, screenHeight/2-40, redstoneInteractionMode,
+				       new Integer(STATE_ITEMS.length).byteValue(), "screen.torcherino.narrate.redstoneinteraction")
 		{
 			@Override protected Item getStateItem(byte state) { return STATE_ITEMS[state]; }
 			@Override protected String getStateName(byte state) { return I18n.translate(STATE_NAMES[state]); }
@@ -62,7 +62,11 @@ public class TorcherinoScreen extends Screen
 
 		this.addButton(new SliderWidget(screenWidth/2-115, screenHeight/2+10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
 		{
-			@Override protected void updateText() { setText(I18n.translate(MODES[mode], 2*mode + 1)); }
+			@Override protected void updateText()
+			{
+				setText(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
+				narrationText = I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
+			}
 			@Override protected void onProgressChanged()
 			{
 				mode = (byte) Math.round((MODES.length-1) * this.progress);

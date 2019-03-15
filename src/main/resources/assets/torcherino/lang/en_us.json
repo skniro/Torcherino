@@ -11,6 +11,9 @@
 	"screen.torcherino.speed": "Speed: %d%%",
 	"screen.torcherino.redstoneinteraction.normal": "Normal",
 	"screen.torcherino.redstoneinteraction.inverted": "Inverted",
-	"screen.torcherino.redstoneinteraction.ignore": "Ignored"
+	"screen.torcherino.redstoneinteraction.ignore": "Ignored",
+	"screen.torcherino.narrate.redstoneinteraction": "%s Redstone Interaction Button",
+	"screen.torcherino.narrate.area.stopped": "Stopped",
+	"screen.torcherino.narrate.area.n": "Area: %1$d by 3 by %1$d"
 }
 
