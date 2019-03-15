@@ -1,13 +1,15 @@
 package torcherino.block.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 
-public abstract class StateButtonWidget extends ButtonWidget
+public abstract class StateButtonWidget extends AbstractButtonWidget
 {
 	private byte state;
 	private final byte MAX_STATES;
@@ -29,11 +31,15 @@ public abstract class StateButtonWidget extends ButtonWidget
 	@Override public void draw(int cursorX, int cursorY, float unused)
 	{
 		super.draw(cursorX, cursorY, unused);
-		GuiLighting.enableForItems();
 		itemRenderer.renderGuiItem(getStateItem(state).getDefaultStack(), x + 2, y + 2);
-		GuiLighting.disable();
 		if(this.isHovered()) screen.drawTooltip(this.getStateName(state),x + 14, y + 18);
+		GlStateManager.disableRescaleNormal();
+		GuiLighting.disable();
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepthTest();
 	}
 
-	@Override public void onPressed(double cursorX, double cursorY) { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
+	@Override protected String getNarrationString() { return I18n.translate("gui.narrate.button", this.getStateName(state)); }
+
+	public void method_1826() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }
