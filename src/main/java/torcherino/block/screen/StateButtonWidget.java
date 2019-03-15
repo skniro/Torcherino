@@ -3,13 +3,13 @@ package torcherino.block.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 
-public abstract class StateButtonWidget extends AbstractButtonWidget
+public abstract class StateButtonWidget extends ButtonWidget
 {
 	private byte state;
 	private final byte MAX_STATES;
@@ -41,5 +41,5 @@ public abstract class StateButtonWidget extends AbstractButtonWidget
 
 	@Override protected String getNarrationString() { return I18n.translate("gui.narrate.button", this.getStateName(state)); }
 
-	public void method_1826() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
+	public void onPressed() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }
