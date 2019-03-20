@@ -6,7 +6,7 @@ import net.minecraft.util.math.MathHelper;
 public abstract class SliderWidget extends net.minecraft.client.gui.widget.SliderWidget
 {
 	private double arrowNudgeAmount = 1;
-	String narrationText = "";
+	String narrationMessage = "";
 	SliderWidget(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
 	{
 		super( int_1,  int_2,  int_3,  int_4,  double_1);
@@ -14,7 +14,7 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 		this.updateText();
 	}
 
-	public boolean keyPressed(int key, int scanCode, int modifierBits)
+	@Override public boolean keyPressed(int key, int scanCode, int modifierBits)
 	{
 		double old_progress;
 		if (key == 263)
@@ -41,10 +41,9 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 		return false;
 	}
 
-	protected String getNarrationString()
+	@Override protected String getNarrationMessage()
 	{
-		if(!narrationText.equals(""))
-			return I18n.translate("gui.narrate.slider", narrationText);
-		return I18n.translate("gui.narrate.slider", this.getText());
+		if(!narrationMessage.equals("")) return I18n.translate("gui.narrate.slider", narrationMessage);
+		return I18n.translate("gui.narrate.slider", this.getMessage());
 	}
 }

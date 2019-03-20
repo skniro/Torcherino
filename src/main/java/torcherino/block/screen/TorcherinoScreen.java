@@ -52,7 +52,7 @@ public class TorcherinoScreen extends Screen
 
 		this.addButton(new SliderWidget(screenWidth/2-115, screenHeight/2-15, 230, 20, ((double) speed)/((double) MAX_SPEED), MAX_SPEED + 1)
 		{
-			@Override protected void updateText() { this.setText(I18n.translate("screen.torcherino.speed", 100*speed)); }
+			@Override protected void updateText() { setMessage(I18n.translate("screen.torcherino.speed", 100*speed)); }
 			@Override protected void onProgressChanged()
 			{
 				speed = (int) Math.round(MAX_SPEED * this.progress);
@@ -64,8 +64,8 @@ public class TorcherinoScreen extends Screen
 		{
 			@Override protected void updateText()
 			{
-				setText(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
-				narrationText = I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
+				setMessage(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
+				narrationMessage= I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
 			}
 			@Override protected void onProgressChanged()
 			{
@@ -85,14 +85,14 @@ public class TorcherinoScreen extends Screen
 		super.close();
 	}
 
-	public void draw(int cursorX, int cursorY, float float_1)
+	@Override public void render(int cursorX, int cursorY, float float_1)
 	{
 		this.drawBackground();
 		this.client.getTextureManager().bindTexture(SCREEN_TEXTURE);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.drawTexturedRect(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
 		this.fontRenderer.draw(BLOCK_NAME, (float)(screenWidth / 2 - this.fontRenderer.getStringWidth(BLOCK_NAME) / 2), screenHeight/2.0F - 35, 4210752);
-		super.draw(cursorX, cursorY, float_1);
+		super.render(cursorX, cursorY, float_1);
 	}
 
 	@Override public boolean isPauseScreen() { return false; }

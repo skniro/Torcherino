@@ -14,34 +14,34 @@ public abstract class StateButtonWidget extends ButtonWidget
 	private byte state;
 	private final byte MAX_STATES;
 	private final Screen screen;
-	private final String narrationKey;
+	private final String narrationMessage;
 	private static ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
-	public StateButtonWidget(Screen screen, int x, int y, byte state, byte maxStates, String narrationKey)
+	public StateButtonWidget(Screen screen, int x, int y, byte state, byte maxStates, String narrationMessage)
 	{
 		super(x, y, 20, 20, "");
 		this.screen = screen;
 		this.state = state;
 		this.MAX_STATES = maxStates;
-		this.narrationKey = narrationKey;
+		this.narrationMessage= narrationMessage;
 	}
 
 	protected abstract Item getStateItem(byte state);
 	protected abstract String getStateName(byte state);
 	protected abstract void onStateChange(byte state);
 
-	@Override public void draw(int cursorX, int cursorY, float unused)
+	@Override public void render(int mouseX, int mouseY, float unused)
 	{
-		super.draw(cursorX, cursorY, unused);
+		super.render(mouseX, mouseY, unused);
 		itemRenderer.renderGuiItem(getStateItem(state).getDefaultStack(), x + 2, y + 2);
-		if(this.isHovered()) screen.drawTooltip(this.getStateName(state),x + 14, y + 18);
+		if(this.isHovered()) screen.drawTooltip(this.getStateName(state), x + 14, y + 18);
 		GlStateManager.disableRescaleNormal();
 		GuiLighting.disable();
 		GlStateManager.disableLighting();
 		GlStateManager.disableDepthTest();
 	}
 
-	@Override protected String getNarrationString() { return I18n.translate(this.narrationKey, getStateName(state)); }
+	@Override protected String getNarrationMessage() { return I18n.translate(this.narrationMessage, getStateName(state)); }
 
 	public void onPressed() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }
