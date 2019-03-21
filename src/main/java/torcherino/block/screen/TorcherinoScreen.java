@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.text.StringTextComponent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +29,7 @@ public class TorcherinoScreen extends Screen
 
 	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte redstoneInteractionMode)
 	{
+		super(new StringTextComponent(""));
 		this.POS = pos;
 		this.speed = speed;
 		this.MAX_SPEED = maxSpeed;
@@ -35,15 +37,13 @@ public class TorcherinoScreen extends Screen
 		this.redstoneInteractionMode = redstoneInteractionMode;
 	}
 
-	@Override
-	protected void onInitialized()
+	@Override protected void onInitialized()
 	{
 		BLOCK_NAME = I18n.translate(this.client.world.getBlockState(POS).getBlock().getTranslationKey());
 		LEFT = (screenWidth - WIDTH) / 2;
 		TOP = (screenHeight - HEIGHT) / 2;
 
-		this.addButton(new StateButtonWidget(this, screenWidth/2+95, screenHeight/2-40, redstoneInteractionMode,
-				       new Integer(STATE_ITEMS.length).byteValue(), "screen.torcherino.narrate.redstoneinteraction")
+		this.addButton(new StateButtonWidget(this, screenWidth/2+95, screenHeight/2-40, redstoneInteractionMode, new Integer(STATE_ITEMS.length).byteValue(), "screen.torcherino.narrate.redstoneinteraction")
 		{
 			@Override protected Item getStateItem(byte state) { return STATE_ITEMS[state]; }
 			@Override protected String getStateName(byte state) { return I18n.translate(STATE_NAMES[state]); }
@@ -53,6 +53,7 @@ public class TorcherinoScreen extends Screen
 		this.addButton(new SliderWidget(screenWidth/2-115, screenHeight/2-15, 230, 20, ((double) speed)/((double) MAX_SPEED), MAX_SPEED + 1)
 		{
 			@Override protected void updateText() { setMessage(I18n.translate("screen.torcherino.speed", 100*speed)); }
+
 			@Override protected void onProgressChanged()
 			{
 				speed = (int) Math.round(MAX_SPEED * this.progress);
@@ -67,6 +68,7 @@ public class TorcherinoScreen extends Screen
 				setMessage(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
 				narrationMessage= I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
 			}
+
 			@Override protected void onProgressChanged()
 			{
 				mode = (byte) Math.round((MODES.length-1) * this.progress);

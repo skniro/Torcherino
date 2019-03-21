@@ -11,10 +11,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.block.screen.TorcherinoScreen;
 
 public class PacketConsumers
 {
-	public static class ModifierBind implements PacketConsumer
+	public static class ModifierBindConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
@@ -24,7 +25,7 @@ public class PacketConsumers
 		}
 	}
 
-	public static class TorcherinoScreen implements PacketConsumer
+	public static class TorcherinoScreenConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
@@ -34,11 +35,11 @@ public class PacketConsumers
 			int MaxSpeed = tag.getInt("MaxSpeed");
 			byte Mode = tag.getByte("Mode");
 			byte state = tag.getByte("RedstoneInteractionMode");
-			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new torcherino.block.screen.TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
+			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
 		}
 	}
 
-	public static class UpdateTorcherino implements PacketConsumer
+	public static class UpdateTorcherinoConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{

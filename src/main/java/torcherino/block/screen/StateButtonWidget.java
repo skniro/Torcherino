@@ -19,7 +19,7 @@ public abstract class StateButtonWidget extends ButtonWidget
 
 	public StateButtonWidget(Screen screen, int x, int y, byte state, byte maxStates, String narrationMessage)
 	{
-		super(x, y, 20, 20, "");
+		super(x, y, 20, 20, "", null);
 		this.screen = screen;
 		this.state = state;
 		this.MAX_STATES = maxStates;
@@ -42,6 +42,5 @@ public abstract class StateButtonWidget extends ButtonWidget
 	}
 
 	@Override protected String getNarrationMessage() { return I18n.translate(this.narrationMessage, getStateName(state)); }
-
-	public void onPressed() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
+	@Override public void onPressed() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }

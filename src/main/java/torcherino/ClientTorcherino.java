@@ -22,6 +22,6 @@ public class ClientTorcherino implements ClientModInitializer
 	{
 		KeyBindingRegistry.INSTANCE.register(MODIFIER_BIND);
 		ClientTickCallback.EVENT.register(new ClientTickHandler());
-		ClientSidePacketRegistryImpl.INSTANCE.register(Utils.getId("openscreen"), new PacketConsumers.TorcherinoScreen());
+		ClientSidePacketRegistryImpl.INSTANCE.register(Utils.getId("openscreen"), new PacketConsumers.TorcherinoScreenConsumer());
 	}
 }

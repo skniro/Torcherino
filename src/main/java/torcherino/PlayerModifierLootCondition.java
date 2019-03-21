@@ -15,7 +15,6 @@ public class PlayerModifierLootCondition implements LootCondition
 	private static final PlayerModifierLootCondition INSTANCE = new PlayerModifierLootCondition();
 
 	@Override public Set<LootContextParameter<?>> getRequiredParameters() { return ImmutableSet.of(LootContextParameters.THIS_ENTITY); }
-
 	@Override public boolean test(LootContext context)
 	{
 		return Utils.keyStates.getOrDefault(context.get(LootContextParameters.THIS_ENTITY), false);
@@ -26,7 +25,6 @@ public class PlayerModifierLootCondition implements LootCondition
 		Factory() { super(Utils.getId("player_modifier"), PlayerModifierLootCondition.class); }
 
 		@Override public void toJson(JsonObject jsonObject, PlayerModifierLootCondition lootCondition, JsonSerializationContext context) { }
-
 		@Override public PlayerModifierLootCondition fromJson(JsonObject jsonObject, JsonDeserializationContext context)
 		{
 			return PlayerModifierLootCondition.INSTANCE;

@@ -7,6 +7,7 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 {
 	private double arrowNudgeAmount = 1;
 	String narrationMessage = "";
+
 	SliderWidget(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
 	{
 		super( int_1,  int_2,  int_3,  int_4,  double_1);

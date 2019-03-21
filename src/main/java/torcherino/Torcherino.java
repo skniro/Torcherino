@@ -17,8 +17,8 @@ public class Torcherino implements ModInitializer
 	@Override public void onInitialize()
 	{
 		LootConditions.register(new PlayerModifierLootCondition.Factory());
-		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatemodifierstate"), new PacketConsumers.ModifierBind());
-		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatetorcherinostate"), new PacketConsumers.UpdateTorcherino());
+		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatemodifierstate"), new PacketConsumers.ModifierBindConsumer());
+		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatetorcherinostate"), new PacketConsumers.UpdateTorcherinoConsumer());
 		ModBlocks.onInitialize();
 		Utils.blacklistBlockEntity(TORCHERINO_BLOCK_ENTITY_TYPE);
 	}

@@ -36,6 +36,10 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 
 	@Override public PistonBehavior getPistonBehavior(BlockState state) { return PistonBehavior.IGNORE; }
 	@Override public BlockEntity createBlockEntity(BlockView view) { return new TorcherinoBlockEntity(MAX_SPEED); }
+	@Override public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state)
+	{
+		this.neighborUpdate(newState, world, pos, null, null);
+	}
 
 	@Override public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
 	{
@@ -44,11 +48,6 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 		if(blockEntity == null) return;
 		Direction oppositeFacing = state.get(FACING).getOpposite();
 		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.offset(oppositeFacing), oppositeFacing));
-	}
-
-	@Override public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state)
-	{
-		this.neighborUpdate(newState, world, pos, null, null);
 	}
 
 	@Override public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
@@ -68,9 +67,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 		if(world.isClient) return;
 		String prefix = "Something";
 		if(placer != null) prefix = placer.getDisplayName().getText() + " (" + placer.getUuidAsString() + ")";
-		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix,
-				StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")),
-				pos.getX(), pos.getY(), pos.getZ());
+		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
@@ -79,8 +76,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 		if(hand == Hand.OFF) return true;
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
-		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, Utils.getId("openscreen"),
-				new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
+		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, Utils.getId("openscreen"), new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
 		return true;
 	}
 }
