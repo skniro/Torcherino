@@ -10,9 +10,9 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 
 	SliderWidget(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
 	{
-		super( int_1,  int_2,  int_3,  int_4,  double_1);
+		super(int_1,  int_2,  int_3,  int_4,  double_1);
 		this.arrowNudgeAmount /= permutations;
-		this.updateText();
+		this.updateMessage();
 	}
 
 	@Override public boolean keyPressed(int key, int scanCode, int modifierBits)
@@ -20,22 +20,22 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 		double old_progress;
 		if (key == 263)
 		{
-			old_progress = this.progress;
-			this.progress = MathHelper.clamp(this.progress - this.arrowNudgeAmount, 0.0D, 1.0D);
-			if (old_progress != this.progress)
+			old_progress = this.value;
+			this.value = MathHelper.clamp(this.value - this.arrowNudgeAmount, 0.0D, 1.0D);
+			if (old_progress != this.value)
 			{
-				this.onProgressChanged();
-				this.updateText();
+				this.applyValue();
+				this.updateMessage();
 			}
 		}
 		else if (key == 262)
 		{
-			old_progress = this.progress;
-			this.progress = MathHelper.clamp(this.progress + this.arrowNudgeAmount, 0.0D, 1.0D);
-			if (old_progress != this.progress)
+			old_progress = this.value;
+			this.value = MathHelper.clamp(this.value + this.arrowNudgeAmount, 0.0D, 1.0D);
+			if (old_progress != this.value)
 			{
-				this.onProgressChanged();
-				this.updateText();
+				this.applyValue();
+				this.updateMessage();
 			}
 		}
 
@@ -44,7 +44,7 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 
 	@Override protected String getNarrationMessage()
 	{
-		if(!narrationMessage.equals("")) return I18n.translate("gui.narrate.slider", narrationMessage);
+		if (!narrationMessage.equals("")) return I18n.translate("gui.narrate.slider", narrationMessage);
 		return I18n.translate("gui.narrate.slider", this.getMessage());
 	}
 }

@@ -30,72 +30,72 @@ public class TorcherinoScreen extends Screen
 	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte redstoneInteractionMode)
 	{
 		super(new StringTextComponent(""));
-		this.POS = pos;
+		POS = pos;
+		MAX_SPEED = maxSpeed;
 		this.speed = speed;
-		this.MAX_SPEED = maxSpeed;
 		this.mode = mode;
 		this.redstoneInteractionMode = redstoneInteractionMode;
 	}
 
-	@Override protected void onInitialized()
+	@Override protected void init()
 	{
-		BLOCK_NAME = I18n.translate(this.client.world.getBlockState(POS).getBlock().getTranslationKey());
-		LEFT = (screenWidth - WIDTH) / 2;
-		TOP = (screenHeight - HEIGHT) / 2;
+		BLOCK_NAME = I18n.translate(minecraft.world.getBlockState(POS).getBlock().getTranslationKey());
+		LEFT = (width - WIDTH) / 2;
+		TOP = (height - HEIGHT) / 2;
 
-		this.addButton(new StateButtonWidget(this, screenWidth/2+95, screenHeight/2-40, redstoneInteractionMode, new Integer(STATE_ITEMS.length).byteValue(), "screen.torcherino.narrate.redstoneinteraction")
+		this.addButton(new StateButtonWidget(this, width/2+95, height/2-40, redstoneInteractionMode, new Integer(STATE_ITEMS.length).byteValue(), "screen.torcherino.narrate.redstoneinteraction")
 		{
 			@Override protected Item getStateItem(byte state) { return STATE_ITEMS[state]; }
 			@Override protected String getStateName(byte state) { return I18n.translate(STATE_NAMES[state]); }
 			@Override protected void onStateChange(byte state) { redstoneInteractionMode = state; }
 		});
 
-		this.addButton(new SliderWidget(screenWidth/2-115, screenHeight/2-15, 230, 20, ((double) speed)/((double) MAX_SPEED), MAX_SPEED + 1)
+		this.addButton(new SliderWidget(width/2-115, height/2-15, 230, 20, ((double) speed)/((double) MAX_SPEED), MAX_SPEED + 1)
 		{
-			@Override protected void updateText() { setMessage(I18n.translate("screen.torcherino.speed", 100*speed)); }
+			@Override protected void updateMessage() { setMessage(I18n.translate("screen.torcherino.speed", 100*speed)); }
 
-			@Override protected void onProgressChanged()
+			@Override protected void applyValue()
 			{
-				speed = (int) Math.round(MAX_SPEED * this.progress);
-				this.progress = (double) speed / (double) MAX_SPEED;
+				speed = (int) Math.round(MAX_SPEED * value);
+				value = (double) speed / (double) MAX_SPEED;
 			}
 		});
 
-		this.addButton(new SliderWidget(screenWidth/2-115, screenHeight/2+10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
+		this.addButton(new SliderWidget(width/2-115, height/2+10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
 		{
-			@Override protected void updateText()
+			@Override protected void updateMessage()
 			{
 				setMessage(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
 				narrationMessage= I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
 			}
 
-			@Override protected void onProgressChanged()
+			@Override protected void applyValue()
 			{
-				mode = (byte) Math.round((MODES.length-1) * this.progress);
-				this.progress = (double) mode / ((double) MODES.length - 1);
+				mode = (byte) Math.round((MODES.length-1) * value);
+				value = (double) mode / ((double) MODES.length - 1);
 			}
 		});
 	}
 
-	@Override public void close()
+	@Override public void onClose()
 	{
 		PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer()).writeBlockPos(POS);
 		packetByteBuf.writeInt(speed);
 		packetByteBuf.writeByte(mode);
 		packetByteBuf.writeByte(redstoneInteractionMode);
 		ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("updatetorcherinostate"), packetByteBuf);
-		super.close();
+		super.onClose();
 	}
 
 	@Override public void render(int cursorX, int cursorY, float float_1)
 	{
-		this.drawBackground();
-		this.client.getTextureManager().bindTexture(SCREEN_TEXTURE);
+		renderBackground();
+		minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.drawTexturedRect(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
-		this.fontRenderer.draw(BLOCK_NAME, (float)(screenWidth / 2 - this.fontRenderer.getStringWidth(BLOCK_NAME) / 2), screenHeight/2.0F - 35, 4210752);
+		blit(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
+		font.draw(BLOCK_NAME, (float)(width / 2 - font.getStringWidth(BLOCK_NAME) / 2), height/2.0F - 35, 4210752);
 		super.render(cursorX, cursorY, float_1);
 	}
 
-	@Override public boolean isPauseScreen() { return false; }
+	@Override public boolean isPauseScreen(){ return false; }
 }

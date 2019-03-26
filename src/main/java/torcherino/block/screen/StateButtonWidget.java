@@ -34,13 +34,13 @@ public abstract class StateButtonWidget extends ButtonWidget
 	{
 		super.render(mouseX, mouseY, unused);
 		itemRenderer.renderGuiItem(getStateItem(state).getDefaultStack(), x + 2, y + 2);
-		if(this.isHovered()) screen.drawTooltip(this.getStateName(state), x + 14, y + 18);
+		if (this.isHovered()) screen.renderTooltip(this.getStateName(state), x + 14, y + 18);
 		GlStateManager.disableRescaleNormal();
 		GuiLighting.disable();
 		GlStateManager.disableLighting();
 		GlStateManager.disableDepthTest();
 	}
 
-	@Override protected String getNarrationMessage() { return I18n.translate(this.narrationMessage, getStateName(state)); }
-	@Override public void onPressed() { onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
+	@Override protected String getNarrationMessage(){ return I18n.translate(this.narrationMessage, getStateName(state)); }
+	@Override public void onPress(){ onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
 }
