@@ -5,6 +5,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -12,6 +15,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import torcherino.Torcherino;
 
+@OnlyIn(Dist.CLIENT)
 public class Client
 {
 	private static KeyBinding modifierBind;
@@ -24,19 +28,16 @@ public class Client
 		ClientRegistry.registerKeyBinding(modifierBind);
 	}
 
-	@SubscribeEvent
-	public static void clientTick(final TickEvent.ClientTickEvent event)
+	@SubscribeEvent public static void clientTick(final TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.START)
+		if (event.phase == TickEvent.Phase.START)
 		{
-			if(Minecraft.getInstance().currentScreen == null)
+			if (Minecraft.getInstance().currentScreen == null)
 			{
 				boolean bindPressed = InputMappings.isKeyDown(modifierBind.getKey().getKeyCode());
-				if(bindPressed ^ pressed)
-				{
-					pressed = !pressed;
-					Torcherino.torcherinoNetworkChannel.sendToServer(new Messages.KeystateUpdate(pressed, new PacketBuffer(Unpooled.buffer())));
-				}
+				if (bindPressed ^ pressed)
+					Torcherino.torcherinoNetworkChannel.sendToServer(new Messages.KeystateUpdate(pressed = !pressed, new PacketBuffer(Unpooled.buffer())));
+
 			}
 		}
 	}

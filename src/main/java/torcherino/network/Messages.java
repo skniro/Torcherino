@@ -12,11 +12,10 @@ public class Messages
 		private final boolean pressed;
 		private final PacketBuffer buf;
 
-		KeystateUpdate(boolean pressed, PacketBuffer buf) { this.pressed = pressed; this.buf = buf; }
+		KeystateUpdate(boolean pressed, PacketBuffer buf){ this.pressed = pressed; this.buf = buf; }
 
-		public static void encode(KeystateUpdate msg, PacketBuffer buf) { buf.writeBoolean(msg.pressed); }
-
-		public static KeystateUpdate decode(PacketBuffer buf) { return new KeystateUpdate(buf.readBoolean(), buf); }
+		public static void encode(KeystateUpdate msg, PacketBuffer buf){ buf.writeBoolean(msg.pressed); }
+		public static KeystateUpdate decode(PacketBuffer buf){ return new KeystateUpdate(buf.readBoolean(), buf); }
 
 		public static void handle(KeystateUpdate msg, Supplier<NetworkEvent.Context> ctx)
 		{

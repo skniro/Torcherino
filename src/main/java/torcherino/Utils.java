@@ -14,6 +14,7 @@ import java.util.HashSet;
 
 public class Utils
 {
+	public static final String MOD_ID = "torcherino";
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static boolean logPlacement = false;
 	private static HashSet<Block> blacklistedBlocks = new HashSet<>();

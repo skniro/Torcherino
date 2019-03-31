@@ -42,15 +42,14 @@ public class TorcherinoConfig
 	static final ForgeConfigSpec commonSpec = specPair.getRight();
 	private static final COMMON common = specPair.getLeft();
 
-	@SubscribeEvent
-	public static void onLoad(final ModConfig.Loading configEvent)
+	@SubscribeEvent public static void onLoad(final ModConfig.Loading configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
 		Utils.logPlacement = config.getConfigData().get("logPlacement");
 		Utils.LOGGER.info("Torcherino config has been loaded from {}", config.getFileName());
 		List<String> blocks = config.getConfigData().get("blacklistedBlocks");
-		for(String block : blocks) Utils.blacklistString(block);
+		for (String block : blocks) Utils.blacklistString(block);
 		List<String> tiles = config.getConfigData().get("blacklistedTiles");
-		for(String tile : tiles) Utils.blacklistString(tile);
+		for (String tile : tiles) Utils.blacklistString(tile);
 	}
 }

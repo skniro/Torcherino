@@ -12,11 +12,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 import torcherino.Items.ModItems;
 import torcherino.Utils;
 
-@Mod.EventBusSubscriber( modid = "torcherino", bus = Mod.EventBusSubscriber.Bus.MOD )
+@Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks
 {
-	@SubscribeEvent
-	public static void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
+	@SubscribeEvent public static void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
 	{
 		IForgeRegistry<Block> registry = registryEvent.getRegistry();
 		register(registry, "", 4);
