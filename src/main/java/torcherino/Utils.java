@@ -8,15 +8,15 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class Utils
 {
 	public static final String MOD_ID = "torcherino";
-	public static final Logger LOGGER = LogManager.getLogger();
+	public static final Logger LOGGER = LogManager.getLogger(Torcherino.class);
 	public static boolean logPlacement = false;
+	public static int randomTickSpeedRate = 1;
 	private static HashSet<Block> blacklistedBlocks = new HashSet<>();
 	private static HashSet<Class<? extends TileEntity>> blacklistedBlockEntities = new HashSet<>();
 	public static HashMap<EntityPlayerMP, Boolean> keyStates = new HashMap<>();

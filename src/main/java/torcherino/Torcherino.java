@@ -35,7 +35,6 @@ public class Torcherino
 
 	public static void processIMC(final InterModProcessEvent event)
 	{
-		System.out.println("Codestill runs");
 		// To use:
 		// in InterModEnqueueEvent call
 		// InterModComms.sendTo("torcherino", "blacklist", supplier);

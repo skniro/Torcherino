@@ -1,13 +1,16 @@
 package torcherino;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class TorcherinoConfig
 {
 	public static class COMMON
@@ -17,6 +20,7 @@ public class TorcherinoConfig
 		final ForgeConfigSpec.BooleanValue logPlacement;
 		final ForgeConfigSpec.ConfigValue<List<String>> blacklistedBlocks;
 		final ForgeConfigSpec.ConfigValue<List<String>> blacklistedTiles;
+		final ForgeConfigSpec.ConfigValue<Integer> randomTickSpeedRate;
 
 		COMMON(ForgeConfigSpec.Builder builder)
 		{
@@ -35,6 +39,7 @@ public class TorcherinoConfig
 			logPlacement = builder.comment("Log torcherino placement (Intended for server use)")
 					.translation("torcherino.configgui.logplacement")
 					.define("logPlacement", FMLEnvironment.dist.isDedicatedServer());
+			randomTickSpeedRate = builder.comment("Defines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096").translation("torcherino.configgui.randomtickspeedrate").define("randomTickSpeedRate", 1);
 		}
 	}
 
@@ -46,7 +51,7 @@ public class TorcherinoConfig
 	{
 		ModConfig config = configEvent.getConfig();
 		Utils.logPlacement = config.getConfigData().get("logPlacement");
-		Utils.LOGGER.info("Torcherino config has been loaded from {}", config.getFileName());
+		Utils.randomTickSpeedRate = MathHelper.clamp(config.getConfigData().get("randomTickSpeedRate"), 1, 4096);
 		List<String> blocks = config.getConfigData().get("blacklistedBlocks");
 		for (String block : blocks) Utils.blacklistString(block);
 		List<String> tiles = config.getConfigData().get("blacklistedTiles");

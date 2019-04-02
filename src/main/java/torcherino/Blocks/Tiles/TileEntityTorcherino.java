@@ -7,6 +7,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import torcherino.Utils;
 import static torcherino.Torcherino.TORCHERINO_TILE_ENTITY_TYPE;
@@ -29,15 +30,12 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 
 	@Override public void tick()
 	{
-		if (world.isRemote) return;
-		if (poweredByRedstone || mode == 0 || speed == 0) return;
-		if (cachedMode != mode) {
-			xMin = pos.getX() - mode;
-			xMax = pos.getX() + mode;
-			yMin = pos.getY() - 1;
-			yMax = pos.getY() + 1;
-			zMin = pos.getZ() - mode;
-			zMax = pos.getZ() + mode;
+		if (world.isRemote || poweredByRedstone || mode == 0 || speed == 0) return;
+		if (cachedMode != mode)
+		{
+			xMin = pos.getX() - mode; xMax = pos.getX() + mode;
+			yMin = pos.getY() - 1; yMax = pos.getY() + 1;
+			zMin = pos.getZ() - mode; zMax = pos.getZ() + mode;
 			cachedMode = mode;
 		}
 		randomTicks = world.getGameRules().getInt("randomTickSpeed");
@@ -52,12 +50,10 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 		IBlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (Utils.isBlockBlacklisted(block)) return;
-		if (block.getTickRandomly(blockState) && world.getRandom().nextInt(4096 / speed) < randomTicks) block.randomTick(blockState, world, pos, world.getRandom());
+		if (block.getTickRandomly(blockState) && world.getRandom().nextInt(MathHelper.clamp(4096 / (speed * Utils.randomTickSpeedRate), 1, 4096)) < randomTicks) block.randomTick(blockState, world, pos, world.getRandom());
 		if (!block.hasTileEntity(blockState)) return;
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity == null || tileEntity.isRemoved()) return;
-		if (Utils.isTileEntityBlacklisted(tileEntity)) return;
-		if (!(tileEntity instanceof ITickable)) return;
+		if (tileEntity == null || tileEntity.isRemoved() || Utils.isTileEntityBlacklisted(tileEntity) || !(tileEntity instanceof ITickable)) return;
 		for (int i = 0; i < speed; i++)
 		{
 			if (tileEntity.isRemoved()) break;
