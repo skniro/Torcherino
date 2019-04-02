@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import torcherino.Utils;
+import javax.annotation.Nonnull;
 import static torcherino.Torcherino.TORCHERINO_TILE_ENTITY_TYPE;
 
 public class TileEntityTorcherino extends TileEntity implements ITickable
@@ -74,7 +75,7 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 				new TextComponentTranslation("chat.torcherino.hint.speed",speed*100));
 	}
 
-	@Override public NBTTagCompound write(NBTTagCompound tag)
+	@Override @Nonnull public NBTTagCompound write(@Nonnull NBTTagCompound tag)
 	{
 		super.write(tag);
 		tag.setInt("Speed", speed);
@@ -84,7 +85,7 @@ public class TileEntityTorcherino extends TileEntity implements ITickable
 		return tag;
 	}
 
-	@Override public void read(NBTTagCompound  tag)
+	@Override public void read(@Nonnull NBTTagCompound tag)
 	{
 		super.read(tag);
 		speed = tag.getInt("Speed");

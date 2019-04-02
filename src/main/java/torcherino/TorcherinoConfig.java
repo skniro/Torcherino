@@ -39,7 +39,9 @@ public class TorcherinoConfig
 			logPlacement = builder.comment("Log torcherino placement (Intended for server use)")
 					.translation("torcherino.configgui.logplacement")
 					.define("logPlacement", FMLEnvironment.dist.isDedicatedServer());
-			randomTickSpeedRate = builder.comment("Defines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096").translation("torcherino.configgui.randomtickspeedrate").define("randomTickSpeedRate", 1);
+			randomTickSpeedRate = builder.comment("Defines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
+					.translation("torcherino.configgui.randomtickspeedrate")
+					.define("randomTickSpeedRate", 1);
 		}
 	}
 

@@ -24,7 +24,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Blocks.Tiles.TileEntityTorcherino;
 import torcherino.Utils;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -39,10 +41,10 @@ public class BlockLanterino extends BlockCarvedPumpkin
 
 	@Override public boolean hasTileEntity(IBlockState state){ return true; }
 	@Override public TileEntity createTileEntity(IBlockState state, IBlockReader world){ return new TileEntityTorcherino(MAX_SPEED); }
-	@Override public void onBlockAdded(IBlockState state, World world, BlockPos blockPos, IBlockState oldState){ neighborChanged(state, world, blockPos, null, null); }
-	@Override public EnumPushReaction getPushReaction(IBlockState state){ return EnumPushReaction.IGNORE; }
+	@Override @ParametersAreNonnullByDefault public void onBlockAdded(IBlockState state, World world, BlockPos blockPos, IBlockState oldState){ neighborChanged(state, world, blockPos, null, null); }
+	@Override @Nonnull public EnumPushReaction getPushReaction(@Nonnull IBlockState state){ return EnumPushReaction.IGNORE; }
 
-	@Override public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+	@Override @ParametersAreNonnullByDefault public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
 	{
 		player.addStat(StatList.BLOCK_MINED.get(this));
 		player.addExhaustion(0.005F);
@@ -62,7 +64,7 @@ public class BlockLanterino extends BlockCarvedPumpkin
 
 	}
 
-	@Override public void neighborChanged(IBlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
+	@Override @ParametersAreNonnullByDefault public void neighborChanged(IBlockState selfState, World world, BlockPos selfPos, Block neighborBlock, BlockPos neighborPos)
 	{
 		if (world.isRemote) return;
 		TileEntity tileEntity = world.getTileEntity(selfPos);
@@ -70,19 +72,19 @@ public class BlockLanterino extends BlockCarvedPumpkin
 		((TileEntityTorcherino) tileEntity).setPoweredByRedstone(world.isBlockPowered(selfPos));
 	}
 
-	@Override public void tick(IBlockState state, World world, BlockPos pos, Random random)
+	@Override @ParametersAreNonnullByDefault public void tick(IBlockState state, World world, BlockPos pos, Random random)
 	{
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof ITickable) ((ITickable) tileEntity).tick();
 	}
 
-	@Override public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState state1, boolean b)
+	@Override @ParametersAreNonnullByDefault public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState state1, boolean b)
 	{
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity != null) tileEntity.remove();
 	}
 
-	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
+	@Override @ParametersAreNonnullByDefault public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
 		if (world.isRemote || !Utils.logPlacement) return;
 		String prefix = "Something";
@@ -90,7 +92,7 @@ public class BlockLanterino extends BlockCarvedPumpkin
 		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 
-	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	@Override @ParametersAreNonnullByDefault public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote || hand == EnumHand.OFF_HAND) return true;
 		TileEntity tile = world.getTileEntity(pos);

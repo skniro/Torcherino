@@ -20,8 +20,7 @@ public class Client
 	private static KeyBinding modifierBind;
 	private static boolean pressed = false;
 
-	@SubscribeEvent
-	public static void clientSetup(final FMLClientSetupEvent event)
+	@SubscribeEvent public static void clientSetup(final FMLClientSetupEvent event)
 	{
 		modifierBind = new KeyBinding("key.torcherino.modifier", KeyConflictContext.IN_GAME, InputMappings.getInputByName("key.keyboard.left.shift"), "key.categories.misc");
 		ClientRegistry.registerKeyBinding(modifierBind);

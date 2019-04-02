@@ -41,13 +41,12 @@ public class Torcherino
 		// where supplier has a get method which returns a String of either:
 		// a block's resource location e.g. "minecraft:furnace"
 		// or a tile entity class path e.g. net.minecraft.tileentity.TileEntityFurnace
-		event.getIMCStream().forEach((InterModComms.IMCMessage message) -> { if(message.getMethod().equalsIgnoreCase("blacklist")) Utils.blacklistString((String) message.getMessageSupplier().get()); });
+		event.getIMCStream().forEach((InterModComms.IMCMessage message) -> { if (message.getMethod().equalsIgnoreCase("blacklist")) Utils.blacklistString((String) message.getMessageSupplier().get()); });
 	}
 
 	@SubscribeEvent public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
 	{
-		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TileEntityTorcherino::new).build(null);
-		TORCHERINO_TILE_ENTITY_TYPE.setRegistryName(Utils.getId("torcherino"));
+		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TileEntityTorcherino::new).build(null).setRegistryName(Utils.getId("torcherino"));
 		registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
 	}
 }
