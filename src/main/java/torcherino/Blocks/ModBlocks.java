@@ -29,7 +29,7 @@ public class ModBlocks
 		Block blockTorcherinoWall = new BlockTorcherinoWall(blockTorcherino).setRegistryName(Utils.getId("wall_"+name+"torcherino"));
 		Block blockLanterino = new BlockLanterino(speed).setRegistryName(Utils.getId(name+"lanterino"));
 		Item itemTorcherino = new ItemWallOrFloor(blockTorcherino, blockTorcherinoWall, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(Utils.getId(name+"torcherino"));
-		Item itemLanterino = new ItemBlock(blockLanterino, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(Utils.getId(name+"lanterino"));
+		Item itemLanterino = new ItemBlock(blockLanterino, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Utils.getId(name+"lanterino"));
 		registry.registerAll(blockTorcherino, blockTorcherinoWall, blockLanterino);
 		Utils.blacklistBlocks(blockTorcherino, blockTorcherinoWall, blockLanterino);
 		ModItems.items.add(itemTorcherino);
