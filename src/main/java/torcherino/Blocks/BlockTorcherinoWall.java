@@ -23,8 +23,8 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class BlockTorcherinoWall extends BlockTorchWall
 {
-	private BlockTorcherino BASE;
-	BlockTorcherinoWall(BlockTorcherino base) { super(Properties.from(base)); this.BASE = base; }
+	private Block BASE;
+	BlockTorcherinoWall(Block base) { super(Properties.from(base)); this.BASE = base; }
 
 	@Override public boolean hasTileEntity(IBlockState state){ return true; }
 	@Override public TileEntity createTileEntity(IBlockState state, IBlockReader world){ return BASE.createTileEntity(state, world); }

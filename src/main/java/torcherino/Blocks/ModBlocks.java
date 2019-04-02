@@ -25,22 +25,13 @@ public class ModBlocks
 
 	private static void register(IForgeRegistry<Block> registry, String name, int speed)
 	{
-		BlockTorcherino blockTorcherino = new BlockTorcherino(speed);
-		BlockTorcherinoWall blockTorcherinoWall = new BlockTorcherinoWall(blockTorcherino);
-		BlockLanterino blockLanterino = new BlockLanterino(speed);
-		Item itemTorcherino = new ItemWallOrFloor(blockTorcherino, blockTorcherinoWall, new Item.Properties().group(ItemGroup.DECORATIONS));
-		Item itemLanterino = new ItemBlock(blockLanterino, new Item.Properties().group(ItemGroup.DECORATIONS));
-		itemTorcherino.setRegistryName(Utils.getId(name+"torcherino"));
-		itemLanterino.setRegistryName(Utils.getId(name+"lanterino"));
-		blockTorcherino.setRegistryName(Utils.getId(name+"torcherino"));
-		blockTorcherinoWall.setRegistryName(Utils.getId("wall_"+name+"torcherino"));
-		blockLanterino.setRegistryName(Utils.getId(name+"lanterino"));
-		registry.register(blockTorcherino);
-		registry.register(blockTorcherinoWall);
-		registry.register(blockLanterino);
-		Utils.blacklistBlock(blockTorcherino);
-		Utils.blacklistBlock(blockTorcherinoWall);
-		Utils.blacklistBlock(blockLanterino);
+		Block blockTorcherino = new BlockTorcherino(speed).setRegistryName(Utils.getId(name+"torcherino"));
+		Block blockTorcherinoWall = new BlockTorcherinoWall(blockTorcherino).setRegistryName(Utils.getId("wall_"+name+"torcherino"));
+		Block blockLanterino = new BlockLanterino(speed).setRegistryName(Utils.getId(name+"lanterino"));
+		Item itemTorcherino = new ItemWallOrFloor(blockTorcherino, blockTorcherinoWall, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(Utils.getId(name+"torcherino"));
+		Item itemLanterino = new ItemBlock(blockLanterino, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(Utils.getId(name+"lanterino"));
+		registry.registerAll(blockTorcherino, blockTorcherinoWall, blockLanterino);
+		Utils.blacklistBlocks(blockTorcherino, blockTorcherinoWall, blockLanterino);
 		ModItems.items.add(itemTorcherino);
 		ModItems.items.add(itemLanterino);
 	}

@@ -24,6 +24,7 @@ public class Utils
 	public static boolean isBlockBlacklisted(Block block){ return blacklistedBlocks.contains(block); }
 	public static boolean isTileEntityBlacklisted(TileEntity tileEntity){ return blacklistedBlockEntities.contains(tileEntity.getClass()); }
 	public static void blacklistBlock(Block block){ blacklistedBlocks.add(block); }
+	public static void blacklistBlocks(Block... blocks){ for (Block block : blocks) blacklistBlock(block); }
 	static void blacklistTileEntity(Class<? extends TileEntity> tileEntity){ blacklistedBlockEntities.add(tileEntity); }
 	public static void blacklistTileEntity(TileEntity tileEntity){ blacklistedBlockEntities.add(tileEntity.getClass()); }
 	public static ResourceLocation getId(String path){ return new ResourceLocation("torcherino", path); }
