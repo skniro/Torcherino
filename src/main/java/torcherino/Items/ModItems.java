@@ -5,13 +5,13 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.antlr.v4.runtime.misc.OrderedHashSet;
 import torcherino.Utils;
+import java.util.HashSet;
 
 @Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems
 {
-	public static OrderedHashSet<Item> items = new OrderedHashSet<>();
+	public static HashSet<Item> items = new HashSet<>();
 
 	@SubscribeEvent public static void onItemRegistry(final RegistryEvent.Register<Item> registryEvent)
 	{
