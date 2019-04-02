@@ -15,15 +15,17 @@ import torcherino.Utils;
 @Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks
 {
+	private static IForgeRegistry<Block> registry;
+
 	@SubscribeEvent public static void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
 	{
-		IForgeRegistry<Block> registry = registryEvent.getRegistry();
-		register(registry, "", 4);
-		register(registry, "compressed_", 36);
-		register(registry, "double_compressed_", 324);
+		registry = registryEvent.getRegistry();
+		register("", 4);
+		register("compressed_", 36);
+		register("double_compressed_", 324);
 	}
 
-	private static void register(IForgeRegistry<Block> registry, String name, int speed)
+	private static void register(String name, int speed)
 	{
 		Block blockTorcherino = new BlockTorcherino(speed).setRegistryName(Utils.getId(name+"torcherino"));
 		Block blockTorcherinoWall = new BlockTorcherinoWall(blockTorcherino).setRegistryName(Utils.getId("wall_"+name+"torcherino"));
