@@ -66,7 +66,7 @@ public class TorcherinoScreen extends Screen
 			@Override protected void updateMessage()
 			{
 				setMessage(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
-				narrationMessage= I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
+				narrationMessage = I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
 			}
 
 			@Override protected void applyValue()

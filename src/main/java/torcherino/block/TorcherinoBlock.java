@@ -35,12 +35,9 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
 		MAX_SPEED = maxSpeed;
 	}
 
-	@Override public PistonBehavior getPistonBehavior(BlockState state) { return PistonBehavior.IGNORE; }
-	@Override public BlockEntity createBlockEntity(BlockView view) { return new TorcherinoBlockEntity(MAX_SPEED); }
-	@Override public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
-	{
-		this.neighborUpdate(newState, world, pos, null, null, false);
-	}
+	@Override public PistonBehavior getPistonBehavior(BlockState state){ return PistonBehavior.IGNORE; }
+	@Override public BlockEntity createBlockEntity(BlockView view){ return new TorcherinoBlockEntity(MAX_SPEED); }
+	@Override public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1){ neighborUpdate(newState, world, pos, null, null, false); }
 
 	@Override public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)
 	{
@@ -53,28 +50,28 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
 	@Override public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
 	{
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if(blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();
+		if (blockEntity instanceof Tickable) ((Tickable) blockEntity).tick();
 	}
 
 	@Override public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean bool)
 	{
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if(blockEntity != null) blockEntity.invalidate();
+		if (blockEntity != null) blockEntity.invalidate();
 	}
 
 	@Override public void onPlaced(World world, BlockPos pos, BlockState oldState, LivingEntity placer, ItemStack handStack)
 	{
-		if(world.isClient) return;
+		if (world.isClient) return;
 		String prefix = "Something";
-		if(placer != null) prefix = placer.getDisplayName().getText() + " (" + placer.getUuidAsString() + ")";
+		if (placer != null) prefix = placer.getDisplayName().getText() + " (" + placer.getUuidAsString() + ")";
 		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		if(world.isClient || hand == Hand.OFF) return true;
+		if (world.isClient || hand == Hand.OFF) return true;
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if(!(blockEntity instanceof TorcherinoBlockEntity)) return true;
+		if (!(blockEntity instanceof TorcherinoBlockEntity)) return true;
 		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, Utils.getId("openscreen"), new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
 		return true;
 	}

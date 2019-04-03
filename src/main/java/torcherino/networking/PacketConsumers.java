@@ -50,7 +50,7 @@ public class PacketConsumers
 			int redstoneInteractionMode = buffer.readInt();
 			context.getTaskQueue().execute(() -> {
 				BlockEntity blockEntity = world.getBlockEntity(pos);
-				if(blockEntity instanceof TorcherinoBlockEntity)
+				if (blockEntity instanceof TorcherinoBlockEntity)
 				{
 					TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
 					torch.setSpeed(speed);
