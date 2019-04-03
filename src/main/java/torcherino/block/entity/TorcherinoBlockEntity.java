@@ -71,7 +71,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	{
 		redstoneInteractionMode = mode;
 		BlockState blockState = world.getBlockState(pos);
-		blockState.getBlock().neighborUpdate(blockState, world, pos, null, null);
+		blockState.getBlock().neighborUpdate(blockState, world, pos, null, null, false);
 	}
 
 	@Override public CompoundTag toTag(CompoundTag tag)
