@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import torcherino.Blocks.Tiles.TileEntityTorcherino;
@@ -28,9 +29,12 @@ public class Torcherino
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorcherinoConfig.commonSpec);
 		torcherinoNetworkChannel.registerMessage(0, Messages.KeystateUpdate.class, Messages.KeystateUpdate::encode, Messages.KeystateUpdate::decode, Messages.KeystateUpdate::handle);
-		FMLJavaModLoadingContext.get().getModEventBus().register(Client.class);
-		MinecraftForge.EVENT_BUS.register(Client.class);
 		Utils.blacklistTileEntity(TileEntityTorcherino.class);
+		if (FMLEnvironment.dist.isClient())
+		{
+			FMLJavaModLoadingContext.get().getModEventBus().register(Client.class);
+			MinecraftForge.EVENT_BUS.register(Client.class);
+		}
 	}
 
 	public static void processIMC(final InterModProcessEvent event)
