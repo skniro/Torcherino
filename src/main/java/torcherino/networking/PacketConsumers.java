@@ -33,8 +33,8 @@ public class PacketConsumers
 			BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
 			int Speed = tag.getInt("Speed");
 			int MaxSpeed = tag.getInt("MaxSpeed");
-			byte Mode = tag.getByte("Mode");
-			byte state = tag.getByte("RedstoneInteractionMode");
+			int Mode = tag.getInt("Mode");
+			int state = tag.getInt("RedstoneInteractionMode");
 			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
 		}
 	}
@@ -46,10 +46,9 @@ public class PacketConsumers
 			World world = context.getPlayer().world;
 			BlockPos pos = buffer.readBlockPos();
 			int speed = buffer.readInt();
-			byte mode = buffer.readByte();
-			byte redstoneInteractionMode = buffer.readByte();
-			context.getTaskQueue().execute(() ->
-			{
+			int mode = buffer.readInt();
+			int redstoneInteractionMode = buffer.readInt();
+			context.getTaskQueue().execute(() -> {
 				BlockEntity blockEntity = world.getBlockEntity(pos);
 				if(blockEntity instanceof TorcherinoBlockEntity)
 				{
