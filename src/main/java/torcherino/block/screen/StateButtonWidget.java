@@ -42,5 +42,5 @@ public abstract class StateButtonWidget extends ButtonWidget
 	}
 
 	@Override protected String getNarrationMessage(){ return I18n.translate(this.narrationMessage, getStateName(state)); }
-	@Override public void onPress(){ onStateChange(state = (byte) ((state+1) % MAX_STATES)); }
+	@Override public void onPress(){ onStateChange(state =  (state+1) % MAX_STATES); }
 }

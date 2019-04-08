@@ -1,5 +1,7 @@
 package torcherino.networking;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.PacketConsumer;
 import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,7 +27,7 @@ public class PacketConsumers
 		}
 	}
 
-	public static class TorcherinoScreenConsumer implements PacketConsumer
+	@Environment(EnvType.CLIENT) public static class TorcherinoScreenConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
