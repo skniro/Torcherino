@@ -17,34 +17,20 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 
 	@Override public boolean keyPressed(int key, int scanCode, int modifierBits)
 	{
-		double old_progress;
 		if (key == 263)
 		{
-			old_progress = this.value;
+			double old_progress = this.value;
 			this.value = MathHelper.clamp(this.value - this.arrowNudgeAmount, 0.0D, 1.0D);
-			if (old_progress != this.value)
-			{
-				this.applyValue();
-				this.updateMessage();
-			}
+			if (old_progress != this.value){ this.applyValue(); this.updateMessage(); }
 		}
 		else if (key == 262)
 		{
-			old_progress = this.value;
+			double old_progress = this.value;
 			this.value = MathHelper.clamp(this.value + this.arrowNudgeAmount, 0.0D, 1.0D);
-			if (old_progress != this.value)
-			{
-				this.applyValue();
-				this.updateMessage();
-			}
+			if (old_progress != this.value){ this.applyValue(); this.updateMessage(); }
 		}
-
 		return false;
 	}
 
-	@Override protected String getNarrationMessage()
-	{
-		if (!narrationMessage.equals("")) return I18n.translate("gui.narrate.slider", narrationMessage);
-		return I18n.translate("gui.narrate.slider", this.getMessage());
-	}
+	@Override protected String getNarrationMessage(){ return I18n.translate("gui.narrate.slider", narrationMessage.equals("") ? this.getMessage() : narrationMessage); }
 }

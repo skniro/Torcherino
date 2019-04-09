@@ -1,5 +1,7 @@
 package torcherino.networking;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.PacketConsumer;
 import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,7 +27,7 @@ public class PacketConsumers
 		}
 	}
 
-	public static class TorcherinoScreenConsumer implements PacketConsumer
+	@Environment(EnvType.CLIENT) public static class TorcherinoScreenConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
@@ -33,8 +35,8 @@ public class PacketConsumers
 			BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
 			int Speed = tag.getInt("Speed");
 			int MaxSpeed = tag.getInt("MaxSpeed");
-			byte Mode = tag.getByte("Mode");
-			byte state = tag.getByte("RedstoneInteractionMode");
+			int Mode = tag.getInt("Mode");
+			int state = tag.getInt("RedstoneInteractionMode");
 			context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
 		}
 	}
@@ -46,12 +48,11 @@ public class PacketConsumers
 			World world = context.getPlayer().world;
 			BlockPos pos = buffer.readBlockPos();
 			int speed = buffer.readInt();
-			byte mode = buffer.readByte();
-			byte redstoneInteractionMode = buffer.readByte();
-			context.getTaskQueue().execute(() ->
-			{
+			int mode = buffer.readInt();
+			int redstoneInteractionMode = buffer.readInt();
+			context.getTaskQueue().execute(() -> {
 				BlockEntity blockEntity = world.getBlockEntity(pos);
-				if(blockEntity instanceof TorcherinoBlockEntity)
+				if (blockEntity instanceof TorcherinoBlockEntity)
 				{
 					TorcherinoBlockEntity torch = (TorcherinoBlockEntity) blockEntity;
 					torch.setSpeed(speed);

@@ -15,19 +15,17 @@ import torcherino.Utils;
 
 public class TorcherinoScreen extends Screen
 {
-	private static final Item[] STATE_ITEMS = new Item[]{Items.REDSTONE, Items.REDSTONE_TORCH, Items.GUNPOWDER};
-	private static final String[] STATE_NAMES = new String[]{"screen.torcherino.redstoneinteraction.normal",
-			"screen.torcherino.redstoneinteraction.inverted", "screen.torcherino.redstoneinteraction.ignore"};
+	private static final Item[] STATE_ITEMS = {Items.REDSTONE, Items.REDSTONE_TORCH, Items.GUNPOWDER};
+	private static final String[] STATE_NAMES = {"screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted", "screen.torcherino.redstoneinteraction.ignore"};
+	private static String[] MODES = {"area.stopped", "area.n", "area.n", "area.n", "area.n"};
 	private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
+	private static final int WIDTH = 256, HEIGHT = 88;
 	private String BLOCK_NAME;
 	private final BlockPos POS;
-	private byte mode, redstoneInteractionMode;
-	private int speed, LEFT, TOP;
+	private int speed, mode, redstoneInteractionMode, LEFT, TOP;
 	private final int MAX_SPEED;
-	private static final int WIDTH = 256, HEIGHT = 88;
-	private String[] MODES = {"area.stopped", "area.n", "area.n", "area.n", "area.n"};
 
-	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, byte mode, byte redstoneInteractionMode)
+	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, int mode, int redstoneInteractionMode)
 	{
 		super(new StringTextComponent(""));
 		POS = pos;
@@ -37,17 +35,19 @@ public class TorcherinoScreen extends Screen
 		this.redstoneInteractionMode = redstoneInteractionMode;
 	}
 
+	@Override public boolean isPauseScreen(){ return false; }
+
 	@Override protected void init()
 	{
 		BLOCK_NAME = I18n.translate(minecraft.world.getBlockState(POS).getBlock().getTranslationKey());
 		LEFT = (width - WIDTH) / 2;
 		TOP = (height - HEIGHT) / 2;
 
-		this.addButton(new StateButtonWidget(this, width/2+95, height/2-40, redstoneInteractionMode, new Integer(STATE_ITEMS.length).byteValue(), "screen.torcherino.narrate.redstoneinteraction")
+		this.addButton(new StateButtonWidget(this, width/2+95, height/2-40, redstoneInteractionMode, STATE_ITEMS.length, "screen.torcherino.narrate.redstoneinteraction")
 		{
-			@Override protected Item getStateItem(byte state) { return STATE_ITEMS[state]; }
-			@Override protected String getStateName(byte state) { return I18n.translate(STATE_NAMES[state]); }
-			@Override protected void onStateChange(byte state) { redstoneInteractionMode = state; }
+			@Override protected Item getStateItem(int state){ return STATE_ITEMS[state]; }
+			@Override protected String getStateName(int state){ return I18n.translate(STATE_NAMES[state]); }
+			@Override protected void onStateChange(int state){ redstoneInteractionMode = state; }
 		});
 
 		this.addButton(new SliderWidget(width/2-115, height/2-15, 230, 20, ((double) speed)/((double) MAX_SPEED), MAX_SPEED + 1)
@@ -66,12 +66,12 @@ public class TorcherinoScreen extends Screen
 			@Override protected void updateMessage()
 			{
 				setMessage(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
-				narrationMessage= I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
+				narrationMessage = I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
 			}
 
 			@Override protected void applyValue()
 			{
-				mode = (byte) Math.round((MODES.length-1) * value);
+				mode = (int) Math.round((MODES.length-1) * value);
 				value = (double) mode / ((double) MODES.length - 1);
 			}
 		});
@@ -81,8 +81,8 @@ public class TorcherinoScreen extends Screen
 	{
 		PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer()).writeBlockPos(POS);
 		packetByteBuf.writeInt(speed);
-		packetByteBuf.writeByte(mode);
-		packetByteBuf.writeByte(redstoneInteractionMode);
+		packetByteBuf.writeInt(mode);
+		packetByteBuf.writeInt(redstoneInteractionMode);
 		ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("updatetorcherinostate"), packetByteBuf);
 		super.onClose();
 	}
@@ -93,9 +93,13 @@ public class TorcherinoScreen extends Screen
 		minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		blit(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
-		font.draw(BLOCK_NAME, (float)(width / 2 - font.getStringWidth(BLOCK_NAME) / 2), height/2.0F - 35, 4210752);
+		font.draw(BLOCK_NAME, (width - font.getStringWidth(BLOCK_NAME)) / 2.0f, height/2.0F - 35, 4210752);
 		super.render(cursorX, cursorY, float_1);
 	}
 
-	@Override public boolean isPauseScreen(){ return false; }
+	@Override public boolean keyPressed(int keyCode, int scanCode, int modifier)
+	{
+		if (keyCode == 256 || minecraft.options.keyInventory.matchesKey(keyCode, 0)){ this.onClose(); return true; }
+		return super.keyPressed(keyCode, scanCode, modifier);
+	}
 }
