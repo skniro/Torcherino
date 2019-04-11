@@ -12,7 +12,7 @@ def main(args: dict) -> str:
 	not_changed = True
 	try:
 		format_args = dict(fabric_version=get_release('fabric'), loader_version=get_release('fabric-loader'))
-		format_args['minecraft_version'], format_args['yarn_version'] = get_release('yarn').rsplit('.')
+		format_args['minecraft_version'], format_args['yarn_version'] = get_release('yarn').rsplit('+', 1)
 	except Exception as e:
 		return str(e)
 	with open(args['file']) as f:
