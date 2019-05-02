@@ -1,10 +1,10 @@
 package torcherino.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.block.BlockItem;
-import net.minecraft.item.block.WallStandingBlockItem;
+import net.minecraft.item.WallStandingBlockItem;
 import net.minecraft.util.registry.Registry;
 import torcherino.Utils;
 

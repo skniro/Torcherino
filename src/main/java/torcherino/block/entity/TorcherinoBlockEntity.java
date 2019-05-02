@@ -23,7 +23,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	public TorcherinoBlockEntity(int speed){ this(); MAX_SPEED = speed; redstoneInteractionMode = 0; }
 
 	public void setSpeed(int speed){ this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
-	public void setMode(int mode){ this.mode = MathHelper.clamp(mode, 0, 4); positions = BlockPos.iterateBoxPositions(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode)); }
+	public void setMode(int mode){ this.mode = MathHelper.clamp(mode, 0, 4); positions = BlockPos.iterate(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode)); }
 	public void setPoweredByRedstone(boolean powered){ poweredByRedstone = redstoneInteractionMode == 0 ? powered : redstoneInteractionMode == 1 && !powered; }
 	@Override public BlockEntityUpdateS2CPacket toUpdatePacket(){ return new BlockEntityUpdateS2CPacket(getPos(), 126, toTag(new CompoundTag())); }
 
