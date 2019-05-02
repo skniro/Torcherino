@@ -17,7 +17,7 @@
 		"client": ["torcherino.Torcherino"]
 	},
 	"requires": {
-		"fabricloader": ">=0.4.0",
+		"fabricloader": ">=0.4.1",
 		"fabric": "*"
 	}
 }

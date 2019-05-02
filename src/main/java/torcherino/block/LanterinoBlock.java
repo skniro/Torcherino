@@ -68,7 +68,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		if (world.isClient || hand == Hand.OFF) return true;
+		if (world.isClient || hand == Hand.OFF_HAND) return true;
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (!(blockEntity instanceof TorcherinoBlockEntity)) return true;
 		ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, Utils.getId("openscreen"), new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
