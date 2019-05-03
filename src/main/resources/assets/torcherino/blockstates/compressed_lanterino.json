@@ -1,8 +1,8 @@
 {
-    "variants": {
-        "facing=north": { "model": "torcherino:block/compressed_lanterino" },
-        "facing=south": { "model": "torcherino:block/compressed_lanterino", "y": 180 },
-        "facing=west":  { "model": "torcherino:block/compressed_lanterino", "y": 270 },
-        "facing=east":  { "model": "torcherino:block/compressed_lanterino", "y": 90 }
-    }
+  "variants": {
+    "facing=north": { "model": "torcherino:block/compressed_lanterino" },
+    "facing=south": { "model": "torcherino:block/compressed_lanterino", "y": 180 },
+    "facing=west":  { "model": "torcherino:block/compressed_lanterino", "y": 270 },
+    "facing=east":  { "model": "torcherino:block/compressed_lanterino", "y": 90 }
+  }
 }
