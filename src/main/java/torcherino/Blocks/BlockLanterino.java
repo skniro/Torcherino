@@ -7,6 +7,7 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -18,8 +19,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Blocks.Tiles.TileEntityTorcherino;
@@ -27,6 +31,7 @@ import torcherino.Utils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -101,5 +106,18 @@ public class BlockLanterino extends BlockCarvedPumpkin
 		torch.changeMode(Utils.keyStates.getOrDefault(player, false));
 		player.sendStatusMessage(torch.getDescription(), true);
 		return true;
+	}
+
+	@OnlyIn(Dist.CLIENT) @Override public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	{
+		tooltip.add(new TextComponentString(""));
+		tooltip.add(new TextComponentTranslation("tooltip.torcherino.usageinformation").applyTextStyle(TextFormatting.GRAY));
+		tooltip.add(new TextComponentKeybind("key.use").applyTextStyle(TextFormatting.GOLD).appendSibling(new TextComponentString(" ")).appendSibling(new TextComponentTranslation("tooltip.torcherino.change_speed")));
+		tooltip.add(new TextComponentString("")
+				.appendSibling(new TextComponentKeybind("key.torcherino.modifier").applyTextStyle(TextFormatting.GOLD))
+				.appendSibling(new TextComponentString(" + "))
+				.appendSibling(new TextComponentKeybind("key.use").applyTextStyle(TextFormatting.GOLD))
+				.appendSibling(new TextComponentString(" "))
+				.appendSibling(new TextComponentTranslation("tooltip.torcherino.change_area")));
 	}
 }

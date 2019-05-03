@@ -9,6 +9,9 @@
 	"chat.torcherino.hint.area.stopped": "Stopped",
 	"chat.torcherino.hint.area.n": "Area: %1$dx3x%1$d",
 	"chat.torcherino.hint.speed": "Speed: %d%%",
-	"chat.torcherino.hint.layout": "%s | %s"
+	"chat.torcherino.hint.layout": "%s | %s",
+	"tooltip.torcherino.change_speed": "to change the speed.",
+	"tooltip.torcherino.change_area": "to change the area.",
+	"tooltip.torcherino.usageinformation": "Torcherino usage:"
 }
 
