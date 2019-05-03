@@ -6,27 +6,15 @@ import net.fabricmc.fabric.api.network.PacketConsumer;
 import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import torcherino.Utils;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.block.screen.TorcherinoScreen;
 
 public class PacketConsumers
 {
-	public static class ModifierBindConsumer implements PacketConsumer
-	{
-		@Override public void accept(PacketContext context, PacketByteBuf buffer)
-		{
-			PlayerEntity player = context.getPlayer();
-			boolean pressed = buffer.readBoolean();
-			context.getTaskQueue().execute(() -> Utils.keyStates.put(player, pressed));
-		}
-	}
-
 	@Environment(EnvType.CLIENT) public static class TorcherinoScreenConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)

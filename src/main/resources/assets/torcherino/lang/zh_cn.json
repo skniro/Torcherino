@@ -5,7 +5,6 @@
 	"block.torcherino.lanterino": "加速南瓜灯",
 	"block.torcherino.compressed_lanterino": "压缩加速南瓜灯",
 	"block.torcherino.double_compressed_lanterino": "二重压缩加速南瓜灯",
-	"key.torcherino.modifier": "切换加速模式",
 	"screen.torcherino.area.stopped": "停止",
 	"screen.torcherino.area.n": "区域: %1$dx3x%1$d",
 	"screen.torcherino.speed": "速度: %d%%",
