@@ -1,0 +1,8 @@
+tile.torcherino.torcherino.name=Beschleunigungsfackel
+tile.torcherino.compressed_torcherino.name=komprimierte Beschleunigungsfackel
+tile.torcherino.double_compressed_torcherino.name=Doppelt komprimierte Beschleunigungsfackel
+tile.torcherino.lanterino.name=Beschleunigungs Kürbislaterne
+tile.torcherino.compressed_lanterino.name=komprimierte Beschleunigungs Kürbislaterne
+tile.torcherino.double_compressed_lanterino.name=Doppelt komprimierte Beschleunigungs Kürbislaterne
+
+key.torcherino.useage_key=Beschleunigungsfackel Modifikator
