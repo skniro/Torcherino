@@ -13,7 +13,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import torcherino.Blocks.Tiles.TileEntityTorcherino;
+import torcherino.blocks.tiles.TileEntityTorcherino;
 import torcherino.network.Client;
 import torcherino.network.Messages;
 

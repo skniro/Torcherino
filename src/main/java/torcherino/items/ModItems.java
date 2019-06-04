@@ -1,4 +1,4 @@
-package torcherino.Items;
+package torcherino.items;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;

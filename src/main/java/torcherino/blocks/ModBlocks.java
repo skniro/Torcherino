@@ -1,4 +1,4 @@
-package torcherino.Blocks;
+package torcherino.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -9,7 +9,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
-import torcherino.Items.ModItems;
+import torcherino.items.ModItems;
 import torcherino.Utils;
 
 @Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)

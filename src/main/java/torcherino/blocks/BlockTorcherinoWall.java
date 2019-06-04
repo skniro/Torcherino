@@ -1,4 +1,4 @@
-package torcherino.Blocks;
+package torcherino.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorchWall;
@@ -19,12 +19,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
-import torcherino.Blocks.Tiles.TileEntityTorcherino;
+import torcherino.blocks.tiles.TileEntityTorcherino;
 import torcherino.Utils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
