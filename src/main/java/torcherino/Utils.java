@@ -41,7 +41,7 @@ public class Utils
 			else
 			{
 				BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(identifier);
-				if(blockEntityType != BlockEntityType.FURNACE || identifier.equals(new Identifier("minecraft", "furnace")))
+				if (blockEntityType != BlockEntityType.FURNACE || identifier.equals(new Identifier("minecraft", "furnace")))
 				{
 					blacklistBlockEntity(blockEntityType);
 				}

@@ -14,7 +14,7 @@ public class Torcherino implements ModInitializer, ClientModInitializer
 	{
 		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatetorcherinostate"), new PacketConsumers.UpdateTorcherinoConsumer());
 		ModBlocks.onInitialize();
-		if(FabricLoader.getInstance().isModLoaded("computercraft"))
+		if (FabricLoader.getInstance().isModLoaded("computercraft"))
 		{
 			Utils.blacklistString("computercraft:turtle_normal");
 			Utils.blacklistString("computercraft:turtle_advanced");
