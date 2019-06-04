@@ -14,7 +14,7 @@ def main(args: dict) -> str:
     output = []
     not_changed = True
     try:
-        format_args = dict(fabric_version=get_release('fabric'), loader_version=get_release('fabric-loader'))
+        format_args = dict(fabric_version=get_release('fabric-api/fabric-api'), loader_version=get_release('fabric-loader'))
         format_args['minecraft_version'], format_args['yarn_version'] = get_release('yarn').rsplit('+', 1)
     except Exception as e:
         print(str(e), end="")
@@ -23,9 +23,11 @@ def main(args: dict) -> str:
         for line in f:
             if " = " in line:
                 key, value = line.split(" = ", 1)
-                new_value = format_args[key]
-                output.append(f"{key} = {new_value}\n")
-                if new_value not in value: print(f"Updated {key} from {value[0:-1]} to {new_value}"); not_changed = False
+                if key in format_args:
+                    new_value = format_args[key]
+                    output.append(f"{key} = {new_value}\n")
+                    if new_value not in value: print(f"Updated {key} from {value[0:-1]} to {new_value}"); not_changed = False
+                else: output.append(line)
             else: output.append(line)
     if not_changed:
         print("Already up to date. ", end="")

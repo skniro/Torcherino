@@ -23,11 +23,13 @@ public abstract class StateButtonWidget extends ButtonWidget
 		this.screen = screen;
 		this.state = state;
 		this.MAX_STATES = maxStates;
-		this.narrationMessage= narrationMessage;
+		this.narrationMessage = narrationMessage;
 	}
 
 	protected abstract Item getStateItem(int state);
+
 	protected abstract String getStateName(int state);
+
 	protected abstract void onStateChange(int state);
 
 	@Override public void render(int mouseX, int mouseY, float unused)
@@ -42,5 +44,6 @@ public abstract class StateButtonWidget extends ButtonWidget
 	}
 
 	@Override protected String getNarrationMessage(){ return I18n.translate(this.narrationMessage, getStateName(state)); }
-	@Override public void onPress(){ onStateChange(state =  (state+1) % MAX_STATES); }
+
+	@Override public void onPress(){ onStateChange(state = (state + 1) % MAX_STATES); }
 }

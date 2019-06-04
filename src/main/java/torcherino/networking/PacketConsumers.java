@@ -15,7 +15,8 @@ import torcherino.block.screen.TorcherinoScreen;
 
 public class PacketConsumers
 {
-	@Environment(EnvType.CLIENT) public static class TorcherinoScreenConsumer implements PacketConsumer
+	@Environment(EnvType.CLIENT)
+	public static class TorcherinoScreenConsumer implements PacketConsumer
 	{
 		@Override public void accept(PacketContext context, PacketByteBuf buffer)
 		{
@@ -38,7 +39,8 @@ public class PacketConsumers
 			int speed = buffer.readInt();
 			int mode = buffer.readInt();
 			int redstoneInteractionMode = buffer.readInt();
-			context.getTaskQueue().execute(() -> {
+			context.getTaskQueue().execute(() ->
+			{
 				BlockEntity blockEntity = world.getBlockEntity(pos);
 				if (blockEntity instanceof TorcherinoBlockEntity)
 				{

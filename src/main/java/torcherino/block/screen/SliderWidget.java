@@ -10,7 +10,7 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 
 	SliderWidget(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
 	{
-		super(int_1,  int_2,  int_3,  int_4,  double_1);
+		super(int_1, int_2, int_3, int_4, double_1);
 		this.arrowNudgeAmount /= permutations;
 		this.updateMessage();
 	}
@@ -21,13 +21,21 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 		{
 			double old_progress = this.value;
 			this.value = MathHelper.clamp(this.value - this.arrowNudgeAmount, 0.0D, 1.0D);
-			if (old_progress != this.value){ this.applyValue(); this.updateMessage(); }
+			if (old_progress != this.value)
+			{
+				this.applyValue();
+				this.updateMessage();
+			}
 		}
 		else if (key == 262)
 		{
 			double old_progress = this.value;
 			this.value = MathHelper.clamp(this.value + this.arrowNudgeAmount, 0.0D, 1.0D);
-			if (old_progress != this.value){ this.applyValue(); this.updateMessage(); }
+			if (old_progress != this.value)
+			{
+				this.applyValue();
+				this.updateMessage();
+			}
 		}
 		return false;
 	}

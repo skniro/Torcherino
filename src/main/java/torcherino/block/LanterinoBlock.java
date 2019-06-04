@@ -35,7 +35,9 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
 	}
 
 	@Override public PistonBehavior getPistonBehavior(BlockState state){ return PistonBehavior.IGNORE; }
+
 	@Override public BlockEntity createBlockEntity(BlockView view){ return new TorcherinoBlockEntity(MAX_SPEED); }
+
 	@Override public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1){ neighborUpdate(newState, world, pos, null, null, false); }
 
 	@Override public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)

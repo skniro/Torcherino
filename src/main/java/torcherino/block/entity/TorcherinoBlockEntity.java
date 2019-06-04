@@ -8,8 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import torcherino.Torcherino;
 import torcherino.Utils;
+import torcherino.block.ModBlocks;
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
@@ -19,12 +19,25 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	private Iterable<BlockPos> positions;
 	private static final Random RANDOM = new Random();
 
-	public TorcherinoBlockEntity(){ super(Torcherino.TORCHERINO_BLOCK_ENTITY_TYPE); }
-	public TorcherinoBlockEntity(int speed){ this(); MAX_SPEED = speed; redstoneInteractionMode = 0; }
+	public TorcherinoBlockEntity(){ super(ModBlocks.TORCHERINO_BLOCK_ENTITY_TYPE); }
+
+	public TorcherinoBlockEntity(int speed)
+	{
+		this();
+		MAX_SPEED = speed;
+		redstoneInteractionMode = 0;
+	}
 
 	public void setSpeed(int speed){ this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
-	public void setMode(int mode){ this.mode = MathHelper.clamp(mode, 0, 4); positions = BlockPos.iterate(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode)); }
+
+	public void setMode(int mode)
+	{
+		this.mode = MathHelper.clamp(mode, 0, 4);
+		positions = BlockPos.iterate(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode));
+	}
+
 	public void setPoweredByRedstone(boolean powered){ poweredByRedstone = redstoneInteractionMode == 0 ? powered : redstoneInteractionMode == 1 && !powered; }
+
 	@Override public BlockEntityUpdateS2CPacket toUpdatePacket(){ return new BlockEntityUpdateS2CPacket(getPos(), 126, toTag(new CompoundTag())); }
 
 	@Override public void tick()
