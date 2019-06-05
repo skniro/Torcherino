@@ -10,9 +10,13 @@ import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoBlacklistAPI;
 import java.util.HashSet;
 
+/**
+ * DO NOT USE THIS CLASS DIRECTLY. Use TorcherinoBlacklistAPI.INSTANCE instead.
+ * Why? anything in this class is subject to change where as anything in the API won't
+ * be removed without significant warning time. e.g. a minecraft version update or major mod update.
+ */
 public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
 {
-
 	public static final TorcherinoBlacklistAPI INSTANCE = new TorcherinoBlacklistImpl();
 
 	private final Logger LOGGER = LogManager.getLogger("torcherino-api");
@@ -40,29 +44,28 @@ public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
 		blacklistedBlocks.add(block);
 	}
 
+	@Override public void blacklistBlock(Identifier blockIdentifier)
+	{
+		Block block = Registry.BLOCK.get(blockIdentifier);
+		// why would someone want to blacklist air? Let's let them anyways.
+		if (block != Blocks.AIR || blockIdentifier.equals(Registry.BLOCK.getId(Blocks.AIR)))
+			blacklistBlock(block);
+		else
+			LOGGER.warn("Could not find a block matching provided identifier: {}.", blockIdentifier);
+
+	}
+
 	@Override public void blacklistBlockEntity(BlockEntityType blockEntityType)
 	{
 		blacklistedBlockEntities.add(blockEntityType);
 	}
 
-	@Override public void blacklistIdentifier(Identifier identifier)
+	@Override public void blacklistBlockEntity(Identifier blockEntityTypeIdentifier)
 	{
-		Block block = Registry.BLOCK.get(identifier);
-		if (block != Blocks.AIR)
-		{
-			blacklistBlock(block);
-		}
+		BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(blockEntityTypeIdentifier);
+		if (blockEntityType != BlockEntityType.FURNACE || blockEntityTypeIdentifier.equals(Registry.BLOCK_ENTITY.getId(BlockEntityType.FURNACE)))
+			blacklistBlockEntity(blockEntityType);
 		else
-		{
-			BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(identifier);
-			if (blockEntityType != BlockEntityType.FURNACE || identifier.equals(new Identifier("minecraft", "furnace")))
-			{
-				blacklistBlockEntity(blockEntityType);
-			}
-			else
-			{
-				LOGGER.warn("Could not find a block or block entity type matching provided identifier: {}.", identifier);
-			}
-		}
+			LOGGER.warn("Could not find a block entity type matching provided identifier: {}.", blockEntityTypeIdentifier);
 	}
 }
