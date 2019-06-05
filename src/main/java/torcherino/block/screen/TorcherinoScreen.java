@@ -3,7 +3,7 @@ package torcherino.block.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.impl.network.ClientSidePacketRegistryImpl;
-import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -42,17 +42,17 @@ public class TorcherinoScreen extends Screen
 		BLOCK_NAME = I18n.translate(minecraft.world.getBlockState(POS).getBlock().getTranslationKey());
 		LEFT = (width - WIDTH) / 2;
 		TOP = (height - HEIGHT) / 2;
-
-		this.addButton(new StateButtonWidget(this, width/2+95, height/2-40, redstoneInteractionMode, STATE_ITEMS.length, "screen.torcherino.narrate.redstoneinteraction")
+		this.addButton(new StateButtonWidget(this, width / 2 + 95, height / 2 - 40, redstoneInteractionMode, STATE_ITEMS.length, "screen.torcherino.narrate.redstoneinteraction")
 		{
 			@Override protected Item getStateItem(int state){ return STATE_ITEMS[state]; }
+
 			@Override protected String getStateName(int state){ return I18n.translate(STATE_NAMES[state]); }
+
 			@Override protected void onStateChange(int state){ redstoneInteractionMode = state; }
 		});
-
-		this.addButton(new SliderWidget(width/2-115, height/2-15, 230, 20, ((double) speed)/((double) MAX_SPEED), MAX_SPEED + 1)
+		this.addButton(new SliderWidget(width / 2 - 115, height / 2 - 15, 230, 20, ((double) speed) / ((double) MAX_SPEED), MAX_SPEED + 1)
 		{
-			@Override protected void updateMessage() { setMessage(I18n.translate("screen.torcherino.speed", 100*speed)); }
+			@Override protected void updateMessage(){ setMessage(I18n.translate("screen.torcherino.speed", 100 * speed)); }
 
 			@Override protected void applyValue()
 			{
@@ -60,18 +60,17 @@ public class TorcherinoScreen extends Screen
 				value = (double) speed / (double) MAX_SPEED;
 			}
 		});
-
-		this.addButton(new SliderWidget(width/2-115, height/2+10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
+		this.addButton(new SliderWidget(width / 2 - 115, height / 2 + 10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
 		{
 			@Override protected void updateMessage()
 			{
-				setMessage(I18n.translate("screen.torcherino."+MODES[mode], 2*mode + 1));
-				narrationMessage = I18n.translate("screen.torcherino.narrate."+MODES[mode], 2*mode + 1);
+				setMessage(I18n.translate("screen.torcherino." + MODES[mode], 2 * mode + 1));
+				narrationMessage = I18n.translate("screen.torcherino.narrate." + MODES[mode], 2 * mode + 1);
 			}
 
 			@Override protected void applyValue()
 			{
-				mode = (int) Math.round((MODES.length-1) * value);
+				mode = (int) Math.round((MODES.length - 1) * value);
 				value = (double) mode / ((double) MODES.length - 1);
 			}
 		});
@@ -93,13 +92,17 @@ public class TorcherinoScreen extends Screen
 		minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		blit(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
-		font.draw(BLOCK_NAME, (width - font.getStringWidth(BLOCK_NAME)) / 2.0f, height/2.0F - 35, 4210752);
+		font.draw(BLOCK_NAME, (width - font.getStringWidth(BLOCK_NAME)) / 2.0f, height / 2.0F - 35, 4210752);
 		super.render(cursorX, cursorY, float_1);
 	}
 
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifier)
 	{
-		if (keyCode == 256 || minecraft.options.keyInventory.matchesKey(keyCode, 0)){ this.onClose(); return true; }
+		if (keyCode == 256 || minecraft.options.keyInventory.matchesKey(keyCode, 0))
+		{
+			this.onClose();
+			return true;
+		}
 		return super.keyPressed(keyCode, scanCode, modifier);
 	}
 }

@@ -2,7 +2,7 @@ package torcherino.block.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -35,7 +35,7 @@ public abstract class StateButtonWidget extends ButtonWidget
 	@Override public void render(int mouseX, int mouseY, float unused)
 	{
 		super.render(mouseX, mouseY, unused);
-		itemRenderer.renderGuiItem(getStateItem(state).getDefaultStack(), x + 2, y + 2);
+		itemRenderer.renderGuiItem(getStateItem(state).getStackForRender(), x + 2, y + 2);
 		if (this.isHovered) screen.renderTooltip(getStateName(state), x + 14, y + 18);
 		GlStateManager.disableRescaleNormal();
 		GuiLighting.disable();

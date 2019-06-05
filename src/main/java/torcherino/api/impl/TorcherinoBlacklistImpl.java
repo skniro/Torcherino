@@ -48,11 +48,8 @@ public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
 	{
 		Block block = Registry.BLOCK.get(blockIdentifier);
 		// why would someone want to blacklist air? Let's let them anyways.
-		if (block != Blocks.AIR || blockIdentifier.equals(Registry.BLOCK.getId(Blocks.AIR)))
-			blacklistBlock(block);
-		else
-			LOGGER.warn("Could not find a block matching provided identifier: {}.", blockIdentifier);
-
+		if (block != Blocks.AIR || blockIdentifier.equals(Registry.BLOCK.getId(Blocks.AIR))) blacklistBlock(block);
+		else LOGGER.warn("Could not find a block matching provided identifier: {}.", blockIdentifier);
 	}
 
 	@Override public void blacklistBlockEntity(BlockEntityType blockEntityType)
@@ -63,9 +60,7 @@ public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
 	@Override public void blacklistBlockEntity(Identifier blockEntityTypeIdentifier)
 	{
 		BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(blockEntityTypeIdentifier);
-		if (blockEntityType != BlockEntityType.FURNACE || blockEntityTypeIdentifier.equals(Registry.BLOCK_ENTITY.getId(BlockEntityType.FURNACE)))
-			blacklistBlockEntity(blockEntityType);
-		else
-			LOGGER.warn("Could not find a block entity type matching provided identifier: {}.", blockEntityTypeIdentifier);
+		if (blockEntityType != BlockEntityType.FURNACE || blockEntityTypeIdentifier.equals(Registry.BLOCK_ENTITY.getId(BlockEntityType.FURNACE))) blacklistBlockEntity(blockEntityType);
+		else LOGGER.warn("Could not find a block entity type matching provided identifier: {}.", blockEntityTypeIdentifier);
 	}
 }
