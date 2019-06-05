@@ -8,12 +8,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import torcherino.Utils;
+import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.block.ModBlocks;
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
+	private static final TorcherinoBlacklistAPI API = TorcherinoBlacklistAPI.INSTANCE;
 	private boolean poweredByRedstone;
 	private int randomTicks = 3, speed, MAX_SPEED, mode, redstoneInteractionMode;
 	private Iterable<BlockPos> positions;
@@ -51,11 +52,11 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	{
 		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (block == null || Utils.isBlockBlacklisted(block)) return;
+		if (block == null || API.isBlockBlacklisted(block)) return;
 		if (block.hasRandomTicks(blockState) && RANDOM.nextInt(4095) < randomTicks * speed) block.onRandomTick(blockState, world, pos, RANDOM);
 		if (!block.hasBlockEntity()) return;
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if (blockEntity == null || blockEntity.isInvalid() || !(blockEntity instanceof Tickable) || Utils.isBlockEntityBlacklisted(blockEntity.getType())) return;
+		if (blockEntity == null || blockEntity.isInvalid() || !(blockEntity instanceof Tickable) || API.isBlockEntityBlacklisted(blockEntity.getType())) return;
 		for (int i = 0; i < speed; i++) ((Tickable) blockEntity).tick();
 	}
 
