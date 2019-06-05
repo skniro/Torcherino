@@ -11,23 +11,26 @@ import torcherino.block.ModBlocks;
 import torcherino.networking.PacketConsumers;
 
 @EnvironmentInterface(itf = ClientModInitializer.class, value = EnvType.CLIENT)
-public class Torcherino implements ModInitializer, ClientModInitializer
+public class Torcherino implements ModInitializer, ClientModInitializer, TorcherinoBlacklistInitializer
 {
 	@Override public void onInitialize()
 	{
 		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatetorcherinostate"), new PacketConsumers.UpdateTorcherinoConsumer());
 		ModBlocks.onInitialize();
-		// Blacklist computer craft turtles (known to crash otherwise)
-		if (FabricLoader.getInstance().isModLoaded("computercraft"))
-		{
-			TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_normal"));
-			TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_advanced"));
-		}
 		FabricLoader.getInstance().getEntrypoints("torcherino", TorcherinoBlacklistInitializer.class).forEach(TorcherinoBlacklistInitializer::onTorcherinoBlacklist);
 	}
 
 	@Environment(EnvType.CLIENT) @Override public void onInitializeClient()
 	{
 		ClientSidePacketRegistryImpl.INSTANCE.register(Utils.getId("openscreen"), new PacketConsumers.TorcherinoScreenConsumer());
+	}
+
+	@Override public void onTorcherinoBlacklist()
+	{
+		if (FabricLoader.getInstance().isModLoaded("computercraft"))
+		{
+			TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_normal"));
+			TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_advanced"));
+		}
 	}
 }

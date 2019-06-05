@@ -14,7 +14,8 @@
   "environment": "*",
   "entrypoints": {
     "main": ["torcherino.Torcherino"],
-    "client": ["torcherino.Torcherino"]
+    "client": ["torcherino.Torcherino"],
+    "torcherino": ["torcherino.Torcherino"]
   },
   "requires": {
     "fabricloader": ">=0.4.1",
