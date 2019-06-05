@@ -20,8 +20,8 @@ public class Torcherino implements ModInitializer, ClientModInitializer
 		// Blacklist computer craft turtles (known to crash otherwise)
 		if (FabricLoader.getInstance().isModLoaded("computercraft"))
 		{
-			TorcherinoBlacklistAPI.INSTANCE.blacklistIdentifier(new Identifier("computercraft", "turtle_normal"));
-			TorcherinoBlacklistAPI.INSTANCE.blacklistIdentifier(new Identifier("computercraft", "turtle_advanced"));
+			TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_normal"));
+			TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_advanced"));
 		}
 		FabricLoader.getInstance().getEntrypoints("torcherino", TorcherinoBlacklistInitializer.class).forEach(TorcherinoBlacklistInitializer::onTorcherinoBlacklist);
 	}
