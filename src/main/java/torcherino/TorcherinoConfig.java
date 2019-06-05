@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Utils.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TorcherinoConfig
 {
 	public static class COMMON
@@ -30,18 +30,10 @@ public class TorcherinoConfig
 			//doubleCompressedEnabled = builder.comment("Set this to true to enable double compressed torcherino and lanterinos")
 			//		.translation("torcherino.configgui.doublecompressedenabled")
 			//		.define("enableDoubleCompressed", false);
-			blacklistedBlocks = builder.comment("Add block by resource location to the blacklist\nExample: [\"minecraft:furnace\", \"minecraft:grass_block\"]")
-					.translation("torcherino.configgui.blacklistedblocks")
-					.define("blacklistedBlocks", new ArrayList<>());
-			blacklistedTiles = builder.comment("Add tileentity by class path to the blacklist\nExample: [\"net.minecraft.tileentity.TileEntityFurnace\"]")
-					.translation("torcherino.configgui.blacklistedtiles")
-					.define("blacklistedTiles", new ArrayList<>());
-			logPlacement = builder.comment("Log torcherino placement (Intended for server use)")
-					.translation("torcherino.configgui.logplacement")
-					.define("logPlacement", FMLEnvironment.dist.isDedicatedServer());
-			randomTickSpeedRate = builder.comment("Defines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
-					.translation("torcherino.configgui.randomtickspeedrate")
-					.define("randomTickSpeedRate", 1);
+			blacklistedBlocks = builder.comment("Add block by resource location to the blacklist\nExample: [\"minecraft:furnace\", \"minecraft:grass_block\"]").translation("torcherino.configgui.blacklistedblocks").define("blacklistedBlocks", new ArrayList<>());
+			blacklistedTiles = builder.comment("Add tileentity by class path to the blacklist\nExample: [\"net.minecraft.tileentity.TileEntityFurnace\"]").translation("torcherino.configgui.blacklistedtiles").define("blacklistedTiles", new ArrayList<>());
+			logPlacement = builder.comment("Log torcherino placement (Intended for server use)").translation("torcherino.configgui.logplacement").define("logPlacement", FMLEnvironment.dist.isDedicatedServer());
+			randomTickSpeedRate = builder.comment("Defines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096").translation("torcherino.configgui.randomtickspeedrate").define("randomTickSpeedRate", 1);
 		}
 	}
 

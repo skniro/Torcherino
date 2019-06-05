@@ -4,22 +4,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorchWall;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.commons.lang3.StringUtils;
-import torcherino.blocks.tiles.TileEntityTorcherino;
+import torcherino.blocks.misc.TorcherinoTileEntity;
 import torcherino.Utils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +41,7 @@ public class BlockTorcherinoWall extends BlockTorchWall
 		TileEntity tileEntity = world.getTileEntity(selfPos);
 		if (tileEntity == null) return;
 		EnumFacing oppositeFacing = selfState.get(HORIZONTAL_FACING).getOpposite();
-		((TileEntityTorcherino) tileEntity).setPoweredByRedstone(world.isSidePowered(selfPos.offset(oppositeFacing), oppositeFacing));
+		((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(world.isSidePowered(selfPos.offset(oppositeFacing), oppositeFacing));
 	}
 
 	@Override @ParametersAreNonnullByDefault public void tick(IBlockState state, World world, BlockPos pos, Random random)
@@ -60,20 +58,26 @@ public class BlockTorcherinoWall extends BlockTorchWall
 
 	@Override @ParametersAreNonnullByDefault public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
-		if (world.isRemote || !Utils.logPlacement) return;
-		String prefix = "Something";
-		if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
-		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+		if (world.isRemote) return;
+		if (!Utils.logPlacement)
+		{
+			String prefix = "Something";
+			if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
+			Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+		}
+		if (stack.hasDisplayName())
+		{
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName());
+		}
 	}
 
 	@Override @ParametersAreNonnullByDefault public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote || hand == EnumHand.OFF_HAND) return true;
 		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof TileEntityTorcherino)) return true;
-		TileEntityTorcherino torch = (TileEntityTorcherino) tile;
-		torch.changeMode(Utils.keyStates.getOrDefault(player, false));
-		player.sendStatusMessage(torch.getDescription(), true);
+		if (!(tile instanceof TorcherinoTileEntity)) return true;
+		NetworkHooks.openGui((EntityPlayerMP) player, (TorcherinoTileEntity) tile, pos);
 		return true;
 	}
 }

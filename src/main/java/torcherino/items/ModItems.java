@@ -8,7 +8,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import torcherino.Utils;
 import java.util.HashSet;
 
-@Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Utils.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems
 {
 	public static HashSet<Item> items = new HashSet<>();
