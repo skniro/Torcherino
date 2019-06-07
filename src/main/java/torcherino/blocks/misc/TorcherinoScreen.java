@@ -18,10 +18,12 @@ import torcherino.Utils;
 public class TorcherinoScreen extends GuiContainer
 {
 	private static final ResourceLocation BACKGROUND_TEXTURE = Utils.getId("textures/gui/container/torcherino.png");
+	private TorcherinoContainer container;
 
 	public TorcherinoScreen(TorcherinoTileEntity tileEntity)
 	{
 		super(new TorcherinoContainer(tileEntity));
+		container = (TorcherinoContainer) inventorySlots;
 		System.out.println(tileEntity.getName().toString());
 		xSize = 256;
 		ySize = 88;
@@ -30,11 +32,11 @@ public class TorcherinoScreen extends GuiContainer
 	@Override protected void initGui()
 	{
 		super.initGui();
-		this.addButton(new SliderButton(0, 0, 0)
+		this.addButton(new SliderButton(0, guiLeft, guiTop)
 		{
 			@Override protected void initialise()
 			{
-				this.progress = 0.3;
+				this.progress = 0;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", this.progress).getFormattedText();
 			}
 
