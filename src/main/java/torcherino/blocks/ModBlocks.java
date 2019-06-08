@@ -36,10 +36,10 @@ public class ModBlocks
 
 	private void register(ResourceLocation resourceLocation, TorcherinoTiers.Tier tier)
 	{
-		if(resourceLocation.getNamespace().equals(Utilities.MOD_ID))
+		if (resourceLocation.getNamespace().equals(Utilities.MOD_ID))
 		{
 			ResourceLocation torcherinoID = Utilities.resloc(translateTierName(resourceLocation.getPath(), "torcherino"));
-			ResourceLocation torcherinoWallID = Utilities.resloc("wall_"+torcherinoID.getPath());
+			ResourceLocation torcherinoWallID = Utilities.resloc("wall_" + torcherinoID.getPath());
 			ResourceLocation lanterinoID = Utilities.resloc(translateTierName(resourceLocation.getPath(), "lanterino"));
 			Block torcherinoBlock = new TorcherinoBlock().setRegistryName(torcherinoID);
 			Block torcherinoWallBlock = new TorcherinoWallBlock().setRegistryName(torcherinoWallID);
@@ -56,8 +56,8 @@ public class ModBlocks
 
 	private static String translateTierName(String name, String type)
 	{
-		if(name.equals("normal")) return type;
-		return name+"_"+type;
+		if (name.equals("normal")) return type;
+		return name + "_" + type;
 	}
 
 	@SubscribeEvent public void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
