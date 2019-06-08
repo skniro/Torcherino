@@ -16,4 +16,9 @@ public class TorcherinoContainer extends Container
 	{
 		return true;
 	}
+
+	TorcherinoTileEntity getTileEntity()
+	{
+		return this.tileEntity;
+	}
 }

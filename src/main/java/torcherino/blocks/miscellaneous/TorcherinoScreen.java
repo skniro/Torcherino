@@ -39,6 +39,19 @@ public class TorcherinoScreen extends GuiContainer
 		//});
 	}
 
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.render(mouseX, mouseY, partialTicks);
+	}
+
+	/**
+	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
+	 */
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		this.fontRenderer.drawString(container.getTileEntity().getName().getFormattedText(), 8.0F, 6.0F, 4210752);
+		//this.fontRenderer.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
+	}
+
 	@Override protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
