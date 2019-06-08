@@ -31,19 +31,19 @@ public class ModBlocks
 		items = new HashSet<>();
 		Map<ResourceLocation, TorcherinoTiers.Tier> tiers = TorcherinoTiers.INSTANCE.getTiers();
 		tiers.forEach(this::register);
-		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Utilities.resloc("torcherino"));
+		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(() -> new TorcherinoTileEntity(null)).build(null).setRegistryName(Utilities.resloc("torcherino"));
 	}
 
 	private void register(ResourceLocation resourceLocation, TorcherinoTiers.Tier tier)
 	{
 		if (resourceLocation.getNamespace().equals(Utilities.MOD_ID))
 		{
-			ResourceLocation torcherinoID = Utilities.resloc(translateTierName(resourceLocation.getPath(), "torcherino"));
+			ResourceLocation torcherinoID = Utilities.resloc(resourceLocation.getPath() + "_" + "torcherino");
 			ResourceLocation torcherinoWallID = Utilities.resloc("wall_" + torcherinoID.getPath());
-			ResourceLocation lanterinoID = Utilities.resloc(translateTierName(resourceLocation.getPath(), "lanterino"));
-			Block torcherinoBlock = new TorcherinoBlock().setRegistryName(torcherinoID);
-			Block torcherinoWallBlock = new TorcherinoWallBlock().setRegistryName(torcherinoWallID);
-			Block lanterinoBlock = new LanterinoBlock().setRegistryName(lanterinoID);
+			ResourceLocation lanterinoID = Utilities.resloc(resourceLocation.getPath() + "_" + "lanterino");
+			Block torcherinoBlock = new TorcherinoBlock().setTier(tier).setRegistryName(torcherinoID);
+			Block torcherinoWallBlock = new TorcherinoWallBlock().setTier(tier).setRegistryName(torcherinoWallID);
+			Block lanterinoBlock = new LanterinoBlock().setTier(tier).setRegistryName(lanterinoID);
 			Item torcherinoItem = new ItemWallOrFloor(torcherinoBlock, torcherinoWallBlock, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(torcherinoID);
 			Item lanterinoItem = new ItemBlock(lanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(lanterinoID);
 			blocks.add(torcherinoBlock);
@@ -52,12 +52,6 @@ public class ModBlocks
 			items.add(torcherinoItem);
 			items.add(lanterinoItem);
 		}
-	}
-
-	private static String translateTierName(String name, String type)
-	{
-		if (name.equals("normal")) return type;
-		return name + "_" + type;
 	}
 
 	@SubscribeEvent public void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)

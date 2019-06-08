@@ -1,6 +1,6 @@
 {
   "parent": "block/template_torch",
   "textures": {
-    "torch": "torcherino:blocks/torcherino"
+    "torch": "torcherino:blocks/normal_torcherino"
   }
 }

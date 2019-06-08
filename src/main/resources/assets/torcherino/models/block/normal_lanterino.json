@@ -2,7 +2,7 @@
   "parent": "block/orientable",
   "textures": {
     "top": "block/pumpkin_top",
-    "front": "torcherino:blocks/lanterino",
+    "front": "torcherino:blocks/normal_lanterino",
     "side": "block/pumpkin_side"
   }
 }

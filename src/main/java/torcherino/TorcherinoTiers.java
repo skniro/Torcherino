@@ -2,6 +2,7 @@ package torcherino;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.ResourceLocation;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +29,9 @@ public class TorcherinoTiers
 
 	public class Tier
 	{
-		int MAX_SPEED;
-		int XZ_RANGE;
-		int Y_RANGE;
+		public final int MAX_SPEED;
+		public final int XZ_RANGE;
+		public final int Y_RANGE;
 
 		Tier(int maxSpeed, int xzRange, int yRange)
 		{

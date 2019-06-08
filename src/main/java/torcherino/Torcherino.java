@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import torcherino.blocks.ModBlocks;
-import torcherino.blocks.miscellaneous.TorcherinoScreen;
+import torcherino.client.gui.TorcherinoScreen;
 import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import torcherino.items.ModItems;
 

@@ -1,5 +1,6 @@
 package torcherino.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -9,8 +10,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -20,12 +25,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import torcherino.TorcherinoTiers;
 import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import javax.annotation.Nullable;
 
 public class TorcherinoBlock extends BlockTorch
 {
+	// Constructors
 	protected TorcherinoBlock(){ super(Properties.from(Blocks.TORCH)); }
+
+	// Variables
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	private TorcherinoTiers.Tier tier;
+
+	// Methods
+	public Block setTier(TorcherinoTiers.Tier tier)
+	{
+		this.tier = tier;
+		return this;
+	}
 
 	@Override public boolean hasTileEntity(IBlockState state)
 	{
@@ -34,8 +52,16 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Nullable @Override public TileEntity createTileEntity(IBlockState state, IBlockReader world)
 	{
-		return new TorcherinoTileEntity();
+		return new TorcherinoTileEntity(tier);
 	}
+
+	@Override protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
+	{
+		super.fillStateContainer(builder);
+		builder.add(POWERED);
+	}
+
+	@Override public IBlockState getStateForPlacement(BlockItemUseContext context){ return super.getStateForPlacement(context).with(POWERED, false); }
 
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
@@ -48,7 +74,7 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
-		if(stack.hasDisplayName())
+		if (stack.hasDisplayName())
 		{
 			TileEntity tile = world.getTileEntity(pos);
 			if (!(tile instanceof TorcherinoTileEntity)) return;

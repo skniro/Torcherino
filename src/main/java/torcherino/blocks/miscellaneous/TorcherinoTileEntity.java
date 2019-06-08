@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IInteractionObject;
+import torcherino.TorcherinoTiers;
 import torcherino.Utilities;
 import torcherino.blocks.ModBlocks;
 import javax.annotation.Nullable;
@@ -18,8 +19,14 @@ import javax.annotation.Nullable;
 public class TorcherinoTileEntity extends TileEntity implements IInteractionObject
 {
 	private ITextComponent customName;
+	private int xRange, yRange, zRange, speed;
+	private TorcherinoTiers.Tier tier;
 
-	public TorcherinoTileEntity(){ super(ModBlocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE); }
+	public TorcherinoTileEntity(TorcherinoTiers.Tier tier)
+	{
+		super(ModBlocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE);
+		this.tier = tier;
+	}
 
 	@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
@@ -51,6 +58,16 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		this.customName = customName;
 	}
 
+	public TorcherinoTiers.Tier getTier(){ return tier; }
+
+	public int getxRange(){ return xRange; }
+
+	public int getyRange(){ return yRange; }
+
+	public int getzRange(){ return zRange; }
+
+	public int getSpeed(){ return speed; }
+
 	public void read(NBTTagCompound compound)
 	{
 		super.read(compound);
@@ -79,10 +96,7 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 			{
 				setCustomName(ITextComponent.Serializer.fromJson(tag.getString("CustomName")));
 			}
-			Utilities.LOGGER.info(tag.toFormattedComponent().getFormattedText());
 		}
-		//read(pkt.getNbtCompound());
-		Utilities.LOGGER.info(this.getName());
 	}
 
 	@Nullable public SPacketUpdateTileEntity getUpdatePacket()
@@ -90,13 +104,9 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		return new SPacketUpdateTileEntity(this.pos, 127, this.getUpdateTag());
 	}
 
+
 	@Override public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound tag = new NBTTagCompound();
-		if (hasCustomName())
-		{
-			tag.setString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
-		}
-		return tag;
+		return write(new NBTTagCompound());
 	}
 }
