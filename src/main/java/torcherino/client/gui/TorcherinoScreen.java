@@ -27,13 +27,14 @@ public class TorcherinoScreen extends GuiContainer
 		container = (TorcherinoContainer) inventorySlots;
 		this.tileEntity = tileEntity;
 		xSize = 256;
-		ySize = 88;
+		ySize = 133;
 	}
 
 	@Override protected void initGui()
 	{
 		super.initGui();
-		this.addButton(new FixedSliderButton(0, guiLeft + xSize/2 - 100, guiTop + 20, 200)
+		int buttonId = 0;
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 - 100, guiTop + 20, 205)
 		{
 			int speed;
 			double MAX_SPEED;
@@ -50,6 +51,126 @@ public class TorcherinoScreen extends GuiContainer
 				speed = (int) Math.round(progress * MAX_SPEED);
 				this.progress = speed / MAX_SPEED;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
+			}
+		});
+
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 - 100, guiTop + 45, 100)
+		{
+			int xRange;
+			int XZ_RANGE;
+			@Override protected void initialise()
+			{
+				xRange = TorcherinoScreen.this.tileEntity.getxRange();
+				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().XZ_RANGE;
+				this.progress = (double) xRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.neg_x_range", xRange).getFormattedText();
+			}
+
+			@Override protected void onValueChange()
+			{
+				xRange = (int) Math.round(progress * XZ_RANGE);
+				this.progress = (double) xRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.neg_x_range", xRange).getFormattedText();
+			}
+		});
+
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 + 4, guiTop + 45, 100)
+		{
+			int xRange;
+			int XZ_RANGE;
+			@Override protected void initialise()
+			{
+				xRange = TorcherinoScreen.this.tileEntity.getxRange();
+				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().XZ_RANGE;
+				this.progress = (double) xRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.pos_x_range", xRange).getFormattedText();
+			}
+
+			@Override protected void onValueChange()
+			{
+				xRange = (int) Math.round(progress * XZ_RANGE);
+				this.progress = (double) xRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.pos_x_range", xRange).getFormattedText();
+			}
+		});
+
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 - 100, guiTop + 70, 100)
+		{
+			int zRange;
+			int XZ_RANGE;
+			@Override protected void initialise()
+			{
+				zRange = TorcherinoScreen.this.tileEntity.getzRange();
+				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().XZ_RANGE;
+				this.progress = (double) zRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.neg_z_range", zRange).getFormattedText();
+			}
+
+			@Override protected void onValueChange()
+			{
+				zRange = (int) Math.round(progress * XZ_RANGE);
+				this.progress = (double) zRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.neg_z_range", zRange).getFormattedText();
+			}
+		});
+
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 + 4, guiTop + 70, 100)
+		{
+			int zRange;
+			int XZ_RANGE;
+			@Override protected void initialise()
+			{
+				zRange = TorcherinoScreen.this.tileEntity.getzRange();
+				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().XZ_RANGE;
+				this.progress = (double) zRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.pos_z_range", zRange).getFormattedText();
+			}
+
+			@Override protected void onValueChange()
+			{
+				zRange = (int) Math.round(progress * XZ_RANGE);
+				this.progress = (double) zRange / XZ_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.pos_z_range", zRange).getFormattedText();
+			}
+		});
+
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 - 100, guiTop + 95, 100)
+		{
+			int yRange;
+			int Y_RANGE;
+			@Override protected void initialise()
+			{
+				yRange = TorcherinoScreen.this.tileEntity.getyRange();
+				Y_RANGE = TorcherinoScreen.this.tileEntity.getTier().Y_RANGE;
+				this.progress = (double) yRange / Y_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.neg_y_range", yRange).getFormattedText();
+			}
+
+			@Override protected void onValueChange()
+			{
+				yRange = (int) Math.round(progress * Y_RANGE);
+				this.progress = (double) yRange / Y_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.neg_y_range", yRange).getFormattedText();
+			}
+		});
+
+		this.addButton(new FixedSliderButton(buttonId++, guiLeft + xSize/2 + 4, guiTop + 95, 100)
+		{
+			int yRange;
+			int Y_RANGE;
+			@Override protected void initialise()
+			{
+				yRange = TorcherinoScreen.this.tileEntity.getyRange();
+				Y_RANGE = TorcherinoScreen.this.tileEntity.getTier().Y_RANGE;
+				this.progress = (double) yRange / Y_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.pos_y_range", yRange).getFormattedText();
+			}
+
+			@Override protected void onValueChange()
+			{
+				yRange = (int) Math.round(progress * Y_RANGE);
+				this.progress = (double) yRange / Y_RANGE;
+				this.displayString = new TextComponentTranslation("gui.torcherino.pos_y_range", yRange).getFormattedText();
 			}
 		});
 	}
