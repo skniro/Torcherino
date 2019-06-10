@@ -6,12 +6,8 @@
   "block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
   "block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
   "gui.torcherino.speed_slider": "Speed: %s%%",
-  "gui.torcherino.neg_x_range": "-X Range: %s",
-  "gui.torcherino.neg_z_range": "-Z Range: %s",
-  "gui.torcherino.neg_y_range": "-Y Range: %s",
-
-  "gui.torcherino.pos_x_range": "+X Range: %s",
-  "gui.torcherino.pos_z_range": "+Z Range: %s",
-  "gui.torcherino.pos_y_range": "+Y Range: %s"
+  "gui.torcherino.x_range": "X Range: %s Blocks",
+  "gui.torcherino.z_range": "Z Range: %s Blocks",
+  "gui.torcherino.y_range": "Y Range: %s Blocks"
 }
 
