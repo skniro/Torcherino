@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.GameRules;
 import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.block.ModBlocks;
 import java.util.Random;
@@ -44,7 +45,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	@Override public void tick()
 	{
 		if (world.isClient || poweredByRedstone || mode == 0 || speed == 0) return;
-		randomTicks = world.getGameRules().getInteger("randomTickSpeed");
+		randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
 		positions.forEach(this::tickBlock);
 	}
 

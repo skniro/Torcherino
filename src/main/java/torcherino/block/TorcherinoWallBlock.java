@@ -65,7 +65,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 	{
 		if (world.isClient) return;
 		String prefix = "Something";
-		if (placer != null) prefix = placer.getDisplayName().getText() + " (" + placer.getUuidAsString() + ")";
+		if (placer != null) prefix = placer.getDisplayName().getString() + " (" + placer.getUuidAsString() + ")";
 		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 

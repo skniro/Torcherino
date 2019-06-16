@@ -20,6 +20,7 @@ public interface TorcherinoBlacklistAPI
 
 	/**
 	 * Checks if a Block is blacklisted.
+	 *
 	 * @param block The Block to check is blacklisted.
 	 * @return boolean primitive, true for block is blacklisted, false otherwise.
 	 * @since 1.8.49
@@ -28,6 +29,7 @@ public interface TorcherinoBlacklistAPI
 
 	/**
 	 * Checks if a BlockEntityType is blacklisted.
+	 *
 	 * @param blockEntityType The BlockEntityType to check is blacklisted.
 	 * @return boolean primitive, true for block entity type is blacklisted, false otherwise.
 	 * @since 1.8.49

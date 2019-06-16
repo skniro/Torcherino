@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +27,7 @@ public class TorcherinoScreen extends Screen
 
 	public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, int mode, int redstoneInteractionMode)
 	{
-		super(new TextComponent(""));
+		super(new LiteralText(""));
 		POS = pos;
 		MAX_SPEED = maxSpeed;
 		this.speed = speed;
