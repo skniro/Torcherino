@@ -60,7 +60,12 @@ public class TorcherinoWallBlock extends BlockTorchWall
 		builder.add(POWERED);
 	}
 
-	@Override public IBlockState getStateForPlacement(BlockItemUseContext context){ return getDefaultState().with(POWERED, false); }
+	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		IBlockState state = super.getStateForPlacement(context);
+		if(state == null) return null;
+		return state.with(POWERED, false);
+	}
 
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
