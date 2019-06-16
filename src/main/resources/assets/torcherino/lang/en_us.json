@@ -8,6 +8,11 @@
   "gui.torcherino.speed_slider": "Speed: %s%%",
   "gui.torcherino.x_range": "X Range: %s Blocks",
   "gui.torcherino.z_range": "Z Range: %s Blocks",
-  "gui.torcherino.y_range": "Y Range: %s Blocks"
+  "gui.torcherino.y_range": "Y Range: %s Blocks",
+  "gui.torcherino.redstone_mode": "Redstone Mode: %s",
+  "gui.torcherino.mode.normal": "Normal",
+  "gui.torcherino.mode.inverted": "Inverted",
+  "gui.torcherino.mode.ignored": "Ignored",
+  "gui.torcherino.mode.off": "Off"
 }
 

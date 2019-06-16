@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -24,8 +23,8 @@ import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
 import torcherino.TorcherinoTiers;
+import torcherino.Utilities;
 import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import javax.annotation.Nullable;
 
@@ -65,11 +64,7 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if (world.isRemote || hand == EnumHand.OFF_HAND) return true;
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof TorcherinoTileEntity)) return true;
-		NetworkHooks.openGui((EntityPlayerMP) player, (TorcherinoTileEntity) tile, pos);
-		return true;
+		return Utilities.openScreenServer(world, player, pos);
 	}
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)

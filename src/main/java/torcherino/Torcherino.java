@@ -1,9 +1,5 @@
 package torcherino;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -11,14 +7,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import torcherino.blocks.ModBlocks;
-import torcherino.client.gui.TorcherinoScreen;
-import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import torcherino.items.ModItems;
+import torcherino.network.Networker;
 
 @Mod(Utilities.MOD_ID)
 public class Torcherino
 {
-
 	public Torcherino()
 	{
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -30,26 +24,7 @@ public class Torcherino
 		ModBlocks.INSTANCE.initialise();
 		eventBus.register(ModBlocks.INSTANCE);
 		eventBus.register(ModItems.INSTANCE);
-		//FMLJavaModLoadingContext.get().getModEventBus().register(this);
-		//MinecraftForge.EVENT_BUS.register(this);
-		//MinecraftForge.EVENT_BUS.register(ModBlocks.INSTANCE);
-
-		if (FMLEnvironment.dist.isClient())
-		{
-			ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () ->
-			{
-				return openContainer ->
-				{
-					BlockPos pos = openContainer.getAdditionalData().readBlockPos();
-					EntityPlayerSP player = Minecraft.getInstance().player;
-					TileEntity tile = player.world.getTileEntity(pos);
-					if (tile instanceof TorcherinoTileEntity)
-					{
-						return new TorcherinoScreen((TorcherinoTileEntity) tile);
-					}
-					return null;
-				};
-			});
-		}
+		if (FMLEnvironment.dist.isClient()) ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> Utilities::openScreenClient);
+		Networker.INSTANCE.initialise();
 	}
 }

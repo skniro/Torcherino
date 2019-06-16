@@ -4,9 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.EnumPacketDirection;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -19,7 +17,7 @@ import javax.annotation.Nullable;
 public class TorcherinoTileEntity extends TileEntity implements IInteractionObject
 {
 	private ITextComponent customName;
-	private int xRange, yRange, zRange, speed;
+	private int xRange, yRange, zRange, speed, redstoneMode;
 	private TorcherinoTiers.Tier tier;
 
 	public TorcherinoTileEntity(TorcherinoTiers.Tier tier)
@@ -30,7 +28,7 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 
 	@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
 	{
-		return new TorcherinoContainer(this);
+		return new TorcherinoContainer(this, getName());
 	}
 
 	@Override public String getGuiID()
@@ -60,13 +58,15 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 
 	public TorcherinoTiers.Tier getTier(){ return tier; }
 
-	public int getxRange(){ return xRange; }
+	public int getXRange(){ return xRange; }
 
-	public int getyRange(){ return yRange; }
+	public int getYRange(){ return yRange; }
 
-	public int getzRange(){ return zRange; }
+	public int getZRange(){ return zRange; }
 
 	public int getSpeed(){ return speed; }
+
+	public int getRedstoneMode(){ return redstoneMode; }
 
 	public void read(NBTTagCompound compound)
 	{
@@ -87,26 +87,20 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		return compound;
 	}
 
-	@Override public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	public void writeClientData(PacketBuffer packetBuffer)
 	{
-		if (net.getDirection() == EnumPacketDirection.CLIENTBOUND)
-		{
-			NBTTagCompound tag = pkt.getNbtCompound();
-			if (tag.contains("CustomName", 8))
-			{
-				setCustomName(ITextComponent.Serializer.fromJson(tag.getString("CustomName")));
-			}
-		}
+		packetBuffer.writeBlockPos(pos);
+		packetBuffer.writeTextComponent(getName());
+		packetBuffer.writeInt(getXRange());
+		packetBuffer.writeInt(getZRange());
+		packetBuffer.writeInt(getYRange());
+		packetBuffer.writeInt(getSpeed());
+		packetBuffer.writeInt(getRedstoneMode());
 	}
 
-	@Nullable public SPacketUpdateTileEntity getUpdatePacket()
+	public void readClientData(PacketBuffer packetBuffer)
 	{
-		return new SPacketUpdateTileEntity(this.pos, 127, this.getUpdateTag());
-	}
-
-
-	@Override public NBTTagCompound getUpdateTag()
-	{
-		return write(new NBTTagCompound());
+		// todo: read data + validate values
+		// assume blockpos has already been read by some other method
 	}
 }
