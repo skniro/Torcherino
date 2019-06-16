@@ -16,9 +16,8 @@ public abstract class StateButton extends GuiButton
 	public StateButton(int buttonId, int x, int y, int state, GuiContainer container)
 	{
 		super(buttonId, x, y, 20, 20, "");
-		this.state = state;
 		this.containerScreen = container;
-		setInternalState(0);
+		setInternalState(state);
 	}
 
 	protected abstract ItemStack getButtonIcon();
@@ -31,7 +30,7 @@ public abstract class StateButton extends GuiButton
 
 	private void setInternalState(int state)
 	{
-		if(state >= getMaxStates()) state = 0;
+		if (state >= getMaxStates()) state = 0;
 		this.state = state;
 		setState(state);
 	}
@@ -52,11 +51,10 @@ public abstract class StateButton extends GuiButton
 			RenderHelper.enableGUIStandardItemLighting();
 			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getButtonIcon(), x + 2, y + 2);
 			RenderHelper.disableStandardItemLighting();
-			if(hovered)
+			if (hovered)
 			{
 				containerScreen.drawHoveringText(getToolTip(), mouseX, mouseY);
 			}
-
 		}
 	}
 

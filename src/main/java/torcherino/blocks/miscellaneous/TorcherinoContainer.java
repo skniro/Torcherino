@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
-import torcherino.Utilities;
 import torcherino.network.Networker;
 
 public class TorcherinoContainer extends Container
@@ -37,31 +36,26 @@ public class TorcherinoContainer extends Container
 	public void setSpeed(int speed)
 	{
 		this.speed = speed;
-		needsSyncing = true;
 	}
 
 	public void setXRange(int xRange)
 	{
 		this.xRange = xRange;
-		needsSyncing = true;
 	}
 
 	public void setZRange(int zRange)
 	{
 		this.zRange = zRange;
-		needsSyncing = true;
 	}
 
 	public void setYRange(int yRange)
 	{
 		this.yRange = yRange;
-		needsSyncing = true;
 	}
 
 	public void setRedstoneMode(int redstoneMode)
 	{
 		this.redstoneMode = redstoneMode;
-		needsSyncing = true;
 	}
 
 	public int getXRange(){ return xRange; }
@@ -84,13 +78,9 @@ public class TorcherinoContainer extends Container
 
 	@Override public void onContainerClosed(EntityPlayer player)
 	{
-		// Lets inform the server of the variables
-		// needsSyncing should only be true on the client but lets check just incase
-		if (needsSyncing && player instanceof EntityPlayerSP)
+		if (player instanceof EntityPlayerSP)
 		{
-			Utilities.LOGGER.info("Sending data to server.");
-			Networker.ValueUpdateMessage message = new Networker.ValueUpdateMessage(tileEntity.getPos(), getXRange(), getZRange(), getYRange(), getSpeed(), getRedstoneMode(), new PacketBuffer(Unpooled.buffer()));
-			Networker.INSTANCE.torcherinoChannel.sendToServer(message);
+			Networker.INSTANCE.torcherinoChannel.sendToServer(new Networker.ValueUpdateMessage(tileEntity.getPos(), getXRange(), getZRange(), getYRange(), getSpeed(), getRedstoneMode(), new PacketBuffer(Unpooled.buffer())));
 		}
 		super.onContainerClosed(player);
 	}

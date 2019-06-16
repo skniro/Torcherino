@@ -60,7 +60,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 		builder.add(POWERED);
 	}
 
-	@Override public IBlockState getStateForPlacement(BlockItemUseContext context){ return super.getStateForPlacement(context).with(POWERED, false); }
+	@Override public IBlockState getStateForPlacement(BlockItemUseContext context){ return getDefaultState().with(POWERED, false); }
 
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{

@@ -98,9 +98,12 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		packetBuffer.writeInt(getRedstoneMode());
 	}
 
-	public void readClientData(PacketBuffer packetBuffer)
+	public void readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode)
 	{
-		// todo: read data + validate values
-		// assume blockpos has already been read by some other method
+		this.xRange = xRange;
+		this.zRange = zRange;
+		this.yRange = yRange;
+		this.speed = speed;
+		this.redstoneMode = redstoneMode;
 	}
 }
