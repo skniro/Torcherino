@@ -18,7 +18,6 @@ import java.util.function.Supplier;
 
  */
 
-
 public class Networker
 {
 
@@ -52,7 +51,7 @@ public class Networker
 			this.redstoneMode = redstoneMode;
 		}
 
-		public static void encode(ValueUpdateMessage msg, PacketBuffer buf)
+		private static void encode(ValueUpdateMessage msg, PacketBuffer buf)
 		{
 			buf.writeBlockPos(msg.pos);
 			buf.writeInt(msg.xRange);
@@ -62,12 +61,12 @@ public class Networker
 			buf.writeInt(msg.redstoneMode);
 		}
 
-		public static ValueUpdateMessage decode(PacketBuffer buf)
+		private static ValueUpdateMessage decode(PacketBuffer buf)
 		{
 			return new ValueUpdateMessage(buf.readBlockPos(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt());
 		}
 
-		public static void handle(ValueUpdateMessage msg, Supplier<NetworkEvent.Context> ctx)
+		private static void handle(ValueUpdateMessage msg, Supplier<NetworkEvent.Context> ctx)
 		{
 			NetworkEvent.Context context = ctx.get();
 			context.enqueueWork(() ->

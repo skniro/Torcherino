@@ -118,5 +118,6 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		this.yRange = yRange;
 		this.speed = speed;
 		this.redstoneMode = redstoneMode;
+		this.markDirty();
 	}
 }
