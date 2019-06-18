@@ -43,22 +43,16 @@ public class Utilities
 	{
 		PacketBuffer additionalData = openContainer.getAdditionalData();
 		BlockPos pos = additionalData.readBlockPos();
-		ITextComponent containerName = additionalData.readTextComponent();
-		int xRange = additionalData.readInt();
-		int zRange = additionalData.readInt();
-		int yRange = additionalData.readInt();
-		int speed = additionalData.readInt();
-		int redstoneMode = additionalData.readInt();
-		EntityPlayerSP player = Minecraft.getInstance().player;
-		TileEntity tile = player.world.getTileEntity(pos);
+		TileEntity tile = Minecraft.getInstance().player.world.getTileEntity(pos);
 		if (tile instanceof TorcherinoTileEntity)
 		{
+			ITextComponent containerName = additionalData.readTextComponent();
 			TorcherinoContainer container = new TorcherinoContainer((TorcherinoTileEntity) tile, containerName);
-			container.setXRange(xRange);
-			container.setZRange(zRange);
-			container.setYRange(yRange);
-			container.setSpeed(speed);
-			container.setRedstoneMode(redstoneMode);
+			container.setXRange(additionalData.readInt());
+			container.setZRange(additionalData.readInt());
+			container.setYRange(additionalData.readInt());
+			container.setSpeed(additionalData.readInt());
+			container.setRedstoneMode(additionalData.readInt());
 			return new TorcherinoScreen(container);
 		}
 		return null;

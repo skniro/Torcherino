@@ -1,5 +1,6 @@
 package torcherino.blocks.miscellaneous;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,7 +12,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IInteractionObject;
 import torcherino.TorcherinoTiers;
 import torcherino.Utilities;
+import torcherino.blocks.LanterinoBlock;
 import torcherino.blocks.ModBlocks;
+import torcherino.blocks.TorcherinoBlock;
+import torcherino.blocks.TorcherinoWallBlock;
 import javax.annotation.Nullable;
 
 public class TorcherinoTileEntity extends TileEntity implements IInteractionObject
@@ -20,10 +24,9 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 	private int xRange, yRange, zRange, speed, redstoneMode;
 	private TorcherinoTiers.Tier tier;
 
-	public TorcherinoTileEntity(TorcherinoTiers.Tier tier)
+	public TorcherinoTileEntity()
 	{
 		super(ModBlocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE);
-		this.tier = tier;
 	}
 
 	@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
@@ -56,7 +59,20 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		this.customName = customName;
 	}
 
-	public TorcherinoTiers.Tier getTier(){ return tier; }
+	public TorcherinoTiers.Tier getTier()
+	{
+		if(tier == null)
+		{
+			Block block = world.getBlockState(pos).getBlock();
+			if(block instanceof LanterinoBlock)
+				tier = ((LanterinoBlock) block).getTier();
+			else if(block instanceof TorcherinoBlock)
+				tier = ((TorcherinoBlock) block).getTier();
+			else if(block instanceof TorcherinoWallBlock)
+				tier = ((TorcherinoWallBlock) block).getTier();
+		}
+		return tier;
+	}
 
 	public int getXRange(){ return xRange; }
 

@@ -80,7 +80,6 @@ public class Networker
 				{
 					TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
 					TorcherinoTiers.Tier tier = torcherinoTileEntity.getTier();
-					// also check for < 0
 					if (msg.xRange > tier.XZ_RANGE || msg.zRange > tier.XZ_RANGE || msg.yRange > tier.Y_RANGE || msg.speed > tier.MAX_SPEED || msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0)
 						return;
 					torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);

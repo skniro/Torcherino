@@ -44,6 +44,8 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 		return this;
 	}
 
+	public TorcherinoTiers.Tier getTier(){ return tier; }
+
 	@Override public boolean hasTileEntity(IBlockState state)
 	{
 		return true;
@@ -51,7 +53,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 
 	@Nullable @Override public TileEntity createTileEntity(IBlockState state, IBlockReader world)
 	{
-		return new TorcherinoTileEntity(tier);
+		return new TorcherinoTileEntity();
 	}
 
 	@Override protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)

@@ -31,7 +31,7 @@ public class ModBlocks
 		items = new HashSet<>();
 		Map<ResourceLocation, TorcherinoTiers.Tier> tiers = TorcherinoTiers.INSTANCE.getTiers();
 		tiers.forEach(this::register);
-		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(() -> new TorcherinoTileEntity(null)).build(null).setRegistryName(Utilities.resloc("torcherino"));
+		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Utilities.resloc("torcherino"));
 	}
 
 	private ResourceLocation getIdentifier(ResourceLocation resourceLocation, String type)
