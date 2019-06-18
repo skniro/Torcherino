@@ -60,13 +60,10 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 		builder.add(POWERED);
 	}
 
-	@Override public IBlockState getStateForPlacement(BlockItemUseContext context){ return getDefaultState().with(POWERED, false); }
-
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		return Utilities.openScreenServer(world, player, pos);
 	}
-
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
@@ -96,6 +93,22 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 		else
 		{
 			super.harvestBlock(world, player, pos, state, null, stack);
+		}
+	}
+
+	// Unique Methods ( can't be copy / pasted between torcherino classes )
+	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		boolean powered = context.getWorld().isBlockPowered(context.getPos());
+		return getDefaultState().with(POWERED, powered);
+	}
+
+	@Override public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+	{
+		boolean powered = worldIn.isBlockPowered(pos);
+		if (state.get(POWERED) != powered)
+		{
+			worldIn.setBlockState(pos, state.with(POWERED, powered));
 		}
 	}
 }

@@ -60,13 +60,6 @@ public class TorcherinoWallBlock extends BlockTorchWall
 		builder.add(POWERED);
 	}
 
-	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
-	{
-		IBlockState state = super.getStateForPlacement(context);
-		if(state == null) return null;
-		return state.with(POWERED, false);
-	}
-
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		return Utilities.openScreenServer(world, player, pos);
@@ -101,6 +94,24 @@ public class TorcherinoWallBlock extends BlockTorchWall
 		else
 		{
 			super.harvestBlock(world, player, pos, state, null, stack);
+		}
+	}
+
+	// Unique Methods ( can't be copy / pasted between torcherino classes )
+	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		IBlockState state = super.getStateForPlacement(context);
+		if (state == null) return null;
+		boolean powered = context.getWorld().isBlockPowered(context.getPos().offset(state.get(HORIZONTAL_FACING).getOpposite()));
+		return state.with(POWERED, powered);
+	}
+
+	@Override public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+	{
+		boolean powered = worldIn.isBlockPowered(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()));
+		if (state.get(POWERED) != powered)
+		{
+			worldIn.setBlockState(pos, state.with(POWERED, powered));
 		}
 	}
 }
