@@ -1,8 +1,8 @@
 {
-  "block.torcherino.normal_torcherino": "Torcherino",
+  "block.torcherino.torcherino": "Torcherino",
   "block.torcherino.compressed_torcherino": "Compressed Torcherino",
   "block.torcherino.double_compressed_torcherino": "Double Compressed Torcherino",
-  "block.torcherino.normal_lanterino": "Jack o'Lanterino",
+  "block.torcherino.lanterino": "Jack o'Lanterino",
   "block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
   "block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
   "gui.torcherino.speed_slider": "Speed: %s%%",

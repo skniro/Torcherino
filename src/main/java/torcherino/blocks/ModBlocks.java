@@ -36,16 +36,18 @@ public class ModBlocks
 
 	private ResourceLocation getIdentifier(ResourceLocation resourceLocation, String type)
 	{
-		return resourceLocation;
+		String newType = resourceLocation.getPath() + "_" + type;
+		if (newType.startsWith("normal_")) newType = newType.substring(7);
+		return new ResourceLocation(resourceLocation.getNamespace(), newType);
 	}
 
 	private void register(ResourceLocation resourceLocation, TorcherinoTiers.Tier tier)
 	{
 		if (resourceLocation.getNamespace().equals(Utilities.MOD_ID))
 		{
-			ResourceLocation torcherinoID = Utilities.resloc(resourceLocation.getPath() + "_" + "torcherino");
+			ResourceLocation torcherinoID = getIdentifier(resourceLocation, "torcherino");
 			ResourceLocation torcherinoWallID = Utilities.resloc("wall_" + torcherinoID.getPath());
-			ResourceLocation lanterinoID = Utilities.resloc(resourceLocation.getPath() + "_" + "lanterino");
+			ResourceLocation lanterinoID = getIdentifier(resourceLocation, "lanterino");
 			Block torcherinoBlock = new TorcherinoBlock().setTier(tier).setRegistryName(torcherinoID);
 			Block torcherinoWallBlock = new TorcherinoWallBlock().setTier(tier).setRegistryName(torcherinoWallID);
 			Block lanterinoBlock = new LanterinoBlock().setTier(tier).setRegistryName(lanterinoID);

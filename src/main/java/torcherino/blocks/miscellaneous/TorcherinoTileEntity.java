@@ -75,6 +75,11 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		{
 			setCustomName(ITextComponent.Serializer.fromJson(compound.getString("CustomName")));
 		}
+		this.xRange = compound.getInt("XRange");
+		this.zRange = compound.getInt("ZRange");
+		this.yRange = compound.getInt("YRange");
+		this.speed = compound.getInt("Speed");
+		this.redstoneMode = compound.getInt("RedstoneMode");
 	}
 
 	public NBTTagCompound write(NBTTagCompound compound)
@@ -84,6 +89,11 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		{
 			compound.setString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
 		}
+		compound.setInt("XRange", getXRange());
+		compound.setInt("ZRange", getZRange());
+		compound.setInt("YRange", getYRange());
+		compound.setInt("Speed", getSpeed());
+		compound.setInt("RedstoneMode", getRedstoneMode());
 		return compound;
 	}
 
