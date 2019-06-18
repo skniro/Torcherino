@@ -100,7 +100,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		boolean powered = context.getWorld().isBlockPowered(context.getPos());
-		return getDefaultState().with(POWERED, powered);
+		return super.getStateForPlacement(context).with(POWERED, powered);
 	}
 
 	@Override public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
