@@ -34,6 +34,11 @@ public class ModBlocks
 		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(() -> new TorcherinoTileEntity(null)).build(null).setRegistryName(Utilities.resloc("torcherino"));
 	}
 
+	private ResourceLocation getIdentifier(ResourceLocation resourceLocation, String type)
+	{
+		return resourceLocation;
+	}
+
 	private void register(ResourceLocation resourceLocation, TorcherinoTiers.Tier tier)
 	{
 		if (resourceLocation.getNamespace().equals(Utilities.MOD_ID))
@@ -56,13 +61,11 @@ public class ModBlocks
 
 	@SubscribeEvent public void onBlockRegistry(final RegistryEvent.Register<Block> registryEvent)
 	{
-		Utilities.LOGGER.info("Registering Blocks.");
 		registryEvent.getRegistry().registerAll(blocks.toArray(new Block[]{}));
 	}
 
 	@SubscribeEvent public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
 	{
-		Utilities.LOGGER.info("Registering Tile Entities.");
 		registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
 	}
 

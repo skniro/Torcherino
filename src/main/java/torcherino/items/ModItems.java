@@ -12,7 +12,6 @@ public class ModItems
 
 	@SubscribeEvent public void onItemRegistry(final RegistryEvent.Register<Item> registryEvent)
 	{
-		Utilities.LOGGER.info("Registering Items.");
 		registryEvent.getRegistry().registerAll(ModBlocks.INSTANCE.getItems().toArray(new Item[]{}));
 	}
 }
