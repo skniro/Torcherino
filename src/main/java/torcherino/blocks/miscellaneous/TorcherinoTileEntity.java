@@ -61,28 +61,15 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 
 	public TorcherinoTiers.Tier getTier()
 	{
-		if(tier == null)
+		if (tier == null)
 		{
 			Block block = world.getBlockState(pos).getBlock();
-			if(block instanceof LanterinoBlock)
-				tier = ((LanterinoBlock) block).getTier();
-			else if(block instanceof TorcherinoBlock)
-				tier = ((TorcherinoBlock) block).getTier();
-			else if(block instanceof TorcherinoWallBlock)
-				tier = ((TorcherinoWallBlock) block).getTier();
+			if (block instanceof LanterinoBlock) tier = ((LanterinoBlock) block).getTier();
+			else if (block instanceof TorcherinoBlock) tier = ((TorcherinoBlock) block).getTier();
+			else if (block instanceof TorcherinoWallBlock) tier = ((TorcherinoWallBlock) block).getTier();
 		}
 		return tier;
 	}
-
-	public int getXRange(){ return xRange; }
-
-	public int getYRange(){ return yRange; }
-
-	public int getZRange(){ return zRange; }
-
-	public int getSpeed(){ return speed; }
-
-	public int getRedstoneMode(){ return redstoneMode; }
 
 	public void read(NBTTagCompound compound)
 	{
@@ -105,11 +92,11 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 		{
 			compound.setString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
 		}
-		compound.setInt("XRange", getXRange());
-		compound.setInt("ZRange", getZRange());
-		compound.setInt("YRange", getYRange());
-		compound.setInt("Speed", getSpeed());
-		compound.setInt("RedstoneMode", getRedstoneMode());
+		compound.setInt("XRange", this.xRange);
+		compound.setInt("ZRange", this.zRange);
+		compound.setInt("YRange", this.yRange);
+		compound.setInt("Speed", this.speed);
+		compound.setInt("RedstoneMode", this.redstoneMode);
 		return compound;
 	}
 
@@ -117,11 +104,11 @@ public class TorcherinoTileEntity extends TileEntity implements IInteractionObje
 	{
 		packetBuffer.writeBlockPos(pos);
 		packetBuffer.writeTextComponent(getName());
-		packetBuffer.writeInt(getXRange());
-		packetBuffer.writeInt(getZRange());
-		packetBuffer.writeInt(getYRange());
-		packetBuffer.writeInt(getSpeed());
-		packetBuffer.writeInt(getRedstoneMode());
+		packetBuffer.writeInt(this.xRange);
+		packetBuffer.writeInt(this.zRange);
+		packetBuffer.writeInt(this.yRange);
+		packetBuffer.writeInt(this.speed);
+		packetBuffer.writeInt(this.redstoneMode);
 	}
 
 	public void readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode)

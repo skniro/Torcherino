@@ -31,19 +31,17 @@ import javax.annotation.Nullable;
 public class LanterinoBlock extends BlockCarvedPumpkin
 {
 	//Constructors
-	public LanterinoBlock(){ super(Properties.from(Blocks.JACK_O_LANTERN)); }
-
-	// Variables
-	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private TorcherinoTiers.Tier tier;
-
-	// Methods
-	public Block setTier(TorcherinoTiers.Tier tier)
+	public LanterinoBlock(TorcherinoTiers.Tier tier)
 	{
+		super(Properties.from(Blocks.JACK_O_LANTERN));
 		this.tier = tier;
-		return this;
 	}
 
+	// Variables
+	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	private final TorcherinoTiers.Tier tier;
+
+	// Methods
 	public TorcherinoTiers.Tier getTier(){ return tier; }
 
 	@Override public boolean hasTileEntity(IBlockState state)

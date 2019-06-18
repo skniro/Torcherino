@@ -48,9 +48,9 @@ public class ModBlocks
 			ResourceLocation torcherinoID = getIdentifier(resourceLocation, "torcherino");
 			ResourceLocation torcherinoWallID = Utilities.resloc("wall_" + torcherinoID.getPath());
 			ResourceLocation lanterinoID = getIdentifier(resourceLocation, "lanterino");
-			Block torcherinoBlock = new TorcherinoBlock().setTier(tier).setRegistryName(torcherinoID);
-			Block torcherinoWallBlock = new TorcherinoWallBlock().setTier(tier).setRegistryName(torcherinoWallID);
-			Block lanterinoBlock = new LanterinoBlock().setTier(tier).setRegistryName(lanterinoID);
+			Block torcherinoBlock = new TorcherinoBlock(tier).setRegistryName(torcherinoID);
+			Block torcherinoWallBlock = new TorcherinoWallBlock(tier).setRegistryName(torcherinoWallID);
+			Block lanterinoBlock = new LanterinoBlock(tier).setRegistryName(lanterinoID);
 			Item torcherinoItem = new ItemWallOrFloor(torcherinoBlock, torcherinoWallBlock, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(torcherinoID);
 			Item lanterinoItem = new ItemBlock(lanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(lanterinoID);
 			blocks.add(torcherinoBlock);

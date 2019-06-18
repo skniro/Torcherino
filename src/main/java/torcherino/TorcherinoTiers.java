@@ -2,7 +2,6 @@ package torcherino;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.ResourceLocation;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 

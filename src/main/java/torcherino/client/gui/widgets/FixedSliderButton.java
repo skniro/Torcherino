@@ -12,7 +12,7 @@ public abstract class FixedSliderButton extends GuiButton
 {
 	private double oldProgress;
 	public double progress;
-	public boolean pressed;
+	private boolean pressed;
 
 	public FixedSliderButton(int buttonId, int x, int y, int width)
 	{
@@ -36,7 +36,6 @@ public abstract class FixedSliderButton extends GuiButton
 				this.oldProgress = progress;
 				this.progress = (double) ((float) (mouseX - (this.x + 4)) / (float) (this.width - 8));
 				this.checkValueChange();
-				// update text
 			}
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.drawTexturedModalRect(this.x + (int) (this.progress * (double) (this.width - 8)), this.y, 0, 66, 4, 20);

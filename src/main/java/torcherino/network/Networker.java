@@ -12,6 +12,13 @@ import torcherino.Utilities;
 import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import java.util.function.Supplier;
 
+/*
+
+	Now that this is implemented maybe I should make a new message for opening the screen and drop the gui factory extension point + container
+
+ */
+
+
 public class Networker
 {
 

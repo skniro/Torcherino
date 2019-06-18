@@ -31,19 +31,17 @@ import javax.annotation.Nullable;
 public class TorcherinoWallBlock extends BlockTorchWall
 {
 	// Constructors
-	protected TorcherinoWallBlock(){ super(Properties.from(Blocks.WALL_TORCH)); }
-
-	// Variables
-	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private TorcherinoTiers.Tier tier;
-
-	// Methods
-	public Block setTier(TorcherinoTiers.Tier tier)
+	protected TorcherinoWallBlock(TorcherinoTiers.Tier tier)
 	{
+		super(Properties.from(Blocks.WALL_TORCH));
 		this.tier = tier;
-		return this;
 	}
 
+	// Variables
+	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	private final TorcherinoTiers.Tier tier;
+
+	// Methods
 	public TorcherinoTiers.Tier getTier(){ return tier; }
 
 	@Override public boolean hasTileEntity(IBlockState state)

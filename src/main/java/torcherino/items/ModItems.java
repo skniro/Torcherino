@@ -3,7 +3,6 @@ package torcherino.items;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import torcherino.Utilities;
 import torcherino.blocks.ModBlocks;
 
 public class ModItems
