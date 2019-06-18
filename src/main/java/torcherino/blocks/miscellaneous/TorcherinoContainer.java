@@ -80,7 +80,7 @@ public class TorcherinoContainer extends Container
 	{
 		if (player instanceof EntityPlayerSP)
 		{
-			Networker.INSTANCE.torcherinoChannel.sendToServer(new Networker.ValueUpdateMessage(tileEntity.getPos(), getXRange(), getZRange(), getYRange(), getSpeed(), getRedstoneMode(), new PacketBuffer(Unpooled.buffer())));
+			Networker.INSTANCE.torcherinoChannel.sendToServer(new Networker.ValueUpdateMessage(tileEntity.getPos(), getXRange(), getZRange(), getYRange(), getSpeed(), getRedstoneMode()));
 		}
 		super.onContainerClosed(player);
 	}

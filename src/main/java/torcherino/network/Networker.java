@@ -21,13 +21,7 @@ public class Networker
 
 	public void initialise()
 	{
-		torcherinoChannel = NetworkRegistry.newSimpleChannel(Utilities.resloc("channel"), () -> "1", version ->
-		{
-			return version.equals("1");
-		}, version ->
-		{
-			return version.equals("1");
-		});
+		torcherinoChannel = NetworkRegistry.newSimpleChannel(Utilities.resloc("channel"), () -> "1", version -> version.equals("1"), version -> version.equals("1"));
 		torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
 	}
 
@@ -39,11 +33,9 @@ public class Networker
 		private final int yRange;
 		private final int speed;
 		private final int redstoneMode;
-		// can I remove this?
-		private final PacketBuffer buf;
 
 
-		public ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode, PacketBuffer buf)
+		public ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode)
 		{
 			this.pos = pos;
 			this.xRange = xRange;
@@ -51,7 +43,6 @@ public class Networker
 			this.yRange = yRange;
 			this.speed = speed;
 			this.redstoneMode = redstoneMode;
-			this.buf = buf;
 		}
 
 		public static void encode(ValueUpdateMessage msg, PacketBuffer buf)
@@ -66,7 +57,7 @@ public class Networker
 
 		public static ValueUpdateMessage decode(PacketBuffer buf)
 		{
-			return new ValueUpdateMessage(buf.readBlockPos(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt(), buf);
+			return new ValueUpdateMessage(buf.readBlockPos(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readInt());
 		}
 
 		public static void handle(ValueUpdateMessage msg, Supplier<NetworkEvent.Context> ctx)
