@@ -1,8 +1,9 @@
 package torcherino.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -11,30 +12,46 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import torcherino.Utilities;
-import torcherino.blocks.miscellaneous.TorcherinoContainer;
+import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import torcherino.client.gui.widgets.FixedSliderButton;
 import torcherino.client.gui.widgets.StateButton;
 import torcherino.network.Networker;
+import torcherino.network.ValueUpdateMessage;
 import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class TorcherinoScreen extends GuiContainer
+public class TorcherinoScreen extends GuiScreen
 {
 	private static final ResourceLocation BACKGROUND_TEXTURE = Utilities.resloc("textures/gui/container/torcherino.png");
-	private final TorcherinoContainer container;
+	private static final int xSize = 245;
+	private static final int ySize = 123;
+	private final TorcherinoTileEntity tileEntity;
+	private final ITextComponent title;
+	private int guiLeft;
+	private int guiTop;
+	private int xRange;
+	private int zRange;
+	private int yRange;
+	private int speed;
+	private int redstoneMode;
 
-	public TorcherinoScreen(TorcherinoContainer torcherinoContainer)
+	public TorcherinoScreen(TorcherinoTileEntity tileEntity, ITextComponent title, int xRange, int zRange, int yRange, int speed, int redstoneMode)
 	{
-		super(torcherinoContainer);
-		container = torcherinoContainer;
-		xSize = 245;
-		ySize = 123;
+		this.tileEntity = tileEntity;
+		this.title = title;
+		this.xRange = xRange;
+		this.zRange = zRange;
+		this.yRange = yRange;
+		this.speed = speed;
+		this.redstoneMode = redstoneMode;
 	}
 
 	@Override protected void initGui()
 	{
-		super.initGui();
+		Utilities.LOGGER.info("Width: " + width);
+		this.guiLeft = (this.width - xSize) / 2;
+		this.guiTop = (this.height - ySize) / 2;
 		int buttonId = 0;
 		this.addButton(new FixedSliderButton(buttonId++, guiLeft + 8, guiTop + 20, 205)
 		{
@@ -43,8 +60,8 @@ public class TorcherinoScreen extends GuiContainer
 
 			@Override protected void initialise()
 			{
-				speed = container.getSpeed();
-				MAX_SPEED = container.getMaxSpeed();
+				speed = TorcherinoScreen.this.speed;
+				MAX_SPEED = TorcherinoScreen.this.tileEntity.getTier().MAX_SPEED;
 				this.progress = speed / MAX_SPEED;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
 			}
@@ -52,7 +69,7 @@ public class TorcherinoScreen extends GuiContainer
 			@Override protected void onValueChange()
 			{
 				speed = (int) Math.round(progress * MAX_SPEED);
-				container.setSpeed(speed);
+				TorcherinoScreen.this.speed = speed;
 				this.progress = speed / MAX_SPEED;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
 			}
@@ -64,8 +81,8 @@ public class TorcherinoScreen extends GuiContainer
 
 			@Override protected void initialise()
 			{
-				xRange = container.getXRange();
-				XZ_RANGE = container.getMaxXZRange();
+				xRange = TorcherinoScreen.this.xRange;
+				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().XZ_RANGE;
 				this.progress = (double) xRange / XZ_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.x_range", 1 + 2 * xRange).getFormattedText();
 			}
@@ -73,7 +90,7 @@ public class TorcherinoScreen extends GuiContainer
 			@Override protected void onValueChange()
 			{
 				xRange = (int) Math.round(progress * XZ_RANGE);
-				container.setXRange(xRange);
+				TorcherinoScreen.this.xRange = xRange;
 				this.progress = (double) xRange / XZ_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.x_range", 1 + 2 * xRange).getFormattedText();
 			}
@@ -85,8 +102,8 @@ public class TorcherinoScreen extends GuiContainer
 
 			@Override protected void initialise()
 			{
-				zRange = container.getZRange();
-				XZ_RANGE = container.getMaxXZRange();
+				zRange = TorcherinoScreen.this.zRange;
+				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().XZ_RANGE;
 				this.progress = (double) zRange / XZ_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.z_range", 1 + 2 * zRange).getFormattedText();
 			}
@@ -94,7 +111,7 @@ public class TorcherinoScreen extends GuiContainer
 			@Override protected void onValueChange()
 			{
 				zRange = (int) Math.round(progress * XZ_RANGE);
-				container.setZRange(zRange);
+				TorcherinoScreen.this.zRange = zRange;
 				this.progress = (double) zRange / XZ_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.z_range", 1 + 2 * zRange).getFormattedText();
 			}
@@ -106,8 +123,8 @@ public class TorcherinoScreen extends GuiContainer
 
 			@Override protected void initialise()
 			{
-				yRange = container.getYRange();
-				Y_RANGE = container.getMaxYRange();
+				yRange = TorcherinoScreen.this.yRange;
+				Y_RANGE = TorcherinoScreen.this.tileEntity.getTier().Y_RANGE;
 				this.progress = (double) yRange / Y_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.y_range", 1 + 2 * yRange).getFormattedText();
 			}
@@ -115,12 +132,12 @@ public class TorcherinoScreen extends GuiContainer
 			@Override protected void onValueChange()
 			{
 				yRange = (int) Math.round(progress * Y_RANGE);
-				container.setYRange(yRange);
+				TorcherinoScreen.this.yRange = yRange;
 				this.progress = (double) yRange / Y_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.y_range", 1 + 2 * yRange).getFormattedText();
 			}
 		});
-		this.addButton(new StateButton(buttonId++, guiLeft + 217, guiTop + 20, container.getRedstoneMode(), this)
+		this.addButton(new StateButton(buttonId++, guiLeft + 217, guiTop + 20, this.redstoneMode)
 		{
 			ItemStack renderStack;
 			List<ITextComponent> tooltip;
@@ -153,7 +170,7 @@ public class TorcherinoScreen extends GuiContainer
 						break;
 				}
 				tooltip.add(0, new TextComponentTranslation("gui.torcherino.redstone_mode", modeTranslationKey));
-				container.setRedstoneMode(state);
+				TorcherinoScreen.this.redstoneMode = state;
 			}
 
 			@Override protected int getMaxStates()
@@ -171,30 +188,28 @@ public class TorcherinoScreen extends GuiContainer
 				return tooltip;
 			}
 		});
+		super.initGui();
 	}
 
 	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
+		this.drawBackgroundLayer();
 		super.render(mouseX, mouseY, partialTicks);
+		this.drawForegroundLayer();
 	}
 
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 */
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	private void drawForegroundLayer()
 	{
-		String text = container.getDisplayName().getFormattedText();
+		String text = title.getFormattedText();
 		fontRenderer.drawString(text, (xSize - fontRenderer.getStringWidth(text)) / 2, 6, 4210752);
 	}
 
-	@Override protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	private void drawBackgroundLayer()
 	{
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-		int i = (this.width - this.xSize) / 2;
-		int j = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
+		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	@Override public void onResize(Minecraft mcIn, int w, int h)
@@ -205,6 +220,23 @@ public class TorcherinoScreen extends GuiContainer
 	@Override public void onGuiClosed()
 	{
 		super.onGuiClosed();
-		Networker.INSTANCE.torcherinoChannel.sendToServer(new Networker.ValueUpdateMessage(container.getTileEntity().getPos(), container.getXRange(), container.getZRange(), container.getYRange(), container.getSpeed(), container.getRedstoneMode()));
+		Networker.INSTANCE.torcherinoChannel.sendToServer(new ValueUpdateMessage(this.tileEntity.getPos(), this.xRange, this.zRange, this.yRange, this.speed, this.redstoneMode));
+	}
+
+	@Override public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
+
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	{
+		if (keyCode == 256 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		{
+			this.mc.player.closeScreen();
+			return true;
+
+		}
+		super.keyPressed(keyCode, scanCode, modifiers);
+		return true;
 	}
 }

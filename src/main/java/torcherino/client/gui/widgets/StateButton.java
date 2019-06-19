@@ -1,22 +1,20 @@
 package torcherino.client.gui.widgets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class StateButton extends GuiButton
 {
 	private int state;
-	private GuiContainer containerScreen;
 
-	public StateButton(int buttonId, int x, int y, int state, GuiContainer container)
+	public StateButton(int buttonId, int x, int y, int state)
 	{
 		super(buttonId, x, y, 20, 20, "");
-		this.containerScreen = container;
 		setInternalState(state);
 	}
 
@@ -53,7 +51,7 @@ public abstract class StateButton extends GuiButton
 			RenderHelper.disableStandardItemLighting();
 			if (hovered)
 			{
-				containerScreen.drawHoveringText(getToolTip(), mouseX, mouseY);
+				GuiUtils.drawHoveringText(getToolTip(), mouseX, mouseY, width, height, -1, Minecraft.getInstance().fontRenderer);
 			}
 		}
 	}
