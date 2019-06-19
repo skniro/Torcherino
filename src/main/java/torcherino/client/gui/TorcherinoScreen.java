@@ -14,6 +14,7 @@ import torcherino.Utilities;
 import torcherino.blocks.miscellaneous.TorcherinoContainer;
 import torcherino.client.gui.widgets.FixedSliderButton;
 import torcherino.client.gui.widgets.StateButton;
+import torcherino.network.Networker;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -204,5 +205,6 @@ public class TorcherinoScreen extends GuiContainer
 	@Override public void onGuiClosed()
 	{
 		super.onGuiClosed();
+		Networker.INSTANCE.torcherinoChannel.sendToServer(new Networker.ValueUpdateMessage(container.getTileEntity().getPos(), container.getXRange(), container.getZRange(), container.getYRange(), container.getSpeed(), container.getRedstoneMode()));
 	}
 }

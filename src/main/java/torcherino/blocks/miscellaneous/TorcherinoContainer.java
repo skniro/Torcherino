@@ -1,10 +1,8 @@
 package torcherino.blocks.miscellaneous;
 
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.text.ITextComponent;
-import torcherino.network.Networker;
 
 public class TorcherinoContainer extends Container
 {
@@ -19,35 +17,17 @@ public class TorcherinoContainer extends Container
 		this.displayName = displayName;
 	}
 
-	@Override public boolean canInteractWith(EntityPlayer playerIn)
-	{
-		return true;
-	}
+	@Override public boolean canInteractWith(EntityPlayer playerIn){ return true; }
 
-	public void setSpeed(int speed)
-	{
-		this.speed = speed;
-	}
+	public void setSpeed(int speed){ this.speed = speed; }
 
-	public void setXRange(int xRange)
-	{
-		this.xRange = xRange;
-	}
+	public void setXRange(int xRange){ this.xRange = xRange; }
 
-	public void setZRange(int zRange)
-	{
-		this.zRange = zRange;
-	}
+	public void setZRange(int zRange){ this.zRange = zRange; }
 
-	public void setYRange(int yRange)
-	{
-		this.yRange = yRange;
-	}
+	public void setYRange(int yRange){ this.yRange = yRange; }
 
-	public void setRedstoneMode(int redstoneMode)
-	{
-		this.redstoneMode = redstoneMode;
-	}
+	public void setRedstoneMode(int redstoneMode){ this.redstoneMode = redstoneMode; }
 
 	public int getXRange(){ return xRange; }
 
@@ -65,14 +45,7 @@ public class TorcherinoContainer extends Container
 
 	public int getRedstoneMode(){ return redstoneMode; }
 
-	public ITextComponent getDisplayName(){ return displayName; }
+	public TorcherinoTileEntity getTileEntity(){ return tileEntity; }
 
-	@Override public void onContainerClosed(EntityPlayer player)
-	{
-		if (player instanceof EntityPlayerSP)
-		{
-			Networker.INSTANCE.torcherinoChannel.sendToServer(new Networker.ValueUpdateMessage(tileEntity.getPos(), getXRange(), getZRange(), getYRange(), getSpeed(), getRedstoneMode()));
-		}
-		super.onContainerClosed(player);
-	}
+	public ITextComponent getDisplayName(){ return displayName; }
 }
