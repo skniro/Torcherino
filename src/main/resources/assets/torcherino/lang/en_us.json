@@ -9,10 +9,10 @@
   "gui.torcherino.x_range": "X Range: %s Blocks",
   "gui.torcherino.z_range": "Z Range: %s Blocks",
   "gui.torcherino.y_range": "Y Range: %s Blocks",
-  "gui.torcherino.redstone_mode": "Redstone Mode: %s",
-  "gui.torcherino.mode.normal": "Normal",
-  "gui.torcherino.mode.inverted": "Inverted",
-  "gui.torcherino.mode.ignored": "Ignored",
+  "gui.torcherino.redstone_mode": "Mode: %s",
+  "gui.torcherino.mode.normal": "Redstone Normal",
+  "gui.torcherino.mode.inverted": "Redstone Inverted",
+  "gui.torcherino.mode.ignored": "Redstone Ignored",
   "gui.torcherino.mode.off": "Off"
 }
 
