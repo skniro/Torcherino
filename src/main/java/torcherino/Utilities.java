@@ -1,10 +1,12 @@
 package torcherino;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkDirection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
@@ -27,7 +29,7 @@ public class Utilities
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TorcherinoTileEntity)) return true;
 		TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tile;
-		Networker.INSTANCE.torcherinoChannel.sendToServer(new OpenScreenMessage(torcherinoTileEntity.getPos(), torcherinoTileEntity.getName(), torcherinoTileEntity.getxRange(), torcherinoTileEntity.getzRange(), torcherinoTileEntity.getyRange(), torcherinoTileEntity.getSpeed(), torcherinoTileEntity.getRedstoneMode()));
+		Networker.INSTANCE.torcherinoChannel.sendTo(new OpenScreenMessage(torcherinoTileEntity.getPos(), torcherinoTileEntity.getName(), torcherinoTileEntity.getxRange(), torcherinoTileEntity.getzRange(), torcherinoTileEntity.getyRange(), torcherinoTileEntity.getSpeed(), torcherinoTileEntity.getRedstoneMode()), ((EntityPlayerMP) player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 		return true;
 	}
 }

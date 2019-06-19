@@ -1,24 +1,21 @@
 package torcherino.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
-import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import torcherino.client.gui.TorcherinoScreen;
 import java.util.function.Supplier;
 public class OpenScreenMessage
 {
-	private final BlockPos pos;
-	private final ITextComponent title;
-	private final int xRange;
-	private final int zRange;
-	private final int yRange;
-	private final int speed;
-	private final int redstoneMode;
+	public final BlockPos pos;
+	public final ITextComponent title;
+	public final int xRange;
+	public final int zRange;
+	public final int yRange;
+	public final int speed;
+	public final int redstoneMode;
 
 	public OpenScreenMessage(BlockPos pos, ITextComponent title, int xRange, int zRange, int yRange, int speed, int redstoneMode)
 	{
@@ -47,17 +44,7 @@ public class OpenScreenMessage
 	static void handle(OpenScreenMessage msg, Supplier<NetworkEvent.Context> ctx)
 	{
 		NetworkEvent.Context context = ctx.get();
-		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.addScheduledTask(() -> {
-			World world = minecraft.player.world;
-			TileEntity tileEntity = world.getTileEntity(msg.pos);
-			if (tileEntity instanceof TorcherinoTileEntity)
-			{
-				TorcherinoScreen screen = new TorcherinoScreen((TorcherinoTileEntity) tileEntity, msg.title, msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
-				Minecraft.getInstance().mouseHelper.ungrabMouse();
-				Minecraft.getInstance().displayGuiScreen(screen);
-			}
-		});
+		if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) TorcherinoScreen.open(msg);
 		context.setPacketHandled(true);
 	}
 }

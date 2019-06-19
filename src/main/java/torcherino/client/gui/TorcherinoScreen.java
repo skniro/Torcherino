@@ -5,9 +5,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,6 +18,7 @@ import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
 import torcherino.client.gui.widgets.FixedSliderButton;
 import torcherino.client.gui.widgets.StateButton;
 import torcherino.network.Networker;
+import torcherino.network.OpenScreenMessage;
 import torcherino.network.ValueUpdateMessage;
 import java.util.ArrayList;
 import java.util.List;
@@ -234,9 +237,24 @@ public class TorcherinoScreen extends GuiScreen
 		{
 			this.mc.player.closeScreen();
 			return true;
-
 		}
 		super.keyPressed(keyCode, scanCode, modifiers);
 		return true;
+	}
+
+	public static void open(OpenScreenMessage msg)
+	{
+		Minecraft minecraft = Minecraft.getInstance();
+		minecraft.addScheduledTask(() ->
+		{
+			World world = minecraft.player.world;
+			TileEntity tileEntity = world.getTileEntity(msg.pos);
+			if (tileEntity instanceof TorcherinoTileEntity)
+			{
+				TorcherinoScreen screen = new TorcherinoScreen((TorcherinoTileEntity) tileEntity, msg.title, msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
+				Minecraft.getInstance().mouseHelper.ungrabMouse();
+				Minecraft.getInstance().displayGuiScreen(screen);
+			}
+		});
 	}
 }
