@@ -52,7 +52,7 @@ public class TorcherinoScreen extends GuiScreen
 
 	@Override protected void initGui()
 	{
-		Utilities.LOGGER.info("Width: " + width);
+		super.initGui();
 		this.guiLeft = (this.width - xSize) / 2;
 		this.guiTop = (this.height - ySize) / 2;
 		int buttonId = 0;
@@ -140,7 +140,7 @@ public class TorcherinoScreen extends GuiScreen
 				this.displayString = new TextComponentTranslation("gui.torcherino.y_range", 1 + 2 * yRange).getFormattedText();
 			}
 		});
-		this.addButton(new StateButton(buttonId++, guiLeft + 217, guiTop + 20, this.redstoneMode)
+		this.addButton(new StateButton(buttonId++, guiLeft + 217, guiTop + 20, width, height, this.redstoneMode)
 		{
 			ItemStack renderStack;
 			List<ITextComponent> tooltip;
@@ -191,21 +191,20 @@ public class TorcherinoScreen extends GuiScreen
 				return tooltip;
 			}
 		});
-		super.initGui();
 	}
 
 	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
 		this.drawBackgroundLayer();
-		super.render(mouseX, mouseY, partialTicks);
 		this.drawForegroundLayer();
+		super.render(mouseX, mouseY, partialTicks);
 	}
 
 	private void drawForegroundLayer()
 	{
 		String text = title.getFormattedText();
-		fontRenderer.drawString(text, (xSize - fontRenderer.getStringWidth(text)) / 2, 6, 4210752);
+		fontRenderer.drawString(text, guiLeft + (xSize - fontRenderer.getStringWidth(text)) / 2, guiTop + 6, 4210752);
 	}
 
 	private void drawBackgroundLayer()

@@ -11,10 +11,14 @@ import java.util.List;
 public abstract class StateButton extends GuiButton
 {
 	private int state;
+	private final int screenWidth;
+	private final int screenHeight;
 
-	public StateButton(int buttonId, int x, int y, int state)
+	public StateButton(int buttonId, int x, int y, int screenWidth, int screenHeight, int state)
 	{
 		super(buttonId, x, y, 20, 20, "");
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
 		setInternalState(state);
 	}
 
@@ -49,10 +53,7 @@ public abstract class StateButton extends GuiButton
 			RenderHelper.enableGUIStandardItemLighting();
 			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getButtonIcon(), x + 2, y + 2);
 			RenderHelper.disableStandardItemLighting();
-			if (hovered)
-			{
-				GuiUtils.drawHoveringText(getToolTip(), mouseX, mouseY, width, height, -1, Minecraft.getInstance().fontRenderer);
-			}
+			if (hovered) GuiUtils.drawHoveringText(getButtonIcon(), getToolTip(), mouseX, mouseY, screenWidth, screenHeight, -1, Minecraft.getInstance().fontRenderer);
 		}
 	}
 
