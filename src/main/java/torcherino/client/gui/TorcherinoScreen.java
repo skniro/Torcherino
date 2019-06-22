@@ -30,7 +30,7 @@ public class TorcherinoScreen extends GuiScreen
 	private static final int xSize = 245;
 	private static final int ySize = 123;
 	private final TorcherinoTileEntity tileEntity;
-	private final ITextComponent title;
+	private final String title;
 	private int guiLeft;
 	private int guiTop;
 	private int xRange;
@@ -42,7 +42,7 @@ public class TorcherinoScreen extends GuiScreen
 	public TorcherinoScreen(TorcherinoTileEntity tileEntity, ITextComponent title, int xRange, int zRange, int yRange, int speed, int redstoneMode)
 	{
 		this.tileEntity = tileEntity;
-		this.title = title;
+		this.title = title.getFormattedText();
 		this.xRange = xRange;
 		this.zRange = zRange;
 		this.yRange = yRange;
@@ -53,19 +53,19 @@ public class TorcherinoScreen extends GuiScreen
 	@Override protected void initGui()
 	{
 		super.initGui();
-		this.guiLeft = (this.width - xSize) / 2;
-		this.guiTop = (this.height - ySize) / 2;
+		guiLeft = (this.width - xSize) / 2;
+		guiTop = (this.height - ySize) / 2;
 		int buttonId = 0;
 		this.addButton(new FixedSliderButton(buttonId++, guiLeft + 8, guiTop + 20, 205)
 		{
-			int speed;
-			double MAX_SPEED;
+			private int speed;
+			private int MAX_SPEED;
 
 			@Override protected void initialise()
 			{
 				speed = TorcherinoScreen.this.speed;
 				MAX_SPEED = TorcherinoScreen.this.tileEntity.getTier().MAX_SPEED;
-				this.progress = speed / MAX_SPEED;
+				this.progress = (double) speed / MAX_SPEED;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
 			}
 
@@ -73,14 +73,14 @@ public class TorcherinoScreen extends GuiScreen
 			{
 				speed = (int) Math.round(progress * MAX_SPEED);
 				TorcherinoScreen.this.speed = speed;
-				this.progress = speed / MAX_SPEED;
+				this.progress = (double) speed / MAX_SPEED;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
 			}
 		});
 		this.addButton(new FixedSliderButton(buttonId++, guiLeft + 8, guiTop + 45, 205)
 		{
-			int xRange;
-			int XZ_RANGE;
+			private int xRange;
+			private int XZ_RANGE;
 
 			@Override protected void initialise()
 			{
@@ -100,8 +100,8 @@ public class TorcherinoScreen extends GuiScreen
 		});
 		this.addButton(new FixedSliderButton(buttonId++, guiLeft + 8, guiTop + 70, 205)
 		{
-			int zRange;
-			int XZ_RANGE;
+			private int zRange;
+			private int XZ_RANGE;
 
 			@Override protected void initialise()
 			{
@@ -121,8 +121,8 @@ public class TorcherinoScreen extends GuiScreen
 		});
 		this.addButton(new FixedSliderButton(buttonId++, guiLeft + 8, guiTop + 95, 205)
 		{
-			int yRange;
-			int Y_RANGE;
+			private int yRange;
+			private int Y_RANGE;
 
 			@Override protected void initialise()
 			{
@@ -142,8 +142,8 @@ public class TorcherinoScreen extends GuiScreen
 		});
 		this.addButton(new StateButton(buttonId++, guiLeft + 217, guiTop + 20, width, height, this.redstoneMode)
 		{
-			ItemStack renderStack;
-			List<ITextComponent> tooltip;
+			private ItemStack renderStack;
+			private List<ITextComponent> tooltip;
 
 			@Override protected void setState(int state)
 			{
@@ -196,22 +196,11 @@ public class TorcherinoScreen extends GuiScreen
 	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
-		this.drawBackgroundLayer();
-		this.drawForegroundLayer();
-		super.render(mouseX, mouseY, partialTicks);
-	}
-
-	private void drawForegroundLayer()
-	{
-		String text = title.getFormattedText();
-		fontRenderer.drawString(text, guiLeft + (xSize - fontRenderer.getStringWidth(text)) / 2, guiTop + 6, 4210752);
-	}
-
-	private void drawBackgroundLayer()
-	{
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		fontRenderer.drawString(title, guiLeft + (xSize - fontRenderer.getStringWidth(title)) / 2, guiTop + 6, 4210752);
+		super.render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override public void onResize(Minecraft mcIn, int w, int h)
@@ -232,12 +221,8 @@ public class TorcherinoScreen extends GuiScreen
 
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		if (keyCode == 256 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
-		{
-			this.mc.player.closeScreen();
-			return true;
-		}
-		super.keyPressed(keyCode, scanCode, modifiers);
+		if (keyCode == 256 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) mc.player.closeScreen();
+		else super.keyPressed(keyCode, scanCode, modifiers);
 		return true;
 	}
 

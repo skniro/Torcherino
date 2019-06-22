@@ -14,10 +14,11 @@ public class Torcherino
 	{
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		TorcherinoTiers.INSTANCE.initialise();
+		TorcherinoConfig.INSTANCE.loadConfig();
 		// todo load this from config:
-		TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("normal"), 4, 4, 1);
-		TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("compressed"), 36, 4, 1);
-		TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("double_compressed"), 324, 4, 1);
+		//TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("normal"), 4, 4, 1);
+		//TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("compressed"), 36, 4, 1);
+		//TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("double_compressed"), 324, 4, 1);
 		ModBlocks.INSTANCE.initialise();
 		eventBus.register(ModBlocks.INSTANCE);
 		eventBus.register(ModItems.INSTANCE);
