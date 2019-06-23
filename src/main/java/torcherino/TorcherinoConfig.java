@@ -109,8 +109,9 @@ public class TorcherinoConfig
 			config = defaultConfig;
 		}
 		// finally read our data (from config class member)
-		JsonArray blacklistedBlocks = config.getAsJsonArray("blacklistedBlocks");
+		JsonArray blacklistedBlocks = config.getAsJsonArray("blacklisted_blocks");
 		Utilities.LOGGER.info("Present? {}, value: {}", blacklistedBlocks != null, blacklistedBlocks != null ? blacklistedBlocks.toString() : "");
+		System.exit(0);
 		// Load
 		//Utils.logPlacement = config.getConfigData().get("logPlacement");
 		//Utils.randomTickSpeedRate = MathHelper.clamp(config.getConfigData().get("randomTickSpeedRate"), 1, 4096);
