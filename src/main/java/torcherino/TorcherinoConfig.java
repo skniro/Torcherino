@@ -1,45 +1,95 @@
 package torcherino;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.internal.Streams;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.loading.FMLPaths;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 
 public class TorcherinoConfig
 {
 
 	public static final TorcherinoConfig INSTANCE = new TorcherinoConfig();
+	private final JsonObject defaultConfig;
+	private JsonObject config;
+
+	private TorcherinoConfig()
+	{
+		defaultConfig = new JsonObject();
+		defaultConfig.add("randomTickRate", new JsonPrimitive(1));
+		defaultConfig.add("blacklistedBlocks", new JsonArray());
+	}
 
 	public void loadConfig()
 	{
 		File torcherinoConfigFile = new File(FMLPaths.CONFIGDIR.get().toFile(), "torcherino.cfg");
-		Gson gson = new GsonBuilder().create();
+		Gson gson = new GsonBuilder().setLenient().setPrettyPrinting().create();
 		if (torcherinoConfigFile.exists())
 		{
+			JsonReader reader = null;
 			try
 			{
-				JsonReader reader = gson.newJsonReader(new FileReader(torcherinoConfigFile));
-				JsonObject config = (JsonObject) Streams.parse(reader);
-				JsonArray blacklistedBlocks = config.getAsJsonArray("blacklistedBlocks");
-				Utilities.LOGGER.info("Present? {}, value: {}", blacklistedBlocks != null, blacklistedBlocks != null ? blacklistedBlocks.toString() : "");
+				reader = gson.newJsonReader(new FileReader(torcherinoConfigFile));
+				config = gson.fromJson(reader, JsonObject.class);
 			}
 			catch (FileNotFoundException e)
 			{
 				e.printStackTrace();
 			}
+			finally
+			{
+				if (reader != null)
+				{
+					try
+					{
+						reader.close();
+					}
+					catch (IOException e)
+					{
+						Utilities.LOGGER.info("Reader threw IO error when closing.");
+					}
+				}
+			}
 		}
 		else
 		{
+			JsonWriter writer = null;
 			// write the default config
-			Utilities.LOGGER.info("No config found...");
+			try
+			{
+				if (torcherinoConfigFile.createNewFile())
+				{
+					writer = gson.newJsonWriter(new FileWriter(torcherinoConfigFile));
+					gson.toJson(defaultConfig, writer);
+				}
+				else
+				{
+					Utilities.LOGGER.error("Could not create config file");
+				}
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				if (writer != null)
+				{
+					try
+					{
+						writer.close();
+					}
+					catch (IOException e)
+					{
+						Utilities.LOGGER.info("Writer threw IO error when closing.");
+					}
+				}
+			}
+			config = defaultConfig;
 		}
-
+		// finally read our data (from config class member)
+		JsonArray blacklistedBlocks = config.getAsJsonArray("blacklistedBlocks");
+		Utilities.LOGGER.info("Present? {}, value: {}", blacklistedBlocks != null, blacklistedBlocks != null ? blacklistedBlocks.toString() : "");
 		// Load
 		//Utils.logPlacement = config.getConfigData().get("logPlacement");
 		//Utils.randomTickSpeedRate = MathHelper.clamp(config.getConfigData().get("randomTickSpeedRate"), 1, 4096);
