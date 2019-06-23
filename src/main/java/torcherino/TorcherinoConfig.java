@@ -16,8 +16,29 @@ public class TorcherinoConfig
 	private TorcherinoConfig()
 	{
 		defaultConfig = new JsonObject();
-		defaultConfig.add("randomTickRate", new JsonPrimitive(1));
-		defaultConfig.add("blacklistedBlocks", new JsonArray());
+		defaultConfig.addProperty("log_placement", false);
+		defaultConfig.addProperty("random_tick_rate", 1);
+		defaultConfig.add("blacklisted_blocks", new JsonArray());
+		defaultConfig.add("blacklisted_tiles", new JsonArray());
+		JsonObject tiers = new JsonObject();
+		JsonObject normalTier = new JsonObject();
+		normalTier.addProperty("max_speed", 4);
+		normalTier.addProperty("xz_range", 4);
+		normalTier.addProperty("y_range", 1);
+
+		JsonObject compressedTier = new JsonObject();
+		compressedTier.addProperty("max_speed", 36);
+		compressedTier.addProperty("xz_range", 4);
+		compressedTier.addProperty("y_range", 1);
+
+		JsonObject doubleCompressedTier = new JsonObject();
+		doubleCompressedTier.addProperty("max_speed", 324);
+		doubleCompressedTier.addProperty("xz_range", 4);
+		doubleCompressedTier.addProperty("y_range", 1);
+		tiers.add("normal", normalTier);
+		tiers.add("compressed", compressedTier);
+		tiers.add("double_compressed", doubleCompressedTier);
+		defaultConfig.add("tiers", tiers);
 	}
 
 	public void loadConfig()
