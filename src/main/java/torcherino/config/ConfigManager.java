@@ -21,27 +21,6 @@ public class ConfigManager
 	/**
 	 * Loads a .config file from the config folder and parses it to a POJO.
 	 *
-	 * @param clazz The class of the POJO that will store all our properties
-	 * @return A new config Object containing all our options from the config file
-	 */
-	public static <T> T loadConfig(Class<T> clazz)
-	{
-		String configName;
-		if (clazz.isAnnotationPresent(ConfigFile.class))
-		{
-			ConfigFile annotation = clazz.getAnnotation(ConfigFile.class);
-			configName = annotation.name() + annotation.extension();
-		}
-		else
-		{
-			configName = clazz.getSimpleName() + DEFAULT_EXTENSION;
-		}
-		return loadConfig(clazz, configName);
-	}
-
-	/**
-	 * Loads a .config file from the config folder and parses it to a POJO.
-	 *
 	 * @param clazz      The class of the POJO that will store all our properties
 	 * @param configName The name of the config file
 	 * @return A new config Object containing all our options from the config file
@@ -99,28 +78,6 @@ public class ConfigManager
 		}
 		//this is ... unfortunate
 		return null;
-	}
-
-	/**
-	 * Saves a POJO Config object to the disk and uses either the name specified in the Annotation (if available) or
-	 * the simple Class name as filename.
-	 * This function is used to create new configs if they don't already exist.
-	 *
-	 * @param object The Config we want to save
-	 */
-	public static void saveConfig(Object object)
-	{
-		String configName;
-		if (object.getClass().isAnnotationPresent(ConfigFile.class))
-		{
-			ConfigFile annotation = object.getClass().getAnnotation(ConfigFile.class);
-			configName = annotation.name() + annotation.extension();
-		}
-		else
-		{
-			configName = object.getClass().getSimpleName() + DEFAULT_EXTENSION;
-		}
-		saveConfig(object, configName);
 	}
 
 	/**
