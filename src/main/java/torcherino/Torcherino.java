@@ -4,6 +4,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import torcherino.blocks.ModBlocks;
+import torcherino.config.ConfigManager;
+import torcherino.config.TorcherinoConfig;
 import torcherino.items.ModItems;
 import torcherino.network.Networker;
 
@@ -15,7 +17,7 @@ public class Torcherino
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		TorcherinoTiers.INSTANCE.initialise();
 
-
+		TorcherinoConfig.INSTANCE = ConfigManager.loadConfig(TorcherinoConfig.class, "Torcherino.cfg");
 
 		TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("normal"), 4, 4, 1);
 		TorcherinoTiers.INSTANCE.registerTier(Utilities.resloc("compressed"), 36, 4, 1);
