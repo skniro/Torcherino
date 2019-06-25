@@ -15,7 +15,6 @@ public class ConfigManager
 {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	public static final String DEFAULT_EXTENSION = ".json5";
 
 	/**
 	 * Loads a .config file from the config folder and parses it to a POJO.
