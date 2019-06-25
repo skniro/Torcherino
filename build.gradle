@@ -5,13 +5,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.128'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 
-version = '8.0.2'
+version = '8.0.3'
 group = 'torcherino'
 archivesBaseName = 'torcherino'
 
@@ -32,10 +32,6 @@ minecraft {
     }
 }
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.205'
-}
-
 jar {
     manifest {
         attributes(["Specification-Title": "Torcherino ",
@@ -46,4 +42,8 @@ jar {
                     "Implementation-Vendor" :"NinjaPhenix1",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.205'
 }
