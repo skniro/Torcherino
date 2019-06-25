@@ -23,7 +23,7 @@ public class ConfigManager
 	 * @param configName The name of the config file
 	 * @return A new config Object containing all our options from the config file
 	 */
-	public static <T> T loadConfig(Class<T> clazz, String configName)
+	@SuppressWarnings("ConstantConditions") public static <T> T loadConfig(Class<T> clazz, String configName)
 	{
 		try
 		{
@@ -84,7 +84,7 @@ public class ConfigManager
 	 * @param object     The Config we want to save
 	 * @param configName The filename of our config.
 	 */
-	public static void saveConfig(Object object, String configName)
+	@SuppressWarnings("ResultOfMethodCallIgnored") public static void saveConfig(Object object, String configName)
 	{
 		Jankson jankson = Jankson.builder().build();
 		JsonElement json = jankson.toJson(object);
