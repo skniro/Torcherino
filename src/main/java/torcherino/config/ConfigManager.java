@@ -15,7 +15,7 @@ public class ConfigManager
 {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-
+	private static final Jankson.Builder builder = new Jankson.Builder();
 	/**
 	 * Loads a .config file from the config folder and parses it to a POJO.
 	 *
@@ -28,7 +28,7 @@ public class ConfigManager
 		try
 		{
 			File file = FMLPaths.CONFIGDIR.get().resolve(configName).toFile();
-			Jankson jankson = Jankson.builder().build();
+			Jankson jankson = builder.build();
 			//Generate config file if it doesn't exist
 			if (!file.exists())
 			{
@@ -88,7 +88,7 @@ public class ConfigManager
 	 */
 	@SuppressWarnings("ResultOfMethodCallIgnored") public static void saveConfig(Object object, String configName)
 	{
-		Jankson jankson = Jankson.builder().build();
+		Jankson jankson = builder.build();
 		JsonElement json = jankson.toJson(object);
 		String result = json.toJson(true, true);
 		try
