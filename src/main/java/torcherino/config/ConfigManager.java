@@ -32,7 +32,9 @@ public class ConfigManager
 			//Generate config file if it doesn't exist
 			if (!file.exists())
 			{
-				saveConfig(clazz.newInstance(), configName);
+				T instance = clazz.newInstance();
+				saveConfig(instance, configName);
+				return instance;
 			}
 			try
 			{
