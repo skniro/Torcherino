@@ -7,7 +7,6 @@ import blue.endless.jankson.impl.SyntaxError;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import torcherino.config.annotations.ConfigFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
