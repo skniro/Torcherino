@@ -58,8 +58,6 @@ public class TorcherinoConfig
 		{
 			INSTANCE = ConfigManager.loadConfig(TorcherinoConfig.class, sci4meDirectory.resolve("Torcherino.cfg").toFile());
 		}
-
-		Utilities.LOGGER.info("BLACKLISTED TILES " + INSTANCE.blacklisted_tiles[0].toString());
 	}
 
 	public static class Tier
