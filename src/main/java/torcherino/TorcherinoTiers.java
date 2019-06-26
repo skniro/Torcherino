@@ -2,6 +2,7 @@ package torcherino;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.ResourceLocation;
+import torcherino.config.TorcherinoConfig;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,17 +14,17 @@ public class TorcherinoTiers
 	public void initialise()
 	{
 		tiers = new HashMap<>();
+
+		for(TorcherinoConfig.Tier tier : TorcherinoConfig.INSTANCE.tiers)
+		{
+			registerTier(Utilities.resloc(tier.name), tier.max_speed, tier.xz_range, tier.y_range);
+		}
 	}
 
-	public void registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
+	private void registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
 	{
 		Tier tier = new Tier(maxSpeed, xzRange, yRange);
 		tiers.put(name, tier);
-	}
-
-	public Tier of(int maxSpeed, int xzRange, int yRange)
-	{
-		return new Tier(maxSpeed, xzRange, yRange);
 	}
 
 	public ImmutableMap<ResourceLocation, Tier> getTiers()

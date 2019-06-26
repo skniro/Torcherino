@@ -3,6 +3,7 @@ package torcherino.config;
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
+import blue.endless.jankson.impl.Marshaller;
 import blue.endless.jankson.impl.SyntaxError;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,11 @@ public class ConfigManager
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Jankson jankson = new Jankson.Builder().build();
+
+	public static Marshaller getMarshaller()
+	{
+		return jankson.getMarshaller();
+	}
 
 	/**
 	 * Loads a .config file from the config folder and parses it to a POJO.
