@@ -1,11 +1,11 @@
-package torcherino.config;
+package torcherino;
 
 import blue.endless.jankson.Comment;
 import blue.endless.jankson.JsonPrimitive;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
-import torcherino.Utilities;
+import torcherino.config.ConfigManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
