@@ -6,10 +6,14 @@ import torcherino.api.impl.TorcherinoImpl;
 
 public interface TorcherinoAPI
 {
-	public TorcherinoAPI INSTANCE = new TorcherinoImpl();
+	TorcherinoAPI INSTANCE = new TorcherinoImpl();
 
 	ImmutableMap<ResourceLocation, Tier> getTiers();
 
-	void registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange);
+	boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange);
+
+	boolean blacklistBlock(ResourceLocation block);
+
+	boolean blacklistTileEntity(ResourceLocation tileEntity);
 
 }
