@@ -1,22 +1,29 @@
 package torcherino.api.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import torcherino.Utilities;
 import torcherino.api.Tier;
+import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
+import torcherino.config.Config;
 import javax.annotation.Nullable;
 
 public class TorcherinoTileEntity extends TileEntity implements INameable, ITickable
 {
 	private ITextComponent customName;
-	private int xRange, yRange, zRange, speed, redstoneMode;
+	private int xRange, yRange, zRange, speed, redstoneMode, randomTicks;
 	private boolean active;
+	private Iterable<BlockPos> area;
 	private Tier tier;
 
 	public TorcherinoTileEntity()
@@ -75,6 +82,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		this.yRange = compound.getInt("YRange");
 		this.speed = compound.getInt("Speed");
 		this.redstoneMode = compound.getInt("RedstoneMode");
+		area = BlockPos.getAllInBox(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
 	}
 
 	public NBTTagCompound write(NBTTagCompound compound)
@@ -97,34 +105,50 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		this.xRange = xRange;
 		this.zRange = zRange;
 		this.yRange = yRange;
+		area = BlockPos.getAllInBox(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
 		this.speed = speed;
 		this.redstoneMode = redstoneMode;
+		IBlockState state = world.getBlockState(pos);
+		if (state.has(BlockStateProperties.POWERED)) setPoweredByRedstone(state.get(BlockStateProperties.POWERED));
 		this.markDirty();
 	}
 
 	@Override public void tick()
 	{
+		if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
+		randomTicks = world.getGameRules().getInt("randomTickSpeed");
+		area.forEach(this::tickBlock);
+		Utilities.LOGGER.info("Range: {}, {}, {}", xRange, zRange, yRange);
+	}
 
+	private void tickBlock(BlockPos blockPos)
+	{
+		IBlockState blockState = world.getBlockState(blockPos);
+		Block block = blockState.getBlock();
+		if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) return;
+		if (block.getTickRandomly(blockState) && world.getRandom().nextInt(MathHelper.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) block.randomTick(blockState, world, blockPos, world.getRandom());
+		if (!block.hasTileEntity(blockState)) return;
+		TileEntity tileEntity = world.getTileEntity(blockPos);
+		if (tileEntity == null || tileEntity.isRemoved() || TorcherinoAPI.INSTANCE.isTileEntityBlacklisted(tileEntity.getType()) || !(tileEntity instanceof ITickable)) return;
+		for (int i = 0; i < speed; i++)
+		{
+			if (tileEntity.isRemoved()) break;
+			((ITickable) tileEntity).tick();
+		}
 	}
 
 	public void setPoweredByRedstone(boolean powered)
 	{
-		switch(redstoneMode)
+		switch (redstoneMode)
 		{
-
-			case 0:
-				this.active = powered;
+			case 0: this.active = !powered;
 				break;
-			case 1:
-				this.active = !powered;
+			case 1: this.active = powered;
 				break;
-			case 2:
-				this.active = true;
+			case 2: this.active = true;
 				break;
-			case 3:
-				this.active = false;
+			case 3: this.active = false;
 				break;
 		}
-		Utilities.LOGGER.info("New State: {}", active);
 	}
 }

@@ -116,6 +116,12 @@ public class TorcherinoWallBlock extends BlockTorchWall
 
 	@Override public EnumPushReaction getPushReaction(IBlockState state){ return EnumPushReaction.IGNORE; }
 
+	@Override public void onBlockAdded(IBlockState state, World world, BlockPos pos, IBlockState oldState)
+	{
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
+	}
+
 	// Unique Methods ( can't be copy / pasted between torcherino classes )
 	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
