@@ -35,10 +35,24 @@ public interface TorcherinoAPI
 
 	/**
 	 * @since 8.1.2
+	 * @param block The block to be blacklisted.
+	 * @return TRUE if added to blacklist, FALSE if already on blacklist.
+	 */
+	boolean blacklistBlock(Block block);
+
+	/**
+	 * @since 8.1.2
 	 * @param tileEntity The Resource Location of the tile entity to be blacklisted.
 	 * @return TRUE if added to blacklist, FALSE if no tile entity exists or already on blacklist.
 	 */
 	boolean blacklistTileEntity(ResourceLocation tileEntity);
+
+	/**
+	 * @since 8.1.2
+	 * @param tileEntity The tile entity type to be blacklisted.
+	 * @return TRUE if added to blacklist, FALSE if already on blacklist.
+	 */
+	boolean blacklistTileEntity(TileEntityType tileEntity);
 
 	/**
 	 * @since 8.1.2

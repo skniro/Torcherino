@@ -43,6 +43,13 @@ public class TorcherinoImpl implements TorcherinoAPI
 		return false;
 	}
 
+	@Override public boolean blacklistBlock(Block block)
+	{
+		if(blacklistedBlocks.contains(block)) return false;
+		blacklistedBlocks.add(block);
+		return true;
+	}
+
 	@Override public boolean blacklistTileEntity(ResourceLocation tileEntity)
 	{
 		if (ForgeRegistries.TILE_ENTITIES.containsKey(tileEntity))
@@ -53,6 +60,13 @@ public class TorcherinoImpl implements TorcherinoAPI
 			return true;
 		}
 		return false;
+	}
+
+	@Override public boolean blacklistTileEntity(TileEntityType tileEntity)
+	{
+		if(blacklistedTiles.contains(tileEntity)) return false;
+		blacklistedTiles.add(tileEntity);
+		return true;
 	}
 
 	@Override public boolean isBlockBlacklisted(Block block){ return blacklistedBlocks.contains(block); }

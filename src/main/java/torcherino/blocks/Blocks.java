@@ -36,6 +36,7 @@ public class Blocks
 		Map<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
 		tiers.forEach(this::register);
 		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Utilities.resloc("torcherino"));
+		TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY_TYPE);
 	}
 
 	private ResourceLocation getIdentifier(ResourceLocation resourceLocation, String type)
@@ -60,6 +61,9 @@ public class Blocks
 			blocks.add(torcherinoBlock);
 			blocks.add(torcherinoWallBlock);
 			blocks.add(lanterinoBlock);
+			TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoBlock);
+			TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoWallBlock);
+			TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
 			items.add(torcherinoItem);
 			items.add(lanterinoItem);
 		}
