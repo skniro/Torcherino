@@ -45,18 +45,19 @@ public class TorcherinoImpl implements TorcherinoAPI
 
 	@Override public boolean blacklistTileEntity(ResourceLocation tileEntity)
 	{
-		if(ForgeRegistries.TILE_ENTITIES.containsKey(tileEntity))
+		if (ForgeRegistries.TILE_ENTITIES.containsKey(tileEntity))
 		{
 			TileEntityType type = ForgeRegistries.TILE_ENTITIES.getValue(tileEntity);
-			if(blacklistedTiles.contains(type)) return false;
+			if (blacklistedTiles.contains(type)) return false;
 			blacklistedTiles.add(type);
 			return true;
 		}
 		return false;
 	}
 
-	public ImmutableMap<ResourceLocation, Tier> getTiers()
-	{
-		return ImmutableMap.copyOf(tiers);
-	}
+	@Override public boolean isBlockBlacklisted(Block block){ return blacklistedBlocks.contains(block); }
+
+	@Override public boolean isTileEntityBlacklisted(TileEntityType tileEntityType){ return blacklistedTiles.contains(tileEntityType); }
+
+	public ImmutableMap<ResourceLocation, Tier> getTiers(){ return ImmutableMap.copyOf(tiers); }
 }
