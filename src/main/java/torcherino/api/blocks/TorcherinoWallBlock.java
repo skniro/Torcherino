@@ -1,7 +1,7 @@
-package torcherino.blocks;
+package torcherino.api.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCarvedPumpkin;
+import net.minecraft.block.BlockTorchWall;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,26 +23,25 @@ import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import torcherino.TorcherinoTiers;
-import torcherino.Utilities;
-import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
+import torcherino.api.Tier;
+import torcherino.network.Networker;
 import javax.annotation.Nullable;
 
-public class LanterinoBlock extends BlockCarvedPumpkin
+public class TorcherinoWallBlock extends BlockTorchWall
 {
-	//Constructors
-	public LanterinoBlock(TorcherinoTiers.Tier tier)
+	// Constructors
+	public TorcherinoWallBlock(Tier tier)
 	{
-		super(Properties.from(Blocks.JACK_O_LANTERN));
+		super(Properties.from(Blocks.WALL_TORCH));
 		this.tier = tier;
 	}
 
 	// Variables
 	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private final TorcherinoTiers.Tier tier;
+	private final Tier tier;
 
 	// Methods
-	public TorcherinoTiers.Tier getTier(){ return tier; }
+	public Tier getTier(){ return tier; }
 
 	@Override public boolean hasTileEntity(IBlockState state)
 	{
@@ -62,8 +61,9 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		return Utilities.openScreenServer(world, player, pos);
+		return Networker.INSTANCE.openScreenServer(world, player, pos);
 	}
+
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
@@ -99,13 +99,15 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 	// Unique Methods ( can't be copy / pasted between torcherino classes )
 	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		boolean powered = context.getWorld().isBlockPowered(context.getPos());
-		return super.getStateForPlacement(context).with(POWERED, powered);
+		IBlockState state = super.getStateForPlacement(context);
+		if (state == null) return null;
+		boolean powered = context.getWorld().isBlockPowered(context.getPos().offset(state.get(HORIZONTAL_FACING).getOpposite()));
+		return state.with(POWERED, powered);
 	}
 
 	@Override public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
-		boolean powered = worldIn.isBlockPowered(pos);
+		boolean powered = worldIn.isBlockPowered(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()));
 		if (state.get(POWERED) != powered)
 		{
 			worldIn.setBlockState(pos, state.with(POWERED, powered));

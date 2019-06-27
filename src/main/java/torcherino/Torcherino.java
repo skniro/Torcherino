@@ -3,8 +3,9 @@ package torcherino;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import torcherino.blocks.ModBlocks;
-import torcherino.items.ModItems;
+import torcherino.config.Config;
+import torcherino.items.Items;
+import torcherino.blocks.Blocks;
 import torcherino.network.Networker;
 
 @Mod(Utilities.MOD_ID)
@@ -13,12 +14,10 @@ public class Torcherino
 	public Torcherino()
 	{
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		TorcherinoConfig.initialise();
-		TorcherinoTiers.INSTANCE.initialise();
-		ModBlocks.INSTANCE.initialise();
+		Config.initialise();
+		Blocks.INSTANCE.initialise();
 		Networker.INSTANCE.initialise();
-		eventBus.register(ModBlocks.INSTANCE);
-		eventBus.register(ModItems.INSTANCE);
-
+		eventBus.register(Blocks.INSTANCE);
+		eventBus.register(Items.INSTANCE);
 	}
 }

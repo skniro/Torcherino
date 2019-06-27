@@ -1,4 +1,4 @@
-package torcherino.client.gui.widgets;
+package torcherino.client.gui.buttons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;

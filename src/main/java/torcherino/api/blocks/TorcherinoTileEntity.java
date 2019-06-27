@@ -1,4 +1,4 @@
-package torcherino.blocks.miscellaneous;
+package torcherino.api.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -6,22 +6,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import torcherino.TorcherinoTiers;
-import torcherino.blocks.LanterinoBlock;
-import torcherino.blocks.ModBlocks;
-import torcherino.blocks.TorcherinoBlock;
-import torcherino.blocks.TorcherinoWallBlock;
+import torcherino.api.Tier;
+import torcherino.blocks.Blocks;
 import javax.annotation.Nullable;
 
 public class TorcherinoTileEntity extends TileEntity implements INameable
 {
 	private ITextComponent customName;
 	private int xRange, yRange, zRange, speed, redstoneMode;
-	private TorcherinoTiers.Tier tier;
+	private Tier tier;
 
 	public TorcherinoTileEntity()
 	{
-		super(ModBlocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE);
+		super(Blocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE);
 	}
 
 	@Override public ITextComponent getName(){ return hasCustomName() ? customName : new TextComponentTranslation(world.getBlockState(pos).getBlock().getTranslationKey()); }
@@ -41,7 +38,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable
 		this.customName = customName;
 	}
 
-	public TorcherinoTiers.Tier getTier()
+	public Tier getTier()
 	{
 		if (tier == null)
 		{

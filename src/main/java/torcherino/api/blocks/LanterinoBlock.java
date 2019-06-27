@@ -1,7 +1,7 @@
-package torcherino.blocks;
+package torcherino.api.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockCarvedPumpkin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,26 +23,25 @@ import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import torcherino.TorcherinoTiers;
-import torcherino.Utilities;
-import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
+import torcherino.api.Tier;
+import torcherino.network.Networker;
 import javax.annotation.Nullable;
 
-public class TorcherinoBlock extends BlockTorch
+public class LanterinoBlock extends BlockCarvedPumpkin
 {
-	// Constructors
-	protected TorcherinoBlock(TorcherinoTiers.Tier tier)
+	//Constructors
+	public LanterinoBlock(Tier tier)
 	{
-		super(Properties.from(Blocks.TORCH));
+		super(Properties.from(Blocks.JACK_O_LANTERN));
 		this.tier = tier;
 	}
 
 	// Variables
 	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private final TorcherinoTiers.Tier tier;
+	private final Tier tier;
 
 	// Methods
-	public TorcherinoTiers.Tier getTier(){ return tier; }
+	public Tier getTier(){ return tier; }
 
 	@Override public boolean hasTileEntity(IBlockState state)
 	{
@@ -62,7 +61,7 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Override public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		return Utilities.openScreenServer(world, player, pos);
+		return Networker.INSTANCE.openScreenServer(world, player, pos);
 	}
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
@@ -99,13 +98,13 @@ public class TorcherinoBlock extends BlockTorch
 	// Unique Methods ( can't be copy / pasted between torcherino classes )
 	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		boolean powered = context.getWorld().isBlockPowered(context.getPos().down());
-		return getDefaultState().with(POWERED, powered);
+		boolean powered = context.getWorld().isBlockPowered(context.getPos());
+		return super.getStateForPlacement(context).with(POWERED, powered);
 	}
 
 	@Override public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
-		boolean powered = worldIn.isBlockPowered(pos.down());
+		boolean powered = worldIn.isBlockPowered(pos);
 		if (state.get(POWERED) != powered)
 		{
 			worldIn.setBlockState(pos, state.with(POWERED, powered));

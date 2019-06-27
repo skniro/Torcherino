@@ -10,16 +10,20 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import torcherino.TorcherinoTiers;
 import torcherino.Utilities;
-import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
+import torcherino.api.Tier;
+import torcherino.api.TorcherinoAPI;
+import torcherino.api.blocks.LanterinoBlock;
+import torcherino.api.blocks.TorcherinoBlock;
+import torcherino.api.blocks.TorcherinoTileEntity;
+import torcherino.api.blocks.TorcherinoWallBlock;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ModBlocks
+public class Blocks
 {
-	public static final ModBlocks INSTANCE = new ModBlocks();
+	public static final Blocks INSTANCE = new Blocks();
 	public TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
 
 	private HashSet<Block> blocks;
@@ -29,7 +33,7 @@ public class ModBlocks
 	{
 		blocks = new HashSet<>();
 		items = new HashSet<>();
-		Map<ResourceLocation, TorcherinoTiers.Tier> tiers = TorcherinoTiers.INSTANCE.getTiers();
+		Map<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
 		tiers.forEach(this::register);
 		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Utilities.resloc("torcherino"));
 	}
@@ -41,7 +45,7 @@ public class ModBlocks
 		return new ResourceLocation(resourceLocation.getNamespace(), newType);
 	}
 
-	private void register(ResourceLocation resourceLocation, TorcherinoTiers.Tier tier)
+	private void register(ResourceLocation resourceLocation, Tier tier)
 	{
 		if (resourceLocation.getNamespace().equals(Utilities.MOD_ID))
 		{

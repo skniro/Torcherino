@@ -3,14 +3,14 @@ package torcherino.items;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import torcherino.blocks.ModBlocks;
+import torcherino.blocks.Blocks;
 
-public class ModItems
+public class Items
 {
-	public static final ModItems INSTANCE = new ModItems();
+	public static final Items INSTANCE = new Items();
 
 	@SubscribeEvent public void onItemRegistry(final RegistryEvent.Register<Item> registryEvent)
 	{
-		registryEvent.getRegistry().registerAll(ModBlocks.INSTANCE.getItems().toArray(new Item[]{}));
+		registryEvent.getRegistry().registerAll(Blocks.INSTANCE.getItems().toArray(new Item[]{}));
 	}
 }

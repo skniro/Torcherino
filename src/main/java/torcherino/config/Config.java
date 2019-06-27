@@ -1,18 +1,19 @@
-package torcherino;
+package torcherino.config;
 
 import blue.endless.jankson.Comment;
 import blue.endless.jankson.JsonPrimitive;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
-import torcherino.config.ConfigManager;
+import torcherino.Utilities;
+import torcherino.api.TorcherinoAPI;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class TorcherinoConfig
+public class Config
 {
-	public static TorcherinoConfig INSTANCE;
+	public static Config INSTANCE;
 
 	@Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
 	public final int random_tick_rate = 1;
@@ -46,26 +47,36 @@ public class TorcherinoConfig
 			try
 			{
 				Files.createDirectory(sci4meDirectory);
-				INSTANCE = ConfigManager.loadConfig(TorcherinoConfig.class, sci4meDirectory.resolve("Torcherino.cfg").toFile());
+				INSTANCE = ConfigManager.loadConfig(Config.class, sci4meDirectory.resolve("Torcherino.cfg").toFile());
 			}
 			catch (IOException e)
 			{
 				Utilities.LOGGER.error("Failed to create sci4me folder, config won't be saved.");
-				INSTANCE = new TorcherinoConfig();
+				INSTANCE = new Config();
 			}
 		}
 		else
 		{
-			INSTANCE = ConfigManager.loadConfig(TorcherinoConfig.class, sci4meDirectory.resolve("Torcherino.cfg").toFile());
+			INSTANCE = ConfigManager.loadConfig(Config.class, sci4meDirectory.resolve("Torcherino.cfg").toFile());
+		}
+		INSTANCE.onConfigLoaded();
+	}
+
+	private void onConfigLoaded()
+	{
+		// Here we will initialise stuff (register blacklisted blocks, tiers ect.)
+		for(Tier tier : tiers)
+		{
+			TorcherinoAPI.INSTANCE.registerTier(new ResourceLocation("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
 		}
 	}
 
-	public static class Tier
+	private static class Tier
 	{
-		public final String name;
-		public final int max_speed;
-		public final int xz_range;
-		public final int y_range;
+		final String name;
+		final int max_speed;
+		final int xz_range;
+		final int y_range;
 
 		Tier(String name, int max_speed, int xz_range, int y_range)
 		{

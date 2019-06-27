@@ -5,8 +5,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
-import torcherino.TorcherinoTiers;
-import torcherino.blocks.miscellaneous.TorcherinoTileEntity;
+import torcherino.api.Tier;
+import torcherino.api.blocks.TorcherinoTileEntity;
 import java.util.function.Supplier;
 
 public class ValueUpdateMessage
@@ -53,7 +53,7 @@ public class ValueUpdateMessage
 			if (tileEntity instanceof TorcherinoTileEntity)
 			{
 				TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
-				TorcherinoTiers.Tier tier = torcherinoTileEntity.getTier();
+				Tier tier = torcherinoTileEntity.getTier();
 				if (msg.xRange > tier.XZ_RANGE || msg.zRange > tier.XZ_RANGE || msg.yRange > tier.Y_RANGE || msg.speed > tier.MAX_SPEED || msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0)
 					return;
 				torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
