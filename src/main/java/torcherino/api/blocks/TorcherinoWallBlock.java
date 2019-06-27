@@ -2,6 +2,7 @@ package torcherino.api.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorchWall;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,9 +24,13 @@ import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
+import torcherino.Utilities;
 import torcherino.api.Tier;
+import torcherino.config.Config;
 import torcherino.network.Networker;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TorcherinoWallBlock extends BlockTorchWall
 {
@@ -64,14 +69,20 @@ public class TorcherinoWallBlock extends BlockTorchWall
 		return Networker.INSTANCE.openScreenServer(world, player, pos);
 	}
 
-
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
+		if(world.isRemote) return;
 		if (stack.hasDisplayName())
 		{
 			TileEntity tile = world.getTileEntity(pos);
 			if (!(tile instanceof TorcherinoTileEntity)) return;
 			((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName());
+		}
+		if(Config.INSTANCE.log_placement)
+		{
+			String prefix = "Something";
+			if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
+			Utilities.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 
@@ -96,21 +107,36 @@ public class TorcherinoWallBlock extends BlockTorchWall
 		}
 	}
 
+	@Override public void tick(IBlockState state, World world, BlockPos pos, Random random)
+	{
+		if(world.isRemote) return;
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
+	}
+
+	@Override public EnumPushReaction getPushReaction(IBlockState state){ return EnumPushReaction.IGNORE; }
+
 	// Unique Methods ( can't be copy / pasted between torcherino classes )
 	@Override public IBlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		IBlockState state = super.getStateForPlacement(context);
 		if (state == null) return null;
-		boolean powered = context.getWorld().isBlockPowered(context.getPos().offset(state.get(HORIZONTAL_FACING).getOpposite()));
+		boolean powered = context.getWorld().isSidePowered(context.getPos().offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
 		return state.with(POWERED, powered);
 	}
 
-	@Override public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+	@Override public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos)
 	{
-		boolean powered = worldIn.isBlockPowered(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()));
+		if(world.isRemote) return;
+		boolean powered = world.isSidePowered(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
 		if (state.get(POWERED) != powered)
 		{
-			worldIn.setBlockState(pos, state.with(POWERED, powered));
+			world.setBlockState(pos, state.with(POWERED, powered));
+			TileEntity tileEntity = world.getTileEntity(pos);
+			if(tileEntity instanceof TorcherinoTileEntity)
+			{
+				((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
+			}
 		}
 	}
 }

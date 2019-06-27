@@ -25,7 +25,6 @@ public class Blocks
 {
 	public static final Blocks INSTANCE = new Blocks();
 	public TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
-
 	private HashSet<Block> blocks;
 	private HashSet<Item> items;
 

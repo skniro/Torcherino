@@ -4,16 +4,19 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import torcherino.Utilities;
 import torcherino.api.Tier;
 import torcherino.blocks.Blocks;
 import javax.annotation.Nullable;
 
-public class TorcherinoTileEntity extends TileEntity implements INameable
+public class TorcherinoTileEntity extends TileEntity implements INameable, ITickable
 {
 	private ITextComponent customName;
 	private int xRange, yRange, zRange, speed, redstoneMode;
+	private boolean active;
 	private Tier tier;
 
 	public TorcherinoTileEntity()
@@ -97,5 +100,31 @@ public class TorcherinoTileEntity extends TileEntity implements INameable
 		this.speed = speed;
 		this.redstoneMode = redstoneMode;
 		this.markDirty();
+	}
+
+	@Override public void tick()
+	{
+
+	}
+
+	public void setPoweredByRedstone(boolean powered)
+	{
+		switch(redstoneMode)
+		{
+
+			case 0:
+				this.active = powered;
+				break;
+			case 1:
+				this.active = !powered;
+				break;
+			case 2:
+				this.active = true;
+				break;
+			case 3:
+				this.active = false;
+				break;
+		}
+		Utilities.LOGGER.info("New State: {}", active);
 	}
 }
