@@ -43,7 +43,6 @@ public class ConfigManager
 			try
 			{
 				JsonObject json = jankson.load(configFile);
-				String cleaned = json.toJson(false, true); //remove comments
 				T result = jankson.fromJson(json, clazz);
 				//check if the config file is outdated. If so overwrite it
 				JsonElement jsonElementNew = jankson.toJson(clazz.newInstance());
