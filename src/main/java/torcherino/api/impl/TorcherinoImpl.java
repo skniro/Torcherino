@@ -20,6 +20,8 @@ public class TorcherinoImpl implements TorcherinoAPI
 
 	private Set<TileEntityType> blacklistedTiles = new HashSet<>();
 
+	private Set<Block> torcherinoBlocks = new HashSet<>();
+
 	public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
 	{
 		Tier tier = new Tier(maxSpeed, xzRange, yRange);
@@ -72,6 +74,17 @@ public class TorcherinoImpl implements TorcherinoAPI
 	@Override public boolean isBlockBlacklisted(Block block){ return blacklistedBlocks.contains(block); }
 
 	@Override public boolean isTileEntityBlacklisted(TileEntityType tileEntityType){ return blacklistedTiles.contains(tileEntityType); }
+
+	@Override public boolean registerTorcherinoBlock(Block block)
+	{
+		if(!torcherinoBlocks.contains(block))
+		{
+			blacklistBlock(block);
+			torcherinoBlocks.add(block);
+			return true;
+		}
+		return false;
+	}
 
 	public ImmutableMap<ResourceLocation, Tier> getTiers(){ return ImmutableMap.copyOf(tiers); }
 }

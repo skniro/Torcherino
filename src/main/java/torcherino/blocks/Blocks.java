@@ -60,9 +60,9 @@ public class Blocks
 			blocks.add(torcherinoBlock);
 			blocks.add(torcherinoWallBlock);
 			blocks.add(lanterinoBlock);
-			TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoBlock);
-			TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoWallBlock);
-			TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
+			TorcherinoAPI.INSTANCE.registerTorcherinoBlock(torcherinoBlock);
+			TorcherinoAPI.INSTANCE.registerTorcherinoBlock(torcherinoWallBlock);
+			TorcherinoAPI.INSTANCE.registerTorcherinoBlock(lanterinoBlock);
 			items.add(torcherinoItem);
 			items.add(lanterinoItem);
 		}

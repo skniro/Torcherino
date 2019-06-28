@@ -69,4 +69,12 @@ public interface TorcherinoAPI
 	 */
 	boolean isTileEntityBlacklisted(TileEntityType tileEntityType);
 
+	/**
+	 * Blacklists and adds the torcherino to a list.
+	 * Will be used in 1.14.x to assign the torcherino tile entity to blocks.
+	 * @since 8.1.2
+	 * @param block The torcherino / lanterino block
+	 * @return TRUE if registered and blacklisted, FALSE otherwise.
+	 */
+	boolean registerTorcherinoBlock(Block block);
 }
