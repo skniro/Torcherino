@@ -48,13 +48,13 @@ public class ValueUpdateMessage
 		NetworkEvent.Context context = ctx.get();
 		context.enqueueWork(() ->
 		{
-			World world = context.getSender().world;
+			@SuppressWarnings("ConstantConditions") World world = context.getSender().world;
 			TileEntity tileEntity = world.getTileEntity(msg.pos);
 			if (tileEntity instanceof TorcherinoTileEntity)
 			{
 				TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
 				Tier tier = torcherinoTileEntity.getTier();
-				if (msg.xRange > tier.XZ_RANGE || msg.zRange > tier.XZ_RANGE || msg.yRange > tier.Y_RANGE || msg.speed > tier.MAX_SPEED || msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0)
+				if (msg.xRange > tier.getXZRange() || msg.zRange > tier.getXZRange() || msg.yRange > tier.getYRange() || msg.speed > tier.getMaxSpeed() || msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0)
 					return;
 				torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
 			}
