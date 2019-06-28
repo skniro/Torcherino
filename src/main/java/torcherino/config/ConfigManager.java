@@ -11,25 +11,29 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Modified version of CottonMC's Config Manager which can be found here:
+ * https://github.com/CottonMC/Cotton/blob/af5d07f01aebc50fc28203881a8a9dcc1a9987cc/src/main/java/io/github/cottonmc/cotton/config/ConfigManager.java
+ */
 public class ConfigManager
 {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Jankson jankson = new Jankson.Builder().build();
 
-	public static Marshaller getMarshaller()
+	static Marshaller getMarshaller()
 	{
 		return jankson.getMarshaller();
 	}
 
 	/**
-	 * Loads a .config file from the config folder and parses it to a POJO.
+	 * Loads a config file and parses it to a POJO.
 	 *
 	 * @param clazz      The class of the POJO that will store all our properties
 	 * @param configFile The config file
 	 * @return A new config Object containing all our options from the config file
 	 */
-	@SuppressWarnings("ConstantConditions") public static <T> T loadConfig(Class<T> clazz, File configFile)
+	@SuppressWarnings("ConstantConditions") static <T> T loadConfig(Class<T> clazz, File configFile)
 	{
 		try
 		{
@@ -89,7 +93,7 @@ public class ConfigManager
 	 * @param object     The Config we want to save
 	 * @param configFile The config file.
 	 */
-	@SuppressWarnings("ResultOfMethodCallIgnored") public static void saveConfig(Object object, File configFile)
+	@SuppressWarnings("ResultOfMethodCallIgnored") private static void saveConfig(Object object, File configFile)
 	{
 		JsonElement json = jankson.toJson(object);
 		String result = json.toJson(true, true);
