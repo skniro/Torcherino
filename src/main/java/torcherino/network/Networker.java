@@ -30,8 +30,7 @@ public class Networker
 		if (world.isRemote) return true;
 		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TorcherinoTileEntity)) return true;
-		TorcherinoTileEntity tileEntity = (TorcherinoTileEntity) tile;
-		torcherinoChannel.sendTo(new OpenScreenMessage(tileEntity.getPos(), tileEntity.getName(), tileEntity.getxRange(), tileEntity.getzRange(), tileEntity.getyRange(), tileEntity.getSpeed(), tileEntity.getRedstoneMode()), ((EntityPlayerMP) player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+		torcherinoChannel.sendTo(((TorcherinoTileEntity) tile).createOpenMessage(), ((EntityPlayerMP) player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 		return true;
 	}
 }

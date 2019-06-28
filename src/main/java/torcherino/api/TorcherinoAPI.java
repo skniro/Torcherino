@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import torcherino.api.impl.TorcherinoImpl;
 
+@SuppressWarnings("UnusedReturnValue")
 public interface TorcherinoAPI
 {
 	TorcherinoAPI INSTANCE = new TorcherinoImpl();

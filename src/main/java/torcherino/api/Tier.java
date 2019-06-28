@@ -2,9 +2,9 @@ package torcherino.api;
 
 public class Tier
 {
-	public final int MAX_SPEED;
-	public final int XZ_RANGE;
-	public final int Y_RANGE;
+	private final int MAX_SPEED;
+	private final int XZ_RANGE;
+	private final int Y_RANGE;
 
 	public Tier(int maxSpeed, int xzRange, int yRange)
 	{
@@ -12,4 +12,10 @@ public class Tier
 		this.XZ_RANGE = xzRange;
 		this.Y_RANGE = yRange;
 	}
+
+	public int getMaxSpeed(){ return MAX_SPEED; }
+
+	public int getXZRange(){ return XZ_RANGE; }
+
+	public int getYRange(){ return Y_RANGE; }
 }

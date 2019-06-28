@@ -32,6 +32,7 @@ import torcherino.network.Networker;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class TorcherinoBlock extends BlockTorch
 {
 	// Constructors

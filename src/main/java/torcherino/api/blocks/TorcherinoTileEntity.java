@@ -11,11 +11,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import torcherino.Utilities;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
 import torcherino.config.Config;
+import torcherino.network.OpenScreenMessage;
 import javax.annotation.Nullable;
 
 public class TorcherinoTileEntity extends TileEntity implements INameable, ITickable
@@ -33,20 +33,11 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 
 	@Override public ITextComponent getName(){ return hasCustomName() ? customName : new TextComponentTranslation(world.getBlockState(pos).getBlock().getTranslationKey()); }
 
-	@Override public boolean hasCustomName()
-	{
-		return customName != null;
-	}
+	@Override public boolean hasCustomName(){ return customName != null; }
 
-	@Nullable @Override public ITextComponent getCustomName()
-	{
-		return customName;
-	}
+	@Nullable @Override public ITextComponent getCustomName(){ return customName; }
 
-	public void setCustomName(@Nullable ITextComponent customName)
-	{
-		this.customName = customName;
-	}
+	void setCustomName(@Nullable ITextComponent name){ customName = name; }
 
 	public Tier getTier()
 	{
@@ -60,23 +51,12 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		return tier;
 	}
 
-	public int getxRange(){ return xRange; }
-
-	public int getzRange(){ return zRange; }
-
-	public int getyRange(){ return yRange; }
-
-	public int getSpeed(){ return speed; }
-
-	public int getRedstoneMode(){ return redstoneMode; }
+	public OpenScreenMessage createOpenMessage(){ return new OpenScreenMessage(pos, getName(), xRange, zRange, yRange, speed, redstoneMode); }
 
 	public void read(NBTTagCompound compound)
 	{
 		super.read(compound);
-		if (compound.contains("CustomName", 8))
-		{
-			setCustomName(ITextComponent.Serializer.fromJson(compound.getString("CustomName")));
-		}
+		if (compound.contains("CustomName", 8)) setCustomName(ITextComponent.Serializer.fromJson(compound.getString("CustomName")));
 		this.xRange = compound.getInt("XRange");
 		this.zRange = compound.getInt("ZRange");
 		this.yRange = compound.getInt("YRange");
@@ -88,10 +68,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		if (hasCustomName())
-		{
-			compound.setString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
-		}
+		if (hasCustomName()) compound.setString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
 		compound.setInt("XRange", this.xRange);
 		compound.setInt("ZRange", this.zRange);
 		compound.setInt("YRange", this.yRange);
@@ -118,7 +95,6 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
 		randomTicks = world.getGameRules().getInt("randomTickSpeed");
 		area.forEach(this::tickBlock);
-		Utilities.LOGGER.info("Range: {}, {}, {}", xRange, zRange, yRange);
 	}
 
 	private void tickBlock(BlockPos blockPos)
@@ -137,7 +113,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		}
 	}
 
-	public void setPoweredByRedstone(boolean powered)
+	void setPoweredByRedstone(boolean powered)
 	{
 		switch (redstoneMode)
 		{

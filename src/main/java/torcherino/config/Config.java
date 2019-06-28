@@ -26,7 +26,7 @@ public class Config
 	@Comment("\nAllows new custom torcherino tiers to be added.\nThis also allows for each tier to have their own max max_speed and ranges.")
 	public final Tier[] tiers = new Tier[]{new Tier("normal", 4, 4, 1), new Tier("compressed", 36, 4, 1), new Tier("double_compressed", 324, 4, 1)};
 
-	public static void initialise()
+	@SuppressWarnings("ConstantConditions") public static void initialise()
 	{
 		ConfigManager.getMarshaller().registerSerializer(ResourceLocation.class, JsonPrimitive::new);
 		ConfigManager.getMarshaller().register(ResourceLocation.class, (it) -> (it instanceof String) ? new ResourceLocation((String) it) : new ResourceLocation(it.toString()));
@@ -36,7 +36,7 @@ public class Config
 			Integer max_speed = it.get(Integer.class, "max_speed");
 			Integer xz_range = it.get(Integer.class, "xz_range");
 			Integer y_range = it.get(Integer.class, "y_range");
-			return new Tier(name, max_speed, xz_range, y_range);
+			return new Tier(name, max_speed < 1 ? 1 : max_speed, xz_range < 0 ? 0 : xz_range, y_range < 0 ? 0 : y_range);
 		});
 		Path sci4meDirectory = FMLPaths.CONFIGDIR.get().resolve("sci4me");
 		if (!sci4meDirectory.toFile().exists())
@@ -61,7 +61,6 @@ public class Config
 
 	private void onConfigLoaded()
 	{
-		// Here we will initialise stuff (register blacklisted blocks, tiers ect.)
 		for (Tier tier : tiers) TorcherinoAPI.INSTANCE.registerTier(new ResourceLocation("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
 		for (ResourceLocation block : blacklisted_blocks) TorcherinoAPI.INSTANCE.blacklistBlock(block);
 		for (ResourceLocation tile : blacklisted_tiles) TorcherinoAPI.INSTANCE.blacklistTileEntity(tile);
