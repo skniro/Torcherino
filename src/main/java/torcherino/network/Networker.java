@@ -19,10 +19,9 @@ public class Networker
 
 	public void initialise()
 	{
-		int id = 0;
-		torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.resloc("channel"), () -> "1", version -> version.equals("1"), version -> version.equals("1"));
-		torcherinoChannel.registerMessage(id++, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
-		torcherinoChannel.registerMessage(id++, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
+		torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.resloc("channel"), () -> "2", version -> version.equals("2"), version -> version.equals("2"));
+		torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
+		torcherinoChannel.registerMessage(1, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
 	}
 
 	public boolean openScreenServer(World world, EntityPlayer player, BlockPos pos)
