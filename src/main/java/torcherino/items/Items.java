@@ -5,6 +5,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import torcherino.blocks.Blocks;
 
+/*
+	Todo: consider moving this class into blocks or Torcherino main class.
+ */
 public class Items
 {
 	public static final Items INSTANCE = new Items();
