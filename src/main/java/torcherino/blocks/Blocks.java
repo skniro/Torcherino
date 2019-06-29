@@ -73,10 +73,7 @@ public class Blocks
 		registryEvent.getRegistry().registerAll(blocks.toArray(new Block[]{}));
 	}
 
-	@SubscribeEvent public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
-	{
-		registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
-	}
+	@SubscribeEvent public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent){ registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE); }
 
 	public Set<Item> getItems()
 	{
