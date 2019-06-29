@@ -1,6 +1,5 @@
 package torcherino.blocks;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -19,7 +18,6 @@ import torcherino.api.blocks.TorcherinoTileEntity;
 import torcherino.api.blocks.TorcherinoWallBlock;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Blocks
 {
@@ -73,10 +71,10 @@ public class Blocks
 		registryEvent.getRegistry().registerAll(blocks.toArray(new Block[]{}));
 	}
 
-	@SubscribeEvent public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent){ registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE); }
-
-	public Set<Item> getItems()
+	@SubscribeEvent public void onItemRegistry(final RegistryEvent.Register<Item> registryEvent)
 	{
-		return ImmutableSet.copyOf(items);
+		registryEvent.getRegistry().registerAll(items.toArray(new Item[]{}));
 	}
+
+	@SubscribeEvent public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent){ registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE); }
 }

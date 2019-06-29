@@ -12,7 +12,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
 import torcherino.config.Config;
-import torcherino.items.Items;
 import torcherino.network.Networker;
 
 @Mod(Utilities.MOD_ID)
@@ -25,7 +24,6 @@ public class Torcherino
 		Blocks.INSTANCE.initialise();
 		Networker.INSTANCE.initialise();
 		eventBus.register(Blocks.INSTANCE);
-		eventBus.register(Items.INSTANCE);
 		eventBus.addListener(this::processIMC);
 	}
 

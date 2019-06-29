@@ -127,4 +127,10 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 				break;
 		}
 	}
+
+	@Override public void onLoad()
+	{
+		super.onLoad();
+		setPoweredByRedstone(world.getBlockState(pos).get(BlockStateProperties.POWERED));
+	}
 }
