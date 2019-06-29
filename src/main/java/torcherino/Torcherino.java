@@ -40,7 +40,7 @@ public class Torcherino
 		event.getIMCStream().forEach(this::processMessage);
 	}
 
-	public void processMessage(final InterModComms.IMCMessage message)
+	private void processMessage(final InterModComms.IMCMessage message)
 	{
 		String method = message.getMethod();
 		Object value = message.getMessageSupplier().get();
