@@ -4,11 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCarvedPumpkin;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
@@ -36,15 +34,17 @@ import java.util.Random;
 public class LanterinoBlock extends BlockCarvedPumpkin
 {
 	//Constructors
-	public LanterinoBlock(Tier tier)
+	public LanterinoBlock(Tier tier, Item torcherino)
 	{
 		super(Properties.from(Blocks.JACK_O_LANTERN));
 		this.tier = tier;
+		this.torcherino = torcherino;
 	}
 
 	// Variables
 	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	private final Tier tier;
+	private final Item torcherino;
 
 	// Methods
 	public Tier getTier(){ return tier; }
@@ -72,14 +72,14 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		if (stack.hasDisplayName())
 		{
 			TileEntity tile = world.getTileEntity(pos);
 			if (!(tile instanceof TorcherinoTileEntity)) return;
 			((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName());
 		}
-		if(Config.INSTANCE.log_placement)
+		if (Config.INSTANCE.log_placement)
 		{
 			String prefix = "Something";
 			if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
@@ -89,30 +89,31 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 
 	@Override public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
 	{
-		if (te instanceof INameable && ((INameable) te).hasCustomName())
+		player.addStat(StatList.BLOCK_MINED.get(this));
+		player.addExhaustion(0.005F);
+		if (player.isSneaking())
 		{
-			player.addStat(StatList.BLOCK_MINED.get(this));
-			player.addExhaustion(0.005F);
-			if (world.isRemote) return;
-			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
-			Item item = this.getItemDropped(state, world, pos, fortune).asItem();
-			if (item == Items.AIR) return;
-			int itemsDropped = this.getItemsToDropCount(state, fortune, world, pos, world.rand);
-			ItemStack itemstack = new ItemStack(item, itemsDropped);
-			itemstack.setDisplayName(((INameable) te).getCustomName());
-			spawnAsEntity(world, pos, itemstack);
+			ItemStack carvedPumpkin = new ItemStack(Blocks.CARVED_PUMPKIN.asItem(), 1);
+			ItemStack torcherino = new ItemStack(this.torcherino, 1);
+			if (te instanceof INameable && ((INameable) te).hasCustomName()) torcherino.setDisplayName(((INameable) te).getCustomName());
+			spawnAsEntity(world, pos, carvedPumpkin);
+			spawnAsEntity(world, pos, torcherino);
 		}
 		else
 		{
-			super.harvestBlock(world, player, pos, state, null, stack);
+			Item item = this.getItemDropped(state, world, pos, 0).asItem();
+			if (item == Items.AIR) return;
+			ItemStack itemstack = new ItemStack(item, 1);
+			if (te instanceof INameable && ((INameable) te).hasCustomName()) itemstack.setDisplayName(((INameable) te).getCustomName());
+			spawnAsEntity(world, pos, itemstack);
 		}
 	}
 
 	@Override public void tick(IBlockState state, World world, BlockPos pos, Random random)
 	{
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if(tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
+		if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
 	}
 
 	@Override public EnumPushReaction getPushReaction(IBlockState state){ return EnumPushReaction.IGNORE; }
@@ -120,7 +121,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 	@Override public void onBlockAdded(IBlockState state, World world, BlockPos pos, IBlockState oldState)
 	{
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if(tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
+		if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
 	}
 
 	// Unique Methods ( can't be copy / pasted between torcherino classes )
@@ -132,13 +133,13 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 
 	@Override public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		boolean powered = world.isBlockPowered(pos);
 		if (state.get(POWERED) != powered)
 		{
 			world.setBlockState(pos, state.with(POWERED, powered));
 			TileEntity tileEntity = world.getTileEntity(pos);
-			if(tileEntity instanceof TorcherinoTileEntity)
+			if (tileEntity instanceof TorcherinoTileEntity)
 			{
 				((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
 			}

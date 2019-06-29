@@ -52,8 +52,8 @@ public class Blocks
 			ResourceLocation lanterinoID = getIdentifier(resourceLocation, "lanterino");
 			Block torcherinoBlock = new TorcherinoBlock(tier).setRegistryName(torcherinoID);
 			Block torcherinoWallBlock = new TorcherinoWallBlock(tier).setRegistryName(torcherinoWallID);
-			Block lanterinoBlock = new LanterinoBlock(tier).setRegistryName(lanterinoID);
 			Item torcherinoItem = new ItemWallOrFloor(torcherinoBlock, torcherinoWallBlock, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(torcherinoID);
+			Block lanterinoBlock = new LanterinoBlock(tier, torcherinoItem).setRegistryName(lanterinoID);
 			Item lanterinoItem = new ItemBlock(lanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(lanterinoID);
 			blocks.add(torcherinoBlock);
 			blocks.add(torcherinoWallBlock);
