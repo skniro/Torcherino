@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import torcherino.Utilities;
+import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.api.blocks.LanterinoBlock;
@@ -32,7 +32,7 @@ public class Blocks
 		items = new HashSet<>();
 		Map<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
 		tiers.forEach(this::register);
-		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Utilities.resloc("torcherino"));
+		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Torcherino.resloc("torcherino"));
 		TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY_TYPE);
 	}
 
@@ -45,10 +45,10 @@ public class Blocks
 
 	private void register(ResourceLocation resourceLocation, Tier tier)
 	{
-		if (resourceLocation.getNamespace().equals(Utilities.MOD_ID))
+		if (resourceLocation.getNamespace().equals(Torcherino.MOD_ID))
 		{
 			ResourceLocation torcherinoID = getIdentifier(resourceLocation, "torcherino");
-			ResourceLocation torcherinoWallID = Utilities.resloc("wall_" + torcherinoID.getPath());
+			ResourceLocation torcherinoWallID = Torcherino.resloc("wall_" + torcherinoID.getPath());
 			ResourceLocation lanterinoID = getIdentifier(resourceLocation, "lanterino");
 			Block torcherinoBlock = new TorcherinoBlock(tier).setRegistryName(torcherinoID);
 			Block torcherinoWallBlock = new TorcherinoWallBlock(tier).setRegistryName(torcherinoWallID);

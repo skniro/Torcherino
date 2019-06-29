@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
-import torcherino.Utilities;
+import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.config.Config;
 import torcherino.network.Networker;
@@ -83,7 +83,7 @@ public class TorcherinoWallBlock extends BlockTorchWall
 		{
 			String prefix = "Something";
 			if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
-			Utilities.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+			Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

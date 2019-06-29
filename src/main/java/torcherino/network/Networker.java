@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import torcherino.Utilities;
+import torcherino.Torcherino;
 import torcherino.api.blocks.TorcherinoTileEntity;
 
 public class Networker
@@ -20,7 +20,7 @@ public class Networker
 	public void initialise()
 	{
 		int id = 0;
-		torcherinoChannel = NetworkRegistry.newSimpleChannel(Utilities.resloc("channel"), () -> "1", version -> version.equals("1"), version -> version.equals("1"));
+		torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.resloc("channel"), () -> "1", version -> version.equals("1"), version -> version.equals("1"));
 		torcherinoChannel.registerMessage(id++, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
 		torcherinoChannel.registerMessage(id++, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
 	}

@@ -13,8 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.lwjgl.glfw.GLFW;
-import torcherino.Utilities;
+import torcherino.Torcherino;
 import torcherino.api.blocks.TorcherinoTileEntity;
 import torcherino.client.gui.buttons.FixedSliderButton;
 import torcherino.client.gui.buttons.StateButton;
@@ -27,7 +26,7 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class TorcherinoScreen extends GuiScreen
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = Utilities.resloc("textures/gui/container/torcherino.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = Torcherino.resloc("textures/gui/container/torcherino.png");
 	private static final int xSize = 245;
 	private static final int ySize = 123;
 	private final TorcherinoTileEntity tileEntity;
@@ -222,7 +221,7 @@ public class TorcherinoScreen extends GuiScreen
 
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		Utilities.LOGGER.info("key: {}, scan: {}, mod: {}", keyCode, scanCode, modifiers);
+		Torcherino.LOGGER.info("key: {}, scan: {}, mod: {}", keyCode, scanCode, modifiers);
 		if (keyCode == 256 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) mc.player.closeScreen();
 		else super.keyPressed(keyCode, scanCode, modifiers);
 		return true;

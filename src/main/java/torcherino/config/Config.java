@@ -5,7 +5,7 @@ import blue.endless.jankson.JsonPrimitive;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
-import torcherino.Utilities;
+import torcherino.Torcherino;
 import torcherino.api.TorcherinoAPI;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,7 +48,7 @@ public class Config
 			}
 			catch (IOException e)
 			{
-				Utilities.LOGGER.error("Failed to create sci4me folder, config won't be saved.");
+				Torcherino.LOGGER.error("Failed to create sci4me folder, config won't be saved.");
 				INSTANCE = new Config();
 			}
 		}

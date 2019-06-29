@@ -9,14 +9,19 @@ import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 
-@Mod(Utilities.MOD_ID)
+@Mod(Torcherino.MOD_ID)
 public class Torcherino
 {
+	public static final Logger LOGGER = LogManager.getLogger(Torcherino.class);
+	public static final String MOD_ID = "torcherino";
+
 	public Torcherino()
 	{
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -50,4 +55,6 @@ public class Torcherino
 			else if (value instanceof TileEntityType) TorcherinoAPI.INSTANCE.blacklistTileEntity((TileEntityType) value);
 		}
 	}
+
+	public static ResourceLocation resloc(String path){ return new ResourceLocation(MOD_ID, path); }
 }
