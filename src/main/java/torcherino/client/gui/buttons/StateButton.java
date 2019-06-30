@@ -1,19 +1,19 @@
 package torcherino.client.gui.buttons;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class StateButton extends AbstractButton
 {
 	private int state;
 	private final int screenWidth;
 	private final int screenHeight;
+	private String narrationMessage;
 
 	public StateButton(int x, int y, int screenWidth, int screenHeight, int state)
 	{
@@ -24,8 +24,6 @@ public abstract class StateButton extends AbstractButton
 	}
 
 	protected abstract ItemStack getButtonIcon();
-
-	protected abstract List<ITextComponent> populateToolTip();
 
 	protected abstract void setState(int state);
 
@@ -38,14 +36,6 @@ public abstract class StateButton extends AbstractButton
 		setState(state);
 	}
 
-	private List<String> getToolTip()
-	{
-		List<ITextComponent> tooltip = populateToolTip();
-		List<String> stringToolTip = new ArrayList<>();
-		for (ITextComponent itextcomponent : tooltip) stringToolTip.add(itextcomponent.getFormattedText());
-		return stringToolTip;
-	}
-
 	@Override public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		super.render(mouseX, mouseY, partialTicks);
@@ -54,12 +44,19 @@ public abstract class StateButton extends AbstractButton
 			RenderHelper.enableGUIStandardItemLighting();
 			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getButtonIcon(), x + 2, y + 2);
 			RenderHelper.disableStandardItemLighting();
-			if (isHovered()) GuiUtils.drawHoveringText(getButtonIcon(), getToolTip(), x+width/2, y+height/2, screenWidth, screenHeight, -1, Minecraft.getInstance().fontRenderer);
+			if (isHovered()) GuiUtils.drawHoveringText(getButtonIcon(), Lists.asList(narrationMessage, new String[]{}), x + width / 2, y + height / 2, screenWidth, screenHeight, -1, Minecraft.getInstance().fontRenderer);
 		}
 	}
 
 	@Override public void onPress()
 	{
 		setInternalState(++state);
+	}
+
+	public void setNarrationMessage(String narrationMessage){ this.narrationMessage = narrationMessage; }
+
+	@Override public String getNarrationMessage()
+	{
+		return new TranslationTextComponent("gui.narrate.button", this.narrationMessage).getFormattedText();
 	}
 }

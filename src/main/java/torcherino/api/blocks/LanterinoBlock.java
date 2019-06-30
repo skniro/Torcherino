@@ -104,7 +104,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock
 	@Override public ResourceLocation getLootTable()
 	{
 		ResourceLocation registryName = getRegistryName();
-		return new ResourceLocation(registryName.getNamespace(), "blocks/"+registryName.getPath());
+		return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
 	}
 
 	// Unique Methods ( can't be copy / pasted between torcherino classes )

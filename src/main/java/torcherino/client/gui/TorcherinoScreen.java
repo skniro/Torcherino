@@ -7,6 +7,7 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -22,8 +23,6 @@ import torcherino.client.gui.buttons.StateButton;
 import torcherino.network.Networker;
 import torcherino.network.OpenScreenMessage;
 import torcherino.network.ValueUpdateMessage;
-import java.util.ArrayList;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class TorcherinoScreen extends Screen
@@ -54,6 +53,7 @@ public class TorcherinoScreen extends Screen
 		super.init();
 		guiLeft = (this.width - xSize) / 2;
 		guiTop = (this.height - ySize) / 2;
+		if (speed == 0) speed = 1;
 		// Todo: rework all buttons to support narration and generally work in 1.14
 		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed() - 1)
 		{
@@ -77,7 +77,7 @@ public class TorcherinoScreen extends Screen
 
 			@Override protected void applyValue()
 			{
-				TorcherinoScreen.this.xRange = (int) (value * TorcherinoScreen.this.tier.getXZRange());
+				TorcherinoScreen.this.xRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
 				this.value = (double) xRange / tier.getXZRange();
 			}
 		});
@@ -90,7 +90,7 @@ public class TorcherinoScreen extends Screen
 
 			@Override protected void applyValue()
 			{
-				TorcherinoScreen.this.zRange = (int) (value * TorcherinoScreen.this.tier.getXZRange());
+				TorcherinoScreen.this.zRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
 				this.value = (double) zRange / tier.getXZRange();
 			}
 		});
@@ -103,43 +103,42 @@ public class TorcherinoScreen extends Screen
 
 			@Override protected void applyValue()
 			{
-				TorcherinoScreen.this.yRange = (int) (value * TorcherinoScreen.this.tier.getYRange());
+				TorcherinoScreen.this.yRange = (int) Math.round(value * TorcherinoScreen.this.tier.getYRange());
 				this.value = (double) yRange / tier.getYRange();
 			}
 		});
 		this.addButton(new StateButton(guiLeft + 217, guiTop + 20, width, height, this.redstoneMode)
 		{
 			private ItemStack renderStack;
-			private List<ITextComponent> tooltip;
 
 			@Override protected void setState(int state)
 			{
-				tooltip = new ArrayList<>();
-				TranslationTextComponent modeTranslationKey;
+				TranslationTextComponent textComponent;
 				switch (state)
 				{
 					case 0:
 						renderStack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "redstone")));
-						modeTranslationKey = new TranslationTextComponent("gui.torcherino.mode.normal");
+						textComponent = new TranslationTextComponent("gui.torcherino.mode.normal");
 						break;
 					case 1:
 						renderStack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "redstone_torch")));
-						modeTranslationKey = new TranslationTextComponent("gui.torcherino.mode.inverted");
+						textComponent = new TranslationTextComponent("gui.torcherino.mode.inverted");
 						break;
 					case 2:
 						renderStack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "gunpowder")));
-						modeTranslationKey = new TranslationTextComponent("gui.torcherino.mode.ignored");
+						textComponent = new TranslationTextComponent("gui.torcherino.mode.ignored");
 						break;
 					case 3:
 						renderStack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "redstone_lamp")));
-						modeTranslationKey = new TranslationTextComponent("gui.torcherino.mode.off");
+						textComponent = new TranslationTextComponent("gui.torcherino.mode.off");
 						break;
 					default:
 						renderStack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "furnace")));
-						modeTranslationKey = new TranslationTextComponent("gui.torcherino.mode.error");
+						textComponent = new TranslationTextComponent("gui.torcherino.mode.error");
 						break;
 				}
-				tooltip.add(0, new TranslationTextComponent("gui.torcherino.redstone_mode", modeTranslationKey));
+				setNarrationMessage(new TranslationTextComponent("gui.torcherino.mode", textComponent).getFormattedText());
+				this.nextNarration = Util.milliTime() + 250L;
 				TorcherinoScreen.this.redstoneMode = state;
 			}
 
@@ -151,11 +150,6 @@ public class TorcherinoScreen extends Screen
 			@Override protected ItemStack getButtonIcon()
 			{
 				return renderStack;
-			}
-
-			@Override protected List<ITextComponent> populateToolTip()
-			{
-				return tooltip;
 			}
 		});
 	}

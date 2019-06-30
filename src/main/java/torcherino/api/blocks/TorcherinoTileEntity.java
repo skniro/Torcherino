@@ -18,7 +18,6 @@ import torcherino.blocks.Blocks;
 import torcherino.config.Config;
 import torcherino.network.OpenScreenMessage;
 import javax.annotation.Nullable;
-import java.util.stream.Stream;
 
 public class TorcherinoTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
