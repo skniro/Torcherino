@@ -219,7 +219,6 @@ public class TorcherinoScreen extends GuiScreen
 
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		Torcherino.LOGGER.info("key: {}, scan: {}, mod: {}", keyCode, scanCode, modifiers);
 		if (keyCode == 256 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) mc.player.closeScreen();
 		else super.keyPressed(keyCode, scanCode, modifiers);
 		return true;
