@@ -8,6 +8,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.concurrent.TickDelayedTask;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -132,6 +133,9 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	{
 		super.onLoad();
 		area = BlockPos.getAllInBoxMutable(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
-		setPoweredByRedstone(world.getBlockState(pos).get(BlockStateProperties.POWERED));
+		world.getServer().enqueue(new TickDelayedTask(world.getServer().getTickCounter(), () -> {
+			setPoweredByRedstone(world.getBlockState(pos).get(BlockStateProperties.POWERED));
+		}));
+
 	}
 }
