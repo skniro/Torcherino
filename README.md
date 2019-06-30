@@ -1,4 +1,4 @@
-# Torcherino 1.14-pre
+# Torcherino for Minecraft 1.14.3
 Torcherino is a mod which provides torches and now jack o' lanterns which speed up the ticks of blocks placed within range.
 
 ## Notable changes
