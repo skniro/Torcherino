@@ -54,7 +54,7 @@ public abstract class StateButton extends AbstractButton
 			RenderHelper.enableGUIStandardItemLighting();
 			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getButtonIcon(), x + 2, y + 2);
 			RenderHelper.disableStandardItemLighting();
-			if (isHovered) GuiUtils.drawHoveringText(getButtonIcon(), getToolTip(), mouseX, mouseY, screenWidth, screenHeight, -1, Minecraft.getInstance().fontRenderer);
+			if (isHovered()) GuiUtils.drawHoveringText(getButtonIcon(), getToolTip(), x+width/2, y+height/2, screenWidth, screenHeight, -1, Minecraft.getInstance().fontRenderer);
 		}
 	}
 

@@ -1,77 +1,36 @@
 package torcherino.client.gui.buttons;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.util.math.MathHelper;
 
-public abstract class FixedSliderButton extends AbstractButton
+public abstract class FixedSliderButton extends AbstractSlider
 {
-	private double oldProgress;
-	public double progress;
-	private boolean pressed;
+	private final float nudgeAmount;
 
-	public FixedSliderButton(int x, int y, int width)
+	public FixedSliderButton(int x, int y, int width, double progress, int permutations)
 	{
-		super(x, y, width, 20, "");
-		this.initialise();
+		super(x, y, width, 20, progress);
+		this.nudgeAmount = 1.0F / permutations;
+		this.applyValue();
+		this.updateMessage();
 	}
 
-	protected abstract void initialise();
-
-	protected int getHoverState(boolean mouseOver)
+	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		return 0;
-	}
-
-	protected void renderBg(Minecraft mc, int mouseX, int mouseY)
-	{
-		if (this.visible)
+		boolean flag = keyCode == 263;
+		if (flag || keyCode == 262)
 		{
-			if (this.pressed)
-			{
-				this.oldProgress = progress;
-				this.progress = (double) ((float) (mouseX - (this.x + 4)) / (float) (this.width - 8));
-				this.checkValueChange();
-			}
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.blit(this.x + (int) (this.progress * (double) (this.width - 8)), this.y, 0, 66, 4, 20);
-			this.blit(this.x + (int) (this.progress * (double) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+			float f = flag ? -nudgeAmount : nudgeAmount;
+			this.setValue(this.value + f);
 		}
+		return false;
 	}
 
-	private void checkValueChange()
+	private void setValue(double value)
 	{
-		this.progress = MathHelper.clamp(this.progress, 0.0D, 1.0D);
-		if (oldProgress != progress)
-		{
-			this.onValueChange();
-		}
+		double d0 = this.value;
+		this.value = MathHelper.clamp(value, 0, 1);
+		if (d0 != this.value) this.applyValue();
+		this.updateMessage();
 	}
-
-	@Override public void onPress(){ }
-
-	public void onClick(double mouseX, double mouseY)
-	{
-		this.oldProgress = progress;
-		this.progress = (mouseX - (double) (this.x + 4)) / (double) (this.width - 8);
-		this.checkValueChange();
-		this.pressed = true;
-	}
-
-	@Override public void playDownSound(SoundHandler soundHandlerIn){ }
-
-	public void onRelease(double mouseX, double mouseY)
-	{
-		if (this.pressed)
-		{
-			Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-			this.pressed = false;
-		}
-	}
-
-	protected abstract void onValueChange();
 }

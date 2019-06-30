@@ -55,88 +55,56 @@ public class TorcherinoScreen extends Screen
 		guiLeft = (this.width - xSize) / 2;
 		guiTop = (this.height - ySize) / 2;
 		// Todo: rework all buttons to support narration and generally work in 1.14
-		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 20, 205)
+		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed() - 1)
 		{
-			private int speed;
-			private int MAX_SPEED;
-
-			@Override protected void initialise()
+			@Override protected void updateMessage()
 			{
-				speed = TorcherinoScreen.this.speed;
-				MAX_SPEED = TorcherinoScreen.this.tier.getMaxSpeed();
-				this.progress = (double) speed / MAX_SPEED;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
+				this.setMessage(new TranslationTextComponent("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).getFormattedText());
 			}
 
-			@Override protected void onValueChange()
+			@Override protected void applyValue()
 			{
-				speed = (int) Math.round(progress * MAX_SPEED);
-				TorcherinoScreen.this.speed = speed;
-				this.progress = (double) speed / MAX_SPEED;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
+				TorcherinoScreen.this.speed = 1 + (int) Math.round(value * (TorcherinoScreen.this.tier.getMaxSpeed() - 1));
+				this.value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
 			}
 		});
-		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 45, 205)
+		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 45, 205, (double) xRange / tier.getXZRange(), tier.getXZRange())
 		{
-			private int xRange;
-			private int XZ_RANGE;
-
-			@Override protected void initialise()
+			@Override protected void updateMessage()
 			{
-				xRange = TorcherinoScreen.this.xRange;
-				XZ_RANGE = TorcherinoScreen.this.tier.getXZRange();
-				this.progress = (double) xRange / XZ_RANGE;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.x_range", 1 + 2 * xRange).getFormattedText();
+				this.setMessage(new TranslationTextComponent("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).getFormattedText());
 			}
 
-			@Override protected void onValueChange()
+			@Override protected void applyValue()
 			{
-				xRange = (int) Math.round(progress * XZ_RANGE);
-				TorcherinoScreen.this.xRange = xRange;
-				this.progress = (double) xRange / XZ_RANGE;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.x_range", 1 + 2 * xRange).getFormattedText();
+				TorcherinoScreen.this.xRange = (int) (value * TorcherinoScreen.this.tier.getXZRange());
+				this.value = (double) xRange / tier.getXZRange();
 			}
 		});
-		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 70, 205)
+		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 70, 205, (double) zRange / tier.getXZRange(), tier.getXZRange())
 		{
-			private int zRange;
-			private int XZ_RANGE;
-
-			@Override protected void initialise()
+			@Override protected void updateMessage()
 			{
-				zRange = TorcherinoScreen.this.zRange;
-				XZ_RANGE = TorcherinoScreen.this.tier.getXZRange();
-				this.progress = (double) zRange / XZ_RANGE;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.z_range", 1 + 2 * zRange).getFormattedText();
+				this.setMessage(new TranslationTextComponent("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).getFormattedText());
 			}
 
-			@Override protected void onValueChange()
+			@Override protected void applyValue()
 			{
-				zRange = (int) Math.round(progress * XZ_RANGE);
-				TorcherinoScreen.this.zRange = zRange;
-				this.progress = (double) zRange / XZ_RANGE;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.z_range", 1 + 2 * zRange).getFormattedText();
+				TorcherinoScreen.this.zRange = (int) (value * TorcherinoScreen.this.tier.getXZRange());
+				this.value = (double) zRange / tier.getXZRange();
 			}
 		});
-		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 95, 205)
+		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 95, 205, (double) yRange / tier.getYRange(), tier.getYRange())
 		{
-			private int yRange;
-			private int Y_RANGE;
-
-			@Override protected void initialise()
+			@Override protected void updateMessage()
 			{
-				yRange = TorcherinoScreen.this.yRange;
-				Y_RANGE = TorcherinoScreen.this.tier.getYRange();
-				this.progress = (double) yRange / Y_RANGE;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.y_range", 1 + 2 * yRange).getFormattedText();
+				this.setMessage(new TranslationTextComponent("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).getFormattedText());
 			}
 
-			@Override protected void onValueChange()
+			@Override protected void applyValue()
 			{
-				yRange = (int) Math.round(progress * Y_RANGE);
-				TorcherinoScreen.this.yRange = yRange;
-				this.progress = (double) yRange / Y_RANGE;
-				//this.displayString = new TranslationTextComponent("gui.torcherino.y_range", 1 + 2 * yRange).getFormattedText();
+				TorcherinoScreen.this.yRange = (int) (value * TorcherinoScreen.this.tier.getYRange());
+				this.value = (double) yRange / tier.getYRange();
 			}
 		});
 		this.addButton(new StateButton(guiLeft + 217, guiTop + 20, width, height, this.redstoneMode)
@@ -200,11 +168,6 @@ public class TorcherinoScreen extends Screen
 		blit(guiLeft, guiTop, 0, 0, xSize, ySize);
 		font.drawString(title, guiLeft + (xSize - font.getStringWidth(title)) / 2, guiTop + 6, 4210752);
 		super.render(mouseX, mouseY, partialTicks);
-	}
-
-	@Override public void resize(Minecraft mcIn, int w, int h)
-	{
-		super.resize(mcIn, w, h);
 	}
 
 	@Override public void onClose()

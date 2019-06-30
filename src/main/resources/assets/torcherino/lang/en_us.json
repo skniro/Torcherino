@@ -5,7 +5,7 @@
   "block.torcherino.lanterino": "Jack o'Lanterino",
   "block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
   "block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
-  "gui.torcherino.speed_slider": "Speed: %s%%",
+  "gui.torcherino.speed": "Speed: %s%%",
   "gui.torcherino.x_range": "X Range: %s Blocks",
   "gui.torcherino.z_range": "Z Range: %s Blocks",
   "gui.torcherino.y_range": "Y Range: %s Blocks",

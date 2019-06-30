@@ -64,7 +64,6 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		this.yRange = compound.getInt("YRange");
 		this.speed = compound.getInt("Speed");
 		this.redstoneMode = compound.getInt("RedstoneMode");
-		area = BlockPos.getAllInBoxMutable(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
 	}
 
 	public CompoundNBT write(CompoundNBT compound)
@@ -133,6 +132,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	@Override public void onLoad()
 	{
 		super.onLoad();
+		area = BlockPos.getAllInBoxMutable(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
 		setPoweredByRedstone(world.getBlockState(pos).get(BlockStateProperties.POWERED));
 	}
 }
