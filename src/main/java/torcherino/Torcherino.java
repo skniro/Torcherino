@@ -1,56 +1,72 @@
 package torcherino;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
-import torcherino.blocks.tiles.TileEntityTorcherino;
-import torcherino.network.Client;
-import torcherino.network.Messages;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import torcherino.api.TorcherinoAPI;
+import torcherino.blocks.Blocks;
+import torcherino.config.Config;
+import torcherino.network.Networker;
 
-@Mod(Utils.MOD_ID)
-@Mod.EventBusSubscriber(modid=Utils.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod(Torcherino.MOD_ID)
 public class Torcherino
 {
-	public static SimpleChannel torcherinoNetworkChannel = NetworkRegistry.ChannelBuilder.named(Utils.getId("modifier"))
-			.networkProtocolVersion(() -> "1.0").clientAcceptedVersions((String version) -> version.equals("1.0")).serverAcceptedVersions((String version) -> version.equals("1.0")).simpleChannel();
-	public static TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
+	public static final Logger LOGGER = LogManager.getLogger(Torcherino.class);
+	public static final String MOD_ID = "torcherino";
 
 	public Torcherino()
 	{
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorcherinoConfig.commonSpec);
-		torcherinoNetworkChannel.registerMessage(0, Messages.KeystateUpdate.class, Messages.KeystateUpdate::encode, Messages.KeystateUpdate::decode, Messages.KeystateUpdate::handle);
-		Utils.blacklistTileEntity(TileEntityTorcherino.class);
-		if (FMLEnvironment.dist.isClient())
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		Config.initialise();
+		Blocks.INSTANCE.initialise();
+		Networker.INSTANCE.initialise();
+		eventBus.register(Blocks.INSTANCE);
+		eventBus.addListener(this::processIMC);
+		MinecraftForge.EVENT_BUS.addListener(this::processPlayerJoin);
+	}
+
+	private void processPlayerJoin(final PlayerEvent.PlayerLoggedInEvent event){ Networker.INSTANCE.sendServerTiers((EntityPlayerMP) event.getPlayer()); }
+
+	@SubscribeEvent public void processIMC(final InterModProcessEvent event)
+	{
+		// To use: in InterModEnqueueEvent call
+		// InterModComms.sendTo( MOD_ID, Method , supplier);
+		// See processMessage method below for method and what they take
+		event.getIMCStream().forEach(this::processMessage);
+	}
+
+	private void processMessage(final InterModComms.IMCMessage message)
+	{
+		String method = message.getMethod();
+		Object value = message.getMessageSupplier().get();
+		if (method.equals("blacklist_block"))
 		{
-			FMLJavaModLoadingContext.get().getModEventBus().register(Client.class);
-			MinecraftForge.EVENT_BUS.register(Client.class);
+			if (value instanceof ResourceLocation) TorcherinoAPI.INSTANCE.blacklistBlock((ResourceLocation) value);
+			else if (value instanceof Block) TorcherinoAPI.INSTANCE.blacklistBlock((Block) value);
+		}
+		else if (method.equals("blacklist_tile"))
+		{
+			if (value instanceof ResourceLocation) TorcherinoAPI.INSTANCE.blacklistTileEntity((ResourceLocation) value);
+			else if (value instanceof TileEntityType) TorcherinoAPI.INSTANCE.blacklistTileEntity((TileEntityType) value);
 		}
 	}
 
-	public static void processIMC(final InterModProcessEvent event)
-	{
-		// To use:
-		// in InterModEnqueueEvent call
-		// InterModComms.sendTo("torcherino", "blacklist", supplier);
-		// where supplier has a get method which returns a String of either:
-		// a block's resource location e.g. "minecraft:furnace"
-		// or a tile entity class path e.g. net.minecraft.tileentity.TileEntityFurnace
-		event.getIMCStream().forEach((InterModComms.IMCMessage message) -> { if (message.getMethod().equalsIgnoreCase("blacklist")) Utils.blacklistString((String) message.getMessageSupplier().get()); });
-	}
+	public static ResourceLocation resloc(String path){ return new ResourceLocation(MOD_ID, path); }
 
-	@SubscribeEvent public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
-	{
-		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TileEntityTorcherino::new).build(null).setRegistryName(Utils.getId("torcherino"));
-		registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
-	}
+	/*
+		TODO: Bug test.
+		TODO: Finally release the mod?
+
+	 */
 }

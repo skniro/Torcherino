@@ -5,13 +5,14 @@
   "block.torcherino.lanterino": "Jack o'Lanterino",
   "block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
   "block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
-  "key.torcherino.modifier": "Torcherino Modifier",
-  "chat.torcherino.hint.area.stopped": "Stopped",
-  "chat.torcherino.hint.area.n": "Area: %1$dx3x%1$d",
-  "chat.torcherino.hint.speed": "Speed: %d%%",
-  "chat.torcherino.hint.layout": "%s | %s",
-  "tooltip.torcherino.change_speed": "to change the speed.",
-  "tooltip.torcherino.change_area": "to change the area.",
-  "tooltip.torcherino.usageinformation": "Torcherino usage:"
+  "gui.torcherino.speed_slider": "Speed: %s%%",
+  "gui.torcherino.x_range": "X Range: %s Blocks",
+  "gui.torcherino.z_range": "Z Range: %s Blocks",
+  "gui.torcherino.y_range": "Y Range: %s Blocks",
+  "gui.torcherino.redstone_mode": "Mode: %s",
+  "gui.torcherino.mode.normal": "Redstone Normal",
+  "gui.torcherino.mode.inverted": "Redstone Inverted",
+  "gui.torcherino.mode.ignored": "Redstone Ignored",
+  "gui.torcherino.mode.off": "Off"
 }
 

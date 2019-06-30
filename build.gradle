@@ -5,13 +5,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.128'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
 
-version = '8.0.1'
+version = '8.1.2'
 group = 'torcherino'
 archivesBaseName = 'torcherino'
 
@@ -33,17 +35,31 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.107'
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.205'
+    implementation ("blue.endless:jankson:1.1.2")
+    shadow ("blue.endless:jankson:1.1.2")
 }
 
 jar {
     manifest {
-        attributes(["Specification-Title": "Torcherino ",
-                    "Specification-Vendor": "NinjaPhenix1",
-                    "Specification-Version": "1",
-                    "Implementation-Title": project.name,
-                    "Implementation-Version": "${version}",
-                    "Implementation-Vendor" :"NinjaPhenix1",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+        attributes([
+            "Specification-Title": "Torcherino",
+            "Specification-Vendor": "NinjaPhenix1",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"NinjaPhenix1",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
+}
+
+shadowJar {
+    relocate 'blue.endless.jankson', 'torcherino.jankson'
+    classifier = ""
+    configurations = [project.configurations.shadow]
+}
+
+artifacts {
+    archives shadowJar
 }
