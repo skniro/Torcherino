@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[24,)"
+loaderVersion="[27,)"
 #issueTrackerURL="http://my.issue.tracker/"
 #displayURL="http://example.com/"
 logoFile="torcherino.png" #optional
@@ -15,7 +15,7 @@ logoFile="torcherino.png" #optional
 [[dependencies.torcherino]]
   modId="forge"
   mandatory=true
-  versionRange="[24,)"
+  versionRange="[27,)"
   ordering="NONE"
   side="BOTH"
 [[dependencies.torcherino]]
