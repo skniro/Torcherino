@@ -14,6 +14,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import torcherino.Torcherino;
+import torcherino.api.Tier;
+import torcherino.api.TorcherinoAPI;
 import torcherino.api.blocks.TorcherinoTileEntity;
 import torcherino.client.gui.buttons.FixedSliderButton;
 import torcherino.client.gui.buttons.StateButton;
@@ -30,18 +32,14 @@ public class TorcherinoScreen extends GuiScreen
 	private static final int xSize = 245;
 	private static final int ySize = 123;
 	private final TorcherinoTileEntity tileEntity;
+	private final Tier tier;
 	private final String title;
-	private int guiLeft;
-	private int guiTop;
-	private int xRange;
-	private int zRange;
-	private int yRange;
-	private int speed;
-	private int redstoneMode;
+	private int guiLeft, guiTop, xRange, zRange, yRange, speed, redstoneMode;
 
 	public TorcherinoScreen(TorcherinoTileEntity tileEntity, ITextComponent title, int xRange, int zRange, int yRange, int speed, int redstoneMode)
 	{
 		this.tileEntity = tileEntity;
+		this.tier = TorcherinoAPI.INSTANCE.getTier(tileEntity.getTierName());
 		this.title = title.getFormattedText();
 		this.xRange = xRange;
 		this.zRange = zRange;
@@ -64,7 +62,7 @@ public class TorcherinoScreen extends GuiScreen
 			@Override protected void initialise()
 			{
 				speed = TorcherinoScreen.this.speed;
-				MAX_SPEED = TorcherinoScreen.this.tileEntity.getTier().getMaxSpeed();
+				MAX_SPEED = TorcherinoScreen.this.tier.getMaxSpeed();
 				this.progress = (double) speed / MAX_SPEED;
 				this.displayString = new TextComponentTranslation("gui.torcherino.speed_slider", 100 * speed).getFormattedText();
 			}
@@ -85,7 +83,7 @@ public class TorcherinoScreen extends GuiScreen
 			@Override protected void initialise()
 			{
 				xRange = TorcherinoScreen.this.xRange;
-				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().getXZRange();
+				XZ_RANGE = TorcherinoScreen.this.tier.getXZRange();
 				this.progress = (double) xRange / XZ_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.x_range", 1 + 2 * xRange).getFormattedText();
 			}
@@ -106,7 +104,7 @@ public class TorcherinoScreen extends GuiScreen
 			@Override protected void initialise()
 			{
 				zRange = TorcherinoScreen.this.zRange;
-				XZ_RANGE = TorcherinoScreen.this.tileEntity.getTier().getXZRange();
+				XZ_RANGE = TorcherinoScreen.this.tier.getXZRange();
 				this.progress = (double) zRange / XZ_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.z_range", 1 + 2 * zRange).getFormattedText();
 			}
@@ -127,7 +125,7 @@ public class TorcherinoScreen extends GuiScreen
 			@Override protected void initialise()
 			{
 				yRange = TorcherinoScreen.this.yRange;
-				Y_RANGE = TorcherinoScreen.this.tileEntity.getTier().getYRange();
+				Y_RANGE = TorcherinoScreen.this.tier.getYRange();
 				this.progress = (double) yRange / Y_RANGE;
 				this.displayString = new TextComponentTranslation("gui.torcherino.y_range", 1 + 2 * yRange).getFormattedText();
 			}

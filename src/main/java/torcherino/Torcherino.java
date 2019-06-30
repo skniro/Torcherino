@@ -1,6 +1,5 @@
 package torcherino;
 
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntityType;
@@ -15,7 +14,6 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
 import torcherino.config.Config;
@@ -38,12 +36,7 @@ public class Torcherino
 		MinecraftForge.EVENT_BUS.addListener(this::processPlayerJoin);
 	}
 
-	private void processPlayerJoin(final PlayerEvent.PlayerLoggedInEvent event)
-	{
-		System.out.println("Hey someone joined: " + event.getPlayer().getName());
-		ImmutableMap<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
-		Networker.INSTANCE.sendServerTiers((EntityPlayerMP) event.getPlayer());
-	}
+	private void processPlayerJoin(final PlayerEvent.PlayerLoggedInEvent event){ Networker.INSTANCE.sendServerTiers((EntityPlayerMP) event.getPlayer()); }
 
 	@SubscribeEvent public void processIMC(final InterModProcessEvent event)
 	{
@@ -72,11 +65,7 @@ public class Torcherino
 	public static ResourceLocation resloc(String path){ return new ResourceLocation(MOD_ID, path); }
 
 	/*
-		TODO: Set serverTiers to null on disconnect ( setServerTiers(@Nullable Map<ResourceLocation, Tier> tiers){this.serverTiers = tiers})
-		TODO: Implement above only in TorcherinoImpl as it is only intended for use by torcherino (don't include in api or api docs)
-		TODO: Implement the rest of the sync code (::handle)
-		TODO: Re-write blocks to have a reference to Tier ID
-		TODO: Create a getTier method that returns the Tier for the given ID (will fetch from serverTiers)
+		TODO: Bug test.
 		TODO: Finally release the mod?
 
 	 */

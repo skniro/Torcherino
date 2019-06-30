@@ -21,12 +21,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.INameable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
-import torcherino.api.Tier;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 import javax.annotation.Nullable;
@@ -36,18 +36,18 @@ import java.util.Random;
 public class TorcherinoBlock extends BlockTorch
 {
 	// Constructors
-	public TorcherinoBlock(Tier tier)
+	public TorcherinoBlock(ResourceLocation tierName)
 	{
 		super(Properties.from(Blocks.TORCH));
-		this.tier = tier;
+		this.tierName = tierName;
 	}
 
 	// Variables
 	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private final Tier tier;
+	private final ResourceLocation tierName;
 
 	// Methods
-	public Tier getTier(){ return tier; }
+	public ResourceLocation getTierName(){ return tierName; }
 
 	@Override public boolean hasTileEntity(IBlockState state)
 	{
@@ -72,14 +72,14 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack)
 	{
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		if (stack.hasDisplayName())
 		{
 			TileEntity tile = world.getTileEntity(pos);
 			if (!(tile instanceof TorcherinoTileEntity)) return;
 			((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName());
 		}
-		if(Config.INSTANCE.log_placement)
+		if (Config.INSTANCE.log_placement)
 		{
 			String prefix = "Something";
 			if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
@@ -110,9 +110,9 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Override public void tick(IBlockState state, World world, BlockPos pos, Random random)
 	{
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if(tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
+		if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
 	}
 
 	@Override public EnumPushReaction getPushReaction(IBlockState state){ return EnumPushReaction.IGNORE; }
@@ -120,7 +120,7 @@ public class TorcherinoBlock extends BlockTorch
 	@Override public void onBlockAdded(IBlockState state, World world, BlockPos pos, IBlockState oldState)
 	{
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if(tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
+		if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
 	}
 
 	// Unique Methods ( can't be copy / pasted between torcherino classes )
@@ -132,13 +132,13 @@ public class TorcherinoBlock extends BlockTorch
 
 	@Override public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		boolean powered = world.isBlockPowered(pos.down());
 		if (state.get(POWERED) != powered)
 		{
 			world.setBlockState(pos, state.with(POWERED, powered));
 			TileEntity tileEntity = world.getTileEntity(pos);
-			if(tileEntity instanceof TorcherinoTileEntity)
+			if (tileEntity instanceof TorcherinoTileEntity)
 			{
 				((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
 			}

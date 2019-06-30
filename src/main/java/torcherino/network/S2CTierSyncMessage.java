@@ -4,6 +4,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import torcherino.api.Tier;
+import torcherino.api.TorcherinoAPI;
+import torcherino.api.impl.TorcherinoImpl;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +23,7 @@ public class S2CTierSyncMessage
 	static void encode(S2CTierSyncMessage msg, PacketBuffer buf)
 	{
 		buf.writeInt(msg.tiers.size());
-		msg.tiers.forEach((name, tier) -> {writeTier(name, tier, buf);});
+		msg.tiers.forEach((name, tier) -> writeTier(name, tier, buf));
 	}
 
 	static S2CTierSyncMessage decode(PacketBuffer buf)
@@ -39,10 +41,7 @@ public class S2CTierSyncMessage
 	static void handle(S2CTierSyncMessage msg, Supplier<NetworkEvent.Context> ctx)
 	{
 		NetworkEvent.Context context = ctx.get();
-		msg.tiers.forEach((name, tier) -> {System.out.println("We got a tier named: "+name);});
-		//context.enqueueWork(() ->
-		//{
-		//});
+		context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setServerTiers(msg.tiers));
 		context.setPacketHandled(true);
 	}
 

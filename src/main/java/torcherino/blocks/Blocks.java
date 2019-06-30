@@ -31,7 +31,7 @@ public class Blocks
 		blocks = new HashSet<>();
 		items = new HashSet<>();
 		Map<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
-		tiers.forEach(this::register);
+		tiers.keySet().forEach(this::register);
 		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new).build(null).setRegistryName(Torcherino.resloc("torcherino"));
 		TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY_TYPE);
 	}
@@ -43,17 +43,17 @@ public class Blocks
 		return new ResourceLocation(resourceLocation.getNamespace(), newType);
 	}
 
-	private void register(ResourceLocation resourceLocation, Tier tier)
+	private void register(ResourceLocation resourceLocation)
 	{
 		if (resourceLocation.getNamespace().equals(Torcherino.MOD_ID))
 		{
 			ResourceLocation torcherinoID = getIdentifier(resourceLocation, "torcherino");
 			ResourceLocation torcherinoWallID = Torcherino.resloc("wall_" + torcherinoID.getPath());
 			ResourceLocation lanterinoID = getIdentifier(resourceLocation, "lanterino");
-			Block torcherinoBlock = new TorcherinoBlock(tier).setRegistryName(torcherinoID);
-			Block torcherinoWallBlock = new TorcherinoWallBlock(tier).setRegistryName(torcherinoWallID);
+			Block torcherinoBlock = new TorcherinoBlock(resourceLocation).setRegistryName(torcherinoID);
+			Block torcherinoWallBlock = new TorcherinoWallBlock(resourceLocation).setRegistryName(torcherinoWallID);
 			Item torcherinoItem = new ItemWallOrFloor(torcherinoBlock, torcherinoWallBlock, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(torcherinoID);
-			Block lanterinoBlock = new LanterinoBlock(tier, torcherinoItem).setRegistryName(lanterinoID);
+			Block lanterinoBlock = new LanterinoBlock(resourceLocation, torcherinoItem).setRegistryName(lanterinoID);
 			Item lanterinoItem = new ItemBlock(lanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(lanterinoID);
 			blocks.add(torcherinoBlock);
 			blocks.add(torcherinoWallBlock);

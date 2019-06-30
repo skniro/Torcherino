@@ -19,12 +19,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.INameable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
-import torcherino.api.Tier;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 import javax.annotation.Nullable;
@@ -34,20 +34,20 @@ import java.util.Random;
 public class LanterinoBlock extends BlockCarvedPumpkin
 {
 	//Constructors
-	public LanterinoBlock(Tier tier, Item torcherino)
+	public LanterinoBlock(ResourceLocation tierName, Item torcherino)
 	{
 		super(Properties.from(Blocks.JACK_O_LANTERN));
-		this.tier = tier;
+		this.tierName = tierName;
 		this.torcherino = torcherino;
 	}
 
 	// Variables
 	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private final Tier tier;
+	private final ResourceLocation tierName;
 	private final Item torcherino;
 
 	// Methods
-	public Tier getTier(){ return tier; }
+	public ResourceLocation getTierName(){ return tierName; }
 
 	@Override public boolean hasTileEntity(IBlockState state)
 	{

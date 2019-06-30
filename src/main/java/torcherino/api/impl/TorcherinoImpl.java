@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class TorcherinoImpl implements TorcherinoAPI
 {
-	private Map<ResourceLocation, Tier> tiers = new HashMap<>();
+	private Map<ResourceLocation, Tier> clientTiers = new HashMap<>();
 	private Map<ResourceLocation, Tier> serverTiers = new HashMap<>();
 
 	private Set<Block> blacklistedBlocks = new HashSet<>();
@@ -26,11 +26,8 @@ public class TorcherinoImpl implements TorcherinoAPI
 	public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
 	{
 		Tier tier = new Tier(maxSpeed, xzRange, yRange);
-		if (tiers.containsKey(name))
-		{
-			return false;
-		}
-		tiers.put(name, tier);
+		if (clientTiers.containsKey(name)) return false;
+		clientTiers.put(name, tier);
 		return true;
 	}
 
@@ -48,7 +45,7 @@ public class TorcherinoImpl implements TorcherinoAPI
 
 	@Override public boolean blacklistBlock(Block block)
 	{
-		if(blacklistedBlocks.contains(block)) return false;
+		if (blacklistedBlocks.contains(block)) return false;
 		blacklistedBlocks.add(block);
 		return true;
 	}
@@ -67,7 +64,7 @@ public class TorcherinoImpl implements TorcherinoAPI
 
 	@Override public boolean blacklistTileEntity(TileEntityType tileEntity)
 	{
-		if(blacklistedTiles.contains(tileEntity)) return false;
+		if (blacklistedTiles.contains(tileEntity)) return false;
 		blacklistedTiles.add(tileEntity);
 		return true;
 	}
@@ -78,7 +75,7 @@ public class TorcherinoImpl implements TorcherinoAPI
 
 	@Override public boolean registerTorcherinoBlock(Block block)
 	{
-		if(!torcherinoBlocks.contains(block))
+		if (!torcherinoBlocks.contains(block))
 		{
 			blacklistBlock(block);
 			torcherinoBlocks.add(block);
@@ -87,5 +84,13 @@ public class TorcherinoImpl implements TorcherinoAPI
 		return false;
 	}
 
-	public ImmutableMap<ResourceLocation, Tier> getTiers(){ return ImmutableMap.copyOf(tiers); }
+	// Do not use
+	public void setServerTiers(Map<ResourceLocation, Tier> tiers){ serverTiers = tiers; }
+
+	public ImmutableMap<ResourceLocation, Tier> getTiers(){ return ImmutableMap.copyOf(clientTiers); }
+
+	@Override public Tier getTier(ResourceLocation name)
+	{
+		return serverTiers.getOrDefault(name, null);
+	}
 }

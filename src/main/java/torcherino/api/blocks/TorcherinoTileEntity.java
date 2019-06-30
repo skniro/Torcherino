@@ -7,11 +7,11 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
 import torcherino.config.Config;
@@ -24,7 +24,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	private int xRange, yRange, zRange, speed, redstoneMode, randomTicks;
 	private boolean active;
 	private Iterable<BlockPos> area;
-	private Tier tier;
+	private ResourceLocation tierName;
 
 	public TorcherinoTileEntity()
 	{
@@ -39,16 +39,16 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 
 	void setCustomName(@Nullable ITextComponent name){ customName = name; }
 
-	public Tier getTier()
+	public ResourceLocation getTierName()
 	{
-		if (tier == null)
+		if (tierName == null)
 		{
 			Block block = world.getBlockState(pos).getBlock();
-			if (block instanceof LanterinoBlock) tier = ((LanterinoBlock) block).getTier();
-			else if (block instanceof TorcherinoBlock) tier = ((TorcherinoBlock) block).getTier();
-			else if (block instanceof TorcherinoWallBlock) tier = ((TorcherinoWallBlock) block).getTier();
+			if (block instanceof LanterinoBlock) tierName = ((LanterinoBlock) block).getTierName();
+			else if (block instanceof TorcherinoBlock) tierName = ((TorcherinoBlock) block).getTierName();
+			else if (block instanceof TorcherinoWallBlock) tierName = ((TorcherinoWallBlock) block).getTierName();
 		}
-		return tier;
+		return tierName;
 	}
 
 	public OpenScreenMessage createOpenMessage(){ return new OpenScreenMessage(pos, getName(), xRange, zRange, yRange, speed, redstoneMode); }
