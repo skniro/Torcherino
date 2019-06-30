@@ -25,7 +25,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	private ITextComponent customName;
 	private int xRange, yRange, zRange, speed, redstoneMode, randomTicks;
 	private boolean active;
-	private Stream<BlockPos> area;
+	private Iterable<BlockPos> area;
 	private ResourceLocation tierName;
 
 	public TorcherinoTileEntity()
@@ -64,7 +64,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		this.yRange = compound.getInt("YRange");
 		this.speed = compound.getInt("Speed");
 		this.redstoneMode = compound.getInt("RedstoneMode");
-		area = BlockPos.getAllInBox(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
+		area = BlockPos.getAllInBoxMutable(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
 	}
 
 	public CompoundNBT write(CompoundNBT compound)
@@ -84,7 +84,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		this.xRange = xRange;
 		this.zRange = zRange;
 		this.yRange = yRange;
-		area = BlockPos.getAllInBox(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
+		area = BlockPos.getAllInBoxMutable(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
 		this.speed = speed;
 		this.redstoneMode = redstoneMode;
 		BlockState state = world.getBlockState(pos);

@@ -54,6 +54,7 @@ public class TorcherinoScreen extends Screen
 		super.init();
 		guiLeft = (this.width - xSize) / 2;
 		guiTop = (this.height - ySize) / 2;
+		// Todo: rework all buttons to support narration and generally work in 1.14
 		this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 20, 205)
 		{
 			private int speed;
@@ -208,15 +209,15 @@ public class TorcherinoScreen extends Screen
 
 	@Override public void onClose()
 	{
-		super.onClose();
 		Networker.INSTANCE.torcherinoChannel.sendToServer(new ValueUpdateMessage(this.tileEntity.getPos(), this.xRange, this.zRange, this.yRange, this.speed, this.redstoneMode));
+		super.onClose();
 	}
 
 	@Override public boolean isPauseScreen(){ return false; }
 
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		if (keyCode == 256 || minecraft.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) minecraft.player.closeScreen();
+		if (keyCode == 256 || minecraft.gameSettings.keyBindInventory.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode))) this.onClose();
 		else super.keyPressed(keyCode, scanCode, modifiers);
 		return true;
 	}

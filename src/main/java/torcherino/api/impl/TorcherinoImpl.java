@@ -1,6 +1,7 @@
 package torcherino.api.impl;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -92,5 +93,10 @@ public class TorcherinoImpl implements TorcherinoAPI
 	@Override public Tier getTier(ResourceLocation name)
 	{
 		return serverTiers.getOrDefault(name, null);
+	}
+
+	@Override public ImmutableSet<Block> getTorcherinoBlocks()
+	{
+		return ImmutableSet.copyOf(torcherinoBlocks);
 	}
 }

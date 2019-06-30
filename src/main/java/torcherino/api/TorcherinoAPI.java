@@ -1,6 +1,7 @@
 package torcherino.api;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import torcherino.api.impl.TorcherinoImpl;
@@ -86,4 +87,10 @@ public interface TorcherinoAPI
 	 * @since 8.1.2
 	 */
 	boolean registerTorcherinoBlock(Block block);
+
+	/**
+	 * @return A set of all torcherino blocks registered through the API.
+	 * @since 9.0.0
+	 */
+	ImmutableSet<Block> getTorcherinoBlocks();
 }

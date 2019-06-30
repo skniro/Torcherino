@@ -70,8 +70,7 @@ public class Blocks
 
 	@SubscribeEvent public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
 	{
-		// todo change this to all api registered blocks.
-		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new, blocks.toArray(new Block[]{})).build(null).setRegistryName(Torcherino.resloc("torcherino"));
+		TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder.create(TorcherinoTileEntity::new, TorcherinoAPI.INSTANCE.getTorcherinoBlocks().toArray(new Block[]{})).build(null).setRegistryName(Torcherino.resloc("torcherino"));
 		TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY_TYPE);
 		registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
 	}
