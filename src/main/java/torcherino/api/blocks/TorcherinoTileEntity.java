@@ -132,11 +132,8 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	@Override public void onLoad()
 	{
 		super.onLoad();
-		if(world.isRemote) return;
+		if (world.isRemote) return;
 		area = BlockPos.getAllInBoxMutable(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange, pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
-		world.getServer().enqueue(new TickDelayedTask(world.getServer().getTickCounter(), () -> {
-			setPoweredByRedstone(world.getBlockState(pos).get(BlockStateProperties.POWERED));
-		}));
-
+		world.getServer().enqueue(new TickDelayedTask(world.getServer().getTickCounter(), () -> setPoweredByRedstone(world.getBlockState(pos).get(BlockStateProperties.POWERED))));
 	}
 }
