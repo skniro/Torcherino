@@ -34,6 +34,11 @@ public class Torcherino
 		eventBus.register(Blocks.INSTANCE);
 		eventBus.addListener(this::processIMC);
 		MinecraftForge.EVENT_BUS.addListener(this::processPlayerJoin);
+		TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.WATER);
+		TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.LAVA);
+		TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.AIR);
+		TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.CAVE_AIR);
+		TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.VOID_AIR);
 	}
 
 	private void processPlayerJoin(final PlayerEvent.PlayerLoggedInEvent event){ Networker.INSTANCE.sendServerTiers((ServerPlayerEntity) event.getPlayer()); }
