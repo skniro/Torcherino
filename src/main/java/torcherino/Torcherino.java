@@ -69,8 +69,5 @@ public class Torcherino
 		TODO: Make TE register blocks from API.
 		TODO: Bug test.
 		TODO: Finally release the mod?
-
-		TODO: Re-release 1.13.2 version without debug print in screen.
-
 	 */
 }
