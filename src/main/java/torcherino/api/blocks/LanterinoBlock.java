@@ -87,6 +87,7 @@ public class LanterinoBlock extends BlockCarvedPumpkin
 		}
 	}
 
+	// todo: in 1.14.x replace this with loot tables
 	@Override public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
 	{
 		player.addStat(StatList.BLOCK_MINED.get(this));

@@ -15,6 +15,7 @@ import java.util.Set;
 public class TorcherinoImpl implements TorcherinoAPI
 {
 	private Map<ResourceLocation, Tier> tiers = new HashMap<>();
+	private Map<ResourceLocation, Tier> serverTiers = new HashMap<>();
 
 	private Set<Block> blacklistedBlocks = new HashSet<>();
 
