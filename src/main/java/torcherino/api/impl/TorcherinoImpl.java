@@ -8,11 +8,12 @@ import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
+import torcherino.api.TorcherinoBlacklistAPI;
 import java.util.HashSet;
 
-public class TorcherinoImpl implements TorcherinoAPI
+public class TorcherinoImpl implements TorcherinoAPI, TorcherinoBlacklistAPI
 {
-	public static final TorcherinoAPI INSTANCE = new TorcherinoImpl();
+	public static final TorcherinoImpl INSTANCE = new TorcherinoImpl();
 
 	private final Logger LOGGER = LogManager.getLogger("torcherino-api");
 	private final HashSet<Block> blacklistedBlocks;
