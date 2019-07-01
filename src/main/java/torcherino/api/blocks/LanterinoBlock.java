@@ -64,7 +64,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
 		if (world.isClient) return;
 		String prefix = "Something";
 		if (placer != null) prefix = placer.getDisplayName().getString() + " (" + placer.getUuidAsString() + ")";
-		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("blocks.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
