@@ -33,9 +33,9 @@ public class Blocks
 
 	private static void register(String name, int speed)
 	{
-		Block torcherinoBlock = new TorcherinoBlock(speed, Utils.getId("blocks/%storcherino", name));
+		Block torcherinoBlock = new TorcherinoBlock(speed, Utils.getId("block/%storcherino", name));
 		Block torcherinoWallBlock = new TorcherinoWallBlock(speed, torcherinoBlock);
-		Block lanterinoBlock = new LanterinoBlock(speed, Utils.getId("blocks/%slanterino", name));
+		Block lanterinoBlock = new LanterinoBlock(speed, Utils.getId("block/%slanterino", name));
 		Registry.register(Registry.BLOCK, Utils.getId("%storcherino", name), torcherinoBlock);
 		Registry.register(Registry.BLOCK, Utils.getId("wall_%storcherino", name), torcherinoWallBlock);
 		Registry.register(Registry.ITEM, Utils.getId("%storcherino", name), new WallStandingBlockItem(torcherinoBlock, torcherinoWallBlock, new Item.Settings().group(ItemGroup.DECORATIONS)));
