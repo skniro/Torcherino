@@ -1,14 +1,14 @@
 package torcherino.api.impl;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.TorcherinoBlacklistAPI;
 import java.util.HashSet;
 
 /**
@@ -16,7 +16,7 @@ import java.util.HashSet;
  * Why? anything in this class is subject to change where as anything in the API won't
  * be removed without significant warning time. e.g. a minecraft version update or major mod update.
  */
-public class TorcherinoImpl implements TorcherinoAPI, TorcherinoBlacklistAPI
+public class TorcherinoImpl implements TorcherinoAPI
 {
 	public static final TorcherinoImpl INSTANCE = new TorcherinoImpl();
 
@@ -30,38 +30,58 @@ public class TorcherinoImpl implements TorcherinoAPI, TorcherinoBlacklistAPI
 		blacklistedBlockEntities = new HashSet<>();
 	}
 
+	@Override public ImmutableMap<Identifier, Tier> getTiers()
+	{
+		return null;
+	}
+
+	@Override public Tier getTier(Identifier name)
+	{
+		return null;
+	}
+
+	@Override public boolean registerTier(Identifier name, int maxSpeed, int xzRange, int yRange)
+	{
+		return false;
+	}
+
+	@Override public boolean blacklistBlock(Identifier blockIdentifier)
+	{
+		return false;
+	}
+
+	@Override public boolean blacklistBlock(Block block)
+	{
+		return false;
+	}
+
+	@Override public boolean blacklistBlockEntity(Identifier blockEntityIdentifier)
+	{
+		return false;
+	}
+
+	@Override public boolean blacklistBlockEntity(BlockEntityType blockEntity)
+	{
+		return false;
+	}
+
 	@Override public boolean isBlockBlacklisted(Block block)
 	{
-		return blacklistedBlocks.contains(block);
+		return false;
 	}
 
 	@Override public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType)
 	{
-		return blacklistedBlockEntities.contains(blockEntityType);
+		return false;
 	}
 
-	@Override public void blacklistBlock(Block block)
+	@Override public boolean registerTorcherinoBlock(Block block)
 	{
-		blacklistedBlocks.add(block);
+		return false;
 	}
 
-	@Override public void blacklistBlock(Identifier blockIdentifier)
+	@Override public ImmutableSet<Block> getTorcherinoBlocks()
 	{
-		Block block = Registry.BLOCK.get(blockIdentifier);
-		// why would someone want to blacklist air? Let's let them anyways.
-		if (block != Blocks.AIR || blockIdentifier.equals(Registry.BLOCK.getId(Blocks.AIR))) blacklistBlock(block);
-		else LOGGER.warn("Could not find a block matching provided identifier: {}.", blockIdentifier);
-	}
-
-	@Override public void blacklistBlockEntity(BlockEntityType blockEntityType)
-	{
-		blacklistedBlockEntities.add(blockEntityType);
-	}
-
-	@Override public void blacklistBlockEntity(Identifier blockEntityTypeIdentifier)
-	{
-		BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(blockEntityTypeIdentifier);
-		if (blockEntityType != BlockEntityType.FURNACE || blockEntityTypeIdentifier.equals(Registry.BLOCK_ENTITY.getId(BlockEntityType.FURNACE))) blacklistBlockEntity(blockEntityType);
-		else LOGGER.warn("Could not find a block entity type matching provided identifier: {}.", blockEntityTypeIdentifier);
+		return null;
 	}
 }

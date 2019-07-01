@@ -1,66 +1,103 @@
 package torcherino.api;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import torcherino.api.impl.TorcherinoImpl;
 
+/**
+ * @author NinjaPhenix
+ * @since 1.9.51
+ */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface TorcherinoAPI
 {
 	/**
 	 * The Implementation of the API, you should use this for all methods.
-	 * e.g. TorcherinoBlacklistAPI.INSTANCE.blacklistBlock(Blocks.STONE)
+	 * e.g. TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.STONE)
 	 */
 	TorcherinoAPI INSTANCE = TorcherinoImpl.INSTANCE;
 
+	/**
+	 * @return Immutable map of tierID -> tier
+	 * @since 1.9.51
+	 */
+	ImmutableMap<Identifier, Tier> getTiers();
 
 	/**
-	 * Checks if a Block is blacklisted.
+	 * Returns the tier for the given tierName.
 	 *
-	 * @param block The Block to check is blacklisted.
-	 * @return boolean primitive, true for block is blacklisted, false otherwise.
-	 * @since 1.8.49
+	 * @param name The tier name to retrieve.
+	 * @return The tier or null if it does not exist.
+	 * @since 1.9.51
+	 */
+	Tier getTier(Identifier name);
+
+	/**
+	 * @param name     Identifier for the new tier.
+	 * @param maxSpeed The max speed blocks of this tier should have.
+	 * @param xzRange  The max range horizontally blocks of this tier should have.
+	 * @param yRange   The max range vertically blocks of this tier should have.
+	 * @return TRUE if the tier was registered, FALSE if tier with same name exists.
+	 * @since 1.9.51
+	 */
+	boolean registerTier(Identifier name, int maxSpeed, int xzRange, int yRange);
+
+	/**
+	 * @param blockIdentifier The Identifier of the block to be blacklisted.
+	 * @return TRUE if added to blacklist, FALSE if no block exists or already on blacklist.
+	 * @since 1.9.51
+	 */
+	boolean blacklistBlock(Identifier blockIdentifier);
+
+	/**
+	 * @param block The block to be blacklisted.
+	 * @return TRUE if added to blacklist, FALSE if already on blacklist.
+	 * @since 1.9.51
+	 */
+	boolean blacklistBlock(Block block);
+
+	/**
+	 * @param blockEntityIdentifier The Identifier of the block entity to be blacklisted.
+	 * @return TRUE if added to blacklist, FALSE if no block entity exists or already on blacklist.
+	 * @since 1.9.51
+	 */
+	boolean blacklistBlockEntity(Identifier blockEntityIdentifier);
+
+	/**
+	 * @param blockEntity The block entity type to be blacklisted.
+	 * @return TRUE if added to blacklist, FALSE if already on blacklist.
+	 * @since 1.9.51
+	 */
+	boolean blacklistBlockEntity(BlockEntityType blockEntity);
+
+	/**
+	 * @param block The block to check is blacklisted.
+	 * @return TRUE if blacklisted, FALSE otherwise.
+	 * @since 1.9.51
 	 */
 	boolean isBlockBlacklisted(Block block);
 
 	/**
-	 * Checks if a BlockEntityType is blacklisted.
-	 *
-	 * @param blockEntityType The BlockEntityType to check is blacklisted.
-	 * @return boolean primitive, true for block entity type is blacklisted, false otherwise.
-	 * @since 1.8.49
+	 * @param blockEntityType The block entity type to check is blacklisted.
+	 * @return TRUE if blacklisted, FALSE otherwise.
+	 * @since 1.9.51
 	 */
 	boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType);
 
 	/**
-	 * Blacklists a Block from being ticked.
-	 *
-	 * @param block The block to blacklist.
-	 * @since 1.8.49
+	 * Use this method so the Torcherino Block Entity includes your block.
+	 * @param block The block to register.
+	 * @return TRUE if registered and blacklisted, FALSE otherwise.
+	 * @since 1.9.51
 	 */
-	void blacklistBlock(Block block);
+	boolean registerTorcherinoBlock(Block block);
 
 	/**
-	 * Same as blacklistBlock(Block) however will attempt to find the block from Registry.BLOCK by identifier.
-	 *
-	 * @param blockIdentifier The Identifier for the Block to be blacklisted.
-	 * @since 1.8.49
+	 * @return A set of all torcherino blocks registered through the API.
+	 * @since 1.9.51
 	 */
-	void blacklistBlock(Identifier blockIdentifier);
-
-	/**
-	 * Blacklists a BlockEntityType from being ticked.
-	 *
-	 * @param blockEntityType The Block Entity Type to blacklist.
-	 * @since 1.8.49
-	 */
-	void blacklistBlockEntity(BlockEntityType blockEntityType);
-
-	/**
-	 * Same as blacklistBlock(Block) however will attempt to find the block from Registry.BLOCK_ENTITY by identifier.
-	 *
-	 * @param blockEntityTypeIdentifier The identifier for the BlockEntityType to be blacklisted.
-	 * @since 1.8.49
-	 */
-	void blacklistBlockEntity(Identifier blockEntityTypeIdentifier);
+	ImmutableSet<Block> getTorcherinoBlocks();
 }
