@@ -1,4 +1,4 @@
-package torcherino.block;
+package torcherino.api.blocks;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
@@ -12,25 +12,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Utils;
-import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.Random;
 
-public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityProvider
+public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
 {
 	private final int MAX_SPEED;
 
-	TorcherinoWallBlock(int maxSpeed, Block block)
+	public LanterinoBlock(int maxSpeed, Identifier id)
 	{
-		super(FabricBlockSettings.of(Material.PART).lightLevel(14).noCollision().sounds(BlockSoundGroup.WOOD).breakInstantly().dropsLike(block).build());
+		super(FabricBlockSettings.of(Material.PUMPKIN, MaterialColor.ORANGE).lightLevel(15).sounds(BlockSoundGroup.WOOD).strength(1, 1).drops(id).build());
 		MAX_SPEED = maxSpeed;
 	}
 
@@ -45,8 +44,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 		if (world.isClient) return;
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity == null) return;
-		Direction oppositeFacing = state.get(FACING).getOpposite();
-		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.offset(oppositeFacing), oppositeFacing));
+		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(pos));
 	}
 
 	@Override public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
@@ -66,7 +64,7 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
 		if (world.isClient) return;
 		String prefix = "Something";
 		if (placer != null) prefix = placer.getDisplayName().getString() + " (" + placer.getUuidAsString() + ")";
-		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("blocks.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)

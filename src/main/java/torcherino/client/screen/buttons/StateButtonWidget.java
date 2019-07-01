@@ -1,4 +1,4 @@
-package torcherino.block.screen;
+package torcherino.client.screen.buttons;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
@@ -6,8 +6,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
+import net.minecraft.text.TranslatableText;
 
 public abstract class StateButtonWidget extends ButtonWidget
 {
@@ -43,7 +43,7 @@ public abstract class StateButtonWidget extends ButtonWidget
 		GlStateManager.disableDepthTest();
 	}
 
-	@Override protected String getNarrationMessage(){ return I18n.translate(this.narrationMessage, getStateName(state)); }
+	@Override protected String getNarrationMessage(){ return new TranslatableText(this.narrationMessage, getStateName(state)).asFormattedString(); }
 
 	@Override public void onPress(){ onStateChange(state = (state + 1) % MAX_STATES); }
 }

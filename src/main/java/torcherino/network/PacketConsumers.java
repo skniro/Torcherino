@@ -1,4 +1,4 @@
-package torcherino.networking;
+package torcherino.network;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -10,8 +10,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import torcherino.block.entity.TorcherinoBlockEntity;
-import torcherino.block.screen.TorcherinoScreen;
+import torcherino.api.blocks.TorcherinoBlockEntity;
+import torcherino.client.screen.TorcherinoScreen;
 
 public class PacketConsumers
 {

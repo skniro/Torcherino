@@ -1,4 +1,4 @@
-package torcherino.block;
+package torcherino.api.blocks;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
@@ -17,20 +17,20 @@ import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Utils;
-import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.Random;
 
-public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
+public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
 {
 	private final int MAX_SPEED;
 
-	LanterinoBlock(int maxSpeed, Identifier id)
+	public TorcherinoBlock(int maxSpeed, Identifier id)
 	{
-		super(FabricBlockSettings.of(Material.PUMPKIN, MaterialColor.ORANGE).lightLevel(15).sounds(BlockSoundGroup.WOOD).strength(1, 1).drops(id).build());
+		super(FabricBlockSettings.of(Material.PART).lightLevel(14).noCollision().sounds(BlockSoundGroup.WOOD).breakInstantly().drops(id).build());
 		MAX_SPEED = maxSpeed;
 	}
 
@@ -45,7 +45,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
 		if (world.isClient) return;
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity == null) return;
-		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(pos));
+		((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.down(), Direction.DOWN));
 	}
 
 	@Override public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
@@ -65,7 +65,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
 		if (world.isClient) return;
 		String prefix = "Something";
 		if (placer != null) prefix = placer.getDisplayName().getString() + " (" + placer.getUuidAsString() + ")";
-		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+		Utils.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("blocks.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)

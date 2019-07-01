@@ -22,7 +22,7 @@ public interface TorcherinoBlacklistAPI
 	 * Checks if a Block is blacklisted.
 	 *
 	 * @param block The Block to check is blacklisted.
-	 * @return boolean primitive, true for block is blacklisted, false otherwise.
+	 * @return boolean primitive, true for blocks is blacklisted, false otherwise.
 	 * @since 1.8.49
 	 */
 	boolean isBlockBlacklisted(Block block);
@@ -31,7 +31,7 @@ public interface TorcherinoBlacklistAPI
 	 * Checks if a BlockEntityType is blacklisted.
 	 *
 	 * @param blockEntityType The BlockEntityType to check is blacklisted.
-	 * @return boolean primitive, true for block entity type is blacklisted, false otherwise.
+	 * @return boolean primitive, true for blocks entity type is blacklisted, false otherwise.
 	 * @since 1.8.49
 	 */
 	boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType);
@@ -39,13 +39,13 @@ public interface TorcherinoBlacklistAPI
 	/**
 	 * Blacklists a Block from being ticked.
 	 *
-	 * @param block The block to blacklist.
+	 * @param block The blocks to blacklist.
 	 * @since 1.8.49
 	 */
 	void blacklistBlock(Block block);
 
 	/**
-	 * Same as blacklistBlock(Block) however will attempt to find the block from Registry.BLOCK by identifier.
+	 * Same as blacklistBlock(Block) however will attempt to find the blocks from Registry.BLOCK by identifier.
 	 *
 	 * @param blockIdentifier The Identifier for the Block to be blacklisted.
 	 * @since 1.8.49
@@ -61,7 +61,7 @@ public interface TorcherinoBlacklistAPI
 	void blacklistBlockEntity(BlockEntityType blockEntityType);
 
 	/**
-	 * Same as blacklistBlock(Block) however will attempt to find the block from Registry.BLOCK_ENTITY by identifier.
+	 * Same as blacklistBlock(Block) however will attempt to find the blocks from Registry.BLOCK_ENTITY by identifier.
 	 *
 	 * @param blockEntityTypeIdentifier The identifier for the BlockEntityType to be blacklisted.
 	 * @since 1.8.49

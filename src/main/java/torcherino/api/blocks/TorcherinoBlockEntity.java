@@ -1,4 +1,4 @@
-package torcherino.block.entity;
+package torcherino.api.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import torcherino.api.TorcherinoBlacklistAPI;
-import torcherino.block.ModBlocks;
+import torcherino.blocks.Blocks;
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
@@ -21,7 +21,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 	private Iterable<BlockPos> positions;
 	private static final Random RANDOM = new Random();
 
-	public TorcherinoBlockEntity(){ super(ModBlocks.TORCHERINO_BLOCK_ENTITY_TYPE); }
+	public TorcherinoBlockEntity(){ super(Blocks.TORCHERINO_BLOCK_ENTITY_TYPE); }
 
 	public TorcherinoBlockEntity(int speed)
 	{

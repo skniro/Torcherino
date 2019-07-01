@@ -1,17 +1,19 @@
-package torcherino.block.screen;
+package torcherino.client.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.impl.network.ClientSidePacketRegistryImpl;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import torcherino.Utils;
+import torcherino.client.screen.buttons.SliderButton;
+import torcherino.client.screen.buttons.StateButtonWidget;
 
 public class TorcherinoScreen extends Screen
 {
@@ -39,20 +41,20 @@ public class TorcherinoScreen extends Screen
 
 	@Override protected void init()
 	{
-		BLOCK_NAME = I18n.translate(minecraft.world.getBlockState(POS).getBlock().getTranslationKey());
+		BLOCK_NAME = new TranslatableText(minecraft.world.getBlockState(POS).getBlock().getTranslationKey()).asFormattedString();
 		LEFT = (width - WIDTH) / 2;
 		TOP = (height - HEIGHT) / 2;
 		this.addButton(new StateButtonWidget(this, width / 2 + 95, height / 2 - 40, redstoneInteractionMode, STATE_ITEMS.length, "screen.torcherino.narrate.redstoneinteraction")
 		{
 			@Override protected Item getStateItem(int state){ return STATE_ITEMS[state]; }
 
-			@Override protected String getStateName(int state){ return I18n.translate(STATE_NAMES[state]); }
+			@Override protected String getStateName(int state){ return new TranslatableText(STATE_NAMES[state]).asFormattedString(); }
 
 			@Override protected void onStateChange(int state){ redstoneInteractionMode = state; }
 		});
-		this.addButton(new SliderWidget(width / 2 - 115, height / 2 - 15, 230, 20, ((double) speed) / ((double) MAX_SPEED), MAX_SPEED + 1)
+		this.addButton(new SliderButton(width / 2 - 115, height / 2 - 15, 230, 20, ((double) speed) / ((double) MAX_SPEED), MAX_SPEED + 1)
 		{
-			@Override protected void updateMessage(){ setMessage(I18n.translate("screen.torcherino.speed", 100 * speed)); }
+			@Override protected void updateMessage(){ setMessage(new TranslatableText("screen.torcherino.speed", 100 * speed).asFormattedString()); }
 
 			@Override protected void applyValue()
 			{
@@ -60,12 +62,12 @@ public class TorcherinoScreen extends Screen
 				value = (double) speed / (double) MAX_SPEED;
 			}
 		});
-		this.addButton(new SliderWidget(width / 2 - 115, height / 2 + 10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
+		this.addButton(new SliderButton(width / 2 - 115, height / 2 + 10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
 		{
 			@Override protected void updateMessage()
 			{
-				setMessage(I18n.translate("screen.torcherino." + MODES[mode], 2 * mode + 1));
-				narrationMessage = I18n.translate("screen.torcherino.narrate." + MODES[mode], 2 * mode + 1);
+				setMessage(new TranslatableText("screen.torcherino." + MODES[mode], 2 * mode + 1).asFormattedString());
+				narrationMessage = new TranslatableText("screen.torcherino.narrate." + MODES[mode], 2 * mode + 1).asFormattedString();
 			}
 
 			@Override protected void applyValue()

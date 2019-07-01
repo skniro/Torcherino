@@ -1,4 +1,4 @@
-package torcherino.block;
+package torcherino.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
@@ -9,10 +9,13 @@ import net.minecraft.item.WallStandingBlockItem;
 import net.minecraft.util.registry.Registry;
 import torcherino.Utils;
 import torcherino.api.TorcherinoBlacklistAPI;
-import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.api.blocks.LanterinoBlock;
+import torcherino.api.blocks.TorcherinoBlock;
+import torcherino.api.blocks.TorcherinoBlockEntity;
+import torcherino.api.blocks.TorcherinoWallBlock;
 import java.util.HashSet;
 
-public class ModBlocks
+public class Blocks
 {
 	public static BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE;
 
@@ -30,9 +33,9 @@ public class ModBlocks
 
 	private static void register(String name, int speed)
 	{
-		Block torcherinoBlock = new TorcherinoBlock(speed, Utils.getId("block/%storcherino", name));
+		Block torcherinoBlock = new TorcherinoBlock(speed, Utils.getId("blocks/%storcherino", name));
 		Block torcherinoWallBlock = new TorcherinoWallBlock(speed, torcherinoBlock);
-		Block lanterinoBlock = new LanterinoBlock(speed, Utils.getId("block/%slanterino", name));
+		Block lanterinoBlock = new LanterinoBlock(speed, Utils.getId("blocks/%slanterino", name));
 		Registry.register(Registry.BLOCK, Utils.getId("%storcherino", name), torcherinoBlock);
 		Registry.register(Registry.BLOCK, Utils.getId("wall_%storcherino", name), torcherinoWallBlock);
 		Registry.register(Registry.ITEM, Utils.getId("%storcherino", name), new WallStandingBlockItem(torcherinoBlock, torcherinoWallBlock, new Item.Settings().group(ItemGroup.DECORATIONS)));

@@ -7,8 +7,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.api.TorcherinoBlacklistInitializer;
-import torcherino.block.ModBlocks;
-import torcherino.networking.PacketConsumers;
+import torcherino.blocks.Blocks;
+import torcherino.network.PacketConsumers;
 
 @EnvironmentInterface(itf = ClientModInitializer.class, value = EnvType.CLIENT)
 public class Torcherino implements ModInitializer, ClientModInitializer, TorcherinoBlacklistInitializer
@@ -16,7 +16,7 @@ public class Torcherino implements ModInitializer, ClientModInitializer, Torcher
 	@Override public void onInitialize()
 	{
 		ServerSidePacketRegistryImpl.INSTANCE.register(Utils.getId("updatetorcherinostate"), new PacketConsumers.UpdateTorcherinoConsumer());
-		ModBlocks.onInitialize();
+		Blocks.onInitialize();
 		FabricLoader.getInstance().getEntrypoints("torcherino", TorcherinoBlacklistInitializer.class).forEach(TorcherinoBlacklistInitializer::onTorcherinoBlacklist);
 	}
 

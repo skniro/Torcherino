@@ -1,14 +1,14 @@
-package torcherino.block.screen;
+package torcherino.client.screen.buttons;
 
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.MathHelper;
 
-public abstract class SliderWidget extends net.minecraft.client.gui.widget.SliderWidget
+public abstract class SliderButton extends net.minecraft.client.gui.widget.SliderWidget
 {
 	private double arrowNudgeAmount = 1;
-	String narrationMessage = "";
+	protected String narrationMessage = "";
 
-	SliderWidget(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
+	protected SliderButton(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
 	{
 		super(int_1, int_2, int_3, int_4, double_1);
 		this.arrowNudgeAmount /= permutations;
@@ -40,5 +40,5 @@ public abstract class SliderWidget extends net.minecraft.client.gui.widget.Slide
 		return false;
 	}
 
-	@Override protected String getNarrationMessage(){ return I18n.translate("gui.narrate.slider", narrationMessage.equals("") ? this.getMessage() : narrationMessage); }
+	@Override protected String getNarrationMessage(){ return new TranslatableText("gui.narrate.slider", narrationMessage.equals("") ? this.getMessage() : narrationMessage).asFormattedString(); }
 }
