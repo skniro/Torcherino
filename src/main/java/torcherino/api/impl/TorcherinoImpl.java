@@ -5,10 +5,12 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -21,33 +23,66 @@ public class TorcherinoImpl implements TorcherinoAPI
 	public static final TorcherinoImpl INSTANCE = new TorcherinoImpl();
 
 	private final Logger LOGGER = LogManager.getLogger("torcherino-api");
+	private final HashMap<Identifier, Tier> localTiers;
+	private final HashMap<Identifier, Tier> remoteTiers;
+	private final HashSet<Block> torcherinoBlocks;
 	private final HashSet<Block> blacklistedBlocks;
 	private final HashSet<BlockEntityType> blacklistedBlockEntities;
 
 	private TorcherinoImpl()
 	{
+		localTiers = new HashMap<>();
+		// On Server this will always be empty.
+		// On Client this will always be a copy of the server's tier (even on integrated server)
+		remoteTiers = new HashMap<>();
+		torcherinoBlocks = new HashSet<>();
 		blacklistedBlocks = new HashSet<>();
 		blacklistedBlockEntities = new HashSet<>();
 	}
 
 	@Override public ImmutableMap<Identifier, Tier> getTiers()
 	{
-		return null;
+		return ImmutableMap.copyOf(localTiers);
 	}
 
-	@Override public Tier getTier(Identifier name)
+	@Override public Tier getTier(Identifier tierIdentifier)
 	{
-		return null;
+		return remoteTiers.getOrDefault(tierIdentifier, null);
 	}
 
-	@Override public boolean registerTier(Identifier name, int maxSpeed, int xzRange, int yRange)
+	@Override public boolean registerTier(Identifier tierIdentifier, int maxSpeed, int xzRange, int yRange)
 	{
-		return false;
+		Tier tier = new Tier(maxSpeed, xzRange, yRange);
+		if (localTiers.containsKey(tierIdentifier))
+		{
+			LOGGER.error("Tier with id {} has already been declared.", tierIdentifier);
+			return false;
+		}
+		localTiers.put(tierIdentifier, tier);
+		return true;
 	}
 
 	@Override public boolean blacklistBlock(Identifier blockIdentifier)
 	{
-		return false;
+		if (Registry.BLOCK.containsId(blockIdentifier))
+		{
+			Block block = Registry.BLOCK.get(blockIdentifier);
+			if (blacklistedBlocks.contains(block))
+			{
+				LOGGER.error("Block with id {} has already been blacklisted.", blockIdentifier);
+				return false;
+			}
+			else
+			{
+				blacklistedBlocks.add(block);
+				return true;
+			}
+		}
+		else
+		{
+			LOGGER.error("No such block exists with id {}.", blockIdentifier);
+			return false;
+		}
 	}
 
 	@Override public boolean blacklistBlock(Block block)

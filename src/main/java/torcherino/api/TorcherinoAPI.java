@@ -29,21 +29,21 @@ public interface TorcherinoAPI
 	/**
 	 * Returns the tier for the given tierName.
 	 *
-	 * @param name The tier name to retrieve.
+	 * @param tierIdentifier The tier name to retrieve.
 	 * @return The tier or null if it does not exist.
 	 * @since 1.9.51
 	 */
-	Tier getTier(Identifier name);
+	Tier getTier(Identifier tierIdentifier);
 
 	/**
-	 * @param name     Identifier for the new tier.
+	 * @param tierIdentifier     Identifier for the new tier.
 	 * @param maxSpeed The max speed blocks of this tier should have.
 	 * @param xzRange  The max range horizontally blocks of this tier should have.
 	 * @param yRange   The max range vertically blocks of this tier should have.
 	 * @return TRUE if the tier was registered, FALSE if tier with same name exists.
 	 * @since 1.9.51
 	 */
-	boolean registerTier(Identifier name, int maxSpeed, int xzRange, int yRange);
+	boolean registerTier(Identifier tierIdentifier, int maxSpeed, int xzRange, int yRange);
 
 	/**
 	 * @param blockIdentifier The Identifier of the block to be blacklisted.
