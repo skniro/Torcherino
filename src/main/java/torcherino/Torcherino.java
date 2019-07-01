@@ -35,3 +35,13 @@ public class Torcherino implements ModInitializer, ClientModInitializer, Torcher
 		}
 	}
 }
+
+
+/*
+
+	TODO:
+		1. Change GUI to allow indiviual control of each axis.
+		2. Implement tiers
+		3. Add config to allow user configurability.
+		4. probably more
+ */

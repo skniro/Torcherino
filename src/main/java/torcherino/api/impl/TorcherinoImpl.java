@@ -7,24 +7,19 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import torcherino.api.TorcherinoAPI;
 import torcherino.api.TorcherinoBlacklistAPI;
 import java.util.HashSet;
 
-/**
- * DO NOT USE THIS CLASS DIRECTLY. Use TorcherinoBlacklistAPI.INSTANCE instead.
- * Why? anything in this class is subject to change where as anything in the API won't
- * be removed without significant warning time. e.g. a minecraft version update or major mod update.
- * @deprecated This class will be removed in the future.
- */
-public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
+public class TorcherinoImpl implements TorcherinoAPI, TorcherinoBlacklistAPI
 {
-	public static final TorcherinoBlacklistAPI INSTANCE = new TorcherinoBlacklistImpl();
+	public static final TorcherinoAPI INSTANCE = new TorcherinoImpl();
 
 	private final Logger LOGGER = LogManager.getLogger("torcherino-api");
 	private final HashSet<Block> blacklistedBlocks;
 	private final HashSet<BlockEntityType> blacklistedBlockEntities;
 
-	private TorcherinoBlacklistImpl()
+	private TorcherinoImpl()
 	{
 		blacklistedBlocks = new HashSet<>();
 		blacklistedBlockEntities = new HashSet<>();

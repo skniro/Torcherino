@@ -3,20 +3,15 @@ package torcherino.api;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
-import torcherino.api.impl.TorcherinoBlacklistImpl;
+import torcherino.api.impl.TorcherinoImpl;
 
-/**
- * @author NinjaPhenix
- * @since 1.8.49
- * @deprecated Warning this interface will be removed in the future look at TorcherinoAPI instead.
- */
-public interface TorcherinoBlacklistAPI
+public interface TorcherinoAPI
 {
 	/**
 	 * The Implementation of the API, you should use this for all methods.
 	 * e.g. TorcherinoBlacklistAPI.INSTANCE.blacklistBlock(Blocks.STONE)
 	 */
-	TorcherinoBlacklistAPI INSTANCE = TorcherinoBlacklistImpl.INSTANCE;
+	TorcherinoAPI INSTANCE = TorcherinoImpl.INSTANCE;
 
 
 	/**
