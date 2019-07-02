@@ -11,11 +11,11 @@ import net.minecraft.text.TranslatableText;
 
 public abstract class StateButtonWidget extends ButtonWidget
 {
-    private int state;
+    private static ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
     private final int MAX_STATES;
     private final Screen screen;
     private final String narrationMessage;
-    private static ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+    private int state;
 
     public StateButtonWidget(Screen screen, int x, int y, int state, int maxStates, String narrationMessage)
     {

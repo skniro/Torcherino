@@ -17,10 +17,10 @@ import java.util.Random;
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
     private static final TorcherinoBlacklistAPI API = TorcherinoBlacklistAPI.INSTANCE;
+    private static final Random RANDOM = new Random();
     private boolean poweredByRedstone;
     private int randomTicks = 3, speed, MAX_SPEED, mode, redstoneInteractionMode;
     private Iterable<BlockPos> positions;
-    private static final Random RANDOM = new Random();
 
     public TorcherinoBlockEntity()
     {

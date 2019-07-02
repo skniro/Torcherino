@@ -5,8 +5,8 @@ import net.minecraft.util.math.MathHelper;
 
 public abstract class SliderButton extends net.minecraft.client.gui.widget.SliderWidget
 {
-    private double arrowNudgeAmount = 1;
     protected String narrationMessage = "";
+    private double arrowNudgeAmount = 1;
 
     protected SliderButton(int int_1, int int_2, int int_3, int int_4, double double_1, int permutations)
     {

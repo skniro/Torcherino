@@ -19,13 +19,13 @@ public class TorcherinoScreen extends Screen
 {
     private static final Item[] STATE_ITEMS = { Items.REDSTONE, Items.REDSTONE_TORCH, Items.GUNPOWDER };
     private static final String[] STATE_NAMES = { "screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted", "screen.torcherino.redstoneinteraction.ignore" };
-    private static String[] MODES = { "area.stopped", "area.n", "area.n", "area.n", "area.n" };
     private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
     private static final int WIDTH = 256, HEIGHT = 88;
-    private String BLOCK_NAME;
+    private static String[] MODES = { "area.stopped", "area.n", "area.n", "area.n", "area.n" };
     private final BlockPos POS;
-    private int speed, mode, redstoneInteractionMode, LEFT, TOP;
     private final int MAX_SPEED;
+    private String BLOCK_NAME;
+    private int speed, mode, redstoneInteractionMode, LEFT, TOP;
 
     public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, int mode, int redstoneInteractionMode)
     {

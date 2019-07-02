@@ -18,10 +18,9 @@ import java.util.HashSet;
 
 public class Blocks
 {
-    public static BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE;
-
-    private static HashSet<Block> BLOCKS = new HashSet<>();
     private static final TorcherinoAPI API = TorcherinoAPI.INSTANCE;
+    public static BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE;
+    private static HashSet<Block> BLOCKS = new HashSet<>();
 
     public static void onInitialize()
     {
