@@ -6,9 +6,15 @@ import org.apache.logging.log4j.Logger;
 
 public class Utils
 {
-	public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
-	public static Identifier getId(String name){ return new Identifier("torcherino", name); }
+    public static Identifier getId(String name)
+    {
+        return new Identifier("torcherino", name);
+    }
 
-	public static Identifier getId(String format, Object... args){ return getId(String.format(format, args)); }
+    public static Identifier getId(String format, Object... args)
+    {
+        return getId(String.format(format, args));
+    }
 }

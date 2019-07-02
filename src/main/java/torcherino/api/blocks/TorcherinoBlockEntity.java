@@ -11,81 +11,100 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.blocks.Blocks;
+
 import java.util.Random;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-	private static final TorcherinoBlacklistAPI API = TorcherinoBlacklistAPI.INSTANCE;
-	private boolean poweredByRedstone;
-	private int randomTicks = 3, speed, MAX_SPEED, mode, redstoneInteractionMode;
-	private Iterable<BlockPos> positions;
-	private static final Random RANDOM = new Random();
+    private static final TorcherinoBlacklistAPI API = TorcherinoBlacklistAPI.INSTANCE;
+    private boolean poweredByRedstone;
+    private int randomTicks = 3, speed, MAX_SPEED, mode, redstoneInteractionMode;
+    private Iterable<BlockPos> positions;
+    private static final Random RANDOM = new Random();
 
-	public TorcherinoBlockEntity(){ super(Blocks.TORCHERINO_BLOCK_ENTITY_TYPE); }
+    public TorcherinoBlockEntity()
+    {
+        super(Blocks.TORCHERINO_BLOCK_ENTITY_TYPE);
+    }
 
-	public TorcherinoBlockEntity(int speed)
-	{
-		this();
-		MAX_SPEED = speed;
-		redstoneInteractionMode = 0;
-	}
+    public TorcherinoBlockEntity(int speed)
+    {
+        this();
+        MAX_SPEED = speed;
+        redstoneInteractionMode = 0;
+    }
 
-	public void setSpeed(int speed){ this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
+    public void setSpeed(int speed)
+    {
+        this.speed = MathHelper.clamp(speed, 0, MAX_SPEED);
+    }
 
-	public void setMode(int mode)
-	{
-		this.mode = MathHelper.clamp(mode, 0, 4);
-		positions = BlockPos.iterate(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode));
-	}
+    public void setMode(int mode)
+    {
+        this.mode = MathHelper.clamp(mode, 0, 4);
+        positions = BlockPos.iterate(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode));
+    }
 
-	public void setPoweredByRedstone(boolean powered){ poweredByRedstone = redstoneInteractionMode == 0 ? powered : redstoneInteractionMode == 1 && !powered; }
+    public void setPoweredByRedstone(boolean powered)
+    {
+        poweredByRedstone = redstoneInteractionMode == 0 ? powered : redstoneInteractionMode == 1 && !powered;
+    }
 
-	@Override public BlockEntityUpdateS2CPacket toUpdatePacket(){ return new BlockEntityUpdateS2CPacket(getPos(), 126, toTag(new CompoundTag())); }
+    @Override
+    public BlockEntityUpdateS2CPacket toUpdatePacket()
+    {
+        return new BlockEntityUpdateS2CPacket(getPos(), 126, toTag(new CompoundTag()));
+    }
 
-	@Override public void tick()
-	{
-		if (world.isClient || poweredByRedstone || mode == 0 || speed == 0) return;
-		randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
-		positions.forEach(this::tickBlock);
-	}
+    @Override
+    public void tick()
+    {
+        if (world.isClient || poweredByRedstone || mode == 0 || speed == 0) return;
+        randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
+        positions.forEach(this::tickBlock);
+    }
 
-	private void tickBlock(BlockPos pos)
-	{
-		BlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (block == null || API.isBlockBlacklisted(block)) return;
-		if (block.hasRandomTicks(blockState) && RANDOM.nextInt(4095) < randomTicks * speed) block.onRandomTick(blockState, world, pos, RANDOM);
-		if (!block.hasBlockEntity()) return;
-		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if (blockEntity == null || blockEntity.isInvalid() || !(blockEntity instanceof Tickable) || API.isBlockEntityBlacklisted(blockEntity.getType())) return;
-		for (int i = 0; i < speed; i++) ((Tickable) blockEntity).tick();
-	}
+    private void tickBlock(BlockPos pos)
+    {
+        BlockState blockState = world.getBlockState(pos);
+        Block block = blockState.getBlock();
+        if (block == null || API.isBlockBlacklisted(block)) return;
+        if (block.hasRandomTicks(blockState) && RANDOM.nextInt(4095) < randomTicks * speed)
+            block.onRandomTick(blockState, world, pos, RANDOM);
+        if (!block.hasBlockEntity()) return;
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity == null || blockEntity.isInvalid() || !(blockEntity instanceof Tickable) || API.isBlockEntityBlacklisted(blockEntity.getType()))
+            return;
+        for (int i = 0; i < speed; i++) ((Tickable) blockEntity).tick();
+    }
 
-	public void setRedstoneInteractionMode(int mode)
-	{
-		redstoneInteractionMode = mode;
-		BlockState state = world.getBlockState(pos);
-		state.getBlock().neighborUpdate(state, world, pos, null, null, false);
-	}
+    public void setRedstoneInteractionMode(int mode)
+    {
+        redstoneInteractionMode = mode;
+        BlockState state = world.getBlockState(pos);
+        state.getBlock().neighborUpdate(state, world, pos, null, null, false);
+    }
 
-	@Override public CompoundTag toTag(CompoundTag tag)
-	{
-		super.toTag(tag);
-		tag.putInt("MaxSpeed", MAX_SPEED);
-		tag.putInt("Speed", speed);
-		tag.putInt("Mode", mode);
-		tag.putInt("RedstoneInteractionMode", redstoneInteractionMode);
-		tag.putBoolean("PoweredByRedstone", poweredByRedstone);
-		return tag;
-	}
+    @Override
+    public CompoundTag toTag(CompoundTag tag)
+    {
+        super.toTag(tag);
+        tag.putInt("MaxSpeed", MAX_SPEED);
+        tag.putInt("Speed", speed);
+        tag.putInt("Mode", mode);
+        tag.putInt("RedstoneInteractionMode", redstoneInteractionMode);
+        tag.putBoolean("PoweredByRedstone", poweredByRedstone);
+        return tag;
+    }
 
-	@Override public void fromTag(CompoundTag tag)
-	{
-		super.fromTag(tag);
-		MAX_SPEED = tag.getInt("MaxSpeed");
-		setSpeed(tag.getInt("Speed"));
-		setMode(tag.getInt("Mode"));
-		redstoneInteractionMode = tag.getInt("RedstoneInteractionMode");
-		setPoweredByRedstone(tag.getBoolean("PoweredByRedstone"));
-	}
+    @Override
+    public void fromTag(CompoundTag tag)
+    {
+        super.fromTag(tag);
+        MAX_SPEED = tag.getInt("MaxSpeed");
+        setSpeed(tag.getInt("Speed"));
+        setMode(tag.getInt("Mode"));
+        redstoneInteractionMode = tag.getInt("RedstoneInteractionMode");
+        setPoweredByRedstone(tag.getBoolean("PoweredByRedstone"));
+    }
 }
