@@ -1,6 +1,7 @@
 package torcherino.api;
 
 @FunctionalInterface
+@Deprecated
 public interface TorcherinoBlacklistInitializer
 {
     /**

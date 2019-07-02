@@ -11,14 +11,13 @@ import torcherino.api.impl.TorcherinoBlacklistImpl;
  * @deprecated Warning this interface will be removed in 1.15.x see TorcherinoAPI interface instead.
  */
 @Deprecated
-@SuppressWarnings({ "UnusedReturnValue", "unused" })
+@SuppressWarnings({ "UnusedReturnValue", "unused", "DeprecatedIsStillUsed" })
 public interface TorcherinoBlacklistAPI
 {
     /**
      * The Implementation of the API, you should use this for all methods. e.g. TorcherinoBlacklistAPI.INSTANCE.blacklistBlock(Blocks.STONE)
      */
     TorcherinoBlacklistAPI INSTANCE = TorcherinoBlacklistImpl.INSTANCE;
-
 
     /**
      * Checks if a Block is blacklisted.

@@ -15,6 +15,7 @@ import torcherino.api.TorcherinoBlacklistAPI;
  * @see torcherino.api.TorcherinoAPI#INSTANCE instead
  */
 @Deprecated
+@SuppressWarnings("DeprecatedIsStillUsed")
 public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
 {
     public static final TorcherinoBlacklistAPI INSTANCE = new TorcherinoBlacklistImpl();
