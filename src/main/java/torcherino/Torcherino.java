@@ -70,7 +70,7 @@ public class Torcherino
 	public static ResourceLocation resloc(String path){ return new ResourceLocation(MOD_ID, path); }
 
 	/*
-		TODO: Move over to using https://mcforge.readthedocs.io/en/1.13.x/gettingstarted/dependencymanagement/
-		TODO: Finally release the mod?
-	 */
+     * TODO: Move over to using https://mcforge.readthedocs.io/en/1.13.x/gettingstarted/dependencymanagement/
+     * TODO: Finally release the mod?
+     */
 }
