@@ -13,18 +13,9 @@ public class Tier
         this.Y_RANGE = yRange;
     }
 
-    public int getMaxSpeed()
-    {
-        return MAX_SPEED;
-    }
+    public int getMaxSpeed() { return MAX_SPEED; }
 
-    public int getXZRange()
-    {
-        return XZ_RANGE;
-    }
+    public int getXZRange() { return XZ_RANGE; }
 
-    public int getYRange()
-    {
-        return Y_RANGE;
-    }
+    public int getYRange() { return Y_RANGE; }
 }
