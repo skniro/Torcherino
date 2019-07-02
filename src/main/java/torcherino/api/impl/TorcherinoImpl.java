@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- DO NOT USE THIS CLASS DIRECTLY. Use TorcherinoAPI.INSTANCE instead. Why? anything in this class is subject to change where as anything in the API won't be
- removed without significant warning time. e.g. a minecraft version update or major mod update.
+ * DO NOT USE THIS CLASS DIRECTLY. Use TorcherinoAPI.INSTANCE instead. Why? anything in this class is subject to change where as anything in the API won't be
+ * removed without significant warning time. e.g. a minecraft version update or major mod update.
  */
 public class TorcherinoImpl implements TorcherinoAPI
 {
