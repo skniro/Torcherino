@@ -29,7 +29,6 @@ public class Torcherino implements ModInitializer, ClientModInitializer, Torcher
         ClientSidePacketRegistryImpl.INSTANCE.register(Utils.getId("openscreen"), new PacketConsumers.TorcherinoScreenConsumer());
     }
 
-    // If your a mod developer this should be in a separate class to avoid a hard dependency on torcherino.
     @Override
     public void onTorcherinoBlacklist()
     {
