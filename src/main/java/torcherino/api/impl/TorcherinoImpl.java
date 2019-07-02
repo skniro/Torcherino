@@ -146,12 +146,19 @@ public class TorcherinoImpl implements TorcherinoAPI
     @Override
     public boolean registerTorcherinoBlock(Block block)
     {
-        return false;
+        if(torcherinoBlocks.contains(block))
+        {
+            LOGGER.error("Block with id {} has already been registered as a torcherino.", Registry.BLOCK.getId(block));
+            return false;
+        }
+        torcherinoBlocks.add(block);
+        blacklistBlock(block);
+        return true;
     }
 
     @Override
     public ImmutableSet<Block> getTorcherinoBlocks()
     {
-        return null;
+        return ImmutableSet.copyOf(torcherinoBlocks);
     }
 }
