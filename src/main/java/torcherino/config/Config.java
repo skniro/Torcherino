@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 public class Config
 {
-    public static Config INSTANCE;
+    private static Config INSTANCE;
 
     @Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
     public final int random_tick_rate = 1;
@@ -23,13 +23,13 @@ public class Config
             EnvType.SERVER;
 
     @Comment("\nAdd a block by identifier to the blacklist.\nExamples: \"minecraft:dirt\", \"minecraft:furnace\"")
-    public final Identifier[] blacklisted_blocks = new Identifier[]{};
+    private final Identifier[] blacklisted_blocks = new Identifier[]{};
 
     @Comment("\nAdd a block entity by identifier to the blacklist.\nExamples: \"minecraft:furnace\", \"minecraft:mob_spawner\"")
-    public final Identifier[] blacklisted_blockentities = new Identifier[]{};
+    private final Identifier[] blacklisted_blockentities = new Identifier[]{};
 
     @Comment("\nAllows new custom torcherino tiers to be added.\nThis also allows for each tier to have their own max max_speed and ranges.")
-    public final Tier[] tiers = new Tier[]{ new Tier("normal", 4, 4, 1), new Tier("compressed", 36, 4, 1), new Tier("double_compressed", 324, 4, 1) };
+    private final Tier[] tiers = new Tier[]{ new Tier("normal", 4, 4, 1), new Tier("compressed", 36, 4, 1), new Tier("double_compressed", 324, 4, 1) };
 
 
     public static void initialize()
