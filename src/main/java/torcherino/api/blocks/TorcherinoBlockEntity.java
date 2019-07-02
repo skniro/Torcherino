@@ -70,11 +70,11 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         Block block = blockState.getBlock();
         if (block == null || API.isBlockBlacklisted(block)) return;
         if (block.hasRandomTicks(blockState) && RANDOM.nextInt(4095) < randomTicks * speed)
-            block.onRandomTick(blockState, world, pos, RANDOM);
+        { block.onRandomTick(blockState, world, pos, RANDOM); }
         if (!block.hasBlockEntity()) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity == null || blockEntity.isInvalid() || !(blockEntity instanceof Tickable) || API.isBlockEntityBlacklisted(blockEntity.getType()))
-            return;
+        { return; }
         for (int i = 0; i < speed; i++) ((Tickable) blockEntity).tick();
     }
 

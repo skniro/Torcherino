@@ -18,7 +18,8 @@ import torcherino.client.screen.buttons.StateButtonWidget;
 public class TorcherinoScreen extends Screen
 {
     private static final Item[] STATE_ITEMS = { Items.REDSTONE, Items.REDSTONE_TORCH, Items.GUNPOWDER };
-    private static final String[] STATE_NAMES = { "screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted", "screen.torcherino.redstoneinteraction.ignore" };
+    private static final String[] STATE_NAMES = { "screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted",
+            "screen.torcherino.redstoneinteraction.ignore" };
     private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
     private static final int WIDTH = 256, HEIGHT = 88;
     private static String[] MODES = { "area.stopped", "area.n", "area.n", "area.n", "area.n" };
@@ -46,7 +47,8 @@ public class TorcherinoScreen extends Screen
         BLOCK_NAME = new TranslatableText(minecraft.world.getBlockState(POS).getBlock().getTranslationKey()).asFormattedString();
         LEFT = (width - WIDTH) / 2;
         TOP = (height - HEIGHT) / 2;
-        this.addButton(new StateButtonWidget(this, width / 2 + 95, height / 2 - 40, redstoneInteractionMode, STATE_ITEMS.length, "screen.torcherino.narrate.redstoneinteraction")
+        this.addButton(new StateButtonWidget(this, width / 2 + 95, height / 2 - 40, redstoneInteractionMode, STATE_ITEMS.length,
+                "screen.torcherino.narrate.redstoneinteraction")
         {
             @Override
             protected Item getStateItem(int state) { return STATE_ITEMS[state]; }
