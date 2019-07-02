@@ -35,16 +35,10 @@ public class TorcherinoWallBlock extends WallTorchBlock implements BlockEntityPr
     }
 
     @Override
-    public PistonBehavior getPistonBehavior(BlockState state)
-    {
-        return PistonBehavior.IGNORE;
-    }
+    public PistonBehavior getPistonBehavior(BlockState state) { return PistonBehavior.IGNORE; }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view)
-    {
-        return new TorcherinoBlockEntity(MAX_SPEED);
-    }
+    public BlockEntity createBlockEntity(BlockView view) { return new TorcherinoBlockEntity(MAX_SPEED); }
 
     @Override
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)

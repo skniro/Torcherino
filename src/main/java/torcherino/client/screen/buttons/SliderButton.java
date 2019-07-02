@@ -1,9 +1,10 @@
 package torcherino.client.screen.buttons;
 
+import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.MathHelper;
 
-public abstract class SliderButton extends net.minecraft.client.gui.widget.SliderWidget
+public abstract class SliderButton extends SliderWidget
 {
     protected String narrationMessage = "";
     private double arrowNudgeAmount = 1;

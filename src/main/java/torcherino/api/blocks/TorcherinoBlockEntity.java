@@ -9,35 +9,30 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
-import torcherino.api.TorcherinoBlacklistAPI;
+import torcherino.api.TorcherinoAPI;
 import torcherino.blocks.Blocks;
 
 import java.util.Random;
 
+@SuppressWarnings("ConstantConditions")
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    private static final TorcherinoBlacklistAPI API = TorcherinoBlacklistAPI.INSTANCE;
+    private static final TorcherinoAPI API = TorcherinoAPI.INSTANCE;
     private static final Random RANDOM = new Random();
     private boolean poweredByRedstone;
     private int randomTicks = 3, speed, MAX_SPEED, mode, redstoneInteractionMode;
     private Iterable<BlockPos> positions;
 
-    public TorcherinoBlockEntity()
-    {
-        super(Blocks.TORCHERINO_BLOCK_ENTITY_TYPE);
-    }
+    public TorcherinoBlockEntity() { super(Blocks.TORCHERINO_BLOCK_ENTITY_TYPE); }
 
-    public TorcherinoBlockEntity(int speed)
+    TorcherinoBlockEntity(int speed)
     {
         this();
         MAX_SPEED = speed;
         redstoneInteractionMode = 0;
     }
 
-    public void setSpeed(int speed)
-    {
-        this.speed = MathHelper.clamp(speed, 0, MAX_SPEED);
-    }
+    public void setSpeed(int speed) { this.speed = MathHelper.clamp(speed, 0, MAX_SPEED); }
 
     public void setMode(int mode)
     {
@@ -45,10 +40,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         positions = BlockPos.iterate(pos.add(-mode, -1, -mode), pos.add(mode, 1, mode));
     }
 
-    public void setPoweredByRedstone(boolean powered)
-    {
-        poweredByRedstone = redstoneInteractionMode == 0 ? powered : redstoneInteractionMode == 1 && !powered;
-    }
+    void setPoweredByRedstone(boolean powered) { poweredByRedstone = redstoneInteractionMode == 0 ? powered : redstoneInteractionMode == 1 && !powered; }
 
     @Override
     public BlockEntityUpdateS2CPacket toUpdatePacket()
@@ -59,7 +51,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
     @Override
     public void tick()
     {
-        if (world.isClient || poweredByRedstone || mode == 0 || speed == 0) return;
+        if ((world.isClient) || poweredByRedstone || mode == 0 || speed == 0) return;
         randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
         positions.forEach(this::tickBlock);
     }
@@ -69,12 +61,13 @@ public class TorcherinoBlockEntity extends BlockEntity implements Tickable
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
         if (block == null || API.isBlockBlacklisted(block)) return;
-        if (block.hasRandomTicks(blockState) && RANDOM.nextInt(4095) < randomTicks * speed)
-        { block.onRandomTick(blockState, world, pos, RANDOM); }
+        if (block.hasRandomTicks(blockState) && RANDOM.nextInt(4095) < randomTicks * speed) { block.onRandomTick(blockState, world, pos, RANDOM); }
         if (!block.hasBlockEntity()) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity == null || blockEntity.isInvalid() || !(blockEntity instanceof Tickable) || API.isBlockEntityBlacklisted(blockEntity.getType()))
-        { return; }
+        {
+            return;
+        }
         for (int i = 0; i < speed; i++) ((Tickable) blockEntity).tick();
     }
 

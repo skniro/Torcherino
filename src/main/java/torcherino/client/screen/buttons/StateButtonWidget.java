@@ -45,14 +45,8 @@ public abstract class StateButtonWidget extends ButtonWidget
     }
 
     @Override
-    protected String getNarrationMessage()
-    {
-        return new TranslatableText(this.narrationMessage, getStateName(state)).asFormattedString();
-    }
+    protected String getNarrationMessage() { return new TranslatableText(this.narrationMessage, getStateName(state)).asFormattedString(); }
 
     @Override
-    public void onPress()
-    {
-        onStateChange(state = (state + 1) % MAX_STATES);
-    }
+    public void onPress() { onStateChange(state = (state + 1) % MAX_STATES); }
 }
