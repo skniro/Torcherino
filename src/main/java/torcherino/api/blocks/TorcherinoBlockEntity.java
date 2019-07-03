@@ -45,12 +45,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     {
         if (!loaded)
         {
-            if (!world.isClient)
-            {
-                area = BlockPos.iterate(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange,
-                        pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
-                setPoweredByRedstone(world.getBlockState(pos).get(Properties.POWERED));
-            }
+            area = BlockPos.iterate(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange,
+                    pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
+            setPoweredByRedstone(world.getBlockState(pos).get(Properties.POWERED));
             loaded = true;
         }
         if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
