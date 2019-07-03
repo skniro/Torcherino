@@ -1,5 +1,6 @@
 package torcherino.blocks;
 
+import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -14,20 +15,53 @@ import torcherino.api.TorcherinoAPI;
 import torcherino.api.blocks.LanterinoBlock;
 import torcherino.api.blocks.TorcherinoBlock;
 import torcherino.api.blocks.TorcherinoBlockEntity;
-import torcherino.api.blocks.TorcherinoWallBlock;
+import torcherino.api.blocks.WallTorcherinoBlock;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class Blocks
 {
     public static final Blocks INSTANCE = new Blocks();
     private HashMap<Identifier, Block> blocks;
     private HashMap<Identifier, Item> items;
+    private Set<Identifier> newBlocks;
+    private Set<Block> blockEntityBlocks;
 
     public void initialise()
     {
+        newBlocks = new HashSet<>(Registry.BLOCK.getIds());
+        blockEntityBlocks = new HashSet<>();
         blocks = new HashMap<>();
         items = new HashMap<>();
+        RegistryEntryAddedCallback.event(Registry.BLOCK).register((index, identifier, entry) -> newBlocks.add(identifier));
+        Timer timer = new Timer();
+        // Honestly stupid code that checks if no new blocks were added in last 1.5 seconds.
+        timer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                if (newBlocks.isEmpty())
+                {
+                    newBlocks = null;
+                    Blocks.this.registerBlockEntity();
+                    timer.cancel();
+                }
+                else
+                {
+                    for (Identifier id : newBlocks)
+                    {
+                        Block b = Registry.BLOCK.get(id);
+                        if (b.getClass().equals(TorcherinoBlock.class) || b.getClass().equals(WallTorcherinoBlock.class) ||
+                                b.getClass().equals(LanterinoBlock.class))
+                        {
+                            blockEntityBlocks.add(b);
+                        }
+                    }
+                    newBlocks = new HashSet<>();
+                }
+            }
+        }, 0, 1500);
         TorcherinoAPI.INSTANCE.getTiers().forEach(this::createBlocks);
         this.registerBlocks();
         this.registerItems();
@@ -42,7 +76,7 @@ public class Blocks
             Identifier lanterinoID = getIdentifier(tierID, "lanterino");
 
             Block torcherinoBlock = new TorcherinoBlock(tierID);
-            Block torcherinoWallBlock = new TorcherinoWallBlock(tierID);
+            Block torcherinoWallBlock = new WallTorcherinoBlock(tierID);
             Block lanterinoBlock = new LanterinoBlock(tierID);
 
             blocks.put(torcherinoID, torcherinoBlock);
@@ -55,27 +89,22 @@ public class Blocks
             items.put(torcherinoID, torcherinoItem);
             items.put(lanterinoID, lanterinoItem);
 
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(torcherinoBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(torcherinoWallBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(lanterinoBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoWallBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
 
         }
     }
 
-    private void registerBlocks()
-    {
-        blocks.forEach((id, block) -> { Registry.register(Registry.BLOCK, id, block); });
-    }
+    private void registerBlocks() { blocks.forEach((id, block) -> { Registry.register(Registry.BLOCK, id, block); }); }
 
-    private void registerItems()
-    {
-        items.forEach((id, item) -> { Registry.register(Registry.ITEM, id, item); });
-    }
+    private void registerItems() { items.forEach((id, item) -> { Registry.register(Registry.ITEM, id, item); }); }
 
-    public void registerBlockEntity()
+    private void registerBlockEntity()
     {
         Registry.register(Registry.BLOCK_ENTITY, new Identifier(Torcherino.MOD_ID, "torcherino"), BlockEntityType.Builder
-                .create(TorcherinoBlockEntity::new, TorcherinoAPI.INSTANCE.getTorcherinoBlocks().toArray(new Block[]{})).build(null));
+                .create(TorcherinoBlockEntity::new, blockEntityBlocks.toArray(new Block[]{})).build(null));
+        blockEntityBlocks = null;
     }
 
     private Identifier getIdentifier(Identifier tierID, String type)

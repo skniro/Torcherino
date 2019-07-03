@@ -1,7 +1,6 @@
 package torcherino.api.impl;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
@@ -25,32 +24,22 @@ public class TorcherinoImpl implements TorcherinoAPI
     private final Logger LOGGER = LogManager.getLogger("torcherino-api");
     private final HashMap<Identifier, Tier> localTiers;
     private final HashMap<Identifier, Tier> remoteTiers;
-    private final HashSet<Block> torcherinoBlocks;
     private final HashSet<Block> blacklistedBlocks;
     private final HashSet<BlockEntityType> blacklistedBlockEntities;
 
     private TorcherinoImpl()
     {
         localTiers = new HashMap<>();
-        // On Server this will always be empty.
-        // On Client this will always be a copy of the server's tier (even on integrated server)
         remoteTiers = new HashMap<>();
-        torcherinoBlocks = new HashSet<>();
         blacklistedBlocks = new HashSet<>();
         blacklistedBlockEntities = new HashSet<>();
     }
 
     @Override
-    public ImmutableMap<Identifier, Tier> getTiers()
-    {
-        return ImmutableMap.copyOf(localTiers);
-    }
+    public ImmutableMap<Identifier, Tier> getTiers() { return ImmutableMap.copyOf(localTiers); }
 
     @Override
-    public Tier getTier(Identifier tierIdentifier)
-    {
-        return remoteTiers.getOrDefault(tierIdentifier, null);
-    }
+    public Tier getTier(Identifier tierIdentifier) { return remoteTiers.getOrDefault(tierIdentifier, null); }
 
     @Override
     public boolean registerTier(Identifier tierIdentifier, int maxSpeed, int xzRange, int yRange)
@@ -132,33 +121,8 @@ public class TorcherinoImpl implements TorcherinoAPI
     }
 
     @Override
-    public boolean isBlockBlacklisted(Block block)
-    {
-        return false;
-    }
+    public boolean isBlockBlacklisted(Block block) { return blacklistedBlocks.contains(block); }
 
     @Override
-    public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean registerTorcherinoBlock(Block block)
-    {
-        if(torcherinoBlocks.contains(block))
-        {
-            LOGGER.error("Block with id {} has already been registered as a torcherino.", Registry.BLOCK.getId(block));
-            return false;
-        }
-        torcherinoBlocks.add(block);
-        blacklistBlock(block);
-        return true;
-    }
-
-    @Override
-    public ImmutableSet<Block> getTorcherinoBlocks()
-    {
-        return ImmutableSet.copyOf(torcherinoBlocks);
-    }
+    public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType) { return blacklistedBlockEntities.contains(blockEntityType); }
 }

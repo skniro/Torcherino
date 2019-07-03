@@ -20,9 +20,7 @@ public class Torcherino implements ModInitializer, ClientModInitializer
     {
         Torcherino.LOGGER.info("Hey were loaded, lets define our blocks and stuff.");
         Config.initialize();
-
         Blocks.INSTANCE.initialise();
-        Blocks.INSTANCE.registerBlockEntity();
     }
 
     @Override
