@@ -1,6 +1,8 @@
 package torcherino.api.blocks;
 
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
@@ -12,6 +14,7 @@ import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -84,9 +87,9 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof TorcherinoBlockEntity)
         {
-            //Open our screen.
-            //ServerSidePacketRegistryImpl.INSTANCE
-            //        .sendToPlayer(player, Utils.getId("openscreen"), new PacketByteBuf(Unpooled.buffer()).writeCompoundTag(blockEntity.toTag(new CompoundTag())));
+            PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+            ((TorcherinoBlockEntity) blockEntity).writeClientData(buffer);
+            ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "ots"), buffer);
         }
         return true;
     }

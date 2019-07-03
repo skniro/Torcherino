@@ -2,6 +2,8 @@ package torcherino.client.screen.widgets;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -10,6 +12,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.TranslatableText;
 
+@Environment(EnvType.CLIENT)
 public abstract class StateButtonWidget extends ButtonWidget
 {
     private static ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();

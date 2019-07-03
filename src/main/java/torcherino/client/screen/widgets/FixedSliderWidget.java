@@ -1,8 +1,11 @@
 package torcherino.client.screen.widgets;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(EnvType.CLIENT)
 public abstract class FixedSliderWidget extends SliderWidget
 {
     private final float nudgeAmount;

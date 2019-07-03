@@ -76,7 +76,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         }
     }
 
-    private void writeClientData(PacketByteBuf buffer)
+    public void writeClientData(PacketByteBuf buffer)
     {
         buffer.writeBlockPos(pos);
         buffer.writeText(getName());
@@ -87,7 +87,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         buffer.writeInt(redstoneMode);
     }
 
-    private void readClientData(PacketByteBuf buffer)
+    public void readClientData(PacketByteBuf buffer)
     {
         Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTierID());
         this.xRange = MathHelper.clamp(buffer.readInt(), 0, tier.getXZRange());

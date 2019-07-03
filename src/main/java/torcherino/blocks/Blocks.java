@@ -1,5 +1,6 @@
 package torcherino.blocks;
 
+import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
@@ -27,7 +28,7 @@ public class Blocks
     private Set<Identifier> newBlocks;
     private Set<Block> blockEntityBlocks;
 
-    public void initialise()
+    public void initialize()
     {
         newBlocks = new HashSet<>(Registry.BLOCK.getIds());
         blockEntityBlocks = new HashSet<>();
@@ -36,6 +37,7 @@ public class Blocks
         RegistryEntryAddedCallback.event(Registry.BLOCK).register((index, identifier, entry) -> newBlocks.add(identifier));
         Timer timer = new Timer();
         // Honestly stupid code that checks if no new blocks were added in last 1.5 seconds.
+        // todo: rework this system as it's not thread safe
         timer.scheduleAtFixedRate(new TimerTask()
         {
             @Override
@@ -49,16 +51,18 @@ public class Blocks
                 }
                 else
                 {
-                    for (Identifier id : newBlocks)
-                    {
+                    // Making a copy of newBlocks probably fixes concurrent modification.
+                    // perhaps we should have a lock object to prevent it being modified concurrently.
+                    Iterator<Identifier> iterator = ImmutableSet.copyOf(newBlocks).iterator();
+                    iterator.forEachRemaining((id) -> {
                         Block b = Registry.BLOCK.get(id);
                         if (b.getClass().equals(TorcherinoBlock.class) || b.getClass().equals(WallTorcherinoBlock.class) ||
                                 b.getClass().equals(LanterinoBlock.class))
                         {
                             blockEntityBlocks.add(b);
                         }
-                    }
-                    newBlocks = new HashSet<>();
+                        newBlocks.remove(id);
+                    });
                 }
             }
         }, 0, 1500);

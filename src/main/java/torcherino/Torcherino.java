@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.blocks.Blocks;
 import torcherino.config.Config;
+import torcherino.network.Networker;
 
 @EnvironmentInterface(value = EnvType.CLIENT, itf = ClientModInitializer.class)
 public class Torcherino implements ModInitializer, ClientModInitializer
@@ -20,7 +21,8 @@ public class Torcherino implements ModInitializer, ClientModInitializer
     {
         Torcherino.LOGGER.info("Hey were loaded, lets define our blocks and stuff.");
         Config.initialize();
-        Blocks.INSTANCE.initialise();
+        Networker.INSTANCE.initialize();
+        Blocks.INSTANCE.initialize();
     }
 
     @Override
