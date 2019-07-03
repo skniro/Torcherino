@@ -14,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -44,7 +45,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(state.get(Properties.POWERED));
+        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(newState.get(Properties.POWERED));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        boolean powered = context.getWorld().isReceivingRedstonePower(context.getBlockPos().down());
+        boolean powered = context.getWorld().isEmittingRedstonePower(context.getBlockPos().down(), Direction.UP);
         return super.getPlacementState(context).with(Properties.POWERED, powered);
     }
 
@@ -94,14 +95,14 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)
     {
         if (world.isClient) return;
-        boolean powered = world.isReceivingRedstonePower(pos.down());
+        boolean powered = world.isEmittingRedstonePower(pos.down(), Direction.UP);
         if (state.get(Properties.POWERED) != powered)
         {
             world.setBlockState(pos, state.with(Properties.POWERED, powered));
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof TorcherinoBlockEntity)
             {
-                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(pos));
+                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(powered);
             }
         }
     }

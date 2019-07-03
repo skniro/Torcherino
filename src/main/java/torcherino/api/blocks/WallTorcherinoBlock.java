@@ -26,9 +26,9 @@ public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityPr
 {
     private final Identifier tierID;
 
-    public WallTorcherinoBlock(Identifier tierID)
+    public WallTorcherinoBlock(Identifier tierID, Identifier dropID)
     {
-        super(FabricBlockSettings.copy(Blocks.WALL_TORCH).build());
+        super(FabricBlockSettings.copy(Blocks.WALL_TORCH).drops(dropID).build());
         this.tierID = tierID;
     }
 
@@ -44,7 +44,7 @@ public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityPr
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(state.get(Properties.POWERED));
+        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(newState.get(Properties.POWERED));
     }
 
     @Override
@@ -57,10 +57,11 @@ public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityPr
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        BlockState state = context.getWorld().getBlockState(context.getBlockPos());
+        BlockState state = super.getPlacementState(context);
+        if (state == null) return null;
         boolean powered = context.getWorld().isEmittingRedstonePower(context.getBlockPos().offset(state.get(Properties.HORIZONTAL_FACING).getOpposite()),
                 state.get(Properties.HORIZONTAL_FACING));
-        return super.getPlacementState(context).with(Properties.POWERED, powered);
+        return state.with(Properties.POWERED, powered);
     }
 
     @Override

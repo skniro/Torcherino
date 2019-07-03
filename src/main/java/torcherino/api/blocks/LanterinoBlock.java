@@ -44,7 +44,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(state.get(Properties.POWERED));
+        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(newState.get(Properties.POWERED));
     }
 
     @Override
