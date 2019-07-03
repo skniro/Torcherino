@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 public class Config
 {
-    private static Config INSTANCE;
+    public static Config INSTANCE;
 
     @Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
     public final int random_tick_rate = 1;

@@ -63,8 +63,8 @@ public class Blocks
             }
         }, 0, 1500);
         TorcherinoAPI.INSTANCE.getTiers().forEach(this::createBlocks);
-        this.registerBlocks();
-        this.registerItems();
+        registerBlocks();
+        registerItems();
     }
 
     private void createBlocks(Identifier tierID, Tier tier)
