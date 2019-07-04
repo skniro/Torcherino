@@ -28,9 +28,6 @@ public class PacketConsumers
             int Speed = tag.getInt("Speed");
             int MaxSpeed = tag.getInt("MaxSpeed");
             int Mode = tag.getInt("Mode");
-            //int XRange = tag.getInt("XRange");
-            //int ZRange = tag.getInt("ZRange");
-            //int YRange = tag.getInt("YRange");
             int state = tag.getInt("RedstoneInteractionMode");
             context.getTaskQueue().execute(() -> MinecraftClient.getInstance().openScreen(new TorcherinoScreen(pos, Speed, MaxSpeed, Mode, state)));
         }
@@ -45,9 +42,6 @@ public class PacketConsumers
             BlockPos pos = buffer.readBlockPos();
             int speed = buffer.readInt();
             int mode = buffer.readInt();
-            //int xRange = buffer.readInt();
-            //int zRange = buffer.readInt();
-            //int yRange = buffer.readInt();
             int redstoneInteractionMode = buffer.readInt();
             context.getTaskQueue().execute(() ->
             {

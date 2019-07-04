@@ -8,7 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.WallStandingBlockItem;
 import net.minecraft.util.registry.Registry;
 import torcherino.Utils;
-import torcherino.api.TorcherinoAPI;
+import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.api.blocks.LanterinoBlock;
 import torcherino.api.blocks.TorcherinoBlock;
 import torcherino.api.blocks.TorcherinoBlockEntity;
@@ -18,7 +18,6 @@ import java.util.HashSet;
 
 public class Blocks
 {
-    private static final TorcherinoAPI API = TorcherinoAPI.INSTANCE;
     public static BlockEntityType<TorcherinoBlockEntity> TORCHERINO_BLOCK_ENTITY_TYPE;
     private static HashSet<Block> BLOCKS = new HashSet<>();
 
@@ -29,7 +28,7 @@ public class Blocks
         register("double_compressed_", 324);
         TORCHERINO_BLOCK_ENTITY_TYPE = Registry.register(Registry.BLOCK_ENTITY, Utils.getId("torcherino"), BlockEntityType.Builder
                 .create(TorcherinoBlockEntity::new, BLOCKS.toArray(new Block[]{})).build(null));
-        API.blacklistBlockEntity(TORCHERINO_BLOCK_ENTITY_TYPE);
+        TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(TORCHERINO_BLOCK_ENTITY_TYPE);
     }
 
     private static void register(String name, int speed)
@@ -47,8 +46,8 @@ public class Blocks
         BLOCKS.add(torcherinoBlock);
         BLOCKS.add(torcherinoWallBlock);
         BLOCKS.add(lanterinoBlock);
-        API.blacklistBlock(torcherinoBlock);
-        API.blacklistBlock(torcherinoWallBlock);
-        API.blacklistBlock(lanterinoBlock);
+        TorcherinoBlacklistAPI.INSTANCE.blacklistBlock(torcherinoBlock);
+        TorcherinoBlacklistAPI.INSTANCE.blacklistBlock(torcherinoWallBlock);
+        TorcherinoBlacklistAPI.INSTANCE.blacklistBlock(lanterinoBlock);
     }
 }

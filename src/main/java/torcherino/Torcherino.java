@@ -5,7 +5,7 @@ import net.fabricmc.fabric.impl.network.ClientSidePacketRegistryImpl;
 import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
-import torcherino.api.TorcherinoAPI;
+import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.api.TorcherinoBlacklistInitializer;
 import torcherino.blocks.Blocks;
 import torcherino.network.PacketConsumers;
@@ -34,18 +34,8 @@ public class Torcherino implements ModInitializer, ClientModInitializer, Torcher
     {
         if (FabricLoader.getInstance().isModLoaded("computercraft"))
         {
-            TorcherinoAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_normal"));
-            TorcherinoAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_advanced"));
+            TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_normal"));
+            TorcherinoBlacklistAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_advanced"));
         }
     }
 }
-
-
-/*
-
-	TODO:
-		1. Change GUI to allow indiviual control of each axis.
-		2. Implement tiers
-		3. Add config to allow user configurability.
-		4. probably more
- */

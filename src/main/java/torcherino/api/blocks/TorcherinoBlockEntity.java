@@ -9,7 +9,7 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
-import torcherino.api.TorcherinoAPI;
+import torcherino.api.TorcherinoBlacklistAPI;
 import torcherino.blocks.Blocks;
 
 import java.util.Random;
@@ -17,7 +17,7 @@ import java.util.Random;
 @SuppressWarnings("ConstantConditions")
 public class TorcherinoBlockEntity extends BlockEntity implements Tickable
 {
-    private static final TorcherinoAPI API = TorcherinoAPI.INSTANCE;
+    private static final TorcherinoBlacklistAPI API = TorcherinoBlacklistAPI.INSTANCE;
     private static final Random RANDOM = new Random();
     private boolean poweredByRedstone;
     private int randomTicks = 3, speed, MAX_SPEED, mode, redstoneInteractionMode;
