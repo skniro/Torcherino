@@ -23,14 +23,13 @@ public class TorcherinoImpl implements TorcherinoAPI
 
     private final Logger LOGGER = LogManager.getLogger("torcherino-api");
     private final HashMap<Identifier, Tier> localTiers;
-    private final HashMap<Identifier, Tier> remoteTiers;
+    private HashMap<Identifier, Tier> remoteTiers;
     private final HashSet<Block> blacklistedBlocks;
     private final HashSet<BlockEntityType> blacklistedBlockEntities;
 
     private TorcherinoImpl()
     {
         localTiers = new HashMap<>();
-        remoteTiers = new HashMap<>();
         blacklistedBlocks = new HashSet<>();
         blacklistedBlockEntities = new HashSet<>();
     }
@@ -125,4 +124,10 @@ public class TorcherinoImpl implements TorcherinoAPI
 
     @Override
     public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType) { return blacklistedBlockEntities.contains(blockEntityType); }
+
+    // Internal do not use.
+    public void setRemoteTiers(HashMap<Identifier, Tier> tiers)
+    {
+        remoteTiers = tiers;
+    }
 }

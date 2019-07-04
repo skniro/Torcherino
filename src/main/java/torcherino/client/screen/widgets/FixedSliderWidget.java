@@ -14,8 +14,7 @@ public abstract class FixedSliderWidget extends SliderWidget
     {
         super(x, y, width, 20, progress);
         nudgeAmount = 1.0F / permutations;
-        applyValue();
-        updateMessage();
+        this.updateMessage();
     }
 
     @Override

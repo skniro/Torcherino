@@ -17,14 +17,16 @@ public abstract class StateButtonWidget extends ButtonWidget
 {
     private static ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
     private final Screen screen;
-    private int state;
     private String narrationMessage;
 
     public StateButtonWidget(Screen screen, int x, int y)
     {
         super(x, y, 20, 20, "", null);
         this.screen = screen;
+        initialize();
     }
+
+    protected abstract void initialize();
 
     protected abstract void nextState();
 
@@ -33,7 +35,6 @@ public abstract class StateButtonWidget extends ButtonWidget
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
     {
-        super.render(mouseX, mouseY, partialTicks);
         if (visible)
         {
             super.render(mouseX, mouseY, partialTicks);
@@ -53,8 +54,10 @@ public abstract class StateButtonWidget extends ButtonWidget
     public void onPress() { nextState(); }
 
     @Override
-    public String getNarrationMessage() { return new TranslatableText("gui.narrate.button", this.narrationMessage).asFormattedString(); }
+    public String getNarrationMessage() { return new TranslatableText("gui.narrate.button", narrationMessage).asString(); }
 
-    public void setNarrationMessage(String narrationMessage) { this.narrationMessage = narrationMessage; }
-
+    protected void setNarrationMessage(String narrationMessage)
+    {
+        this.narrationMessage = narrationMessage;
+    }
 }

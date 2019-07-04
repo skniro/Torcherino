@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "torcherino.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "PlayerManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.7.11-SNAPSHOT"
+}

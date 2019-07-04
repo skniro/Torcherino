@@ -25,5 +25,11 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": "*"
-  }
+  },
+  "mixins": [
+    {
+      "config": "torcherino.mixins.json",
+      "environment": "*"
+    }
+  ]
 }
