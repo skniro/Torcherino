@@ -22,7 +22,6 @@ public abstract class PlayerManagerMixin
     @Inject(method = "onPlayerConnect", at = @At("TAIL"))
     private void onPlayerConnect(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo info)
     {
-        Torcherino.LOGGER.info("A client joined the server.");
         ImmutableMap<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
         PacketByteBuf packetBuffer = new PacketByteBuf(Unpooled.buffer());
         packetBuffer.writeInt(tiers.size());

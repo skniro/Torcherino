@@ -10,9 +10,7 @@ import torcherino.api.TorcherinoAPI;
 import torcherino.api.TorcherinoBlacklistAPI;
 
 /**
- * WARNING: this class will be removed in the future and is not intended to be used.
- *
- * @see torcherino.api.TorcherinoAPI#INSTANCE instead
+ * WARNING: this class will be removed in the future and is not intended to be used. todo 1.15.x: Remove
  */
 @Deprecated
 @SuppressWarnings("DeprecatedIsStillUsed")

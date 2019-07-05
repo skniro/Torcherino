@@ -8,7 +8,7 @@ import torcherino.api.impl.TorcherinoBlacklistImpl;
 /**
  * @author NinjaPhenix
  * @since 1.8.49
- * @deprecated Warning this interface will be removed in 1.15.x see TorcherinoAPI interface instead.
+ * @deprecated Warning this interface will be removed in 1.15.x see TorcherinoAPI interface instead. todo 1.15.x: Remove
  */
 @Deprecated
 @SuppressWarnings({ "UnusedReturnValue", "unused", "DeprecatedIsStillUsed" })

@@ -20,9 +20,9 @@ import torcherino.api.blocks.WallTorcherinoBlock;
 
 import java.util.*;
 
-public class Blocks
+public class ModBlocks
 {
-    public static final Blocks INSTANCE = new Blocks();
+    public static final ModBlocks INSTANCE = new ModBlocks();
     private HashMap<Identifier, Block> blocks;
     private HashMap<Identifier, Item> items;
     private Set<Identifier> newBlocks;
@@ -36,8 +36,7 @@ public class Blocks
         items = new HashMap<>();
         RegistryEntryAddedCallback.event(Registry.BLOCK).register((index, identifier, entry) -> newBlocks.add(identifier));
         Timer timer = new Timer();
-        // Honestly stupid code that checks if no new blocks were added in last 1.5 seconds.
-        // todo: rework this system as it's not thread safe
+        // todo: Find a better way of doing this.
         timer.scheduleAtFixedRate(new TimerTask()
         {
             @Override
@@ -46,13 +45,11 @@ public class Blocks
                 if (newBlocks.isEmpty())
                 {
                     newBlocks = null;
-                    Blocks.this.registerBlockEntity();
+                    ModBlocks.this.registerBlockEntity();
                     timer.cancel();
                 }
                 else
                 {
-                    // Making a copy of newBlocks probably fixes concurrent modification.
-                    // perhaps we should have a lock object to prevent it being modified concurrently.
                     Iterator<Identifier> iterator = ImmutableSet.copyOf(newBlocks).iterator();
                     iterator.forEachRemaining((id) -> {
                         Block b = Registry.BLOCK.get(id);

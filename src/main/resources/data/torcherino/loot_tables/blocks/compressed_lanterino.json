@@ -29,6 +29,12 @@
                   "condition": "minecraft:survives_explosion"
                 }
               ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_name",
+                  "source": "block_entity"
+                }
+              ],
               "name": "torcherino:compressed_lanterino"
             }
           ]
@@ -49,6 +55,12 @@
                   "is_sneaking": true
                 }
               }
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
             }
           ],
           "name": "torcherino:compressed_torcherino"

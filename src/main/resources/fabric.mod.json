@@ -5,7 +5,7 @@
   "name": "Torcherino",
   "description": "Adds torches which speeds up block entities around them.",
   "authors": [
-    "NinjaPhenix1"
+    "NinjaPhenix"
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/torcherino",
@@ -19,6 +19,9 @@
       "torcherino.Torcherino"
     ],
     "client": [
+      "torcherino.TorcherinoClient"
+    ],
+    "torcherinoInitializer": [
       "torcherino.Torcherino"
     ]
   },
