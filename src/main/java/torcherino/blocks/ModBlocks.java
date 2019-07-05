@@ -62,7 +62,7 @@ public class ModBlocks
                     });
                 }
             }
-        }, 0, 1500);
+        }, 0, 5000);
         TorcherinoAPI.INSTANCE.getTiers().forEach(this::createBlocks);
         registerBlocks();
         registerItems();
