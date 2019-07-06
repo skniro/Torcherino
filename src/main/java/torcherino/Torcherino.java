@@ -37,12 +37,18 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
             buffer.retain();
             context.getTaskQueue().execute(() ->
             {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity instanceof TorcherinoBlockEntity)
+                try
                 {
-                    ((TorcherinoBlockEntity) blockEntity).readClientData(buffer);
+                    BlockEntity blockEntity = world.getBlockEntity(pos);
+                    if (blockEntity instanceof TorcherinoBlockEntity)
+                    {
+                        ((TorcherinoBlockEntity) blockEntity).readClientData(buffer);
+                    }
                 }
-                buffer.release();
+                finally
+                {
+                    buffer.release();
+                }
             });
         });
 
