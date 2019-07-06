@@ -2,40 +2,46 @@ package torcherino.client.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.impl.network.ClientSidePacketRegistryImpl;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
-import torcherino.Utils;
-import torcherino.client.screen.buttons.SliderButton;
-import torcherino.client.screen.buttons.StateButtonWidget;
+import torcherino.Torcherino;
+import torcherino.api.Tier;
+import torcherino.api.TorcherinoAPI;
+import torcherino.client.screen.widgets.FixedSliderWidget;
+import torcherino.client.screen.widgets.StateButtonWidget;
 
+@Environment(EnvType.CLIENT)
 public class TorcherinoScreen extends Screen
 {
-    private static final Item[] STATE_ITEMS = { Items.REDSTONE, Items.REDSTONE_TORCH, Items.GUNPOWDER };
-    private static final String[] STATE_NAMES = { "screen.torcherino.redstoneinteraction.normal", "screen.torcherino.redstoneinteraction.inverted",
-            "screen.torcherino.redstoneinteraction.ignore" };
-    private static final Identifier SCREEN_TEXTURE = Utils.getId("textures/screens/torcherino.png");
-    private static final int WIDTH = 256, HEIGHT = 88;
-    private static String[] MODES = { "area.stopped", "area.n", "area.n", "area.n", "area.n" };
-    private final BlockPos POS;
-    private final int MAX_SPEED;
-    private String BLOCK_NAME;
-    private int speed, mode, redstoneInteractionMode, LEFT, TOP;
+    private static final Identifier SCREEN_TEXTURE = new Identifier(Torcherino.MOD_ID, "textures/screens/torcherino.png");
+    private static final int screenWidth = 245;
+    private static final int screenHeight = 123;
 
-    public TorcherinoScreen(BlockPos pos, int speed, int maxSpeed, int mode, int redstoneInteractionMode)
+    private final BlockPos blockPos;
+    private final Tier tier;
+    private final String cached_title;
+    private int xRange, zRange, yRange, speed, redstoneMode, left, top;
+
+    public TorcherinoScreen(Text title, int xRange, int zRange, int yRange, int speed, int redstoneMode, BlockPos pos, Identifier tierID)
     {
-        super(new LiteralText(""));
-        POS = pos;
-        MAX_SPEED = maxSpeed;
-        this.speed = speed;
-        this.mode = mode;
-        this.redstoneInteractionMode = redstoneInteractionMode;
+        super(title);
+        this.tier = TorcherinoAPI.INSTANCE.getTier(tierID);
+        this.blockPos = pos;
+        this.xRange = xRange;
+        this.zRange = zRange;
+        this.yRange = yRange;
+        this.speed = speed == 0 ? 1 : speed;
+        this.redstoneMode = redstoneMode;
+        this.cached_title = title.asString();
     }
 
     @Override
@@ -44,81 +50,170 @@ public class TorcherinoScreen extends Screen
     @Override
     protected void init()
     {
-        BLOCK_NAME = new TranslatableText(minecraft.world.getBlockState(POS).getBlock().getTranslationKey()).asFormattedString();
-        LEFT = (width - WIDTH) / 2;
-        TOP = (height - HEIGHT) / 2;
-        this.addButton(new StateButtonWidget(this, width / 2 + 95, height / 2 - 40, redstoneInteractionMode, STATE_ITEMS.length,
-                "screen.torcherino.narrate.redstoneinteraction")
-        {
-            @Override
-            protected Item getStateItem(int state) { return STATE_ITEMS[state]; }
-
-            @Override
-            protected String getStateName(int state) { return new TranslatableText(STATE_NAMES[state]).asFormattedString(); }
-
-            @Override
-            protected void onStateChange(int state) { redstoneInteractionMode = state; }
-        });
-        this.addButton(new SliderButton(width / 2 - 115, height / 2 - 15, 230, 20, ((double) speed) / ((double) MAX_SPEED), MAX_SPEED + 1)
-        {
-            @Override
-            protected void updateMessage() { setMessage(new TranslatableText("screen.torcherino.speed", 100 * speed).asFormattedString()); }
-
-            @Override
-            protected void applyValue()
-            {
-                speed = (int) Math.round(MAX_SPEED * value);
-                value = (double) speed / (double) MAX_SPEED;
-            }
-        });
-        this.addButton(new SliderButton(width / 2 - 115, height / 2 + 10, 230, 20, ((double) mode) / ((double) MODES.length - 1), MODES.length)
+        left = (width - screenWidth) / 2;
+        top = (height - screenHeight) / 2;
+        addButton(new FixedSliderWidget(left + 8, top + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed())
         {
             @Override
             protected void updateMessage()
             {
-                setMessage(new TranslatableText("screen.torcherino." + MODES[mode], 2 * mode + 1).asFormattedString());
-                narrationMessage = new TranslatableText("screen.torcherino.narrate." + MODES[mode], 2 * mode + 1).asFormattedString();
+                this.setMessage(new TranslatableText("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).asString());
             }
 
             @Override
             protected void applyValue()
             {
-                mode = (int) Math.round((MODES.length - 1) * value);
-                value = (double) mode / ((double) MODES.length - 1);
+                TorcherinoScreen.this.speed = 1 + (int) Math.round(value * (TorcherinoScreen.this.tier.getMaxSpeed() - 1));
+                this.value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
             }
+        });
+        addButton(new FixedSliderWidget(left + 8, top + 45, 205, (double) xRange / tier.getXZRange(), tier.getXZRange())
+        {
+            @Override
+            protected void updateMessage()
+            {
+                this.setMessage(new TranslatableText("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).asString());
+            }
+
+            @Override
+            protected void applyValue()
+            {
+                TorcherinoScreen.this.xRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
+                this.value = (double) xRange / tier.getXZRange();
+            }
+        });
+        this.addButton(new FixedSliderWidget(left + 8, top + 70, 205, (double) zRange / tier.getXZRange(), tier.getXZRange())
+        {
+            @Override
+            protected void updateMessage()
+            {
+                this.setMessage(new TranslatableText("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).asString());
+            }
+
+            @Override
+            protected void applyValue()
+            {
+                TorcherinoScreen.this.zRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
+                this.value = (double) zRange / tier.getXZRange();
+            }
+        });
+        this.addButton(new FixedSliderWidget(left + 8, top + 95, 205, (double) yRange / tier.getYRange(), tier.getYRange())
+        {
+            @Override
+            protected void updateMessage()
+            {
+                this.setMessage(new TranslatableText("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).asString());
+            }
+
+            @Override
+            protected void applyValue()
+            {
+                TorcherinoScreen.this.yRange = (int) Math.round(value * TorcherinoScreen.this.tier.getYRange());
+                this.value = (double) yRange / tier.getYRange();
+            }
+        });
+        this.addButton(new StateButtonWidget(this, left + 217, top + 20)
+        {
+            ItemStack buttonIcon;
+
+            @Override
+            protected void initialize()
+            {
+                setButtonMessage();
+                setButtonIcon();
+            }
+
+            private void setButtonMessage()
+            {
+                String translationKey;
+                switch (TorcherinoScreen.this.redstoneMode)
+                {
+                    case 0:
+                        translationKey = "gui.torcherino.mode.normal";
+                        break;
+                    case 1:
+                        translationKey = "gui.torcherino.mode.inverted";
+                        break;
+                    case 2:
+                        translationKey = "gui.torcherino.mode.ignore";
+                        break;
+                    case 3:
+                        translationKey = "gui.torcherino.mode.off";
+                        break;
+                    default:
+                        translationKey = "gui.torcherino.mode.error";
+                        break;
+                }
+                setNarrationMessage(new TranslatableText("gui.torcherino.mode", new TranslatableText(translationKey)).asString());
+            }
+
+            private void setButtonIcon()
+            {
+                switch (TorcherinoScreen.this.redstoneMode)
+                {
+                    case 0:
+                        this.buttonIcon = new ItemStack(Items.REDSTONE);
+                        break;
+                    case 1:
+                        this.buttonIcon = new ItemStack(Items.REDSTONE_TORCH);
+                        break;
+                    case 2:
+                        this.buttonIcon = new ItemStack(Items.GUNPOWDER);
+                        break;
+                    case 3:
+                        this.buttonIcon = new ItemStack(Items.REDSTONE_LAMP);
+                        break;
+                    default:
+                        this.buttonIcon = new ItemStack(Items.FURNACE);
+                        break;
+                }
+            }
+
+            @Override
+            protected void nextState()
+            {
+                TorcherinoScreen.this.redstoneMode = (TorcherinoScreen.this.redstoneMode + 1) % 4;
+                initialize();
+            }
+
+            @Override
+            protected ItemStack getButtonIcon() { return buttonIcon; }
         });
     }
 
     @Override
-    public void onClose()
+    public void render(int x, int y, float partialTicks)
     {
-        PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer()).writeBlockPos(POS);
-        packetByteBuf.writeInt(speed);
-        packetByteBuf.writeInt(mode);
-        packetByteBuf.writeInt(redstoneInteractionMode);
-        ClientSidePacketRegistryImpl.INSTANCE.sendToServer(Utils.getId("updatetorcherinostate"), packetByteBuf);
-        super.onClose();
-    }
-
-    @Override
-    public void render(int cursorX, int cursorY, float float_1)
-    {
-        renderBackground();
+        fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
         minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        blit(LEFT, TOP, 0, 0, WIDTH, HEIGHT);
-        font.draw(BLOCK_NAME, (width - font.getStringWidth(BLOCK_NAME)) / 2.0f, height / 2.0F - 35, 4210752);
-        super.render(cursorX, cursorY, float_1);
+        blit(left, top, 0, 0, screenWidth, screenHeight);
+        font.draw(cached_title, (width - font.getStringWidth(cached_title)) / 2.0f, top + 6, 4210752);
+        super.render(x, y, partialTicks);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifier)
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
         if (keyCode == 256 || minecraft.options.keyInventory.matchesKey(keyCode, 0))
         {
             this.onClose();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifier);
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public void onClose()
+    {
+        PacketByteBuf packetBuffer = new PacketByteBuf(Unpooled.buffer());
+        packetBuffer.writeBlockPos(blockPos);
+        packetBuffer.writeInt(xRange);
+        packetBuffer.writeInt(zRange);
+        packetBuffer.writeInt(yRange);
+        packetBuffer.writeInt(speed);
+        packetBuffer.writeInt(redstoneMode);
+        ClientSidePacketRegistry.INSTANCE.sendToServer(new Identifier(Torcherino.MOD_ID, "utv"), packetBuffer);
+        super.onClose();
     }
 }

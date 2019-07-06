@@ -9,6 +9,7 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -23,13 +24,13 @@ import torcherino.config.Config;
 
 import java.util.Random;
 
-public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
+public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityProvider
 {
     private final Identifier tierID;
 
-    public LanterinoBlock(Identifier tierID)
+    public WallTorcherinoBlock(Identifier tierID, Identifier dropID)
     {
-        super(FabricBlockSettings.copy(Blocks.JACK_O_LANTERN).build());
+        super(FabricBlockSettings.copy(Blocks.WALL_TORCH).drops(dropID).build());
         this.tierID = tierID;
     }
 
@@ -44,7 +45,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     @Override
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
-        neighborUpdate(null, world, pos, null, null, false);
+        neighborUpdate(newState, world, pos, null, null, false);
     }
 
     @Override
@@ -74,7 +75,11 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     {
         if (world.isClient) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(pos)); }
+        if (blockEntity instanceof TorcherinoBlockEntity)
+        {
+            ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(
+                    pos.offset(state.get(Properties.HORIZONTAL_FACING).getOpposite()), state.get(Properties.HORIZONTAL_FACING)));
+        }
     }
 
     @Override

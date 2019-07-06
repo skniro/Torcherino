@@ -5,11 +5,11 @@
   "name": "Torcherino",
   "description": "Adds torches which speeds up block entities around them.",
   "authors": [
-    "NinjaPhenix1"
+    "NinjaPhenix"
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/torcherino",
-    "sources": "https://github.com/NinjaPhenix/Torcherino/tree/1.14-pre"
+    "sources": "https://github.com/NinjaPhenix/Torcherino/tree/1.14.3-fabric"
   },
   "license": "LGPL-3.0",
   "icon": "assets/torcherino/icon.png",
@@ -19,14 +19,20 @@
       "torcherino.Torcherino"
     ],
     "client": [
-      "torcherino.Torcherino"
+      "torcherino.TorcherinoClient"
     ],
-    "torcherino": [
+    "torcherinoInitializer": [
       "torcherino.Torcherino"
     ]
   },
-  "requires": {
-    "fabricloader": ">=0.4.1",
+  "depends": {
+    "fabricloader": ">=0.4.0",
     "fabric": "*"
-  }
+  },
+  "mixins": [
+    {
+      "config": "torcherino.mixins.json",
+      "environment": "*"
+    }
+  ]
 }

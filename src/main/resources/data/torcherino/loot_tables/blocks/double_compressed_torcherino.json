@@ -6,7 +6,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "torcherino:compressed_torcherino"
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            }
+          ],
+          "name": "torcherino:double_compressed_torcherino"
         }
       ],
       "conditions": [

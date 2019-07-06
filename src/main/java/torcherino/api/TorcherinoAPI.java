@@ -1,7 +1,6 @@
 package torcherino.api;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
@@ -85,19 +84,4 @@ public interface TorcherinoAPI
      * @since 1.9.51
      */
     boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType);
-
-    /**
-     * Use this method so the Torcherino Block Entity includes your block.
-     *
-     * @param block The block to register.
-     * @return TRUE if registered and blacklisted, FALSE otherwise.
-     * @since 1.9.51
-     */
-    boolean registerTorcherinoBlock(Block block);
-
-    /**
-     * @return A set of all torcherino blocks registered through the API.
-     * @since 1.9.51
-     */
-    ImmutableSet<Block> getTorcherinoBlocks();
 }

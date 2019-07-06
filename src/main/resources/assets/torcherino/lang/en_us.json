@@ -5,14 +5,14 @@
   "block.torcherino.lanterino": "Jack o'Lanterino",
   "block.torcherino.compressed_lanterino": "Compressed Jack o'Lanterino",
   "block.torcherino.double_compressed_lanterino": "Double Compressed Jack o'Lanterino",
-  "screen.torcherino.area.stopped": "Stopped",
-  "screen.torcherino.area.n": "Area: %1$dx3x%1$d",
-  "screen.torcherino.speed": "Speed: %d%%",
-  "screen.torcherino.redstoneinteraction.normal": "Normal",
-  "screen.torcherino.redstoneinteraction.inverted": "Inverted",
-  "screen.torcherino.redstoneinteraction.ignore": "Ignored",
-  "screen.torcherino.narrate.redstoneinteraction": "%s Red stone Interaction Button",
-  "screen.torcherino.narrate.area.stopped": "Stopped",
-  "screen.torcherino.narrate.area.n": "Area: %1$d by 3 by %1$d"
+  "gui.torcherino.speed": "Speed: %s%%",
+  "gui.torcherino.x_range": "X Range: %s Blocks",
+  "gui.torcherino.z_range": "Z Range: %s Blocks",
+  "gui.torcherino.y_range": "Y Range: %s Blocks",
+  "gui.torcherino.mode": "Mode: %s",
+  "gui.torcherino.mode.normal": "Redstone Normal",
+  "gui.torcherino.mode.inverted": "Redstone Inverted",
+  "gui.torcherino.mode.ignore": "Redstone Ignored",
+  "gui.torcherino.mode.off": "Off"
 }
 

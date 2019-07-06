@@ -1,7 +1,6 @@
 package torcherino.api.impl;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
@@ -24,33 +23,22 @@ public class TorcherinoImpl implements TorcherinoAPI
 
     private final Logger LOGGER = LogManager.getLogger("torcherino-api");
     private final HashMap<Identifier, Tier> localTiers;
-    private final HashMap<Identifier, Tier> remoteTiers;
-    private final HashSet<Block> torcherinoBlocks;
     private final HashSet<Block> blacklistedBlocks;
     private final HashSet<BlockEntityType> blacklistedBlockEntities;
+    private HashMap<Identifier, Tier> remoteTiers;
 
     private TorcherinoImpl()
     {
         localTiers = new HashMap<>();
-        // On Server this will always be empty.
-        // On Client this will always be a copy of the server's tier (even on integrated server)
-        remoteTiers = new HashMap<>();
-        torcherinoBlocks = new HashSet<>();
         blacklistedBlocks = new HashSet<>();
         blacklistedBlockEntities = new HashSet<>();
     }
 
     @Override
-    public ImmutableMap<Identifier, Tier> getTiers()
-    {
-        return ImmutableMap.copyOf(localTiers);
-    }
+    public ImmutableMap<Identifier, Tier> getTiers() { return ImmutableMap.copyOf(localTiers); }
 
     @Override
-    public Tier getTier(Identifier tierIdentifier)
-    {
-        return remoteTiers.getOrDefault(tierIdentifier, null);
-    }
+    public Tier getTier(Identifier tierIdentifier) { return remoteTiers.getOrDefault(tierIdentifier, null); }
 
     @Override
     public boolean registerTier(Identifier tierIdentifier, int maxSpeed, int xzRange, int yRange)
@@ -73,7 +61,7 @@ public class TorcherinoImpl implements TorcherinoAPI
             Block block = Registry.BLOCK.get(blockIdentifier);
             if (blacklistedBlocks.contains(block))
             {
-                LOGGER.error("Block with id {} has already been blacklisted.", blockIdentifier);
+                LOGGER.warn("Block with id {} has already been blacklisted.", blockIdentifier);
                 return false;
             }
             else
@@ -91,7 +79,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     {
         if (blacklistedBlocks.contains(block))
         {
-            LOGGER.error("Block with id {} has already been blacklisted.", Registry.BLOCK.getId(block));
+            LOGGER.warn("Block with id {} has already been blacklisted.", Registry.BLOCK.getId(block));
             return false;
         }
         else
@@ -109,7 +97,7 @@ public class TorcherinoImpl implements TorcherinoAPI
             BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(blockEntityIdentifier);
             if (blacklistedBlockEntities.contains(blockEntityType))
             {
-                LOGGER.error("Block entity with id {} has already been blacklisted.", blockEntityIdentifier);
+                LOGGER.warn("Block entity with id {} has already been blacklisted.", blockEntityIdentifier);
                 return false;
             }
             blacklistedBlockEntities.add(blockEntityType);
@@ -124,7 +112,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     {
         if (blacklistedBlockEntities.contains(blockEntityType))
         {
-            LOGGER.error("Block entity with id {} has already been blacklisted.", Registry.BLOCK_ENTITY.getId(blockEntityType));
+            LOGGER.warn("Block entity with id {} has already been blacklisted.", Registry.BLOCK_ENTITY.getId(blockEntityType));
             return false;
         }
         blacklistedBlockEntities.add(blockEntityType);
@@ -132,26 +120,11 @@ public class TorcherinoImpl implements TorcherinoAPI
     }
 
     @Override
-    public boolean isBlockBlacklisted(Block block)
-    {
-        return false;
-    }
+    public boolean isBlockBlacklisted(Block block) { return blacklistedBlocks.contains(block); }
 
     @Override
-    public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType)
-    {
-        return false;
-    }
+    public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType) { return blacklistedBlockEntities.contains(blockEntityType); }
 
-    @Override
-    public boolean registerTorcherinoBlock(Block block)
-    {
-        return false;
-    }
-
-    @Override
-    public ImmutableSet<Block> getTorcherinoBlocks()
-    {
-        return null;
-    }
+    // Internal do not use.
+    public void setRemoteTiers(HashMap<Identifier, Tier> tiers) { remoteTiers = tiers; }
 }

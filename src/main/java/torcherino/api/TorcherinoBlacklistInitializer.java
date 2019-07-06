@@ -1,6 +1,12 @@
 package torcherino.api;
 
+/**
+ * @author NinjaPhenix
+ * @since 1.8.49
+ * @deprecated Warning this interface will be removed in 1.15.x see entrypoints/TorcherinoInitializer interface instead. todo 1.15.x: Remove
+ */
 @FunctionalInterface
+@Deprecated
 public interface TorcherinoBlacklistInitializer
 {
     /**

@@ -29,7 +29,13 @@
                   "condition": "minecraft:survives_explosion"
                 }
               ],
-              "name": "torcherino:lanterino"
+              "functions": [
+                {
+                  "function": "minecraft:copy_name",
+                  "source": "block_entity"
+                }
+              ],
+              "name": "torcherino:compressed_lanterino"
             }
           ]
         }
@@ -51,7 +57,13 @@
               }
             }
           ],
-          "name": "torcherino:torcherino"
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            }
+          ],
+          "name": "torcherino:compressed_torcherino"
         }
       ]
     }
