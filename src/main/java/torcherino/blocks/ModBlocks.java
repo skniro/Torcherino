@@ -1,7 +1,5 @@
 package torcherino.blocks;
 
-import com.google.common.collect.ImmutableSet;
-import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -13,60 +11,24 @@ import net.minecraft.util.registry.Registry;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.LanterinoBlock;
-import torcherino.api.blocks.TorcherinoBlock;
-import torcherino.api.blocks.TorcherinoBlockEntity;
-import torcherino.api.blocks.WallTorcherinoBlock;
+import torcherino.api.blocks.*;
 
-import java.util.*;
+import java.util.HashMap;
 
 public class ModBlocks
 {
     public static final ModBlocks INSTANCE = new ModBlocks();
     private HashMap<Identifier, Block> blocks;
     private HashMap<Identifier, Item> items;
-    private Set<Identifier> newBlocks;
-    private Set<Block> blockEntityBlocks;
 
     public void initialize()
     {
-        newBlocks = new HashSet<>(Registry.BLOCK.getIds());
-        blockEntityBlocks = new HashSet<>();
         blocks = new HashMap<>();
         items = new HashMap<>();
-        RegistryEntryAddedCallback.event(Registry.BLOCK).register((index, identifier, entry) -> newBlocks.add(identifier));
-        Timer timer = new Timer();
-        // todo: Find a better way of doing this.
-        timer.scheduleAtFixedRate(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                if (newBlocks.isEmpty())
-                {
-                    newBlocks = null;
-                    ModBlocks.this.registerBlockEntity();
-                    timer.cancel();
-                }
-                else
-                {
-                    Iterator<Identifier> iterator = ImmutableSet.copyOf(newBlocks).iterator();
-                    iterator.forEachRemaining((id) ->
-                    {
-                        Block b = Registry.BLOCK.get(id);
-                        if (b.getClass().equals(TorcherinoBlock.class) || b.getClass().equals(WallTorcherinoBlock.class) ||
-                                b.getClass().equals(LanterinoBlock.class))
-                        {
-                            blockEntityBlocks.add(b);
-                        }
-                        newBlocks.remove(id);
-                    });
-                }
-            }
-        }, 0, 5000);
         TorcherinoAPI.INSTANCE.getTiers().forEach(this::createBlocks);
         registerBlocks();
         registerItems();
+        registerBlockEntity();
     }
 
     private void createBlocks(Identifier tierID, Tier tier)
@@ -104,9 +66,8 @@ public class ModBlocks
 
     private void registerBlockEntity()
     {
-        Registry.register(Registry.BLOCK_ENTITY, new Identifier(Torcherino.MOD_ID, "torcherino"), BlockEntityType.Builder
-                .create(TorcherinoBlockEntity::new, blockEntityBlocks.toArray(new Block[]{})).build(null));
-        blockEntityBlocks = null;
+        BlockEntityType<TorcherinoBlockEntity> type = new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null, null);
+        Registry.register(Registry.BLOCK_ENTITY, new Identifier(Torcherino.MOD_ID, "torcherino"), type);
     }
 
     private Identifier getIdentifier(Identifier tierID, String type)
