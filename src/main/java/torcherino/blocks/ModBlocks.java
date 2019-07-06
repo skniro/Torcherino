@@ -51,7 +51,8 @@ public class ModBlocks
                 else
                 {
                     Iterator<Identifier> iterator = ImmutableSet.copyOf(newBlocks).iterator();
-                    iterator.forEachRemaining((id) -> {
+                    iterator.forEachRemaining((id) ->
+                    {
                         Block b = Registry.BLOCK.get(id);
                         if (b.getClass().equals(TorcherinoBlock.class) || b.getClass().equals(WallTorcherinoBlock.class) ||
                                 b.getClass().equals(LanterinoBlock.class))

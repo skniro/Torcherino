@@ -8,10 +8,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateFactory;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -47,29 +44,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     @Override
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(newState.get(Properties.POWERED));
-    }
-
-    @Override
-    public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean bool)
-    {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity != null) blockEntity.invalidate();
-    }
-
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext context)
-    {
-        boolean powered = context.getWorld().isEmittingRedstonePower(context.getBlockPos().down(), Direction.UP);
-        return super.getPlacementState(context).with(Properties.POWERED, powered);
-    }
-
-    @Override
-    protected void appendProperties(StateFactory.Builder<Block, BlockState> builder)
-    {
-        super.appendProperties(builder);
-        builder.add(Properties.POWERED);
+        neighborUpdate(null, world, pos, null, null, false);
     }
 
     @Override
@@ -98,15 +73,10 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)
     {
         if (world.isClient) return;
-        boolean powered = world.isEmittingRedstonePower(pos.down(), Direction.UP);
-        if (state.get(Properties.POWERED) != powered)
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof TorcherinoBlockEntity)
         {
-            world.setBlockState(pos, state.with(Properties.POWERED, powered));
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof TorcherinoBlockEntity)
-            {
-                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(powered);
-            }
+            ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.down(), Direction.UP));
         }
     }
 
@@ -117,8 +87,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
         if (stack.hasCustomName())
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (!(blockEntity instanceof TorcherinoBlockEntity)) return;
-            ((TorcherinoBlockEntity) blockEntity).setCustomName(stack.getName());
+            if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setCustomName(stack.getName());
         }
         if (Config.INSTANCE.log_placement)
         {

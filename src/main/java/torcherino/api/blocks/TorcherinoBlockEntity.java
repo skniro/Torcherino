@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -24,7 +23,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     private Text customName;
     private int xRange, yRange, zRange, speed, redstoneMode, randomTicks;
     private Iterable<BlockPos> area;
-    private boolean active, loaded = false;
+    private boolean active;
+    private boolean loaded = false;
     private Identifier tierID;
 
     public TorcherinoBlockEntity() { super(Registry.BLOCK_ENTITY.get(new Identifier("torcherino", "torcherino"))); }
@@ -38,7 +38,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     public void setCustomName(Text name) { customName = name; }
 
     @Override
-    public Text getName() { return hasCustomName() ? customName : new TranslatableText(world.getBlockState(pos).getBlock().getTranslationKey()); }
+    public Text getName() { return hasCustomName() ? customName : new TranslatableText(getCachedState().getBlock().getTranslationKey()); }
 
     @Override
     public void tick()
@@ -47,7 +47,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         {
             area = BlockPos.iterate(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange,
                     pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
-            setPoweredByRedstone(world.getBlockState(pos).get(Properties.POWERED));
+            getCachedState().getBlock().neighborUpdate(getCachedState(), world, pos, null, null, false);
             loaded = true;
         }
         if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
@@ -95,13 +95,14 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         this.yRange = MathHelper.clamp(buffer.readInt(), 0, tier.getYRange());
         this.speed = MathHelper.clamp(buffer.readInt(), 1, tier.getMaxSpeed());
         this.redstoneMode = MathHelper.clamp(buffer.readInt(), 0, 3);
+        loaded = false;
     }
 
     public Identifier getTierID()
     {
         if (tierID == null)
         {
-            Block block = world.getBlockState(pos).getBlock();
+            Block block = getCachedState().getBlock();
             if (block instanceof LanterinoBlock) { tierID = ((LanterinoBlock) block).getTierID(); }
             else if (block instanceof TorcherinoBlock) { tierID = ((TorcherinoBlock) block).getTierID(); }
             else if (block instanceof WallTorcherinoBlock) tierID = ((WallTorcherinoBlock) block).getTierID();
@@ -138,6 +139,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         tag.putInt("YRange", yRange);
         tag.putInt("Speed", speed);
         tag.putInt("RedstoneMode", redstoneMode);
+        tag.putBoolean("Active", active);
         return tag;
     }
 
@@ -151,5 +153,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         yRange = tag.getInt("YRange");
         speed = tag.getInt("Speed");
         redstoneMode = tag.getInt("RedstoneMode");
+        active = tag.getBoolean("Active");
     }
 }
