@@ -18,6 +18,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import torcherino.Torcherino;
+import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
 
 import java.util.Random;

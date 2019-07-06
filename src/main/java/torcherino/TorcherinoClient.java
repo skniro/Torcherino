@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.TorcherinoBlockEntity;
+import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.api.impl.TorcherinoImpl;
 import torcherino.client.screen.TorcherinoScreen;
 

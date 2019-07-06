@@ -1,8 +1,11 @@
-package torcherino.api.blocks;
+package torcherino.api.blocks.entity;
 
 import com.mojang.datafixers.types.Type;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import torcherino.api.blocks.LanterinoBlock;
+import torcherino.api.blocks.TorcherinoBlock;
+import torcherino.api.blocks.WallTorcherinoBlock;
 
 import java.util.Set;
 import java.util.function.Supplier;

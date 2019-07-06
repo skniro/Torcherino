@@ -188,7 +188,7 @@ public class TorcherinoScreen extends Screen
         minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         blit(left, top, 0, 0, screenWidth, screenHeight);
-        font.draw(title.asString(), (width - font.getStringWidth(title.asString())) / 2.0f, top + 6, 4210752);
+        font.draw(cached_title, (width - font.getStringWidth(cached_title)) / 2.0f, top + 6, 4210752);
         super.render(x, y, partialTicks);
     }
 

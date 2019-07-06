@@ -1,4 +1,4 @@
-package torcherino.api.blocks;
+package torcherino.api.blocks.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -16,6 +16,9 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
+import torcherino.api.blocks.LanterinoBlock;
+import torcherino.api.blocks.TorcherinoBlock;
+import torcherino.api.blocks.WallTorcherinoBlock;
 import torcherino.config.Config;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tickable

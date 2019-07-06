@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
 import torcherino.api.TorcherinoBlacklistInitializer;
-import torcherino.api.blocks.TorcherinoBlockEntity;
+import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.api.entrypoints.TorcherinoInitializer;
 import torcherino.blocks.ModBlocks;
 import torcherino.config.Config;

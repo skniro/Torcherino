@@ -56,8 +56,5 @@ public abstract class StateButtonWidget extends ButtonWidget
     @Override
     public String getNarrationMessage() { return new TranslatableText("gui.narrate.button", narrationMessage).asString(); }
 
-    protected void setNarrationMessage(String narrationMessage)
-    {
-        this.narrationMessage = narrationMessage;
-    }
+    protected void setNarrationMessage(String narrationMessage) { this.narrationMessage = narrationMessage; }
 }
