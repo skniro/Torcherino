@@ -34,12 +34,13 @@ public class TorcherinoClient implements ClientModInitializer
             int yRange = buffer.readInt();
             int speed = buffer.readInt();
             int redstoneMode = buffer.readInt();
-            context.getTaskQueue().execute(() -> {
+            context.getTaskQueue().execute(() ->
+            {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof TorcherinoBlockEntity)
                 {
-                    Identifier tierID = ((TorcherinoBlockEntity) blockEntity).getTierID();
-                    MinecraftClient.getInstance().openScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos, tierID));
+                    MinecraftClient.getInstance().openScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos,
+                            ((TorcherinoBlockEntity) blockEntity).getTierID()));
                 }
             });
         });
@@ -55,10 +56,9 @@ public class TorcherinoClient implements ClientModInitializer
                 int maxSpeed = buffer.readInt();
                 int xzRange = buffer.readInt();
                 int yRange = buffer.readInt();
-                Tier tier = new Tier(maxSpeed, xzRange, yRange);
-                tiers.put(id, tier);
+                tiers.put(id, new Tier(maxSpeed, xzRange, yRange));
             }
-            context.getTaskQueue().execute(() -> { ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(tiers); });
+            context.getTaskQueue().execute(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(tiers));
         });
     }
 }

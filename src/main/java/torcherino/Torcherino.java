@@ -29,7 +29,6 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
     {
         Config.initialize();
         ModBlocks.INSTANCE.initialize();
-
         ServerSidePacketRegistry.INSTANCE.register(new Identifier(Torcherino.MOD_ID, "utv"), (PacketContext context, PacketByteBuf buffer) ->
         {
             World world = context.getPlayer().getEntityWorld();
@@ -40,23 +39,15 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
                 try
                 {
                     BlockEntity blockEntity = world.getBlockEntity(pos);
-                    if (blockEntity instanceof TorcherinoBlockEntity)
-                    {
-                        ((TorcherinoBlockEntity) blockEntity).readClientData(buffer);
-                    }
+                    if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).readClientData(buffer);
                 }
-                finally
-                {
-                    buffer.release();
-                }
+                finally { buffer.release(); }
             });
         });
-
         FabricLoader.getInstance().getEntrypoints("torcherinoInitializer", TorcherinoInitializer.class).forEach(TorcherinoInitializer::onTorcherinoInitialize);
         // todo 1.15.x: Remove
         FabricLoader.getInstance().getEntrypoints("torcherino", TorcherinoBlacklistInitializer.class)
                     .forEach(TorcherinoBlacklistInitializer::onTorcherinoBlacklist);
-
     }
 
     @Override
@@ -67,7 +58,6 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
-
         if (FabricLoader.getInstance().isModLoaded("computercraft"))
         {
             TorcherinoAPI.INSTANCE.blacklistBlockEntity(new Identifier("computercraft", "turtle_normal"));
