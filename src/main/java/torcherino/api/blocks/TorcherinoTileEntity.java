@@ -29,10 +29,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
     private Iterable<BlockPos> area;
     private ResourceLocation tierName;
 
-    public TorcherinoTileEntity()
-    {
-        super(Blocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE);
-    }
+    public TorcherinoTileEntity() { super(Blocks.INSTANCE.TORCHERINO_TILE_ENTITY_TYPE); }
 
     @Override
     public ITextComponent getName()

@@ -31,10 +31,9 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class TorcherinoWallBlock extends WallTorchBlock
 {
-    // Variables
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private final ResourceLocation tierName;
-    // Constructors
+
     public TorcherinoWallBlock(TorcherinoBlock base)
     {
         super(Block.Properties.from(Blocks.WALL_TORCH).lootFrom(base));
@@ -45,17 +44,11 @@ public class TorcherinoWallBlock extends WallTorchBlock
     public ResourceLocation getTierName() { return tierName; }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
+    public boolean hasTileEntity(BlockState state) { return true; }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
-        return new TorcherinoTileEntity();
-    }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new TorcherinoTileEntity(); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
@@ -86,7 +79,8 @@ public class TorcherinoWallBlock extends WallTorchBlock
             String prefix = "Something";
             if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
             Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix,
-                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "")
+                                                              .replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
         }
     }
 
@@ -127,10 +121,7 @@ public class TorcherinoWallBlock extends WallTorchBlock
         {
             world.setBlockState(pos, state.with(POWERED, powered));
             TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof TorcherinoTileEntity)
-            {
-                ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
-            }
+            if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
         }
     }
 }

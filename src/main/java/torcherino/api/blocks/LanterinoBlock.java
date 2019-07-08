@@ -9,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -32,33 +31,23 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class LanterinoBlock extends CarvedPumpkinBlock
 {
-    // Variables
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private final ResourceLocation tierName;
-    private final Item torcherino;
-    //Constructors
-    public LanterinoBlock(ResourceLocation tierName, Item torcherino)
+
+    public LanterinoBlock(ResourceLocation tierName)
     {
         super(Block.Properties.from(Blocks.JACK_O_LANTERN));
         this.tierName = tierName;
-        this.torcherino = torcherino;
     }
 
-    // Methods
     public ResourceLocation getTierName() { return tierName; }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
+    public boolean hasTileEntity(BlockState state) { return true; }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
-        return new TorcherinoTileEntity();
-    }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new TorcherinoTileEntity(); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
@@ -89,7 +78,8 @@ public class LanterinoBlock extends CarvedPumpkinBlock
             String prefix = "Something";
             if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
             Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix,
-                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "")
+                                                              .replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
         }
     }
 
@@ -118,7 +108,6 @@ public class LanterinoBlock extends CarvedPumpkinBlock
         return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
     }
 
-    // Unique Methods ( can't be copy / pasted between torcherino classes )
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
@@ -135,10 +124,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock
         {
             world.setBlockState(pos, state.with(POWERED, powered));
             TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof TorcherinoTileEntity)
-            {
-                ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
-            }
+            if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
         }
     }
 }

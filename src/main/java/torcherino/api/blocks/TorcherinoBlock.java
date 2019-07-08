@@ -31,24 +31,19 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class TorcherinoBlock extends TorchBlock
 {
-    // Variables
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private final ResourceLocation tierName;
-    // Constructors
+
     public TorcherinoBlock(ResourceLocation tierName)
     {
         super(Properties.from(Blocks.TORCH));
         this.tierName = tierName;
     }
 
-    // Methods
     public ResourceLocation getTierName() { return tierName; }
 
     @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
+    public boolean hasTileEntity(BlockState state) { return true; }
 
     @Nullable
     @Override
@@ -83,7 +78,8 @@ public class TorcherinoBlock extends TorchBlock
             String prefix = "Something";
             if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
             Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix,
-                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "")
+                                                              .replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
         }
     }
 
@@ -112,7 +108,6 @@ public class TorcherinoBlock extends TorchBlock
         return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
     }
 
-    // Unique Methods ( can't be copy / pasted between torcherino classes )
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
@@ -129,10 +124,7 @@ public class TorcherinoBlock extends TorchBlock
         {
             world.setBlockState(pos, state.with(POWERED, powered));
             TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof TorcherinoTileEntity)
-            {
-                ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
-            }
+            if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
         }
     }
 }
