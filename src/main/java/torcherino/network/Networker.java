@@ -13,30 +13,31 @@ import torcherino.api.blocks.TorcherinoTileEntity;
 
 public class Networker
 {
-	public static final Networker INSTANCE = new Networker();
+    public static final Networker INSTANCE = new Networker();
 
-	public SimpleChannel torcherinoChannel;
+    public SimpleChannel torcherinoChannel;
 
-	public void initialise()
-	{
-		torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.resloc("channel"), () -> "2", version -> version.equals("2"), version -> version.equals("2"));
-		torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
-		torcherinoChannel.registerMessage(1, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
-		torcherinoChannel.registerMessage(2, S2CTierSyncMessage.class, S2CTierSyncMessage::encode, S2CTierSyncMessage::decode, S2CTierSyncMessage::handle);
-	}
+    public void initialise()
+    {
+        torcherinoChannel = NetworkRegistry
+                .newSimpleChannel(Torcherino.resloc("channel"), () -> "2", version -> version.equals("2"), version -> version.equals("2"));
+        torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
+        torcherinoChannel.registerMessage(1, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
+        torcherinoChannel.registerMessage(2, S2CTierSyncMessage.class, S2CTierSyncMessage::encode, S2CTierSyncMessage::decode, S2CTierSyncMessage::handle);
+    }
 
-	public boolean openScreenServer(World world, ServerPlayerEntity player, BlockPos pos)
-	{
-		if (world.isRemote) return true;
-		TileEntity tile = world.getTileEntity(pos);
-		if (!(tile instanceof TorcherinoTileEntity)) return true;
-		torcherinoChannel.sendTo(((TorcherinoTileEntity) tile).createOpenMessage(), player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-		return true;
-	}
+    public boolean openScreenServer(World world, ServerPlayerEntity player, BlockPos pos)
+    {
+        if (world.isRemote) return true;
+        TileEntity tile = world.getTileEntity(pos);
+        if (!(tile instanceof TorcherinoTileEntity)) return true;
+        torcherinoChannel.sendTo(((TorcherinoTileEntity) tile).createOpenMessage(), player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        return true;
+    }
 
-	public void sendServerTiers(ServerPlayerEntity player)
-	{
-		S2CTierSyncMessage message = new S2CTierSyncMessage(TorcherinoAPI.INSTANCE.getTiers());
-		torcherinoChannel.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-	}
+    public void sendServerTiers(ServerPlayerEntity player)
+    {
+        S2CTierSyncMessage message = new S2CTierSyncMessage(TorcherinoAPI.INSTANCE.getTiers());
+        torcherinoChannel.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+    }
 }

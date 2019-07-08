@@ -25,107 +25,120 @@ import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
 import torcherino.config.Config;
 import torcherino.network.Networker;
+
 import javax.annotation.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class LanterinoBlock extends CarvedPumpkinBlock
 {
-	//Constructors
-	public LanterinoBlock(ResourceLocation tierName, Item torcherino)
-	{
-		super(Block.Properties.from(Blocks.JACK_O_LANTERN));
-		this.tierName = tierName;
-		this.torcherino = torcherino;
-	}
+    // Variables
+    private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    private final ResourceLocation tierName;
+    private final Item torcherino;
+    //Constructors
+    public LanterinoBlock(ResourceLocation tierName, Item torcherino)
+    {
+        super(Block.Properties.from(Blocks.JACK_O_LANTERN));
+        this.tierName = tierName;
+        this.torcherino = torcherino;
+    }
 
-	// Variables
-	private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	private final ResourceLocation tierName;
-	private final Item torcherino;
+    // Methods
+    public ResourceLocation getTierName() { return tierName; }
 
-	// Methods
-	public ResourceLocation getTierName(){ return tierName; }
+    @Override
+    public boolean hasTileEntity(BlockState state)
+    {
+        return true;
+    }
 
-	@Override public boolean hasTileEntity(BlockState state)
-	{
-		return true;
-	}
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    {
+        return new TorcherinoTileEntity();
+    }
 
-	@Nullable @Override public TileEntity createTileEntity(BlockState state, IBlockReader world)
-	{
-		return new TorcherinoTileEntity();
-	}
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    {
+        super.fillStateContainer(builder);
+        builder.add(POWERED);
+    }
 
-	@Override protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWERED);
-	}
+    @Override
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    {
+        if (world.isRemote) return true;
+        return Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
+    }
 
-	@Override public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-	{
-		if (world.isRemote) return true;
-		return Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
-	}
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        if (world.isRemote) return;
+        if (stack.hasDisplayName())
+        {
+            TileEntity tile = world.getTileEntity(pos);
+            if (!(tile instanceof TorcherinoTileEntity)) return;
+            ((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName());
+        }
+        if (Config.INSTANCE.log_placement)
+        {
+            String prefix = "Something";
+            if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
+            Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix,
+                    StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
+        }
+    }
 
-	@Override public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-	{
-		if (world.isRemote) return;
-		if (stack.hasDisplayName())
-		{
-			TileEntity tile = world.getTileEntity(pos);
-			if (!(tile instanceof TorcherinoTileEntity)) return;
-			((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName());
-		}
-		if (Config.INSTANCE.log_placement)
-		{
-			String prefix = "Something";
-			if (placer != null) prefix = placer.getDisplayName().getString() + "(" + placer.getCachedUniqueIdString() + ")";
-			Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {} {} {}.", prefix, StringUtils.capitalize(getTranslationKey().replace("block.torcherino.", "").replace("_", " ")), pos.getX(), pos.getY(), pos.getZ());
-		}
-	}
+    @Override
+    public void tick(BlockState state, World world, BlockPos pos, Random random)
+    {
+        if (world.isRemote) return;
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
+    }
 
-	@Override public void tick(BlockState state, World world, BlockPos pos, Random random)
-	{
-		if (world.isRemote) return;
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
-	}
+    @Override
+    public PushReaction getPushReaction(BlockState state) { return PushReaction.IGNORE; }
 
-	@Override public PushReaction getPushReaction(BlockState state){ return PushReaction.IGNORE; }
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean b)
+    {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
+    }
 
-	@Override public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean b)
-	{
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
-	}
+    @Override
+    public ResourceLocation getLootTable()
+    {
+        ResourceLocation registryName = getRegistryName();
+        return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
+    }
 
-	@Override public ResourceLocation getLootTable()
-	{
-		ResourceLocation registryName = getRegistryName();
-		return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
-	}
+    // Unique Methods ( can't be copy / pasted between torcherino classes )
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        boolean powered = context.getWorld().isBlockPowered(context.getPos());
+        return super.getStateForPlacement(context).with(POWERED, powered);
+    }
 
-	// Unique Methods ( can't be copy / pasted between torcherino classes )
-	@Override public BlockState getStateForPlacement(BlockItemUseContext context)
-	{
-		boolean powered = context.getWorld().isBlockPowered(context.getPos());
-		return super.getStateForPlacement(context).with(POWERED, powered);
-	}
-
-	@Override public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean b)
-	{
-		if (world.isRemote) return;
-		boolean powered = world.isBlockPowered(pos);
-		if (state.get(POWERED) != powered)
-		{
-			world.setBlockState(pos, state.with(POWERED, powered));
-			TileEntity tileEntity = world.getTileEntity(pos);
-			if (tileEntity instanceof TorcherinoTileEntity)
-			{
-				((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
-			}
-		}
-	}
+    @Override
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean b)
+    {
+        if (world.isRemote) return;
+        boolean powered = world.isBlockPowered(pos);
+        if (state.get(POWERED) != powered)
+        {
+            world.setBlockState(pos, state.with(POWERED, powered));
+            TileEntity tileEntity = world.getTileEntity(pos);
+            if (tileEntity instanceof TorcherinoTileEntity)
+            {
+                ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
+            }
+        }
+    }
 }
