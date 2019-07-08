@@ -23,7 +23,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190621-1.14.2'
+    mappings channel: 'snapshot', version: '20190708-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
@@ -60,7 +60,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.16'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.25'
 
     compile ("blue.endless:jankson:1.1.2")
     shade ("blue.endless:jankson:1.1.2")

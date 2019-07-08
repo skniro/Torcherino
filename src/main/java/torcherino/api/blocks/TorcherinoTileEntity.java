@@ -94,7 +94,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	@Override public void tick()
 	{
 		if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
-		randomTicks = world.getGameRules().func_223592_c(GameRules.field_223610_m);
+		randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
 		area.forEach(this::tickBlock);
 	}
 
