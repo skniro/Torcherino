@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 
@@ -16,6 +18,7 @@ import java.util.Set;
 
 public class TorcherinoImpl implements TorcherinoAPI
 {
+    private final Logger LOGGER = LogManager.getLogger("torcherino-api");
     private Map<ResourceLocation, Tier> clientTiers = new HashMap<>();
     private Map<ResourceLocation, Tier> serverTiers = new HashMap<>();
 
@@ -28,7 +31,11 @@ public class TorcherinoImpl implements TorcherinoAPI
     public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
     {
         Tier tier = new Tier(maxSpeed, xzRange, yRange);
-        if (clientTiers.containsKey(name)) return false;
+        if (clientTiers.containsKey(name))
+        {
+            LOGGER.warn("Tier with id {} has already been registered.", name);
+            return false;
+        }
         clientTiers.put(name, tier);
         return true;
     }
@@ -38,17 +45,26 @@ public class TorcherinoImpl implements TorcherinoAPI
         if (ForgeRegistries.BLOCKS.containsKey(block))
         {
             Block b = ForgeRegistries.BLOCKS.getValue(block);
-            if (blacklistedBlocks.contains(b)) return false;
+            if (blacklistedBlocks.contains(b))
+            {
+                LOGGER.warn("Block with id {} is already blacklisted.", block);
+                return false;
+            }
             blacklistedBlocks.add(b);
             return true;
         }
+        LOGGER.warn("Block with id {} does not exist.", block);
         return false;
     }
 
     @Override
     public boolean blacklistBlock(Block block)
     {
-        if (blacklistedBlocks.contains(block)) return false;
+        if (blacklistedBlocks.contains(block))
+        {
+            LOGGER.warn("Block with id {} is already blacklisted.", block.getRegistryName());
+            return false;
+        }
         blacklistedBlocks.add(block);
         return true;
     }
@@ -59,17 +75,26 @@ public class TorcherinoImpl implements TorcherinoAPI
         if (ForgeRegistries.TILE_ENTITIES.containsKey(tileEntity))
         {
             TileEntityType type = ForgeRegistries.TILE_ENTITIES.getValue(tileEntity);
-            if (blacklistedTiles.contains(type)) return false;
+            if (blacklistedTiles.contains(type))
+            {
+                LOGGER.warn("TileEntity with id {} is already blacklisted.", tileEntity);
+                return false;
+            }
             blacklistedTiles.add(type);
             return true;
         }
+        LOGGER.warn("TileEntity with id {} does not exist.", tileEntity);
         return false;
     }
 
     @Override
     public boolean blacklistTileEntity(TileEntityType tileEntity)
     {
-        if (blacklistedTiles.contains(tileEntity)) return false;
+        if (blacklistedTiles.contains(tileEntity))
+        {
+            LOGGER.warn("TileEntity with id {} is already blacklisted.", tileEntity.getRegistryName());
+            return false;
+        }
         blacklistedTiles.add(tileEntity);
         return true;
     }
@@ -89,6 +114,7 @@ public class TorcherinoImpl implements TorcherinoAPI
             torcherinoBlocks.add(block);
             return true;
         }
+        LOGGER.warn("Torcherino with id {} has already been registered.", block.getRegistryName());
         return false;
     }
 
