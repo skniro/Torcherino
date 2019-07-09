@@ -1,7 +1,7 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/torcherino",
   "1.14.3": {
-    "9.0.1": "Fixed a crash on server side."
+    "9.0.1": "Fixed a crash on server side.",
     "9.0.0": "Initial port to 1.14.3, adds narration support to gui."
   },
   "1.13.2": {
