@@ -10,8 +10,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 
 public abstract class StateButton extends AbstractButton
 {
-    private final int screenWidth;
-    private final int screenHeight;
+    private final int screenWidth, screenHeight;
     private int state;
     private String narrationMessage;
 
@@ -47,23 +46,17 @@ public abstract class StateButton extends AbstractButton
             RenderHelper.disableStandardItemLighting();
             if (isHovered())
             {
-                GuiUtils.drawHoveringText(getButtonIcon(), Lists.asList(narrationMessage, new String[]{}), x + width / 2, y + height / 2, screenWidth,
-                        screenHeight, -1, Minecraft.getInstance().fontRenderer);
+                GuiUtils.drawHoveringText(getButtonIcon(), Lists.asList(narrationMessage, new String[]{}), x + width / 2, y + height / 2,
+                        screenWidth, screenHeight, -1, Minecraft.getInstance().fontRenderer);
             }
         }
     }
 
     @Override
-    public void onPress()
-    {
-        setInternalState(++state);
-    }
+    public void onPress() { setInternalState(++state); }
 
     @Override
-    public String getNarrationMessage()
-    {
-        return new TranslationTextComponent("gui.narrate.button", this.narrationMessage).getFormattedText();
-    }
+    public String getNarrationMessage() { return new TranslationTextComponent("gui.narrate.button", this.narrationMessage).getFormattedText(); }
 
     public void setNarrationMessage(String narrationMessage) { this.narrationMessage = narrationMessage; }
 }

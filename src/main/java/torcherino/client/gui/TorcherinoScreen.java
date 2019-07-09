@@ -40,7 +40,7 @@ public class TorcherinoScreen extends Screen
         super(tileEntity.getName());
         this.tileEntity = tileEntity;
         this.tier = TorcherinoAPI.INSTANCE.getTier(tileEntity.getTierName());
-        this.title = title.getFormattedText();
+        this.title = title.getString();
         this.xRange = xRange;
         this.zRange = zRange;
         this.yRange = yRange;
@@ -72,13 +72,12 @@ public class TorcherinoScreen extends Screen
         guiLeft = (this.width - xSize) / 2;
         guiTop = (this.height - ySize) / 2;
         if (speed == 0) speed = 1;
-        // Todo: rework all buttons to support narration and generally work in 1.14
         this.addButton(new FixedSliderButton(guiLeft + 8, guiTop + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed() - 1)
         {
             @Override
             protected void updateMessage()
             {
-                this.setMessage(new TranslationTextComponent("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).getFormattedText());
+                this.setMessage(new TranslationTextComponent("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).getString());
             }
 
             @Override
@@ -93,7 +92,7 @@ public class TorcherinoScreen extends Screen
             @Override
             protected void updateMessage()
             {
-                this.setMessage(new TranslationTextComponent("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).getFormattedText());
+                this.setMessage(new TranslationTextComponent("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).getString());
             }
 
             @Override
@@ -108,7 +107,7 @@ public class TorcherinoScreen extends Screen
             @Override
             protected void updateMessage()
             {
-                this.setMessage(new TranslationTextComponent("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).getFormattedText());
+                this.setMessage(new TranslationTextComponent("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).getString());
             }
 
             @Override
@@ -123,7 +122,7 @@ public class TorcherinoScreen extends Screen
             @Override
             protected void updateMessage()
             {
-                this.setMessage(new TranslationTextComponent("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).getFormattedText());
+                this.setMessage(new TranslationTextComponent("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).getString());
             }
 
             @Override
@@ -164,7 +163,7 @@ public class TorcherinoScreen extends Screen
                         textComponent = new TranslationTextComponent("gui.torcherino.mode.error");
                         break;
                 }
-                setNarrationMessage(new TranslationTextComponent("gui.torcherino.mode", textComponent).getFormattedText());
+                setNarrationMessage(new TranslationTextComponent("gui.torcherino.mode", textComponent).getString());
                 this.nextNarration = Util.milliTime() + 250L;
                 TorcherinoScreen.this.redstoneMode = state;
             }

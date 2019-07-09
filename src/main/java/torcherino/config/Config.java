@@ -75,9 +75,7 @@ public class Config
     private static class Tier
     {
         final String name;
-        final int max_speed;
-        final int xz_range;
-        final int y_range;
+        final int max_speed, xz_range, y_range;
 
         Tier(String name, int max_speed, int xz_range, int y_range)
         {

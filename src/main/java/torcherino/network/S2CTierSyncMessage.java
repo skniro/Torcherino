@@ -2,6 +2,7 @@ package torcherino.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
@@ -42,22 +43,18 @@ public class S2CTierSyncMessage
     static void handle(S2CTierSyncMessage msg, Supplier<NetworkEvent.Context> ctx)
     {
         NetworkEvent.Context context = ctx.get();
-        context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setServerTiers(msg.tiers));
+        if (context.getDirection().getOriginationSide() == LogicalSide.SERVER)
+            context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(msg.tiers));
         context.setPacketHandled(true);
     }
 
     private static AbstractMap.SimpleImmutableEntry<ResourceLocation, Tier> readTier(PacketBuffer buf)
     {
-        ResourceLocation name = buf.readResourceLocation();
-        Tier tier = new Tier(buf.readInt(), buf.readInt(), buf.readInt());
-        return new AbstractMap.SimpleImmutableEntry<>(name, tier);
+        return new AbstractMap.SimpleImmutableEntry<>(buf.readResourceLocation(), new Tier(buf.readInt(), buf.readInt(), buf.readInt()));
     }
 
     private static void writeTier(ResourceLocation name, Tier tier, PacketBuffer buf)
     {
-        buf.writeResourceLocation(name);
-        buf.writeInt(tier.getMaxSpeed());
-        buf.writeInt(tier.getXZRange());
-        buf.writeInt(tier.getYRange());
+        buf.writeResourceLocation(name).writeInt(tier.getMaxSpeed()).writeInt(tier.getXZRange()).writeInt(tier.getYRange());
     }
 }

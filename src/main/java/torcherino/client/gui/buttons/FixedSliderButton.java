@@ -18,20 +18,20 @@ public abstract class FixedSliderButton extends AbstractSlider
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        boolean flag = keyCode == 263;
-        if (flag || keyCode == 262)
+        boolean pressedLeft = keyCode == 263;
+        if (pressedLeft || keyCode == 262)
         {
-            float f = flag ? -nudgeAmount : nudgeAmount;
-            this.setValue(this.value + f);
+            float offset = pressedLeft ? -nudgeAmount : nudgeAmount;
+            this.setValue(this.value + offset);
         }
         return false;
     }
 
     private void setValue(double value)
     {
-        double d0 = this.value;
+        double oldValue = this.value;
         this.value = MathHelper.clamp(value, 0, 1);
-        if (d0 != this.value) this.applyValue();
+        if (oldValue != this.value) this.applyValue();
         this.updateMessage();
     }
 }

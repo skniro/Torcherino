@@ -19,24 +19,21 @@ import java.util.Set;
 public class TorcherinoImpl implements TorcherinoAPI
 {
     private final Logger LOGGER = LogManager.getLogger("torcherino-api");
-    private Map<ResourceLocation, Tier> clientTiers = new HashMap<>();
-    private Map<ResourceLocation, Tier> serverTiers = new HashMap<>();
-
+    private Map<ResourceLocation, Tier> localTiers = new HashMap<>();
+    private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
     private Set<Block> blacklistedBlocks = new HashSet<>();
-
     private Set<TileEntityType> blacklistedTiles = new HashSet<>();
-
     private Set<Block> torcherinoBlocks = new HashSet<>();
 
     public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
     {
         Tier tier = new Tier(maxSpeed, xzRange, yRange);
-        if (clientTiers.containsKey(name))
+        if (localTiers.containsKey(name))
         {
             LOGGER.warn("Tier with id {} has already been registered.", name);
             return false;
         }
-        clientTiers.put(name, tier);
+        localTiers.put(name, tier);
         return true;
     }
 
@@ -119,19 +116,13 @@ public class TorcherinoImpl implements TorcherinoAPI
     }
 
     // Do not use
-    public void setServerTiers(Map<ResourceLocation, Tier> tiers) { serverTiers = tiers; }
+    public void setRemoteTiers(Map<ResourceLocation, Tier> tiers) { remoteTiers = tiers; }
 
-    public ImmutableMap<ResourceLocation, Tier> getTiers() { return ImmutableMap.copyOf(clientTiers); }
-
-    @Override
-    public Tier getTier(ResourceLocation name)
-    {
-        return serverTiers.getOrDefault(name, null);
-    }
+    public ImmutableMap<ResourceLocation, Tier> getTiers() { return ImmutableMap.copyOf(localTiers); }
 
     @Override
-    public ImmutableSet<Block> getTorcherinoBlocks()
-    {
-        return ImmutableSet.copyOf(torcherinoBlocks);
-    }
+    public Tier getTier(ResourceLocation name) { return remoteTiers.getOrDefault(name, null); }
+
+    @Override
+    public ImmutableSet<Block> getTorcherinoBlocks() { return ImmutableSet.copyOf(torcherinoBlocks); }
 }

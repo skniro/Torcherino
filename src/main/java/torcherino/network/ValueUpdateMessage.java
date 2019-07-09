@@ -14,11 +14,7 @@ import java.util.function.Supplier;
 public class ValueUpdateMessage
 {
     private final BlockPos pos;
-    private final int xRange;
-    private final int zRange;
-    private final int yRange;
-    private final int speed;
-    private final int redstoneMode;
+    private final int xRange, zRange, yRange, speed, redstoneMode;
 
     public ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode)
     {
@@ -32,12 +28,7 @@ public class ValueUpdateMessage
 
     static void encode(ValueUpdateMessage msg, PacketBuffer buf)
     {
-        buf.writeBlockPos(msg.pos);
-        buf.writeInt(msg.xRange);
-        buf.writeInt(msg.zRange);
-        buf.writeInt(msg.yRange);
-        buf.writeInt(msg.speed);
-        buf.writeInt(msg.redstoneMode);
+        buf.writeBlockPos(msg.pos).writeInt(msg.xRange).writeInt(msg.zRange).writeInt(msg.yRange).writeInt(msg.speed).writeInt(msg.redstoneMode);
     }
 
     static ValueUpdateMessage decode(PacketBuffer buf)
@@ -57,8 +48,7 @@ public class ValueUpdateMessage
                 TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
                 Tier tier = TorcherinoAPI.INSTANCE.getTier(torcherinoTileEntity.getTierName());
                 if (msg.xRange > tier.getXZRange() || msg.zRange > tier.getXZRange() || msg.yRange > tier.getYRange() || msg.speed > tier.getMaxSpeed() ||
-                        msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0)
-                { return; }
+                        msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0) { return; }
                 torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
             }
         });
