@@ -13,11 +13,7 @@ public class OpenScreenMessage
 {
     public final BlockPos pos;
     public final ITextComponent title;
-    public final int xRange;
-    public final int zRange;
-    public final int yRange;
-    public final int speed;
-    public final int redstoneMode;
+    public final int xRange, zRange, yRange, speed, redstoneMode;
 
     public OpenScreenMessage(BlockPos pos, ITextComponent title, int xRange, int zRange, int yRange, int speed, int redstoneMode)
     {
