@@ -23,7 +23,6 @@ import java.util.Map;
 public class Blocks
 {
     public static final Blocks INSTANCE = new Blocks();
-    public TileEntityType TORCHERINO_TILE_ENTITY_TYPE;
     private HashSet<Block> blocks;
     private HashSet<Item> items;
 
@@ -35,31 +34,30 @@ public class Blocks
         tiers.keySet().forEach(this::register);
     }
 
-    private ResourceLocation getIdentifier(ResourceLocation resourceLocation, String type)
+    private ResourceLocation getIdentifier(ResourceLocation tierID, String type)
     {
-        String newType = resourceLocation.getPath() + "_" + type;
-        if (newType.startsWith("normal_")) newType = newType.substring(7);
-        return new ResourceLocation(resourceLocation.getNamespace(), newType);
+        if (tierID.getPath().equals("normal")) return new ResourceLocation(Torcherino.MOD_ID, type);
+        return new ResourceLocation(Torcherino.MOD_ID, tierID.getPath() + "_" + type);
     }
 
-    private void register(ResourceLocation resourceLocation)
+    private void register(ResourceLocation tierID)
     {
-        if (resourceLocation.getNamespace().equals(Torcherino.MOD_ID))
+        if (tierID.getNamespace().equals(Torcherino.MOD_ID))
         {
-            ResourceLocation torcherinoID = getIdentifier(resourceLocation, "torcherino");
+            ResourceLocation torcherinoID = getIdentifier(tierID, "torcherino");
             ResourceLocation torcherinoWallID = Torcherino.resloc("wall_" + torcherinoID.getPath());
-            ResourceLocation lanterinoID = getIdentifier(resourceLocation, "lanterino");
-            Block torcherinoBlock = new TorcherinoBlock(resourceLocation).setRegistryName(torcherinoID);
-            Block torcherinoWallBlock = new TorcherinoWallBlock((TorcherinoBlock) torcherinoBlock).setRegistryName(torcherinoWallID);
-            Item torcherinoItem = new WallOrFloorItem(torcherinoBlock, torcherinoWallBlock, new Item.Properties().group(ItemGroup.DECORATIONS))
+            ResourceLocation lanterinoID = getIdentifier(tierID, "lanterino");
+            Block standingBlock = new TorcherinoBlock(tierID).setRegistryName(torcherinoID);
+            Block wallBlock = new TorcherinoWallBlock((TorcherinoBlock) standingBlock).setRegistryName(torcherinoWallID);
+            Item torcherinoItem = new WallOrFloorItem(standingBlock, wallBlock, new Item.Properties().group(ItemGroup.DECORATIONS))
                     .setRegistryName(torcherinoID);
-            Block lanterinoBlock = new LanterinoBlock(resourceLocation).setRegistryName(lanterinoID);
+            Block lanterinoBlock = new LanterinoBlock(tierID).setRegistryName(lanterinoID);
             Item lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(lanterinoID);
-            blocks.add(torcherinoBlock);
-            blocks.add(torcherinoWallBlock);
+            blocks.add(standingBlock);
+            blocks.add(wallBlock);
             blocks.add(lanterinoBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(torcherinoBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(torcherinoWallBlock);
+            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(standingBlock);
+            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(wallBlock);
             TorcherinoAPI.INSTANCE.registerTorcherinoBlock(lanterinoBlock);
             items.add(torcherinoItem);
             items.add(lanterinoItem);
@@ -75,10 +73,10 @@ public class Blocks
     @SubscribeEvent
     public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
     {
-        TORCHERINO_TILE_ENTITY_TYPE = TileEntityType.Builder
+        TileEntityType tileEntityType = TileEntityType.Builder
                 .create(TorcherinoTileEntity::new, TorcherinoAPI.INSTANCE.getTorcherinoBlocks().toArray(new Block[]{})).build(null)
                 .setRegistryName(Torcherino.resloc("torcherino"));
-        TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY_TYPE);
-        registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY_TYPE);
+        TorcherinoAPI.INSTANCE.blacklistTileEntity(tileEntityType);
+        registryEvent.getRegistry().register(tileEntityType);
     }
 }
