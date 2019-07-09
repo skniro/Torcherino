@@ -48,9 +48,6 @@ public class Torcherino
     @SubscribeEvent
     public void processIMC(final InterModProcessEvent event)
     {
-        // To use: in InterModEnqueueEvent call
-        // InterModComms.sendTo( MOD_ID, Method , supplier);
-        // See processMessage method below for method and what they take
         event.getIMCStream().forEach((message) ->
         {
             String method = message.getMethod();

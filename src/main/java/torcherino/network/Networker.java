@@ -19,8 +19,8 @@ public class Networker
 
     public void initialise()
     {
-        torcherinoChannel = NetworkRegistry
-                .newSimpleChannel(Torcherino.resloc("channel"), () -> "2", version -> version.equals("2"), version -> version.equals("2"));
+        String version = "2";
+        torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.resloc("channel"), () -> version, version::equals, version::equals);
         torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
         torcherinoChannel.registerMessage(1, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
         torcherinoChannel.registerMessage(2, S2CTierSyncMessage.class, S2CTierSyncMessage::encode, S2CTierSyncMessage::decode, S2CTierSyncMessage::handle);
@@ -30,8 +30,8 @@ public class Networker
     {
         if (world.isRemote) return true;
         TileEntity tile = world.getTileEntity(pos);
-        if (!(tile instanceof TorcherinoTileEntity)) return true;
-        torcherinoChannel.sendTo(((TorcherinoTileEntity) tile).createOpenMessage(), player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        if (tile instanceof TorcherinoTileEntity)
+            torcherinoChannel.sendTo(((TorcherinoTileEntity) tile).createOpenMessage(), player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
         return true;
     }
 

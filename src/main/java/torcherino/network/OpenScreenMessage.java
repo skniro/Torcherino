@@ -32,13 +32,8 @@ public class OpenScreenMessage
 
     static void encode(OpenScreenMessage msg, PacketBuffer buf)
     {
-        buf.writeBlockPos(msg.pos);
-        buf.writeTextComponent(msg.title);
-        buf.writeInt(msg.xRange);
-        buf.writeInt(msg.zRange);
-        buf.writeInt(msg.yRange);
-        buf.writeInt(msg.speed);
-        buf.writeInt(msg.redstoneMode);
+        buf.writeBlockPos(msg.pos).writeTextComponent(msg.title).writeInt(msg.xRange)
+           .writeInt(msg.zRange).writeInt(msg.yRange).writeInt(msg.speed).writeInt(msg.redstoneMode);
     }
 
     static OpenScreenMessage decode(PacketBuffer buf)
