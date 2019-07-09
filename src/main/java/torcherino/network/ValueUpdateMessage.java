@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.api.blocks.TorcherinoTileEntity;
@@ -46,12 +47,28 @@ public class ValueUpdateMessage
             if (tileEntity instanceof TorcherinoTileEntity)
             {
                 TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
-                Tier tier = TorcherinoAPI.INSTANCE.getTier(torcherinoTileEntity.getTierName());
-                if (msg.xRange > tier.getXZRange() || msg.zRange > tier.getXZRange() || msg.yRange > tier.getYRange() || msg.speed > tier.getMaxSpeed() ||
-                        msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0) { return; }
-                torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
+                if (msg.withinBounds(TorcherinoAPI.INSTANCE.getTiers().get(torcherinoTileEntity.getTierName())))
+                {
+                    torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
+                }
             }
         });
         context.setPacketHandled(true);
+    }
+
+    private boolean withinBounds(Tier tier)
+    {
+        if (tier == null)
+        {
+            Torcherino.LOGGER.error("Torcherino tile entity does not have a valid tier.");
+            return false;
+        }
+        if (xRange > tier.getXZRange() || zRange > tier.getXZRange() || yRange > tier.getYRange() || speed > tier.getMaxSpeed() || redstoneMode > 3 ||
+                xRange < 0 || zRange < 0 || yRange < 0 || speed < 1 || redstoneMode < 0)
+        {
+            Torcherino.LOGGER.error("Data received from client is invalid.");
+            return false;
+        }
+        return true;
     }
 }
