@@ -54,7 +54,7 @@ public class ValueUpdateMessage
 			if (tileEntity instanceof TorcherinoTileEntity)
 			{
 				TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
-				Tier tier = TorcherinoAPI.INSTANCE.getTier(torcherinoTileEntity.getTierName());
+				Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(torcherinoTileEntity.getTierName());
 				if (msg.xRange > tier.getXZRange() || msg.zRange > tier.getXZRange() || msg.yRange > tier.getYRange() || msg.speed > tier.getMaxSpeed() || msg.redstoneMode > 3 || msg.xRange < 0 || msg.zRange < 0 || msg.yRange < 0 || msg.speed < 0 || msg.redstoneMode < 0)
 					return;
 				torcherinoTileEntity.readClientData(msg.xRange, msg.zRange, msg.yRange, msg.speed, msg.redstoneMode);
