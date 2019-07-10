@@ -27,7 +27,10 @@
   },
   "depends": {
     "fabricloader": ">=0.4.0",
-    "fabric": "*"
+    "fabric-api-base": "*",
+    "fabric-content-registries-v0": "*",
+    "fabric-object-builders-v0": "*",
+    "fabric-networking-v0": "*"
   },
   "mixins": [
     {
