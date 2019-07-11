@@ -66,7 +66,7 @@ public abstract class FixedSliderButton extends GuiButton
 	{
 		if (this.pressed)
 		{
-			Minecraft.getInstance().getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			this.pressed = false;
 		}
 	}

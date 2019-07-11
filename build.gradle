@@ -23,7 +23,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20180921-1.13'
+    mappings channel: 'snapshot', version: '20190530-1.13.2'
     runs {
         client {
             workingDirectory project.file('run')

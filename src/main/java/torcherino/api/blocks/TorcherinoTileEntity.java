@@ -68,12 +68,12 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		super.write(compound);
-		if (hasCustomName()) compound.setString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
-		compound.setInt("XRange", this.xRange);
-		compound.setInt("ZRange", this.zRange);
-		compound.setInt("YRange", this.yRange);
-		compound.setInt("Speed", this.speed);
-		compound.setInt("RedstoneMode", this.redstoneMode);
+		if (hasCustomName()) compound.putString("CustomName", ITextComponent.Serializer.toJson(getCustomName()));
+		compound.putInt("XRange", this.xRange);
+		compound.putInt("ZRange", this.zRange);
+		compound.putInt("YRange", this.yRange);
+		compound.putInt("Speed", this.speed);
+		compound.putInt("RedstoneMode", this.redstoneMode);
 		return compound;
 	}
 
@@ -102,7 +102,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
 		if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) return;
-		if (block.getTickRandomly(blockState) && world.getRandom().nextInt(MathHelper.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) block.randomTick(blockState, world, blockPos, world.getRandom());
+		if (block.ticksRandomly(blockState) && world.getRandom().nextInt(MathHelper.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) block.randomTick(blockState, world, blockPos, world.getRandom());
 		if (!block.hasTileEntity(blockState)) return;
 		TileEntity tileEntity = world.getTileEntity(blockPos);
 		if (tileEntity == null || tileEntity.isRemoved() || TorcherinoAPI.INSTANCE.isTileEntityBlacklisted(tileEntity.getType()) || !(tileEntity instanceof ITickable)) return;
