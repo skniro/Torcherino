@@ -24,6 +24,7 @@ import torcherino.config.Config;
 
 import java.util.Random;
 
+@SuppressWarnings({ "SpellCheckingInspection", "deprecation" })
 public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityProvider
 {
     private final Identifier tierID;

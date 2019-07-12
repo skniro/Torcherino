@@ -18,28 +18,18 @@ import java.io.IOException;
 @SuppressWarnings({ "SameParameterValue", "WeakerAccess" })
 public class ConfigManager
 {
-
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Jankson jankson = new Jankson.Builder().build();
-
     static Marshaller getMarshaller()
     {
         return jankson.getMarshaller();
     }
 
-    /**
-     * Loads a config file and parses it to a POJO.
-     *
-     * @param clazz The class of the POJO that will store all our properties
-     * @param configFile The config file
-     * @return A new config Object containing all our options from the config file
-     */
     @SuppressWarnings("ConstantConditions")
     static <T> T loadConfig(Class<T> clazz, File configFile)
     {
         try
         {
-            //Generate config file if it doesn't exist
             if (!configFile.exists())
             {
                 T instance = clazz.newInstance();
@@ -50,7 +40,6 @@ public class ConfigManager
             {
                 JsonObject json = jankson.load(configFile);
                 T result = jankson.fromJson(json, clazz);
-                //check if the config file is outdated. If so overwrite it
                 JsonElement jsonElementNew = jankson.toJson(clazz.newInstance());
                 if (jsonElementNew instanceof JsonObject)
                 {
@@ -75,7 +64,6 @@ public class ConfigManager
         {
             LOGGER.warn("Failed to create new config file for {}: {}", configFile.getName(), e);
         }
-        //Something obviously went wrong, create placeholder config
         LOGGER.warn("Creating placeholder config for {}...", configFile.getName());
         try
         {
@@ -85,16 +73,9 @@ public class ConfigManager
         {
             LOGGER.warn("Failed to create placeholder config for {}: {}", configFile.getName(), e);
         }
-        //this is ... unfortunate
         return null;
     }
 
-    /**
-     * Saves a POJO Config object to the disk. This is mostly used to create new configs if they don't already exist
-     *
-     * @param object The Config we want to save
-     * @param configFile The config file.
-     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void saveConfig(Object object, File configFile)
     {

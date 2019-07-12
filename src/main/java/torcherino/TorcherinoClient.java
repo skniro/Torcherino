@@ -18,6 +18,7 @@ import torcherino.client.screen.TorcherinoScreen;
 
 import java.util.HashMap;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class TorcherinoClient implements ClientModInitializer
 {
     @Override

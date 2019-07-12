@@ -10,17 +10,15 @@ import torcherino.api.blocks.WallTorcherinoBlock;
 import java.util.Set;
 import java.util.function.Supplier;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class TocherinoBlockEntityType extends BlockEntityType<TorcherinoBlockEntity>
 {
-    public TocherinoBlockEntityType(Supplier<TorcherinoBlockEntity> supplier_1, Set<Block> set_1, Type type_1)
-    {
-        super(supplier_1, set_1, type_1);
-    }
+    public TocherinoBlockEntityType(Supplier<TorcherinoBlockEntity> supplier, Set<Block> set, Type type) { super(supplier, set, type); }
 
     @Override
-    public boolean supports(Block block_1)
+    public boolean supports(Block block)
     {
-        return TorcherinoBlock.class.equals(block_1.getClass()) || WallTorcherinoBlock.class.equals(block_1.getClass()) ||
-                LanterinoBlock.class.equals(block_1.getClass());
+        return TorcherinoBlock.class.equals(block.getClass()) || WallTorcherinoBlock.class.equals(block.getClass()) ||
+                LanterinoBlock.class.equals(block.getClass());
     }
 }

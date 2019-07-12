@@ -12,8 +12,8 @@ import torcherino.api.TorcherinoBlacklistAPI;
 /**
  * WARNING: this class will be removed in the future and is not intended to be used. todo 1.15.x: Remove
  */
+@SuppressWarnings({ "SpellCheckingInspection", "DeprecatedIsStillUsed" })
 @Deprecated
-@SuppressWarnings("DeprecatedIsStillUsed")
 public class TorcherinoBlacklistImpl implements TorcherinoBlacklistAPI
 {
     public static final TorcherinoBlacklistAPI INSTANCE = new TorcherinoBlacklistImpl();

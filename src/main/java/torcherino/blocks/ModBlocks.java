@@ -18,6 +18,7 @@ import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 
 import java.util.HashMap;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class ModBlocks
 {
     public static final ModBlocks INSTANCE = new ModBlocks();
@@ -53,7 +54,6 @@ public class ModBlocks
             TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoBlock);
             TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoWallBlock);
             TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
-
         }
     }
 

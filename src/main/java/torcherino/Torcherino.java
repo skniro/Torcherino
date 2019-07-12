@@ -19,6 +19,7 @@ import torcherino.api.entrypoints.TorcherinoInitializer;
 import torcherino.blocks.ModBlocks;
 import torcherino.config.Config;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Torcherino implements ModInitializer, TorcherinoInitializer
 {
     public static final String MOD_ID = "torcherino";
@@ -46,6 +47,7 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
         });
         FabricLoader.getInstance().getEntrypoints("torcherinoInitializer", TorcherinoInitializer.class).forEach(TorcherinoInitializer::onTorcherinoInitialize);
         // todo 1.15.x: Remove
+        //noinspection deprecation
         FabricLoader.getInstance().getEntrypoints("torcherino", TorcherinoBlacklistInitializer.class)
                     .forEach(TorcherinoBlacklistInitializer::onTorcherinoBlacklist);
     }

@@ -21,6 +21,7 @@ import torcherino.api.blocks.TorcherinoBlock;
 import torcherino.api.blocks.WallTorcherinoBlock;
 import torcherino.config.Config;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tickable
 {
     private Text customName;

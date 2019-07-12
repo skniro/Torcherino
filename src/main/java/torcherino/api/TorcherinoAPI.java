@@ -10,7 +10,7 @@ import torcherino.api.impl.TorcherinoImpl;
  * @author NinjaPhenix
  * @since 1.9.51
  */
-@SuppressWarnings({ "UnusedReturnValue", "unused" })
+@SuppressWarnings({ "UnusedReturnValue", "unused", "SpellCheckingInspection" })
 public interface TorcherinoAPI
 {
     /**

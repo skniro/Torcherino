@@ -23,6 +23,7 @@ import torcherino.config.Config;
 
 import java.util.Random;
 
+@SuppressWarnings({ "SpellCheckingInspection", "deprecation" })
 public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
 {
     private final Identifier tierID;

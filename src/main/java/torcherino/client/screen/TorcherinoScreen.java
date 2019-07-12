@@ -20,6 +20,7 @@ import torcherino.client.screen.widgets.FixedSliderWidget;
 import torcherino.client.screen.widgets.StateButtonWidget;
 
 @Environment(EnvType.CLIENT)
+@SuppressWarnings("SpellCheckingInspection")
 public class TorcherinoScreen extends Screen
 {
     private static final Identifier SCREEN_TEXTURE = new Identifier(Torcherino.MOD_ID, "textures/screens/torcherino.png");

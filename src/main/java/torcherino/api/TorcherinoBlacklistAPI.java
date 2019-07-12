@@ -11,7 +11,7 @@ import torcherino.api.impl.TorcherinoBlacklistImpl;
  * @deprecated Warning this interface will be removed in 1.15.x see TorcherinoAPI interface instead. todo 1.15.x: Remove
  */
 @Deprecated
-@SuppressWarnings({ "UnusedReturnValue", "unused", "DeprecatedIsStillUsed" })
+@SuppressWarnings({ "UnusedReturnValue", "unused", "SpellCheckingInspection", "DeprecatedIsStillUsed" })
 public interface TorcherinoBlacklistAPI
 {
     /**
