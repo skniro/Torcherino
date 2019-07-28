@@ -1,5 +1,8 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/torcherino",
+  "1.14.4": {
+	"9.0.2": "Update to 1.14.4"
+  },
   "1.14.3": {
     "9.0.1": "Fixed a crash on server side.",
     "9.0.0": "Initial port to 1.14.3, adds narration support to gui."
@@ -11,8 +14,10 @@
     "8.0.0": "Initial port of Torcherino to 1.13.2 using forge 25.0.42\nConfig options to disable compressed and double compressed torcherino's has temporarily been removed."
   },
   "promos": {
-    "1.14.3-latest": "9.0.0",
-    "1.14.3-recommended": "9.0.0",
+	"1.14.4-latest": "9.0.2",
+	"1.14.4-recommended": "9.0.2",
+    "1.14.3-latest": "9.0.1",
+    "1.14.3-recommended": "9.0.1",
     "1.13.2-latest": "8.1.3",
     "1.13.2-recommended": "8.1.3"
   }

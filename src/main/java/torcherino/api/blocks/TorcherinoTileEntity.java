@@ -16,7 +16,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.registries.ForgeRegistries;
 import torcherino.api.TorcherinoAPI;
-import torcherino.blocks.Blocks;
 import torcherino.config.Config;
 import torcherino.network.OpenScreenMessage;
 
