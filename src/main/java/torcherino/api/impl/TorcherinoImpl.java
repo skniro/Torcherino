@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.Tier;
@@ -57,9 +58,14 @@ public class TorcherinoImpl implements TorcherinoAPI
     @Override
     public boolean blacklistBlock(Identifier blockIdentifier)
     {
-        if (Registry.BLOCK.containsId(blockIdentifier))
+        Block block = (Block) ((SimpleRegistry) Registry.BLOCK).get(blockIdentifier);
+        if (block == null)
         {
-            Block block = Registry.BLOCK.get(blockIdentifier);
+            LOGGER.error("No such block exists with id {}.", blockIdentifier);
+            return false;
+        }
+        else
+        {
             if (blacklistedBlocks.contains(block))
             {
                 LOGGER.warn("Block with id {} has already been blacklisted.", blockIdentifier);
@@ -71,8 +77,6 @@ public class TorcherinoImpl implements TorcherinoAPI
                 return true;
             }
         }
-        LOGGER.error("No such block exists with id {}.", blockIdentifier);
-        return false;
     }
 
     @Override
@@ -93,9 +97,14 @@ public class TorcherinoImpl implements TorcherinoAPI
     @Override
     public boolean blacklistBlockEntity(Identifier blockEntityIdentifier)
     {
-        if (Registry.BLOCK_ENTITY.containsId(blockEntityIdentifier))
+        BlockEntityType blockEntityType = (BlockEntityType) ((SimpleRegistry) Registry.BLOCK_ENTITY).get(blockEntityIdentifier);
+        if (blockEntityType == null)
         {
-            BlockEntityType blockEntityType = Registry.BLOCK_ENTITY.get(blockEntityIdentifier);
+            LOGGER.error("No such block entity exists with id {}.", blockEntityIdentifier);
+            return false;
+        }
+        else
+        {
             if (blacklistedBlockEntities.contains(blockEntityType))
             {
                 LOGGER.warn("Block entity with id {} has already been blacklisted.", blockEntityIdentifier);
@@ -104,8 +113,6 @@ public class TorcherinoImpl implements TorcherinoAPI
             blacklistedBlockEntities.add(blockEntityType);
             return true;
         }
-        LOGGER.error("No such block entity exists with id {}.", blockEntityIdentifier);
-        return false;
     }
 
     @Override
