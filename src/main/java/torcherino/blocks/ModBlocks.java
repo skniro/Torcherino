@@ -51,13 +51,18 @@ public class ModBlocks
             Item lanterinoItem = new BlockItem(lanterinoBlock, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
             items.put(torcherinoID, torcherinoItem);
             items.put(lanterinoID, lanterinoItem);
-            TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoBlock);
-            TorcherinoAPI.INSTANCE.blacklistBlock(torcherinoWallBlock);
-            TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
         }
     }
 
-    private void registerBlocks() { blocks.forEach((id, block) -> Registry.register(Registry.BLOCK, id, block)); }
+    private void registerBlocks()
+    {
+        blocks.forEach((id, block) ->
+        {
+            Registry.register(Registry.BLOCK, id, block);
+            TorcherinoAPI.INSTANCE.blacklistBlock(id);
+
+        });
+    }
 
     private void registerItems() { items.forEach((id, item) -> Registry.register(Registry.ITEM, id, item)); }
 

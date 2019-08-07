@@ -73,8 +73,8 @@ public class TorcherinoImpl implements TorcherinoAPI
     @Override
     public boolean blacklistBlock(Block block)
     {
-        Identifier blockIdentifier = ((SimpleRegistry) Registry.BLOCK).getId(block);
-        if (blockIdentifier == null)
+        Identifier blockIdentifier = Registry.BLOCK.getId(block);
+        if(Registry.BLOCK.get(blockIdentifier) != block)
         {
             LOGGER.error("[Torcherino] Please register your block before attempting to blacklist.");
             return false;
@@ -109,7 +109,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     @Override
     public boolean blacklistBlockEntity(BlockEntityType blockEntityType)
     {
-        Identifier blockEntityTypeIdentifier = ((SimpleRegistry) Registry.BLOCK_ENTITY).getId(blockEntityType);
+        Identifier blockEntityTypeIdentifier = Registry.BLOCK_ENTITY.getId(blockEntityType);
         if (blockEntityTypeIdentifier == null)
         {
             LOGGER.error("[Torcherino] Please register your block entity type before attempting to blacklist.");
