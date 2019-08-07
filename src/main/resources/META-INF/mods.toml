@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[27,)"
+loaderVersion="[28,)"
 logoFile="torcherino.png" #optional
 
 [[mods]]
@@ -13,7 +13,7 @@ logoFile="torcherino.png" #optional
 [[dependencies.torcherino]]
   modId="forge"
   mandatory=true
-  versionRange="[28,)"
+  versionRange="[28.0.45,)"
   ordering="NONE"
   side="BOTH"
 [[dependencies.torcherino]]

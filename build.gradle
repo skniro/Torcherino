@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 
-version = '9.0.2'
+version = '9.0.3'
 group = 'torcherino'
 archivesBaseName = 'torcherino'
 
@@ -23,7 +23,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190728-1.14.3'
+    mappings channel: 'snapshot', version: '20190807-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
@@ -60,7 +60,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.21'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.45'
 
     compile ("blue.endless:jankson:1.1.2")
     shade ("blue.endless:jankson:1.1.2")
