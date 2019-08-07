@@ -45,7 +45,7 @@ public interface TorcherinoAPI
 
     /**
      * @param blockIdentifier The Identifier of the block to be blacklisted.
-     * @return TRUE if added to blacklist, FALSE if no block exists or already on blacklist.
+     * @return TRUE if added to blacklist, FALSE if already on blacklist.
      * @since 1.9.51
      */
     boolean blacklistBlock(Identifier blockIdentifier);
@@ -59,7 +59,7 @@ public interface TorcherinoAPI
 
     /**
      * @param blockEntityIdentifier The Identifier of the block entity to be blacklisted.
-     * @return TRUE if added to blacklist, FALSE if no block entity exists or already on blacklist.
+     * @return TRUE if added to blacklist, FALSE if already on blacklist.
      * @since 1.9.51
      */
     boolean blacklistBlockEntity(Identifier blockEntityIdentifier);
