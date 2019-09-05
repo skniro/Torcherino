@@ -26,6 +26,7 @@ public class Torcherino
 
     public Torcherino()
     {
+        // comment for new push
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         Config.initialise();
         Blocks.INSTANCE.initialise();
