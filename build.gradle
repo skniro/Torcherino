@@ -11,6 +11,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
+apply plugin: 'eclipse'
 
 version = '9.0.3'
 group = 'torcherino'
@@ -24,7 +25,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
+    mappings channel: 'snapshot', version: '20190904-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
