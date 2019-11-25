@@ -18,23 +18,24 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import torcherino.Torcherino;
+import torcherino.api.TierSupplier;
 import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
 
 import java.util.Random;
 
-@SuppressWarnings({ "SpellCheckingInspection", "deprecation" })
-public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider
+public class LanterinoBlock extends LanternBlock implements BlockEntityProvider, TierSupplier
 {
     private final Identifier tierID;
 
-    public LanterinoBlock(Identifier tierID)
+    public LanterinoBlock(Identifier tier)
     {
-        super(FabricBlockSettings.copy(Blocks.JACK_O_LANTERN).build());
-        this.tierID = tierID;
+        super(FabricBlockSettings.copy(Blocks.LANTERN).build());
+        this.tierID = tier;
     }
 
-    public Identifier getTierID() { return tierID; }
+    @Override
+    public Identifier getTier() { return tierID; }
 
     @Override
     public BlockEntity createBlockEntity(BlockView view) { return new TorcherinoBlockEntity(); }
@@ -45,7 +46,7 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     @Override
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
-        neighborUpdate(null, world, pos, null, null, false);
+        //neighborUpdate(null, world, pos, null, null, false);
     }
 
     @Override
@@ -73,9 +74,12 @@ public class LanterinoBlock extends CarvedPumpkinBlock implements BlockEntityPro
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)
     {
-        if (world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(pos)); }
+        //if (world.isClient) return;
+        //BlockEntity blockEntity = world.getBlockEntity(pos);
+        //if (blockEntity instanceof TorcherinoBlockEntity)
+        //{
+        //    ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.down(), Direction.UP));
+        //}
     }
 
     @Override

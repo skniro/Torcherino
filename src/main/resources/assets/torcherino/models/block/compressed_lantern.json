@@ -1,0 +1,7 @@
+{
+  "parent": "block/lantern",
+  "textures": {
+    "particle": "torcherino:blocks/compressed_lantern",
+    "all": "torcherino:blocks/compressed_lantern"
+  }
+}

@@ -2,6 +2,7 @@ package torcherino.api.blocks;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -9,6 +10,10 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -19,23 +24,29 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import torcherino.Torcherino;
+import torcherino.api.TierSupplier;
 import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
 
 import java.util.Random;
 
 @SuppressWarnings({ "SpellCheckingInspection", "deprecation" })
-public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
+public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, TierSupplier
 {
     private final Identifier tierID;
+    private DefaultParticleType flameParticle;
 
-    public TorcherinoBlock(Identifier tierID)
+    public TorcherinoBlock(Identifier tier)
     {
         super(FabricBlockSettings.copy(Blocks.TORCH).build());
-        this.tierID = tierID;
+        tierID = tier;
+        String path = tier.getPath() + "_flame";
+        if(path.equals("normal_flame")) path = "flame";
+        flameParticle = (DefaultParticleType) Registry.PARTICLE_TYPE.get(new Identifier(tier.getNamespace(), path));
     }
 
-    public Identifier getTierID() { return tierID; }
+    @Override
+    public Identifier getTier() { return tierID; }
 
     @Override
     public BlockEntity createBlockEntity(BlockView view) { return new TorcherinoBlockEntity(); }
@@ -96,5 +107,16 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider
             String prefix = placer == null ? "Something" : placer.getDisplayName().getString() + "(" + placer.getUuidAsString() + ")";
             Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {}, {}, {}.", prefix, Registry.BLOCK.getId(this), pos.getX(), pos.getY(), pos.getZ());
         }
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rnd)
+    {
+
+        double d = pos.getX() + 0.5D;
+        double e = pos.getY() + 0.7D;
+        double f = pos.getZ() + 0.5D;
+        world.addParticle(ParticleTypes.SMOKE, d, e, f, 0.0D, 0.0D, 0.0D);
+        world.addParticle(flameParticle, d, e, f, 0.0D, 0.0D, 0.0D);
     }
 }

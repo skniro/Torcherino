@@ -9,7 +9,6 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -26,13 +25,13 @@ import torcherino.config.Config;
 import java.util.Random;
 
 @SuppressWarnings({ "SpellCheckingInspection", "deprecation" })
-public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityProvider, TierSupplier
+public class JackoLanterinoBlock extends CarvedPumpkinBlock implements BlockEntityProvider, TierSupplier
 {
     private final Identifier tierID;
 
-    public WallTorcherinoBlock(Identifier tier, Identifier dropID)
+    public JackoLanterinoBlock(Identifier tier)
     {
-        super(FabricBlockSettings.copy(Blocks.WALL_TORCH).drops(dropID).build());
+        super(FabricBlockSettings.copy(Blocks.JACK_O_LANTERN).build());
         this.tierID = tier;
     }
 
@@ -48,7 +47,7 @@ public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityPr
     @Override
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
-        neighborUpdate(newState, world, pos, null, null, false);
+        neighborUpdate(null, world, pos, null, null, false);
     }
 
     @Override
@@ -78,11 +77,7 @@ public class WallTorcherinoBlock extends WallTorchBlock implements BlockEntityPr
     {
         if (world.isClient) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity)
-        {
-            ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(
-                    pos.offset(state.get(Properties.HORIZONTAL_FACING).getOpposite()), state.get(Properties.HORIZONTAL_FACING)));
-        }
+        if (blockEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isReceivingRedstonePower(pos)); }
     }
 
     @Override

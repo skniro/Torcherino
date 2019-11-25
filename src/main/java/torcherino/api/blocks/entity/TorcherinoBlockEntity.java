@@ -15,14 +15,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import torcherino.api.Tier;
+import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.LanterinoBlock;
-import torcherino.api.blocks.TorcherinoBlock;
-import torcherino.api.blocks.WallTorcherinoBlock;
 import torcherino.config.Config;
 
 @SuppressWarnings("SpellCheckingInspection")
-public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tickable
+public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tickable, TierSupplier
 {
     private Text customName;
     private int xRange, yRange, zRange, speed, redstoneMode, randomTicks;
@@ -93,7 +91,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
 
     public void readClientData(PacketByteBuf buffer)
     {
-        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTierID());
+        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTier());
         this.xRange = MathHelper.clamp(buffer.readInt(), 0, tier.getXZRange());
         this.zRange = MathHelper.clamp(buffer.readInt(), 0, tier.getXZRange());
         this.yRange = MathHelper.clamp(buffer.readInt(), 0, tier.getYRange());
@@ -102,14 +100,13 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         loaded = false;
     }
 
-    public Identifier getTierID()
+    @Override
+    public Identifier getTier()
     {
         if (tierID == null)
         {
             Block block = getCachedState().getBlock();
-            if (block instanceof LanterinoBlock) { tierID = ((LanterinoBlock) block).getTierID(); }
-            else if (block instanceof TorcherinoBlock) { tierID = ((TorcherinoBlock) block).getTierID(); }
-            else if (block instanceof WallTorcherinoBlock) tierID = ((WallTorcherinoBlock) block).getTierID();
+            if (block instanceof TierSupplier) { tierID = ((TierSupplier) block).getTier(); }
         }
         return tierID;
     }
