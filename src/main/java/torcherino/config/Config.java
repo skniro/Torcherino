@@ -1,7 +1,6 @@
 package torcherino.config;
 
 import blue.endless.jankson.Comment;
-import blue.endless.jankson.JsonPrimitive;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;

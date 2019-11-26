@@ -1,5 +1,9 @@
 package torcherino.blocks;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -49,6 +53,11 @@ public class ModBlocks
             Block jackoLanterinoBlock = new JackoLanterinoBlock(tierID);
             Block lanterinoBlock = new LanterinoBlock(tierID);
             blocks.put(torcherinoID, torcherinoBlock);
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
+            {
+                SetRenderLayer(torcherinoBlock);
+                SetRenderLayer(torcherinoWallBlock);
+            }
             blocks.put(new Identifier(Torcherino.MOD_ID, "wall_" + torcherinoID.getPath()), torcherinoWallBlock);
             blocks.put(jackoLanterinoID, jackoLanterinoBlock);
             blocks.put(lanterinoID, lanterinoBlock);
@@ -59,6 +68,12 @@ public class ModBlocks
             items.put(jackoLanterinoID, jackoLanterinoItem);
             items.put(lanterinoID, lanterinoItem);
         }
+    }
+
+    @Environment(EnvType.CLIENT)
+    private void SetRenderLayer(Block block)
+    {
+        BlockRenderLayerMap.INSTANCE.putBlock(block, net.minecraft.client.render.RenderLayer.getCutout());
     }
 
     private void registerBlocks()

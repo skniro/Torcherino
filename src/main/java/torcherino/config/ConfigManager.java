@@ -4,7 +4,6 @@ import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.JsonPrimitive;
-import blue.endless.jankson.api.Marshaller;
 import blue.endless.jankson.api.SyntaxError;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;

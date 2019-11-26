@@ -36,7 +36,7 @@ public class TorcherinoClient implements ClientModInitializer
                     if (!id.getNamespace().equals(MOD_ID)) return;
                     String path = id.getPath() + "_flame";
                     if (path.equals("normal_flame")) path = "flame";
-                    registry.register(new Identifier("torcherino", path));
+                    registry.register(new Identifier("torcherino", "particle/" + path));
                 })));
         Torcherino.particles.forEach((pt) -> ParticleFactoryRegistry.getInstance().register(pt, FlameParticle.Factory::new));
         // Open Torcherino Screen
