@@ -35,7 +35,8 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
     public void onInitialize()
     {
         Config.initialize();
-        TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {
+        TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) ->
+        {
             if (!id.getNamespace().equals(MOD_ID)) return;
             String path = id.getPath() + "_flame";
             if (path.equals("normal_flame")) path = "flame";

@@ -2,7 +2,6 @@ package torcherino.api.blocks;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,8 +10,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -41,7 +38,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
         super(FabricBlockSettings.copy(Blocks.TORCH).build());
         tierID = tier;
         String path = tier.getPath() + "_flame";
-        if(path.equals("normal_flame")) path = "flame";
+        if (path.equals("normal_flame")) path = "flame";
         flameParticle = (DefaultParticleType) Registry.PARTICLE_TYPE.get(new Identifier(tier.getNamespace(), path));
     }
 

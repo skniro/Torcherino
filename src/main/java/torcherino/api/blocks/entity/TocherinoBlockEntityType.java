@@ -8,7 +8,6 @@ import torcherino.api.blocks.LanterinoBlock;
 import torcherino.api.blocks.TorcherinoBlock;
 import torcherino.api.blocks.WallTorcherinoBlock;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 @SuppressWarnings("SpellCheckingInspection")

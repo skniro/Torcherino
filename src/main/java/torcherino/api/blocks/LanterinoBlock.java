@@ -9,11 +9,13 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -34,6 +36,12 @@ public class LanterinoBlock extends LanternBlock implements BlockEntityProvider,
         this.tierID = tier;
     }
 
+    private static boolean isEmittingStrongRedstonePower(World world, BlockPos pos, Direction direction)
+    {
+        BlockState state = world.getBlockState(pos);
+        return state.getStrongRedstonePower(world, pos, direction) > 0;
+    }
+
     @Override
     public Identifier getTier() { return tierID; }
 
@@ -46,7 +54,7 @@ public class LanterinoBlock extends LanternBlock implements BlockEntityProvider,
     @Override
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
-        //neighborUpdate(null, world, pos, null, null, false);
+        neighborUpdate(null, world, pos, null, null, false);
     }
 
     @Override
@@ -74,12 +82,24 @@ public class LanterinoBlock extends LanternBlock implements BlockEntityProvider,
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)
     {
-        //if (world.isClient) return;
-        //BlockEntity blockEntity = world.getBlockEntity(pos);
-        //if (blockEntity instanceof TorcherinoBlockEntity)
-        //{
-        //    ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.down(), Direction.UP));
-        //}
+        if (world.isClient) return;
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof TorcherinoBlockEntity)
+        {
+            if (state == null) return;
+            if (state.get(Properties.HANGING).equals(true))
+            {
+                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.up(), Direction.UP));
+            }
+            else
+            {
+                boolean powered = isEmittingStrongRedstonePower(world, pos.west(), Direction.WEST) ||
+                        isEmittingStrongRedstonePower(world, pos.east(), Direction.EAST) ||
+                        isEmittingStrongRedstonePower(world, pos.south(), Direction.SOUTH) ||
+                        isEmittingStrongRedstonePower(world, pos.north(), Direction.NORTH);
+                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(powered);
+            }
+        }
     }
 
     @Override

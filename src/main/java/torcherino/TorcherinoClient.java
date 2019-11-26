@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.FlameParticle;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -16,6 +15,7 @@ import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import torcherino.api.Tier;
+import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.api.impl.TorcherinoImpl;
@@ -31,18 +31,14 @@ public class TorcherinoClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-
-        ClientSpriteRegistryCallback.event(SpriteAtlasTexture.PARTICLE_ATLAS_TEX).register(((spriteAtlasTexture, registry) -> {
-            TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {
-                if (!id.getNamespace().equals(MOD_ID)) return;
-                String path = id.getPath() + "_flame";
-                if (path.equals("normal_flame")) path = "flame";
-                registry.register(new Identifier("torcherino", path));
-            });
-        }));
-
+        ClientSpriteRegistryCallback.event(SpriteAtlasTexture.PARTICLE_ATLAS_TEX).register(((spriteAtlasTexture, registry) ->
+                TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {
+                    if (!id.getNamespace().equals(MOD_ID)) return;
+                    String path = id.getPath() + "_flame";
+                    if (path.equals("normal_flame")) path = "flame";
+                    registry.register(new Identifier("torcherino", path));
+                })));
         Torcherino.particles.forEach((pt) -> ParticleFactoryRegistry.getInstance().register(pt, FlameParticle.Factory::new));
-
         // Open Torcherino Screen
         ClientSidePacketRegistry.INSTANCE.register(new Identifier(MOD_ID, "ots"), (PacketContext context, PacketByteBuf buffer) ->
         {
@@ -58,13 +54,10 @@ public class TorcherinoClient implements ClientModInitializer
             {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof TorcherinoBlockEntity)
-                {
                     MinecraftClient.getInstance().openScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos,
-                            ((TorcherinoBlockEntity) blockEntity).getTier()));
-                }
+                            ((TierSupplier) blockEntity).getTier()));
             });
         });
-
         // Torcherino Tier Sync
         ClientSidePacketRegistry.INSTANCE.register(new Identifier(MOD_ID, "tts"), (PacketContext context, PacketByteBuf buffer) ->
         {

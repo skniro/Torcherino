@@ -1,6 +1,10 @@
 {
-    "variants": {
-        "hanging=true": { "model": "torcherino:block/compressed_hanging_lantern"},
-        "hanging=false": { "model": "torcherino:block/compressed_lantern"}
+  "variants": {
+    "hanging=true": {
+      "model": "torcherino:block/compressed_hanging_lantern"
+    },
+    "hanging=false": {
+      "model": "torcherino:block/compressed_lantern"
+    }
   }
 }

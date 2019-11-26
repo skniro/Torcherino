@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.Tier;
@@ -74,7 +73,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     public boolean blacklistBlock(Block block)
     {
         Identifier blockIdentifier = Registry.BLOCK.getId(block);
-        if(Registry.BLOCK.get(blockIdentifier) != block)
+        if (Registry.BLOCK.get(blockIdentifier) != block)
         {
             LOGGER.error("[Torcherino] Please register your block before attempting to blacklist.");
             return false;
