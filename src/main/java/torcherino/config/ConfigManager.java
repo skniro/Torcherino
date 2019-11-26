@@ -3,10 +3,13 @@ package torcherino.config;
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.impl.Marshaller;
-import blue.endless.jankson.impl.SyntaxError;
+import blue.endless.jankson.JsonPrimitive;
+import blue.endless.jankson.api.Marshaller;
+import blue.endless.jankson.api.SyntaxError;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import torcherino.config.Config.Tier;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,12 +22,17 @@ import java.io.IOException;
 public class ConfigManager
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Jankson jankson = new Jankson.Builder().build();
-
-    static Marshaller getMarshaller()
-    {
-        return jankson.getMarshaller();
-    }
+    private static final Jankson jankson = new Jankson.Builder()
+            .registerSerializer(Identifier.class, (identifier, marshaller) -> new JsonPrimitive(identifier))
+            .registerDeserializer(String.class, Identifier.class, (it, marshaller) -> new Identifier(it))
+            .registerDeserializer(JsonObject.class, Tier.class, (it, marshaller) -> {
+                String name = it.get(String.class, "name");
+                Integer max_speed = it.get(Integer.class, "max_speed");
+                Integer xz_range = it.get(Integer.class, "xz_range");
+                Integer y_range = it.get(Integer.class, "y_range");
+                return new Tier(name, max_speed < 1 ? 1 : max_speed, xz_range < 0 ? 0 : xz_range, y_range < 0 ? 0 : y_range);
+            })
+            .build();
 
     @SuppressWarnings("ConstantConditions")
     static <T> T loadConfig(Class<T> clazz, File configFile)

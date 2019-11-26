@@ -41,7 +41,7 @@ public abstract class StateButtonWidget extends ButtonWidget
             itemRenderer.renderGuiItem(getButtonIcon(), x + 2, y + 2);
             if (this.isHovered)
             {
-                screen.renderTooltip(Lists.asList(narrationMessage, new String[]{}), x + 14, y + 18);
+                screen.renderTooltip(narrationMessage, x + 14, y + 18);
                 GlStateManager.disableRescaleNormal();
                 GuiLighting.disable();
                 GlStateManager.disableLighting();

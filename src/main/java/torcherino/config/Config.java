@@ -34,16 +34,6 @@ public class Config
 
     public static void initialize()
     {
-        ConfigManager.getMarshaller().registerSerializer(Identifier.class, JsonPrimitive::new);
-        ConfigManager.getMarshaller().register(Identifier.class, (it) -> (it instanceof String) ? new Identifier((String) it) : new Identifier(it.toString()));
-        ConfigManager.getMarshaller().registerTypeAdapter(Tier.class, (it) ->
-        {
-            String name = it.get(String.class, "name");
-            Integer max_speed = it.get(Integer.class, "max_speed");
-            Integer xz_range = it.get(Integer.class, "xz_range");
-            Integer y_range = it.get(Integer.class, "y_range");
-            return new Tier(name, max_speed < 1 ? 1 : max_speed, xz_range < 0 ? 0 : xz_range, y_range < 0 ? 0 : y_range);
-        });
         Path sci4meDirectory = FabricLoader.getInstance().getConfigDirectory().toPath().resolve("sci4me");
         if (!sci4meDirectory.toFile().exists())
         {
@@ -72,7 +62,7 @@ public class Config
         for (Identifier id : blacklisted_blockentities) TorcherinoAPI.INSTANCE.blacklistBlockEntity(id);
     }
 
-    private static class Tier
+    static class Tier
     {
         final String name;
         final int max_speed;

@@ -2,7 +2,7 @@ package torcherino.api.blocks;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
@@ -11,6 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -58,7 +60,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
     }
 
     @Override
-    public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
         if (world.isClient) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -66,17 +68,17 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
     }
 
     @Override
-    public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.isClient || hand == Hand.OFF_HAND) return true;
+        if (world.isClient || hand == Hand.OFF_HAND) return ActionResult.SUCCESS;
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof TorcherinoBlockEntity)
         {
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
             ((TorcherinoBlockEntity) blockEntity).writeClientData(buffer);
-            ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "ots"), buffer);
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "ots"), buffer);
         }
-        return true;
+        return ActionResult.SUCCESS;
     }
 
     @Override

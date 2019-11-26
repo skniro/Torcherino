@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.TorcherinoBlacklistInitializer;
 import torcherino.api.blocks.entity.TorcherinoBlockEntity;
 import torcherino.api.entrypoints.TorcherinoInitializer;
 import torcherino.blocks.ModBlocks;
@@ -62,10 +61,6 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer
             });
         });
         FabricLoader.getInstance().getEntrypoints("torcherinoInitializer", TorcherinoInitializer.class).forEach(TorcherinoInitializer::onTorcherinoInitialize);
-        // todo 1.15.x: Remove
-        //noinspection deprecation
-        FabricLoader.getInstance().getEntrypoints("torcherino", TorcherinoBlacklistInitializer.class)
-                    .forEach(TorcherinoBlacklistInitializer::onTorcherinoBlacklist);
     }
 
     @Override

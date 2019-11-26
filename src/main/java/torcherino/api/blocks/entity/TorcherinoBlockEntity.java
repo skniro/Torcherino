@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -62,18 +63,18 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
         if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) return;
-        if (block.hasRandomTicks(blockState) &&
+        if (world instanceof ServerWorld && block.hasRandomTicks(blockState) &&
                 world.getRandom().nextInt(MathHelper.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks)
         {
-            block.onRandomTick(blockState, world, pos, world.getRandom());
+            block.randomTick(blockState, (ServerWorld) world, pos, world.getRandom());
         }
         if (!block.hasBlockEntity()) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity == null || blockEntity.isInvalid() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) ||
+        if (blockEntity == null || blockEntity.isRemoved() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) ||
                 !(blockEntity instanceof Tickable)) { return; }
         for (int i = 0; i < speed; i++)
         {
-            if (blockEntity.isInvalid()) break;
+            if (blockEntity.isRemoved()) break;
             ((Tickable) blockEntity).tick();
         }
     }
@@ -148,7 +149,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     public void fromTag(CompoundTag tag)
     {
         super.fromTag(tag);
-        if (tag.containsKey("CustomName", 8)) setCustomName(Text.Serializer.fromJson(tag.getString("CustomName")));
+        if (tag.contains("CustomName", 8)) setCustomName(Text.Serializer.fromJson(tag.getString("CustomName")));
         xRange = tag.getInt("XRange");
         zRange = tag.getInt("ZRange");
         yRange = tag.getInt("YRange");
