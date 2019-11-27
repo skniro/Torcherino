@@ -1,8 +1,6 @@
 package torcherino.api.blocks;
 
-import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
@@ -14,17 +12,14 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import torcherino.Torcherino;
 import torcherino.api.TierSupplier;
+import torcherino.api.TorcherinoLogic;
 import torcherino.api.blocks.entity.TorcherinoBlockEntity;
-import torcherino.config.Config;
 
 import java.util.Random;
 
@@ -62,36 +57,24 @@ public class LanterinoBlock extends LanternBlock implements BlockEntityProvider,
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).tick();
+        TorcherinoLogic.scheduledTick(state, world, pos, random);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.isClient || hand == Hand.OFF_HAND) return ActionResult.SUCCESS;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity)
-        {
-            PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-            ((TorcherinoBlockEntity) blockEntity).writeClientData(buffer);
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "ots"), buffer);
-        }
-        return ActionResult.SUCCESS;
+        return TorcherinoLogic.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1)
     {
-        if (world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity)
+        TorcherinoLogic.neighborUpdate(state, world, pos, neighborBlock, neighborPos, boolean_1, (be) ->
         {
             if (state == null) return;
             if (state.get(Properties.HANGING).equals(true))
             {
-                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(world.isEmittingRedstonePower(pos.up(), Direction.UP));
+                be.setPoweredByRedstone(world.isEmittingRedstonePower(pos.up(), Direction.UP));
             }
             else
             {
@@ -99,24 +82,15 @@ public class LanterinoBlock extends LanternBlock implements BlockEntityProvider,
                         isEmittingStrongRedstonePower(world, pos.east(), Direction.EAST) ||
                         isEmittingStrongRedstonePower(world, pos.south(), Direction.SOUTH) ||
                         isEmittingStrongRedstonePower(world, pos.north(), Direction.NORTH);
-                ((TorcherinoBlockEntity) blockEntity).setPoweredByRedstone(powered);
+                be.setPoweredByRedstone(powered);
             }
-        }
+        });
+
     }
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
     {
-        if (world.isClient) return;
-        if (stack.hasCustomName())
-        {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).setCustomName(stack.getName());
-        }
-        if (Config.INSTANCE.log_placement)
-        {
-            String prefix = placer == null ? "Something" : placer.getDisplayName().getString() + "(" + placer.getUuidAsString() + ")";
-            Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {}, {}, {}.", prefix, Registry.BLOCK.getId(this), pos.getX(), pos.getY(), pos.getZ());
-        }
+        TorcherinoLogic.onPlaced(world, pos, state, placer, stack, this);
     }
 }

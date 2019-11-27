@@ -22,13 +22,21 @@ import torcherino.blocks.ModBlocks;
 import torcherino.config.Config;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Torcherino implements ModInitializer, TorcherinoInitializer
 {
     public static final String MOD_ID = "torcherino";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    private static final HashSet<String> allowedUuids = new HashSet<>();
     public static ArrayList<DefaultParticleType> particles = new ArrayList<>();
+
+    public static void playerConnected(String uuid) { allowedUuids.add(uuid); }
+
+    public static boolean hasIsOnline(String uuid) { return allowedUuids.contains(uuid); }
+
+    public static void playerDisconnect(String uuid) { if (Config.INSTANCE.online_mode.equals("ONLINE")) allowedUuids.remove(uuid); }
 
     @Override
     public void onInitialize()

@@ -22,6 +22,7 @@ public abstract class PlayerManagerMixin
     @Inject(method = "onPlayerConnect", at = @At("TAIL"))
     private void onPlayerConnect(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo info)
     {
+        Torcherino.playerConnected(player.getUuidAsString());
         ImmutableMap<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
         PacketByteBuf packetBuffer = new PacketByteBuf(Unpooled.buffer());
         packetBuffer.writeInt(tiers.size());
@@ -33,5 +34,11 @@ public abstract class PlayerManagerMixin
             packetBuffer.writeInt(tier.getYRange());
         });
         ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "tts"), packetBuffer);
+    }
+
+    @Inject(method = "remove", at = @At("HEAD"))
+    private void onPlayerDisconnect(ServerPlayerEntity player, CallbackInfo ci)
+    {
+        Torcherino.playerDisconnect(player.getUuidAsString());
     }
 }
