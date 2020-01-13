@@ -3,27 +3,22 @@ package torcherino.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.WallTorchBlock;
+import net.minecraft.block.CarvedPumpkinBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
-import torcherino.ModContent;
 import torcherino.Torcherino;
 import torcherino.api.TierSupplier;
 import torcherino.blocks.tile.TorcherinoTileEntity;
@@ -36,16 +31,14 @@ import java.util.Random;
 import static net.minecraft.state.properties.BlockStateProperties.POWERED;
 
 @SuppressWarnings("deprecation")
-public class TorcherinoWallBlock extends WallTorchBlock implements TierSupplier
+public class JackoLanterinoBlock extends CarvedPumpkinBlock implements TierSupplier
 {
     private final ResourceLocation tierName;
-    private final ResourceLocation flameID;
 
-    public TorcherinoWallBlock(TorcherinoBlock base, ResourceLocation flameID)
+    public JackoLanterinoBlock(ResourceLocation tierName)
     {
-        super(Block.Properties.from(Blocks.WALL_TORCH).lootFrom(base));
-        this.tierName = base.getTierName();
-        this.flameID = flameID;
+        super(Block.Properties.from(Blocks.JACK_O_LANTERN));
+        this.tierName = tierName;
     }
 
     @Override
@@ -111,38 +104,29 @@ public class TorcherinoWallBlock extends WallTorchBlock implements TierSupplier
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public ResourceLocation getLootTable()
     {
-        BlockState state = super.getStateForPlacement(context);
-        if (state == null) return null;
-        boolean powered = context.getWorld().isSidePowered(context.getPos().offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
-        return state.with(POWERED, powered);
+        ResourceLocation registryName = getRegistryName();
+        return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean b)
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        boolean powered = context.getWorld().isBlockPowered(context.getPos());
+        return super.getStateForPlacement(context).with(POWERED, powered);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean b)
     {
         if (world.isRemote) return;
-        boolean powered = world.isSidePowered(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
+        boolean powered = world.isBlockPowered(pos);
         if (state.get(POWERED) != powered)
         {
             world.setBlockState(pos, state.with(POWERED, powered));
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random random)
-    {
-        Direction facing = state.get(HORIZONTAL_FACING);
-        double x = pos.getX() + 0.5D;
-        double y = pos.getY() + 0.7D;
-        double z = pos.getZ() + 0.5D;
-        Direction opposite = facing.getOpposite();
-        world.addParticle(ParticleTypes.SMOKE, x + 0.27D * opposite.getXOffset(), y + 0.22D, z + 0.27D * opposite.getZOffset(), 0, 0, 0);
-        world.addParticle(ModContent.INSTANCE.getParticleType(flameID), x + 0.27D * opposite.getXOffset(),
-                y + 0.22D, z + 0.27D * opposite.getZOffset(), 0, 0, 0);
     }
 }

@@ -14,7 +14,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
-import torcherino.blocks.Blocks;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 
@@ -28,9 +27,9 @@ public class Torcherino
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         Config.initialise();
-        Blocks.INSTANCE.initialise();
+        ModContent.INSTANCE.initialise();
         Networker.INSTANCE.initialise();
-        eventBus.register(Blocks.INSTANCE);
+        eventBus.register(ModContent.INSTANCE);
         eventBus.addListener(this::processIMC);
         MinecraftForge.EVENT_BUS.addListener(this::processPlayerJoin);
         TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.WATER);

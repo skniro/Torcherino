@@ -10,9 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -20,8 +19,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
+import torcherino.ModContent;
 import torcherino.Torcherino;
+import torcherino.api.TierSupplier;
 import torcherino.blocks.tile.TorcherinoTileEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
@@ -29,18 +32,22 @@ import torcherino.network.Networker;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
-public class TorcherinoBlock extends TorchBlock
-{
-    private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-    private final ResourceLocation tierName;
+import static net.minecraft.state.properties.BlockStateProperties.POWERED;
 
-    public TorcherinoBlock(ResourceLocation tierName)
+@SuppressWarnings("deprecation")
+public class TorcherinoBlock extends TorchBlock implements TierSupplier
+{
+    private final ResourceLocation tierName;
+    private final ResourceLocation flameID;
+
+    public TorcherinoBlock(ResourceLocation tierName, ResourceLocation flameID)
     {
         super(Properties.from(Blocks.TORCH));
         this.tierName = tierName;
+        this.flameID = flameID;
     }
 
+    @Override
     public ResourceLocation getTierName() { return tierName; }
 
     @Override
@@ -113,7 +120,7 @@ public class TorcherinoBlock extends TorchBlock
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
         boolean powered = context.getWorld().isBlockPowered(context.getPos().down());
-        return getDefaultState().with(POWERED, powered);
+        return super.getStateForPlacement(context).with(POWERED, powered);
     }
 
     @Override
@@ -127,5 +134,16 @@ public class TorcherinoBlock extends TorchBlock
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World world, BlockPos pos, Random random)
+    {
+        double x = (double) pos.getX() + 0.5D;
+        double y = (double) pos.getY() + 0.7D;
+        double z = (double) pos.getZ() + 0.5D;
+        world.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0D, 0.0D, 0.0D);
+        world.addParticle(ModContent.INSTANCE.getParticleType(flameID), x, y, z, 0.0D, 0.0D, 0.0D);
     }
 }

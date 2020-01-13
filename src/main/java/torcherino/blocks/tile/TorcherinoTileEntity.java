@@ -14,16 +14,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
+import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.blocks.LanterinoBlock;
-import torcherino.blocks.TorcherinoBlock;
-import torcherino.blocks.TorcherinoWallBlock;
 import torcherino.config.Config;
 import torcherino.network.OpenScreenMessage;
 
 import javax.annotation.Nullable;
 
-import static torcherino.blocks.Blocks.TORCHERINO_TILE_ENTITY;
+import static torcherino.ModContent.TORCHERINO_TILE_ENTITY;
 
 public class TorcherinoTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
@@ -55,9 +53,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
         if (tierName == null)
         {
             Block block = world.getBlockState(pos).getBlock();
-            if (block instanceof LanterinoBlock) { tierName = ((LanterinoBlock) block).getTierName(); }
-            else if (block instanceof TorcherinoBlock) { tierName = ((TorcherinoBlock) block).getTierName(); }
-            else if (block instanceof TorcherinoWallBlock) tierName = ((TorcherinoWallBlock) block).getTierName();
+            if (block instanceof TierSupplier) { tierName = ((TierSupplier) block).getTierName(); }
         }
         return tierName;
     }

@@ -3,17 +3,17 @@ package torcherino.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.CarvedPumpkinBlock;
+import net.minecraft.block.LanternBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
+import torcherino.api.TierSupplier;
 import torcherino.blocks.tile.TorcherinoTileEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
@@ -29,18 +30,19 @@ import torcherino.network.Networker;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
-public class LanterinoBlock extends CarvedPumpkinBlock
+import static net.minecraft.state.properties.BlockStateProperties.POWERED;
+
+public class LanterinoBlock extends LanternBlock implements TierSupplier
 {
-    private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private final ResourceLocation tierName;
 
     public LanterinoBlock(ResourceLocation tierName)
     {
-        super(Block.Properties.from(Blocks.JACK_O_LANTERN));
+        super(Block.Properties.from(Blocks.LANTERN));
         this.tierName = tierName;
     }
 
+    @Override
     public ResourceLocation getTierName() { return tierName; }
 
     @Override
@@ -110,22 +112,58 @@ public class LanterinoBlock extends CarvedPumpkinBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
-    {
-        boolean powered = context.getWorld().isBlockPowered(context.getPos());
-        return super.getStateForPlacement(context).with(POWERED, powered);
-    }
-
-    @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean b)
     {
         if (world.isRemote) return;
-        boolean powered = world.isBlockPowered(pos);
-        if (state.get(POWERED) != powered)
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TorcherinoTileEntity)
         {
-            world.setBlockState(pos, state.with(POWERED, powered));
-            TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
+            if (state == null) return;
+            boolean powered;
+            if (state.get(BlockStateProperties.HANGING).equals(true))
+            {
+                powered = world.isSidePowered(pos.up(), Direction.UP);
+            }
+            else
+            {
+                powered = isEmittingStrongRedstonePower(world, pos.west(), Direction.WEST) ||
+                        isEmittingStrongRedstonePower(world, pos.east(), Direction.EAST) ||
+                        isEmittingStrongRedstonePower(world, pos.south(), Direction.SOUTH) ||
+                        isEmittingStrongRedstonePower(world, pos.north(), Direction.NORTH);
+            }
+            if (state.get(POWERED) != powered)
+            {
+                world.setBlockState(pos, state.with(POWERED, powered));
+                ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
+            }
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        boolean powered;
+        BlockState state = super.getStateForPlacement(context);
+        if (state.get(BlockStateProperties.HANGING).equals(true))
+        {
+            powered = context.getWorld().isSidePowered(context.getPos().up(), Direction.UP);
+        }
+        else
+        {
+            World world = context.getWorld();
+            BlockPos pos = context.getPos();
+            powered = isEmittingStrongRedstonePower(world, pos.west(), Direction.WEST) ||
+                    isEmittingStrongRedstonePower(world, pos.east(), Direction.EAST) ||
+                    isEmittingStrongRedstonePower(world, pos.south(), Direction.SOUTH) ||
+                    isEmittingStrongRedstonePower(world, pos.north(), Direction.NORTH);
+        }
+        return state.with(POWERED, powered);
+    }
+
+    private static boolean isEmittingStrongRedstonePower(World world, BlockPos pos, Direction direction)
+    {
+        BlockState state = world.getBlockState(pos);
+        return state.getStrongPower(world, pos, direction) > 0;
     }
 }
