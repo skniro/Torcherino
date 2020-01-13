@@ -9,7 +9,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import torcherino.Torcherino;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.TorcherinoTileEntity;
+import torcherino.blocks.tile.TorcherinoTileEntity;
 
 public class Networker
 {

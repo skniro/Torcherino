@@ -1,9 +1,9 @@
-package torcherino.api.blocks;
+package torcherino.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.WallTorchBlock;
+import net.minecraft.block.CarvedPumpkinBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
+import torcherino.blocks.tile.TorcherinoTileEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 
@@ -29,18 +30,17 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class TorcherinoWallBlock extends WallTorchBlock
+public class LanterinoBlock extends CarvedPumpkinBlock
 {
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private final ResourceLocation tierName;
 
-    public TorcherinoWallBlock(TorcherinoBlock base)
+    public LanterinoBlock(ResourceLocation tierName)
     {
-        super(Block.Properties.from(Blocks.WALL_TORCH).lootFrom(base));
-        this.tierName = base.getTierName();
+        super(Block.Properties.from(Blocks.JACK_O_LANTERN));
+        this.tierName = tierName;
     }
 
-    // Methods
     public ResourceLocation getTierName() { return tierName; }
 
     @Override
@@ -102,21 +102,25 @@ public class TorcherinoWallBlock extends WallTorchBlock
         if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.get(POWERED));
     }
 
-    // Unique Methods ( can't be copy / pasted between torcherino classes )
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public ResourceLocation getLootTable()
     {
-        BlockState state = super.getStateForPlacement(context);
-        if (state == null) return null;
-        boolean powered = context.getWorld().isSidePowered(context.getPos().offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
-        return state.with(POWERED, powered);
+        ResourceLocation registryName = getRegistryName();
+        return new ResourceLocation(registryName.getNamespace(), "blocks/" + registryName.getPath());
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean b)
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        boolean powered = context.getWorld().isBlockPowered(context.getPos());
+        return super.getStateForPlacement(context).with(POWERED, powered);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean b)
     {
         if (world.isRemote) return;
-        boolean powered = world.isSidePowered(pos.offset(state.get(HORIZONTAL_FACING).getOpposite()), state.get(HORIZONTAL_FACING));
+        boolean powered = world.isBlockPowered(pos);
         if (state.get(POWERED) != powered)
         {
             world.setBlockState(pos, state.with(POWERED, powered));

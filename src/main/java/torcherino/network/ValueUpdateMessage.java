@@ -8,7 +8,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.TorcherinoTileEntity;
+import torcherino.blocks.tile.TorcherinoTileEntity;
 
 import java.util.function.Supplier;
 

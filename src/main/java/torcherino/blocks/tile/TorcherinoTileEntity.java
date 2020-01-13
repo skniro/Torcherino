@@ -1,4 +1,4 @@
-package torcherino.api.blocks;
+package torcherino.blocks.tile;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,12 +14,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
-import net.minecraftforge.registries.ForgeRegistries;
 import torcherino.api.TorcherinoAPI;
+import torcherino.blocks.LanterinoBlock;
+import torcherino.blocks.TorcherinoBlock;
+import torcherino.blocks.TorcherinoWallBlock;
 import torcherino.config.Config;
 import torcherino.network.OpenScreenMessage;
 
 import javax.annotation.Nullable;
+
+import static torcherino.blocks.Blocks.TORCHERINO_TILE_ENTITY;
 
 public class TorcherinoTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
@@ -29,7 +33,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
     private Iterable<BlockPos> area;
     private ResourceLocation tierName;
 
-    public TorcherinoTileEntity() { super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation("torcherino", "torcherino"))); }
+    public TorcherinoTileEntity() { super(TORCHERINO_TILE_ENTITY); }
 
     @Override
     public ITextComponent getName()
@@ -44,7 +48,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
     @Override
     public ITextComponent getCustomName() { return customName; }
 
-    void setCustomName(@Nullable ITextComponent name) { customName = name; }
+    public void setCustomName(@Nullable ITextComponent name) { customName = name; }
 
     public ResourceLocation getTierName()
     {
@@ -124,7 +128,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
         }
     }
 
-    void setPoweredByRedstone(boolean powered)
+    public void setPoweredByRedstone(boolean powered)
     {
         switch (redstoneMode)
         {

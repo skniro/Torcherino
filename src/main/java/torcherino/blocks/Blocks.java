@@ -12,10 +12,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.LanterinoBlock;
-import torcherino.api.blocks.TorcherinoBlock;
-import torcherino.api.blocks.TorcherinoTileEntity;
-import torcherino.api.blocks.TorcherinoWallBlock;
+import torcherino.blocks.tile.CustomTileEntityType;
+import torcherino.blocks.tile.TorcherinoTileEntity;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -25,7 +23,8 @@ public class Blocks
     public static final Blocks INSTANCE = new Blocks();
     private HashSet<Block> blocks;
     private HashSet<Item> items;
-
+    public static final TileEntityType<TorcherinoTileEntity> TORCHERINO_TILE_ENTITY = (TileEntityType<TorcherinoTileEntity>) new CustomTileEntityType<>(TorcherinoTileEntity::new,
+            (b) -> b instanceof TorcherinoBlock || b instanceof TorcherinoWallBlock || b instanceof LanterinoBlock, null).setRegistryName(Torcherino.resloc("torcherino"));
     public void initialise()
     {
         blocks = new HashSet<>();
@@ -73,10 +72,7 @@ public class Blocks
     @SubscribeEvent
     public void onTileEntityTypeRegistry(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
     {
-        TileEntityType tileEntityType = TileEntityType.Builder
-                .create(TorcherinoTileEntity::new, TorcherinoAPI.INSTANCE.getTorcherinoBlocks().toArray(new Block[]{})).build(null)
-                .setRegistryName(Torcherino.resloc("torcherino"));
-        TorcherinoAPI.INSTANCE.blacklistTileEntity(tileEntityType);
-        registryEvent.getRegistry().register(tileEntityType);
+        TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY);
+        registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY);
     }
 }

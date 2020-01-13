@@ -17,7 +17,7 @@ public class Config
     public static Config INSTANCE;
 
     @Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
-    public final int random_tick_rate = 1;
+    public final int random_tick_rate = 4;
 
     @Comment("Log torcherino placement (Intended for server use)") public final boolean log_placement = FMLLoader.getDist().isDedicatedServer();
 
@@ -67,7 +67,7 @@ public class Config
 
     private void onConfigLoaded()
     {
-        for (Tier tier : tiers) TorcherinoAPI.INSTANCE.registerTier(new ResourceLocation("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
+        for (Tier tier : tiers) TorcherinoAPI.INSTANCE.registerTier(Torcherino.resloc(tier.name), tier.max_speed, tier.xz_range, tier.y_range);
         for (ResourceLocation block : blacklisted_blocks) TorcherinoAPI.INSTANCE.blacklistBlock(block);
         for (ResourceLocation tile : blacklisted_tiles) TorcherinoAPI.INSTANCE.blacklistTileEntity(tile);
     }

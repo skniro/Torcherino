@@ -1,4 +1,4 @@
-package torcherino.api.blocks;
+package torcherino.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
+import torcherino.blocks.tile.TorcherinoTileEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 

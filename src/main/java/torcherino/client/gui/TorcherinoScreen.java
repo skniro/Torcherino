@@ -17,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.TorcherinoTileEntity;
+import torcherino.blocks.tile.TorcherinoTileEntity;
 import torcherino.client.gui.buttons.FixedSliderButton;
 import torcherino.client.gui.buttons.StateButton;
 import torcherino.network.Networker;

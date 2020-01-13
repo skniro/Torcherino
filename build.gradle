@@ -5,8 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.139', changing: false
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -25,7 +24,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190904-1.14.3'
+    mappings channel: 'snapshot', version: '20200112-1.14.3'
     runs {
         client {
             workingDirectory project.file('run')
@@ -62,7 +61,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.91'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
 
     compile ("blue.endless:jankson:1.1.2")
     shade ("blue.endless:jankson:1.1.2")
