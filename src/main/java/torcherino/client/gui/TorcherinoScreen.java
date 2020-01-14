@@ -1,6 +1,6 @@
 package torcherino.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.InputMappings;
@@ -185,7 +185,7 @@ public class TorcherinoScreen extends Screen
     public void render(int mouseX, int mouseY, float partialTicks)
     {
         this.renderBackground();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
         blit(guiLeft, guiTop, 0, 0, xSize, ySize);
         font.drawString(title, guiLeft + (xSize - font.getStringWidth(title)) / 2, guiTop + 6, 4210752);

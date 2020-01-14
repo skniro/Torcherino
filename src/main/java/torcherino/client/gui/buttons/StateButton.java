@@ -3,7 +3,6 @@ package torcherino.client.gui.buttons;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
@@ -41,9 +40,7 @@ public abstract class StateButton extends AbstractButton
         super.render(mouseX, mouseY, partialTicks);
         if (visible)
         {
-            RenderHelper.enableGUIStandardItemLighting();
             Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getButtonIcon(), x + 2, y + 2);
-            RenderHelper.disableStandardItemLighting();
             if (isHovered())
             {
                 GuiUtils.drawHoveringText(getButtonIcon(), Lists.asList(narrationMessage, new String[]{}), x + width / 2, y + height / 2,

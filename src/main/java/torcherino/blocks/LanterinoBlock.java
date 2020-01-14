@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
 import torcherino.api.TierSupplier;
@@ -27,7 +29,6 @@ import torcherino.blocks.tile.TorcherinoTileEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 import static net.minecraft.state.properties.BlockStateProperties.POWERED;
@@ -48,7 +49,6 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
     @Override
     public boolean hasTileEntity(BlockState state) { return true; }
 
-    @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new TorcherinoTileEntity(); }
 
@@ -60,14 +60,14 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (world.isRemote) return true;
-        return Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
+        if (!world.isRemote) Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
+        return ActionResultType.SUCCESS;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
     {
         if (world.isRemote) return;
         if (stack.hasDisplayName())
@@ -87,9 +87,8 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
     }
 
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random random)
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (world.isRemote) return;
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
     }
@@ -139,7 +138,6 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
         }
     }
 
-    @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {

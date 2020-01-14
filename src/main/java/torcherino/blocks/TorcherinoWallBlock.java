@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
@@ -66,10 +68,10 @@ public class TorcherinoWallBlock extends WallTorchBlock implements TierSupplier
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (world.isRemote) return true;
-        return Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
+        if (!world.isRemote) Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -93,9 +95,8 @@ public class TorcherinoWallBlock extends WallTorchBlock implements TierSupplier
     }
 
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random random)
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (world.isRemote) return;
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
     }

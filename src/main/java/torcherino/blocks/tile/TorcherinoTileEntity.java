@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.server.ServerWorld;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
@@ -100,6 +101,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
     @Override
     public void tick()
     {
+        if (world.isRemote) return;
         if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
         randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
         area.forEach(this::tickBlock);
@@ -112,7 +114,7 @@ public class TorcherinoTileEntity extends TileEntity implements INameable, ITick
         if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) return;
         if (block.ticksRandomly(blockState) &&
                 world.getRandom().nextInt(MathHelper.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks)
-        { block.randomTick(blockState, world, blockPos, world.getRandom()); }
+        { block.randomTick(blockState, (ServerWorld) world, blockPos, world.getRandom()); }
         if (!block.hasTileEntity(blockState)) return;
         TileEntity tileEntity = world.getTileEntity(blockPos);
         if (tileEntity == null || tileEntity.isRemoved() || TorcherinoAPI.INSTANCE.isTileEntityBlacklisted(tileEntity.getType()) ||

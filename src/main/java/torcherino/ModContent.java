@@ -3,6 +3,8 @@ package torcherino;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -14,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.IForgeRegistry;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
@@ -85,6 +88,11 @@ public class ModContent
             TorcherinoAPI.INSTANCE.blacklistBlock(wallBlock);
             TorcherinoAPI.INSTANCE.blacklistBlock(jackoLanterinoBlock);
             TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
+            if (FMLLoader.getDist().isClient())
+            {
+                RenderTypeLookup.setRenderLayer(standingBlock, RenderType.getCutout());
+                RenderTypeLookup.setRenderLayer(wallBlock, RenderType.getCutout());
+            }
             items.add(torcherinoItem);
             items.add(jackoLanterinoItem);
             items.add(lanterinoItem);
