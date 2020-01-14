@@ -75,7 +75,7 @@ public class ModContent
             Item jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS))
                     .setRegistryName(jackoLanterinoID);
             Block lanterinoBlock = new LanterinoBlock(tierID).setRegistryName(lanterinoID);
-            Item lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(lanterinoID);
+            Item lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(lanterinoID);
             blocks.add(standingBlock);
             blocks.add(wallBlock);
             blocks.add(jackoLanterinoBlock);
