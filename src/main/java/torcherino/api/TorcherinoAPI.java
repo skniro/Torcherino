@@ -1,8 +1,8 @@
 package torcherino.api;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import torcherino.api.impl.TorcherinoImpl;
@@ -63,7 +63,7 @@ public interface TorcherinoAPI
      * @return TRUE if added to blacklist, FALSE if already on blacklist.
      * @since 8.1.2
      */
-    boolean blacklistTileEntity(TileEntityType tileEntity);
+    boolean blacklistTileEntity(TileEntityType<? extends TileEntity> tileEntity);
 
     /**
      * @param block The block to check is blacklisted.
@@ -77,20 +77,5 @@ public interface TorcherinoAPI
      * @return TRUE if blacklisted, FALSE otherwise.
      * @since 8.1.2
      */
-    boolean isTileEntityBlacklisted(TileEntityType tileEntityType);
-
-    /**
-     * Blacklists and adds the torcherino to a list. Will be used in 1.14.x to assign the torcherino tile entity to blocks.
-     *
-     * @param block The torcherino / lanterino block
-     * @return TRUE if registered and blacklisted, FALSE otherwise.
-     * @since 8.1.2
-     */
-    boolean registerTorcherinoBlock(Block block);
-
-    /**
-     * @return A set of all torcherino blocks registered through the API.
-     * @since 9.0.0
-     */
-    ImmutableSet<Block> getTorcherinoBlocks();
+    boolean isTileEntityBlacklisted(TileEntityType<? extends TileEntity> tileEntityType);
 }

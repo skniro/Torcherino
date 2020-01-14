@@ -1,6 +1,7 @@
 package torcherino;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -32,11 +33,11 @@ public class Torcherino
         eventBus.register(ModContent.INSTANCE);
         eventBus.addListener(this::processIMC);
         MinecraftForge.EVENT_BUS.addListener(this::processPlayerJoin);
-        TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.WATER);
-        TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.LAVA);
-        TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.AIR);
-        TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.CAVE_AIR);
-        TorcherinoAPI.INSTANCE.blacklistBlock(net.minecraft.block.Blocks.VOID_AIR);
+        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.WATER);
+        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.LAVA);
+        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.AIR);
+        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
+        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
     }
 
     @SuppressWarnings("SpellCheckingInspection")
@@ -63,7 +64,7 @@ public class Torcherino
             else if (method.equals("blacklist_tile"))
             {
                 if (value instanceof ResourceLocation) { TorcherinoAPI.INSTANCE.blacklistTileEntity((ResourceLocation) value); }
-                else if (value instanceof TileEntityType) TorcherinoAPI.INSTANCE.blacklistTileEntity((TileEntityType) value);
+                else if (value instanceof TileEntityType) TorcherinoAPI.INSTANCE.blacklistTileEntity((TileEntityType<?>) value);
                 else
                 {
                     LOGGER.error("Received blacklist_tile message with invalid value, must be either a TileEntityType or ResourceLocation.");

@@ -41,6 +41,7 @@ public class ModContent
     {
         TORCHERINO_TILE_ENTITY = new CustomTileEntityType<>(TorcherinoTileEntity::new, (b) -> b instanceof TierSupplier, null);
         TORCHERINO_TILE_ENTITY.setRegistryName(Torcherino.resloc("torcherino"));
+        TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY);
     }
 
     public void initialise()
@@ -80,14 +81,13 @@ public class ModContent
             blocks.add(wallBlock);
             blocks.add(jackoLanterinoBlock);
             blocks.add(lanterinoBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(standingBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(wallBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(jackoLanterinoBlock);
-            TorcherinoAPI.INSTANCE.registerTorcherinoBlock(lanterinoBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(standingBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(wallBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(jackoLanterinoBlock);
+            TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
             items.add(torcherinoItem);
             items.add(jackoLanterinoItem);
             items.add(lanterinoItem);
-
             BasicParticleType particleType = new BasicParticleType(false);
             particleType.setRegistryName(flameID);
             particles.put(flameID, particleType);
@@ -99,6 +99,7 @@ public class ModContent
     {
         IForgeRegistry<Block> registry = registryEvent.getRegistry();
         blocks.forEach(registry::register);
+        blocks = null;
     }
 
     @SubscribeEvent
@@ -106,12 +107,12 @@ public class ModContent
     {
         IForgeRegistry<Item> registry = registryEvent.getRegistry();
         items.forEach(registry::register);
+        items = null;
     }
 
     @SubscribeEvent
     public void registerTileEntityTypes(final RegistryEvent.Register<TileEntityType<?>> registryEvent)
     {
-        TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY);
         registryEvent.getRegistry().register(TORCHERINO_TILE_ENTITY);
     }
 

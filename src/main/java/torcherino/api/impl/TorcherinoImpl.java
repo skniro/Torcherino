@@ -1,8 +1,8 @@
 package torcherino.api.impl;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,8 +22,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     private Map<ResourceLocation, Tier> localTiers = new HashMap<>();
     private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
     private Set<Block> blacklistedBlocks = new HashSet<>();
-    private Set<TileEntityType> blacklistedTiles = new HashSet<>();
-    private Set<Block> torcherinoBlocks = new HashSet<>();
+    private Set<TileEntityType<?>> blacklistedTiles = new HashSet<>();
 
     public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange)
     {
@@ -71,7 +70,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     {
         if (ForgeRegistries.TILE_ENTITIES.containsKey(tileEntity))
         {
-            TileEntityType type = ForgeRegistries.TILE_ENTITIES.getValue(tileEntity);
+            TileEntityType<?> type = ForgeRegistries.TILE_ENTITIES.getValue(tileEntity);
             if (blacklistedTiles.contains(type))
             {
                 LOGGER.warn("TileEntity with id {} is already blacklisted.", tileEntity);
@@ -85,7 +84,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     }
 
     @Override
-    public boolean blacklistTileEntity(TileEntityType tileEntity)
+    public boolean blacklistTileEntity(TileEntityType<? extends TileEntity> tileEntity)
     {
         if (blacklistedTiles.contains(tileEntity))
         {
@@ -100,20 +99,7 @@ public class TorcherinoImpl implements TorcherinoAPI
     public boolean isBlockBlacklisted(Block block) { return blacklistedBlocks.contains(block); }
 
     @Override
-    public boolean isTileEntityBlacklisted(TileEntityType tileEntityType) { return blacklistedTiles.contains(tileEntityType); }
-
-    @Override
-    public boolean registerTorcherinoBlock(Block block)
-    {
-        if (!torcherinoBlocks.contains(block))
-        {
-            blacklistBlock(block);
-            torcherinoBlocks.add(block);
-            return true;
-        }
-        LOGGER.warn("Torcherino with id {} has already been registered.", block.getRegistryName());
-        return false;
-    }
+    public boolean isTileEntityBlacklisted(TileEntityType<? extends TileEntity> tileEntityType) { return blacklistedTiles.contains(tileEntityType); }
 
     // Do not use
     public void setRemoteTiers(Map<ResourceLocation, Tier> tiers) { remoteTiers = tiers; }
@@ -122,7 +108,4 @@ public class TorcherinoImpl implements TorcherinoAPI
 
     @Override
     public Tier getTier(ResourceLocation name) { return remoteTiers.getOrDefault(name, null); }
-
-    @Override
-    public ImmutableSet<Block> getTorcherinoBlocks() { return ImmutableSet.copyOf(torcherinoBlocks); }
 }
