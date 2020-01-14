@@ -1,5 +1,8 @@
 {
-  "homepage": "https://minecraft.curseforge.com/projects/torcherino",
+  "homepage": "https://minecraft.curseforge.com/projects/torcherino"
+  "1.15.1": {
+    "10.0.0": "Direct port of 9.14 for 1.14.4"
+  },
   "1.14.4": {
     "9.1.4": "Added lantern form of torcherinos and added custom flame particles for each torcherino type.",
 	"9.0.3": "Fixed crash on forge 28.0.45, no longer works on forge prior to this version.",
@@ -16,6 +19,8 @@
     "8.0.0": "Initial port of Torcherino to 1.13.2 using forge 25.0.42\nConfig options to disable compressed and double compressed torcherino's has temporarily been removed."
   },
   "promos": {
+    "1.15.1-latest": "10.0.0",
+    "1.15.1-recommended": "10.0.0",
 	"1.14.4-latest": "9.1.4",
 	"1.14.4-recommended": "9.1.4",
     "1.14.3-latest": "9.0.1",
