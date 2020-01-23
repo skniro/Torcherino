@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = "Torcherino"
-version = "${mod_version}"
+version = "${mod_version}+${minecraft_version}"
 
 repositories {
     maven { url "https://minecraft.curseforge.com/api/maven" }
