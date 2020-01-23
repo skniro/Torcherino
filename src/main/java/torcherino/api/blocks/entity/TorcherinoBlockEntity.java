@@ -34,7 +34,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     private Identifier tierID;
     private String uuid = "";
 
-    public TorcherinoBlockEntity() { super(Registry.BLOCK_ENTITY.get(new Identifier("torcherino", "torcherino"))); }
+    public TorcherinoBlockEntity() { super(Registry.BLOCK_ENTITY_TYPE.get(new Identifier("torcherino", "torcherino"))); }
 
     @Override
     public boolean hasCustomName() { return customName != null; }

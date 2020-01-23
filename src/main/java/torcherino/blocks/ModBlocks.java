@@ -86,7 +86,7 @@ public class ModBlocks
 
     private void registerBlockEntity()
     {
-        Registry.register(Registry.BLOCK_ENTITY, new Identifier(Torcherino.MOD_ID, "torcherino"),
+        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(Torcherino.MOD_ID, "torcherino"),
                 new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null));
     }
 
