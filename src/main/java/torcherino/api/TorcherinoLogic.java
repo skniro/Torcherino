@@ -29,14 +29,14 @@ public class TorcherinoLogic
 
     public static void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (world.isClient) return;
+        if (world.isClient) { return; }
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).tick();
+        if (blockEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) blockEntity).tick(); }
     }
 
     public static ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.isClient || hand == Hand.OFF_HAND) return ActionResult.SUCCESS;
+        if (world.isClient || hand == Hand.OFF_HAND) { return ActionResult.SUCCESS; }
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof TorcherinoBlockEntity)
         {
@@ -52,21 +52,18 @@ public class TorcherinoLogic
     {
         if (world.isClient) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity)
-        {
-            func.accept((TorcherinoBlockEntity) blockEntity);
-        }
+        if (blockEntity instanceof TorcherinoBlockEntity) { func.accept((TorcherinoBlockEntity) blockEntity); }
     }
 
     public static void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, Block block)
     {
-        if (world.isClient) return;
+        if (world.isClient) { return; }
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof TorcherinoBlockEntity)
         {
             TorcherinoBlockEntity be = (TorcherinoBlockEntity) blockEntity;
-            if (stack.hasCustomName()) be.setCustomName(stack.getName());
-            if (!Config.INSTANCE.online_mode.equals("")) be.setOwner(placer == null ? "" : placer.getUuidAsString());
+            if (stack.hasCustomName()) { be.setCustomName(stack.getName()); }
+            if (!Config.INSTANCE.online_mode.equals("")) { be.setOwner(placer == null ? "" : placer.getUuidAsString()); }
         }
         if (Config.INSTANCE.log_placement)
         {

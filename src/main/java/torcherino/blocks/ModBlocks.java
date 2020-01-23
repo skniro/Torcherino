@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -44,7 +45,6 @@ public class ModBlocks
     {
         if (tierID.getNamespace().equals(Torcherino.MOD_ID))
         {
-
             Identifier torcherinoID = getIdentifier(tierID, "torcherino");
             Identifier jackoLanterinoID = getIdentifier(tierID, "lanterino");
             Identifier lanterinoID = getIdentifier(tierID, "lantern");
@@ -71,10 +71,7 @@ public class ModBlocks
     }
 
     @Environment(EnvType.CLIENT)
-    private void SetRenderLayer(Block block)
-    {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, net.minecraft.client.render.RenderLayer.getCutout());
-    }
+    private void SetRenderLayer(Block block) { BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout()); }
 
     private void registerBlocks()
     {
@@ -82,7 +79,6 @@ public class ModBlocks
         {
             Registry.register(Registry.BLOCK, id, block);
             TorcherinoAPI.INSTANCE.blacklistBlock(id);
-
         });
     }
 

@@ -37,8 +37,5 @@ public abstract class PlayerManagerMixin
     }
 
     @Inject(method = "remove", at = @At("HEAD"))
-    private void onPlayerDisconnect(ServerPlayerEntity player, CallbackInfo ci)
-    {
-        Torcherino.playerDisconnect(player.getUuidAsString());
-    }
+    private void onPlayerDisconnect(ServerPlayerEntity player, CallbackInfo ci) { Torcherino.playerDisconnect(player.getUuidAsString()); }
 }

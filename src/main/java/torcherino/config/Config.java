@@ -16,7 +16,7 @@ public class Config
     public static Config INSTANCE;
 
     @Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
-    public final int random_tick_rate = 1;
+    public final int random_tick_rate = 4;
 
     @Comment("Log torcherino placement (Intended for server use)") public final boolean log_placement = FabricLoader.getInstance().getEnvironmentType() ==
             EnvType.SERVER;

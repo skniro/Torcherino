@@ -69,7 +69,7 @@ public interface TorcherinoAPI
      * @return TRUE if added to blacklist, FALSE if already on blacklist.
      * @since 1.9.51
      */
-    boolean blacklistBlockEntity(BlockEntityType blockEntityType);
+    boolean blacklistBlockEntity(BlockEntityType<?> blockEntityType);
 
     /**
      * @param block The block to check is blacklisted.
@@ -83,5 +83,5 @@ public interface TorcherinoAPI
      * @return TRUE if blacklisted, FALSE otherwise.
      * @since 1.9.51
      */
-    boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType);
+    boolean isBlockEntityBlacklisted(BlockEntityType<?> blockEntityType);
 }

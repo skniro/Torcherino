@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * DO NOT USE THIS CLASS DIRECTLY. Use TorcherinoAPI.INSTANCE instead. Why? anything in this class is subject to change where as anything in the API won't be
- * removed without significant warning time. e.g. a minecraft version update or major mod update.
+ * DO NOT USE THIS CLASS DIRECTLY. Use TorcherinoAPI.INSTANCE instead.
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class TorcherinoImpl implements TorcherinoAPI
 {
+    @Deprecated
     public static final TorcherinoImpl INSTANCE = new TorcherinoImpl();
 
     private final Logger LOGGER = LogManager.getLogger("torcherino-api");
@@ -62,11 +62,8 @@ public class TorcherinoImpl implements TorcherinoAPI
             LOGGER.warn("[Torcherino] Block with id {} has already been blacklisted.", blockIdentifier);
             return false;
         }
-        else
-        {
-            blacklistedBlocks.add(blockIdentifier);
-            return true;
-        }
+        blacklistedBlocks.add(blockIdentifier);
+        return true;
     }
 
     @Override
@@ -83,11 +80,8 @@ public class TorcherinoImpl implements TorcherinoAPI
             LOGGER.warn("[Torcherino] Block with id {} has already been blacklisted.", blockIdentifier);
             return false;
         }
-        else
-        {
-            blacklistedBlocks.add(blockIdentifier);
-            return true;
-        }
+        blacklistedBlocks.add(blockIdentifier);
+        return true;
     }
 
     @Override
@@ -98,15 +92,12 @@ public class TorcherinoImpl implements TorcherinoAPI
             LOGGER.warn("[Torcherino] Block entity with id {} has already been blacklisted.", blockEntityIdentifier);
             return false;
         }
-        else
-        {
-            blacklistedBlockEntities.add(blockEntityIdentifier);
-            return true;
-        }
+        blacklistedBlockEntities.add(blockEntityIdentifier);
+        return true;
     }
 
     @Override
-    public boolean blacklistBlockEntity(BlockEntityType blockEntityType)
+    public boolean blacklistBlockEntity(BlockEntityType<?> blockEntityType)
     {
         Identifier blockEntityTypeIdentifier = Registry.BLOCK_ENTITY.getId(blockEntityType);
         if (blockEntityTypeIdentifier == null)
@@ -119,18 +110,15 @@ public class TorcherinoImpl implements TorcherinoAPI
             LOGGER.warn("[Torcherino] Block entity with id {} has already been blacklisted.", blockEntityTypeIdentifier);
             return false;
         }
-        else
-        {
-            blacklistedBlockEntities.add(blockEntityTypeIdentifier);
-            return true;
-        }
+        blacklistedBlockEntities.add(blockEntityTypeIdentifier);
+        return true;
     }
 
     @Override
     public boolean isBlockBlacklisted(Block block) { return blacklistedBlocks.contains(Registry.BLOCK.getId(block)); }
 
     @Override
-    public boolean isBlockEntityBlacklisted(BlockEntityType blockEntityType)
+    public boolean isBlockEntityBlacklisted(BlockEntityType<?> blockEntityType)
     {
         return blacklistedBlockEntities.contains(BlockEntityType.getId(blockEntityType));
     }

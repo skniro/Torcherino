@@ -1,6 +1,6 @@
 package torcherino.client.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -56,61 +56,49 @@ public class TorcherinoScreen extends Screen
         addButton(new FixedSliderWidget(left + 8, top + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.speed = 1 + (int) Math.round(value * (TorcherinoScreen.this.tier.getMaxSpeed() - 1));
-                this.value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
+                value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
             }
         });
         addButton(new FixedSliderWidget(left + 8, top + 45, 205, (double) xRange / tier.getXZRange(), tier.getXZRange())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.xRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
-                this.value = (double) xRange / tier.getXZRange();
+                value = (double) xRange / tier.getXZRange();
             }
         });
         this.addButton(new FixedSliderWidget(left + 8, top + 70, 205, (double) zRange / tier.getXZRange(), tier.getXZRange())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.zRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
-                this.value = (double) zRange / tier.getXZRange();
+                value = (double) zRange / tier.getXZRange();
             }
         });
         this.addButton(new FixedSliderWidget(left + 8, top + 95, 205, (double) yRange / tier.getYRange(), tier.getYRange())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.yRange = (int) Math.round(value * TorcherinoScreen.this.tier.getYRange());
-                this.value = (double) yRange / tier.getYRange();
+                value = (double) yRange / tier.getYRange();
             }
         });
         this.addButton(new StateButtonWidget(this, left + 217, top + 20)
@@ -187,7 +175,7 @@ public class TorcherinoScreen extends Screen
     {
         fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
         minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         blit(left, top, 0, 0, screenWidth, screenHeight);
         font.draw(cached_title, (width - font.getStringWidth(cached_title)) / 2.0f, top + 6, 4210752);
         super.render(x, y, partialTicks);

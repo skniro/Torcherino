@@ -3,10 +3,7 @@ package torcherino.api.blocks.entity;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import torcherino.api.blocks.JackoLanterinoBlock;
-import torcherino.api.blocks.LanterinoBlock;
-import torcherino.api.blocks.TorcherinoBlock;
-import torcherino.api.blocks.WallTorcherinoBlock;
+import torcherino.api.TierSupplier;
 
 import java.util.function.Supplier;
 
@@ -16,9 +13,5 @@ public class TocherinoBlockEntityType extends BlockEntityType<TorcherinoBlockEnt
     public TocherinoBlockEntityType(Supplier<TorcherinoBlockEntity> supplier, Type type) { super(supplier, null, type); }
 
     @Override
-    public boolean supports(Block block)
-    {
-        return TorcherinoBlock.class.equals(block.getClass()) || WallTorcherinoBlock.class.equals(block.getClass()) ||
-                JackoLanterinoBlock.class.equals(block.getClass()) || LanterinoBlock.class.equals(block.getClass());
-    }
+    public boolean supports(Block block) { return block instanceof TierSupplier; }
 }
