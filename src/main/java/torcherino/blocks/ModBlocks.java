@@ -57,6 +57,7 @@ public class ModBlocks
             {
                 SetRenderLayer(torcherinoBlock);
                 SetRenderLayer(torcherinoWallBlock);
+                SetRenderLayer(lanterinoBlock);
             }
             blocks.put(new Identifier(Torcherino.MOD_ID, "wall_" + torcherinoID.getPath()), torcherinoWallBlock);
             blocks.put(jackoLanterinoID, jackoLanterinoBlock);
