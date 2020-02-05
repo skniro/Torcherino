@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -29,15 +30,11 @@ import java.util.Random;
 public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, TierSupplier
 {
     private final Identifier tierID;
-    private DefaultParticleType flameParticle;
 
-    public TorcherinoBlock(Identifier tier)
+    public TorcherinoBlock(Identifier tier, ParticleEffect particleEffect)
     {
-        super(FabricBlockSettings.copy(Blocks.TORCH).build());
+        super(FabricBlockSettings.copy(Blocks.TORCH).build(), particleEffect);
         tierID = tier;
-        String path = tier.getPath() + "_flame";
-        if (path.equals("normal_flame")) path = "flame";
-        flameParticle = (DefaultParticleType) Registry.PARTICLE_TYPE.get(new Identifier(tier.getNamespace(), path));
     }
 
     @Override
@@ -78,15 +75,5 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
     {
         TorcherinoLogic.onPlaced(world, pos, state, placer, stack, this);
-    }
-
-    @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rnd)
-    {
-        double d = pos.getX() + 0.5D;
-        double e = pos.getY() + 0.7D;
-        double f = pos.getZ() + 0.5D;
-        world.addParticle(ParticleTypes.SMOKE, d, e, f, 0.0D, 0.0D, 0.0D);
-        world.addParticle(flameParticle, d, e, f, 0.0D, 0.0D, 0.0D);
     }
 }
