@@ -3,9 +3,6 @@ buildscript {
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
-        maven {
-            url "https://maven.tterrag.com/"
-        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
@@ -15,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-version = '10.0.0'
+version = '10.0.1'
 group = 'torcherino'
 archivesBaseName = 'torcherino'
 
@@ -33,7 +30,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200112-mixed-1.15.1'
+    mappings channel: 'snapshot', version: '20200209-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
@@ -67,7 +64,7 @@ minecraft {
 
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.36'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.0'
 
     compile ("blue.endless:jankson:1.1.2")
     shade ("blue.endless:jankson:1.1.2")

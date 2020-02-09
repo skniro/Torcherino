@@ -60,7 +60,7 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
     }
 
     @Override
-    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         if (!world.isRemote) Networker.INSTANCE.openScreenServer(world, (ServerPlayerEntity) player, pos);
         return ActionResultType.SUCCESS;
@@ -87,7 +87,7 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TorcherinoTileEntity) ((TorcherinoTileEntity) tileEntity).tick();
@@ -143,6 +143,7 @@ public class LanterinoBlock extends LanternBlock implements TierSupplier
     {
         boolean powered;
         BlockState state = super.getStateForPlacement(context);
+        if (state == null) {state = getDefaultState(); }
         if (state.get(BlockStateProperties.HANGING).equals(true))
         {
             powered = context.getWorld().isSidePowered(context.getPos().up(), Direction.UP);

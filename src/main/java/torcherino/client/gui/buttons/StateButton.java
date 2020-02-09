@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 public abstract class StateButton extends AbstractButton
 {

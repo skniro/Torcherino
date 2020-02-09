@@ -13,6 +13,7 @@ import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -90,8 +91,12 @@ public class ModContent
             TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
             if (FMLLoader.getDist().isClient())
             {
-                RenderTypeLookup.setRenderLayer(standingBlock, RenderType.getCutout());
-                RenderTypeLookup.setRenderLayer(wallBlock, RenderType.getCutout());
+                Minecraft.getInstance().deferTask(() ->
+                {
+                    RenderTypeLookup.setRenderLayer(standingBlock, RenderType.cutout());
+                    RenderTypeLookup.setRenderLayer(wallBlock, RenderType.cutout());
+                    RenderTypeLookup.setRenderLayer(lanterinoBlock, RenderType.cutout());
+                });
             }
             items.add(torcherinoItem);
             items.add(jackoLanterinoItem);
