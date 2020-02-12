@@ -38,14 +38,12 @@ public abstract class StateButtonWidget extends ButtonWidget
         if (visible)
         {
             super.render(mouseX, mouseY, partialTicks);
+            GuiLighting.enableForItems();
             itemRenderer.renderGuiItem(getButtonIcon(), x + 2, y + 2);
+            GuiLighting.disable();
             if (this.isHovered)
             {
-                screen.renderTooltip(Lists.asList(narrationMessage, new String[]{}), x + 14, y + 18);
-                GlStateManager.disableRescaleNormal();
-                GuiLighting.disable();
-                GlStateManager.disableLighting();
-                GlStateManager.disableDepthTest();
+                screen.renderTooltip(narrationMessage, x + 14, y + 18);
             }
         }
     }

@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.render.GuiLighting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
@@ -56,61 +57,49 @@ public class TorcherinoScreen extends Screen
         addButton(new FixedSliderWidget(left + 8, top + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.speed = 1 + (int) Math.round(value * (TorcherinoScreen.this.tier.getMaxSpeed() - 1));
-                this.value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
+                value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
             }
         });
         addButton(new FixedSliderWidget(left + 8, top + 45, 205, (double) xRange / tier.getXZRange(), tier.getXZRange())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.xRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
-                this.value = (double) xRange / tier.getXZRange();
+                value = (double) xRange / tier.getXZRange();
             }
         });
         this.addButton(new FixedSliderWidget(left + 8, top + 70, 205, (double) zRange / tier.getXZRange(), tier.getXZRange())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.zRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
-                this.value = (double) zRange / tier.getXZRange();
+                value = (double) zRange / tier.getXZRange();
             }
         });
         this.addButton(new FixedSliderWidget(left + 8, top + 95, 205, (double) yRange / tier.getYRange(), tier.getYRange())
         {
             @Override
-            protected void updateMessage()
-            {
-                this.setMessage(new TranslatableText("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).asString());
-            }
+            protected void updateMessage() { setMessage(new TranslatableText("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1).asString()); }
 
             @Override
             protected void applyValue()
             {
                 TorcherinoScreen.this.yRange = (int) Math.round(value * TorcherinoScreen.this.tier.getYRange());
-                this.value = (double) yRange / tier.getYRange();
+                value = (double) yRange / tier.getYRange();
             }
         });
         this.addButton(new StateButtonWidget(this, left + 217, top + 20)

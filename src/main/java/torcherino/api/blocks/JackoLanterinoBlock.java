@@ -51,14 +51,6 @@ public class JackoLanterinoBlock extends CarvedPumpkinBlock implements BlockEnti
     }
 
     @Override
-    public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
-    {
-        if (world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).tick();
-    }
-
-    @Override
     public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
     {
         if (world.isClient || hand == Hand.OFF_HAND) return true;

@@ -31,7 +31,7 @@ import java.util.Random;
 public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, TierSupplier
 {
     private final Identifier tierID;
-    private DefaultParticleType flameParticle;
+    private final DefaultParticleType flameParticle;
 
     public TorcherinoBlock(Identifier tier)
     {
@@ -55,14 +55,6 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
     public void onBlockAdded(BlockState newState, World world, BlockPos pos, BlockState state, boolean boolean_1)
     {
         neighborUpdate(null, world, pos, null, null, false);
-    }
-
-    @Override
-    public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random)
-    {
-        if (world.isClient) return;
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TorcherinoBlockEntity) ((TorcherinoBlockEntity) blockEntity).tick();
     }
 
     @Override
@@ -109,7 +101,6 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rnd)
     {
-
         double d = pos.getX() + 0.5D;
         double e = pos.getY() + 0.7D;
         double f = pos.getZ() + 0.5D;

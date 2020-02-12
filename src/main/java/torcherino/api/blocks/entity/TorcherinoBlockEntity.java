@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
+import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
@@ -22,12 +23,15 @@ import torcherino.config.Config;
 @SuppressWarnings("SpellCheckingInspection")
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tickable, TierSupplier
 {
+    private static final String onlineMode = Config.INSTANCE.online_mode;
+    public static int randomTicks;
     private Text customName;
-    private int xRange, yRange, zRange, speed, redstoneMode, randomTicks;
+    private int xRange, yRange, zRange, speed, redstoneMode;
     private Iterable<BlockPos> area;
     private boolean active;
     private boolean loaded = false;
     private Identifier tierID;
+    private String uuid = "";
 
     public TorcherinoBlockEntity() { super(Registry.BLOCK_ENTITY.get(new Identifier("torcherino", "torcherino"))); }
 
@@ -38,6 +42,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     public Text getCustomName() { return customName; }
 
     public void setCustomName(Text name) { customName = name; }
+
+    private String getOwner() { return uuid; }
+
+    public void setOwner(String s) { uuid = s; }
 
     @Override
     public Text getName() { return hasCustomName() ? customName : new TranslatableText(getCachedState().getBlock().getTranslationKey()); }
@@ -50,10 +58,15 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
             area = BlockPos.iterate(pos.getX() - xRange, pos.getY() - yRange, pos.getZ() - zRange,
                     pos.getX() + xRange, pos.getY() + yRange, pos.getZ() + zRange);
             getCachedState().getBlock().neighborUpdate(getCachedState(), world, pos, null, null, false);
+            randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED); // update via mixin
             loaded = true;
         }
         if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) return;
-        randomTicks = world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
+        if (!onlineMode.equals(""))
+        {
+            if (!Torcherino.hasIsOnline(getOwner())) return;
+
+        }
         area.forEach(this::tickBlock);
     }
 
@@ -141,6 +154,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         tag.putInt("Speed", speed);
         tag.putInt("RedstoneMode", redstoneMode);
         tag.putBoolean("Active", active);
+        tag.putString("Owner", getOwner() == null ? "" : getOwner());
         return tag;
     }
 
@@ -155,5 +169,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         speed = tag.getInt("Speed");
         redstoneMode = tag.getInt("RedstoneMode");
         active = tag.getBoolean("Active");
+        uuid = tag.getString("Owner");
     }
 }

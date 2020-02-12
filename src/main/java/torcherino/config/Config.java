@@ -31,6 +31,9 @@ public class Config
     @Comment("\nAllows new custom torcherino tiers to be added.\nThis also allows for each tier to have their own max max_speed and ranges.")
     private final Tier[] tiers = new Tier[]{ new Tier("normal", 4, 4, 1), new Tier("compressed", 36, 4, 1), new Tier("double_compressed", 324, 4, 1) };
 
+    @Comment("\nWhen set to ONLINE, Torcherino's only run if the player is currently online\nIf set to RESTART then Torcherino's will run for anyone who has logged in since the server started.\nAnything else then Torcherino's will act like previous versions.")
+    public String online_mode = "";
+
 
     public static void initialize()
     {
@@ -67,6 +70,8 @@ public class Config
 
     private void onConfigLoaded()
     {
+        online_mode = online_mode.toUpperCase();
+        if (!(online_mode.equals("ONLINE") || online_mode.equals("RESTART"))) online_mode = "";
         for (Tier tier : tiers) TorcherinoAPI.INSTANCE.registerTier(new Identifier("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
         for (Identifier id : blacklisted_blocks) TorcherinoAPI.INSTANCE.blacklistBlock(id);
         for (Identifier id : blacklisted_blockentities) TorcherinoAPI.INSTANCE.blacklistBlockEntity(id);
