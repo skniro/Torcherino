@@ -82,11 +82,11 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         }
         if (!block.hasBlockEntity()) return;
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity == null || blockEntity.isInvalid() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) ||
+        if (blockEntity == null || blockEntity.isRemoved() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) ||
                 !(blockEntity instanceof Tickable)) { return; }
         for (int i = 0; i < speed; i++)
         {
-            if (blockEntity.isInvalid()) break;
+            if (blockEntity.isRemoved()) break;
             ((Tickable) blockEntity).tick();
         }
     }
@@ -162,7 +162,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     public void fromTag(CompoundTag tag)
     {
         super.fromTag(tag);
-        if (tag.containsKey("CustomName", 8)) setCustomName(Text.Serializer.fromJson(tag.getString("CustomName")));
+        if (tag.contains("CustomName", 8)) setCustomName(Text.Serializer.fromJson(tag.getString("CustomName")));
         xRange = tag.getInt("XRange");
         zRange = tag.getInt("ZRange");
         yRange = tag.getInt("YRange");

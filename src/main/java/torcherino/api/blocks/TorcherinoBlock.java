@@ -2,7 +2,7 @@ package torcherino.api.blocks;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.fabricmc.fabric.impl.network.ServerSidePacketRegistryImpl;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
@@ -66,7 +66,7 @@ public class TorcherinoBlock extends TorchBlock implements BlockEntityProvider, 
         {
             PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
             ((TorcherinoBlockEntity) blockEntity).writeClientData(buffer);
-            ServerSidePacketRegistryImpl.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "ots"), buffer);
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new Identifier(Torcherino.MOD_ID, "ots"), buffer);
         }
         return true;
     }

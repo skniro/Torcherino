@@ -1,13 +1,11 @@
 package torcherino.client.screen.widgets;
 
-import com.google.common.collect.Lists;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.TranslatableText;
@@ -38,9 +36,9 @@ public abstract class StateButtonWidget extends ButtonWidget
         if (visible)
         {
             super.render(mouseX, mouseY, partialTicks);
-            GuiLighting.enableForItems();
+            DiffuseLighting.enableForItems();
             itemRenderer.renderGuiItem(getButtonIcon(), x + 2, y + 2);
-            GuiLighting.disable();
+            DiffuseLighting.disable();
             if (this.isHovered)
             {
                 screen.renderTooltip(narrationMessage, x + 14, y + 18);
