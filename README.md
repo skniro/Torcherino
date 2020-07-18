@@ -1,4 +1,4 @@
-# This repository is no longer being used, new repos are:
+# This repository is no longer being used, see:
 ## Forge
 https://github.com/NinjaPhenix/ForgeMods
 ## Fabric
