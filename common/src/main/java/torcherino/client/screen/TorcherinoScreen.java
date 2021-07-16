@@ -116,7 +116,7 @@ public class TorcherinoScreen extends Screen {
                         translationKey = "gui.torcherino.mode.inverted";
                         break;
                     case 2:
-                        translationKey = "gui.torcherino.mode.ignore";
+                        translationKey = "gui.torcherino.mode.ignored";
                         break;
                     case 3:
                         translationKey = "gui.torcherino.mode.off";

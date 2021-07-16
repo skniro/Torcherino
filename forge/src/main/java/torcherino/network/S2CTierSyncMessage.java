@@ -21,12 +21,12 @@ public final class S2CTierSyncMessage {
         this.tiers = tiers;
     }
 
-    static void encode(final S2CTierSyncMessage message, final FriendlyByteBuf buffer) {
+    public static void encode(final S2CTierSyncMessage message, final FriendlyByteBuf buffer) {
         buffer.writeInt(message.tiers.size());
         message.tiers.forEach((name, tier) -> writeTier(name, tier, buffer));
     }
 
-    static S2CTierSyncMessage decode(final FriendlyByteBuf buffer) {
+    public static S2CTierSyncMessage decode(final FriendlyByteBuf buffer) {
         final Map<ResourceLocation, Tier> localTiers = new HashMap<>();
         final int count = buffer.readInt();
         for (int i = 0; i < count; i++) {
@@ -36,7 +36,7 @@ public final class S2CTierSyncMessage {
         return new S2CTierSyncMessage(localTiers);
     }
 
-    static void handle(final S2CTierSyncMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(final S2CTierSyncMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(message.tiers));

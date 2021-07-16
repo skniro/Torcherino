@@ -1,7 +1,5 @@
 package torcherino;
 
-import com.google.common.collect.ImmutableMap;
-import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.network.PacketContext;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
@@ -13,15 +11,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.api.entrypoints.TorcherinoInitializer;
+import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.blocks.ModBlocks;
 import torcherino.config.Config;
+import torcherino.platform.NetworkUtils;
 import torcherino.temp.PlayerConnectCallback;
 import torcherino.temp.PlayerDisconnectCallback;
 
@@ -41,8 +38,7 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer {
     @Override
     public void onInitialize() {
         Config.initialize();
-        TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) ->
-        {
+        TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {
             if (!id.getNamespace().equals(MOD_ID)) {
                 return;
             }
@@ -58,16 +54,16 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer {
         {
             Level world = context.getPlayer().getCommandSenderWorld();
             BlockPos pos = buffer.readBlockPos();
-            buffer.retain();
-            context.getTaskQueue().execute(() ->
-            {
-                try {
-                    BlockEntity blockEntity = world.getBlockEntity(pos);
-                    if (blockEntity instanceof TorcherinoBlockEntity) {
-                        ((TorcherinoBlockEntity) blockEntity).readClientData(buffer);
+            int xRange = buffer.readInt();
+            int zRange = buffer.readInt();
+            int yRange = buffer.readInt();
+            int speed = buffer.readInt();
+            int redstoneMode = buffer.readInt();
+            context.getTaskQueue().execute(() -> {
+                if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
+                    if (!blockEntity.readClientData(xRange, zRange, yRange, speed, redstoneMode)) {
+                        Torcherino.LOGGER.error("Data received from " + context.getPlayer().getName().getString() + "(" + context.getPlayer().getStringUUID() + ") is invalid.");
                     }
-                } finally {
-                    buffer.release();
                 }
             });
         });
@@ -75,18 +71,7 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer {
         PlayerConnectCallback.EVENT.register(player ->
         {
             allowedUuids.add(player.getStringUUID());
-            ImmutableMap<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
-            FriendlyByteBuf packetBuffer = new FriendlyByteBuf(Unpooled.buffer());
-            packetBuffer.writeInt(tiers.size());
-            tiers.forEach((id, tier) ->
-            {
-                packetBuffer.writeResourceLocation(id);
-                packetBuffer.writeInt(tier.getMaxSpeed());
-                packetBuffer.writeInt(tier.getXZRange());
-                packetBuffer.writeInt(tier.getYRange());
-            });
-            // todo: replace with networking v1
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ResourceLocation(Torcherino.MOD_ID, "tts"), packetBuffer);
+            NetworkUtils.getInstance().s2c_sendTorcherinoTiers(player);
         });
         PlayerDisconnectCallback.EVENT.register(player ->
         {

@@ -12,7 +12,9 @@ import torcherino.client.screen.TorcherinoScreen;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class OpenScreenMessage {
+    // todo: make getters.
     public final BlockPos pos;
     public final Component title;
     public final int xRange, zRange, yRange, speed, redstoneMode;
@@ -28,17 +30,17 @@ public final class OpenScreenMessage {
         this.redstoneMode = redstoneMode;
     }
 
-    static void encode(final OpenScreenMessage message, final FriendlyByteBuf buffer) {
+    public static void encode(final OpenScreenMessage message, final FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos).writeComponent(message.title).writeInt(message.xRange)
               .writeInt(message.zRange).writeInt(message.yRange).writeInt(message.speed).writeInt(message.redstoneMode);
     }
 
-    static OpenScreenMessage decode(final FriendlyByteBuf buffer) {
+    public static OpenScreenMessage decode(final FriendlyByteBuf buffer) {
         return new OpenScreenMessage(buffer.readBlockPos(), buffer.readComponent(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(),
                 buffer.readInt());
     }
 
-    static void handle(final OpenScreenMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(final OpenScreenMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             final Minecraft minecraft = Minecraft.getInstance();
@@ -48,7 +50,7 @@ public final class OpenScreenMessage {
                 if (tileEntity instanceof TorcherinoBlockEntity blockEntity)
                 {
                     final TorcherinoScreen screen = new TorcherinoScreen(message.title, message.xRange, message.zRange, message.yRange,
-                            message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTierName());
+                            message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTier());
                     minecraft.setScreen(screen);
                 }
             });

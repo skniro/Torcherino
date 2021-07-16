@@ -24,7 +24,7 @@ import torcherino.api.TorcherinoAPI;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
-import torcherino.block.TorcherinoWallBlock;
+import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.temp.TocherinoBlockEntityType;
 
@@ -56,7 +56,7 @@ public final class ModContent {
             final SimpleParticleType particleType = new SimpleParticleType(false);
             PARTICLE_TYPES.register(getPath(tierID, "flame"), particleType.delegate);
             final TorcherinoBlock standingBlock = new TorcherinoBlock(tierID, particleType);
-            final TorcherinoWallBlock wallBlock = new TorcherinoWallBlock(standingBlock, particleType);
+            final WallTorcherinoBlock wallBlock = new WallTorcherinoBlock(tierID, standingBlock, particleType);
             final Item torcherinoItem = new StandingAndWallBlockItem(standingBlock, wallBlock, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
             final JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(tierID);
             final Item jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));

@@ -1,12 +1,9 @@
-package torcherino.api;
+package torcherino.block;
 
-import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,12 +16,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
+import torcherino.platform.NetworkUtils;
 
 import java.util.Random;
 import java.util.function.Consumer;
 
 public class TorcherinoLogic {
-
     public static void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         if (world.isClientSide) {
             return;
@@ -39,14 +36,12 @@ public class TorcherinoLogic {
             return InteractionResult.SUCCESS;
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            blockEntity.writeClientData(buffer);
-            // todo: replace with networking v1
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ResourceLocation(Torcherino.MOD_ID, "ots"), buffer);
+            blockEntity.openTorcherinoScreen((ServerPlayer) player);
         }
         return InteractionResult.SUCCESS;
     }
 
+    // todo: name boolean_1
     public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1,
                                       Consumer<TorcherinoBlockEntity> func) {
         if (world.isClientSide) {

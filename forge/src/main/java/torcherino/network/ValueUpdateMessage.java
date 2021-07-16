@@ -2,16 +2,14 @@ package torcherino.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
-import torcherino.api.TorcherinoAPI;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class ValueUpdateMessage {
     private final BlockPos pos;
     private final int xRange, zRange, yRange, speed, redstoneMode;
@@ -25,26 +23,22 @@ public final class ValueUpdateMessage {
         this.redstoneMode = redstoneMode;
     }
 
-    static void encode(final ValueUpdateMessage message, final FriendlyByteBuf buffer) {
+    public static void encode(final ValueUpdateMessage message, final FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos).writeInt(message.xRange).writeInt(message.zRange).writeInt(message.yRange).writeInt(message.speed)
               .writeInt(message.redstoneMode);
     }
 
-    static ValueUpdateMessage decode(final FriendlyByteBuf buffer) {
+    public static ValueUpdateMessage decode(final FriendlyByteBuf buffer) {
         return new ValueUpdateMessage(buffer.readBlockPos(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
     }
 
     @SuppressWarnings("ConstantConditions")
-    static void handle(final ValueUpdateMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(final ValueUpdateMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() ->
-        {
-            final Level world = context.getSender().level;
-            final BlockEntity tileEntity = world.getBlockEntity(message.pos);
-            if (tileEntity instanceof TorcherinoBlockEntity) {
-                final TorcherinoBlockEntity torcherinoBlockEntity = (TorcherinoBlockEntity) tileEntity;
-                if (message.withinBounds(TorcherinoAPI.INSTANCE.getTiers().get(torcherinoBlockEntity.getTierName()))) {
-                    torcherinoBlockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode);
+        context.enqueueWork(() -> {
+            if (context.getSender().level.getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
+                if (!blockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode)) {
+                    Torcherino.LOGGER.error("Data received from " + context.getSender().getName().getString() + "(" + context.getSender().getStringUUID() + ") is invalid.");
                 }
             }
         });

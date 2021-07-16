@@ -9,6 +9,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.level.GameRules;
@@ -21,6 +22,7 @@ import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
+import torcherino.platform.NetworkUtils;
 import torcherino.temp.ExpandedBlockEntity;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TickableBlockEntity, TierSupplier, ExpandedBlockEntity {
@@ -114,34 +116,35 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         }
     }
 
-    public void writeClientData(FriendlyByteBuf buffer) {
-        buffer.writeBlockPos(worldPosition);
-        buffer.writeComponent(getName());
-        buffer.writeInt(xRange);
-        buffer.writeInt(zRange);
-        buffer.writeInt(yRange);
-        buffer.writeInt(speed);
-        buffer.writeInt(redstoneMode);
+    public boolean readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode) {
+        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTier());
+        if (this.valueInRange(xRange, 0, tier.getXZRange()) &&
+                this.valueInRange(zRange, 0, tier.getXZRange()) &&
+                this.valueInRange(yRange, 0, tier.getYRange()) &&
+                this.valueInRange(speed, 0, tier.getMaxSpeed()) &&
+                this.valueInRange(redstoneMode, 0, 3)) {
+            this.xRange = xRange;
+            this.zRange = zRange;
+            this.yRange = yRange;
+            this.speed = speed;
+            this.redstoneMode = redstoneMode;
+            area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
+                    worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
+            return true;
+        }
+        return false;
     }
 
-    public void readClientData(FriendlyByteBuf buffer) {
-        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTier());
-        this.xRange = Mth.clamp(buffer.readInt(), 0, tier.getXZRange());
-        this.zRange = Mth.clamp(buffer.readInt(), 0, tier.getXZRange());
-        this.yRange = Mth.clamp(buffer.readInt(), 0, tier.getYRange());
-        this.speed = Mth.clamp(buffer.readInt(), 1, tier.getMaxSpeed());
-        this.redstoneMode = Mth.clamp(buffer.readInt(), 0, 3);
-
-        area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
-                worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
+    private boolean valueInRange(int value, int min, int max) {
+        return value >= min && value <= max;
     }
 
     @Override
     public ResourceLocation getTier() {
         if (tierID == null) {
-            Block block = getBlockState().getBlock();
-            if (block instanceof TierSupplier) {
-                tierID = ((TierSupplier) block).getTier();
+            Block block = this.getBlockState().getBlock();
+            if (block instanceof TierSupplier supplier) {
+                tierID = supplier.getTier();
             }
         }
         return tierID;
@@ -168,7 +171,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     @Override
     public CompoundTag save(CompoundTag tag) {
         super.save(tag);
-        if (hasCustomName()) {
+        if (this.hasCustomName()) {
             tag.putString("CustomName", Component.Serializer.toJson(getCustomName()));
         }
         tag.putInt("XRange", xRange);
@@ -185,7 +188,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     public void load(BlockState state, CompoundTag tag) {
         super.load(state, tag);
         if (tag.contains("CustomName", 8)) {
-            setCustomName(Component.Serializer.fromJson(tag.getString("CustomName")));
+            this.setCustomName(Component.Serializer.fromJson(tag.getString("CustomName")));
         }
         xRange = tag.getInt("XRange");
         zRange = tag.getInt("ZRange");
@@ -194,5 +197,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         redstoneMode = tag.getInt("RedstoneMode");
         active = tag.getBoolean("Active");
         uuid = tag.getString("Owner");
+    }
+
+    public void openTorcherinoScreen(ServerPlayer player) {
+        NetworkUtils.getInstance().s2c_openTorcherinoScreen((ServerPlayer) player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
     }
 }

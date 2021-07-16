@@ -17,10 +17,10 @@ import net.minecraft.world.level.block.Block;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.JackoLanterinoBlock;
-import torcherino.api.blocks.LanterinoBlock;
-import torcherino.api.blocks.TorcherinoBlock;
-import torcherino.api.blocks.WallTorcherinoBlock;
+import torcherino.block.JackoLanterinoBlock;
+import torcherino.block.LanterinoBlock;
+import torcherino.block.TorcherinoBlock;
+import torcherino.block.WallTorcherinoBlock;
 import torcherino.temp.TocherinoBlockEntityType;
 import torcherino.block.entity.TorcherinoBlockEntity;
 

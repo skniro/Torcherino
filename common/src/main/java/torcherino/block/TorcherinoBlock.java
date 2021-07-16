@@ -1,4 +1,4 @@
-package torcherino.api.blocks;
+package torcherino.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,8 +20,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
-import torcherino.api.TorcherinoLogic;
+import torcherino.block.TorcherinoLogic;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Random;
@@ -75,5 +76,14 @@ public class TorcherinoBlock extends TorchBlock implements EntityBlock, TierSupp
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         TorcherinoLogic.onPlaced(level, pos, state, placer, stack, this);
+    }
+
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    public BlockEntity createTileEntity(BlockState state, BlockGetter level) {
+        return new TorcherinoBlockEntity();
     }
 }

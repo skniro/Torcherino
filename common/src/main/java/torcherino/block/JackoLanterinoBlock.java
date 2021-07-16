@@ -1,7 +1,6 @@
-package torcherino.api.blocks;
+package torcherino.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -13,30 +12,27 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.Lantern;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
-import torcherino.api.TorcherinoLogic;
+import torcherino.block.TorcherinoLogic;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Random;
 
-public class LanterinoBlock extends Lantern implements EntityBlock, TierSupplier {
+@SuppressWarnings({"deprecation"})
+public class JackoLanterinoBlock extends CarvedPumpkinBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
 
     // todo: take block properties as argument
-    public LanterinoBlock(ResourceLocation tier) {
-        super(Properties.copy(Blocks.LANTERN));
+    public JackoLanterinoBlock(ResourceLocation tier) {
+        super(Properties.copy(Blocks.JACK_O_LANTERN));
         this.tierID = tier;
-    }
-
-    private static boolean isEmittingStrongRedstonePower(Level level, BlockPos pos, Direction direction) {
-        return level.getBlockState(pos).getDirectSignal(level, pos, direction) > 0;
     }
 
     @Override
@@ -55,45 +51,37 @@ public class LanterinoBlock extends Lantern implements EntityBlock, TierSupplier
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onPlace(BlockState newState, Level level, BlockPos pos, BlockState state, boolean boolean_1) {
         this.neighborChanged(null, level, pos, null, null, false);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
         TorcherinoLogic.scheduledTick(state, level, pos, random);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return TorcherinoLogic.onUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1) {
-        TorcherinoLogic.neighborUpdate(state, level, pos, neighborBlock, neighborPos, boolean_1, (be) -> {
-            if (state == null) {
-                return;
-            }
-            if (state.getValue(BlockStateProperties.HANGING).equals(true)) {
-                be.setPoweredByRedstone(level.hasSignal(pos.above(), Direction.UP));
-            } else {
-                boolean powered = isEmittingStrongRedstonePower(level, pos.west(), Direction.WEST) ||
-                        isEmittingStrongRedstonePower(level, pos.east(), Direction.EAST) ||
-                        isEmittingStrongRedstonePower(level, pos.south(), Direction.SOUTH) ||
-                        isEmittingStrongRedstonePower(level, pos.north(), Direction.NORTH);
-                be.setPoweredByRedstone(powered);
-            }
-        });
-
+        TorcherinoLogic.neighborUpdate(state, level, pos, neighborBlock, neighborPos, boolean_1, (be) ->
+                be.setPoweredByRedstone(level.hasNeighborSignal(pos)));
     }
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         TorcherinoLogic.onPlaced(level, pos, state, placer, stack, this);
+    }
+
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    public BlockEntity createTileEntity(BlockState state, BlockGetter level) {
+        return new TorcherinoBlockEntity();
     }
 }
