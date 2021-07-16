@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import torcherino.Torcherino;
-import torcherino.api.blocks.entity.TorcherinoBlockEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
 
 import java.util.Random;

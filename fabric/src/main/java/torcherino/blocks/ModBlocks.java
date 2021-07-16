@@ -21,8 +21,8 @@ import torcherino.api.blocks.JackoLanterinoBlock;
 import torcherino.api.blocks.LanterinoBlock;
 import torcherino.api.blocks.TorcherinoBlock;
 import torcherino.api.blocks.WallTorcherinoBlock;
-import torcherino.api.blocks.entity.TocherinoBlockEntityType;
-import torcherino.api.blocks.entity.TorcherinoBlockEntity;
+import torcherino.temp.TocherinoBlockEntityType;
+import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Map;
 

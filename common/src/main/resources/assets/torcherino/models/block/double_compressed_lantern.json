@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_lantern",
+  "textures": {
+    "lantern": "torcherino:blocks/double_compressed_lantern"
+  }
+}

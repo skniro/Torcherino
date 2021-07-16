@@ -1,11 +1,14 @@
 package torcherino.network;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
-import torcherino.client.gui.TorcherinoScreen;
+import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.client.screen.TorcherinoScreen;
 
 import java.util.function.Supplier;
 
@@ -38,7 +41,17 @@ public final class OpenScreenMessage {
     static void handle(final OpenScreenMessage message, final Supplier<NetworkEvent.Context> contextSupplier) {
         final NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
-            TorcherinoScreen.open(message);
+            final Minecraft minecraft = Minecraft.getInstance();
+            minecraft.submitAsync(() ->
+            {
+                final BlockEntity tileEntity = minecraft.player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof TorcherinoBlockEntity blockEntity)
+                {
+                    final TorcherinoScreen screen = new TorcherinoScreen(message.title, message.xRange, message.zRange, message.yRange,
+                            message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTierName());
+                    minecraft.setScreen(screen);
+                }
+            });
             context.setPacketHandled(true);
         }
     }

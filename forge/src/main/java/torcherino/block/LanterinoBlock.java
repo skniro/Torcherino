@@ -25,7 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
 import torcherino.api.TierSupplier;
-import torcherino.block.tile.TorcherinoTileEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 
@@ -46,13 +46,13 @@ public class LanterinoBlock extends Lantern implements TierSupplier
     { return world.getBlockState(pos).getDirectSignal(world, pos, direction) > 0; }
 
     @Override
-    public ResourceLocation getTierName() { return tierName; }
+    public ResourceLocation getTier() { return tierName; }
 
     @Override
     public boolean hasTileEntity(final BlockState state) { return true; }
 
     @Override
-    public BlockEntity createTileEntity(final BlockState state, final BlockGetter world) { return new TorcherinoTileEntity(); }
+    public BlockEntity createTileEntity(final BlockState state, final BlockGetter world) { return new TorcherinoBlockEntity(); }
 
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder)
@@ -76,7 +76,7 @@ public class LanterinoBlock extends Lantern implements TierSupplier
         if (stack.hasCustomHoverName())
         {
             final BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName()); }
+            if (tile instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tile).setCustomName(stack.getDisplayName()); }
         }
         if (Config.INSTANCE.log_placement)
         {
@@ -91,7 +91,7 @@ public class LanterinoBlock extends Lantern implements TierSupplier
     public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final Random random)
     {
         final BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tileEntity).tick(); }
+        if (tileEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tileEntity).tick(); }
     }
 
     @Override
@@ -101,7 +101,7 @@ public class LanterinoBlock extends Lantern implements TierSupplier
     public void onPlace(final BlockState state, final Level world, final BlockPos pos, final BlockState oldState, final boolean b)
     {
         final BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.getValue(BlockStateProperties.POWERED)); }
+        if (tileEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tileEntity).setPoweredByRedstone(state.getValue(BlockStateProperties.POWERED)); }
     }
 
     @Override @SuppressWarnings("deprecation")
@@ -109,7 +109,7 @@ public class LanterinoBlock extends Lantern implements TierSupplier
     {
         if (world.isClientSide) { return; }
         final BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TorcherinoTileEntity)
+        if (tileEntity instanceof TorcherinoBlockEntity)
         {
             final boolean powered;
             if (state.getValue(BlockStateProperties.HANGING).equals(true)) { powered = world.hasSignal(pos.above(), Direction.UP); }
@@ -123,7 +123,7 @@ public class LanterinoBlock extends Lantern implements TierSupplier
             if (state.getValue(BlockStateProperties.POWERED) != powered)
             {
                 world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, powered));
-                ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered);
+                ((TorcherinoBlockEntity) tileEntity).setPoweredByRedstone(powered);
             }
         }
     }

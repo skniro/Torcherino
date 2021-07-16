@@ -10,7 +10,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import torcherino.Torcherino;
 import torcherino.api.TorcherinoAPI;
-import torcherino.block.tile.TorcherinoTileEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
 
 public final class Networker {
     public static final Networker INSTANCE = new Networker();
@@ -30,8 +30,8 @@ public final class Networker {
             return;
         }
         final BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TorcherinoTileEntity) {
-            torcherinoChannel.sendTo(((TorcherinoTileEntity) tile).createOpenMessage(), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        if (tile instanceof TorcherinoBlockEntity) {
+            torcherinoChannel.sendTo(((TorcherinoBlockEntity) tile).createOpenMessage(), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 

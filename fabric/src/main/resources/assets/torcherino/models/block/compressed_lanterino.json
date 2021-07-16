@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "torcherino:blocks/compressed_lanterino_top",
-    "front": "torcherino:blocks/compressed_lanterino",
-    "side": "torcherino:blocks/compressed_lanterino_side"
-  }
-}

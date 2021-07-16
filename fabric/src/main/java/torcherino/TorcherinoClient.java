@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.blocks.entity.TorcherinoBlockEntity;
-import torcherino.api.impl.TorcherinoImpl;
+import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.screen.TorcherinoScreen;
 
 import java.util.HashMap;

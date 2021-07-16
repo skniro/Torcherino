@@ -22,7 +22,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoLogic;
-import torcherino.api.blocks.entity.TorcherinoBlockEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Random;
 

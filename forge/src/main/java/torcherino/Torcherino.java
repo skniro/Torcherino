@@ -23,7 +23,7 @@ public final class Torcherino {
 
     public Torcherino() {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        Config.initialise();
+        Config.initialize();
         ModContent.initialise(eventBus);
         Networker.INSTANCE.initialise();
         eventBus.addListener(this::processIMC);
@@ -55,9 +55,9 @@ public final class Torcherino {
                 }
             } else if (method.equals("blacklist_tile")) {
                 if (value instanceof ResourceLocation) {
-                    TorcherinoAPI.INSTANCE.blacklistTileEntity((ResourceLocation) value);
+                    TorcherinoAPI.INSTANCE.blacklistBlockEntity((ResourceLocation) value);
                 } else if (value instanceof BlockEntityType) {
-                    TorcherinoAPI.INSTANCE.blacklistTileEntity((BlockEntityType<?>) value);
+                    TorcherinoAPI.INSTANCE.blacklistBlockEntity((BlockEntityType<?>) value);
                 } else {
                     LOGGER.error("Received blacklist_tile message with invalid value, must be either a TileEntityType or ResourceLocation.");
                 }

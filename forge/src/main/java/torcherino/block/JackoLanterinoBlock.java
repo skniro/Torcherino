@@ -23,7 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.StringUtils;
 import torcherino.Torcherino;
 import torcherino.api.TierSupplier;
-import torcherino.block.tile.TorcherinoTileEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
 import torcherino.network.Networker;
 
@@ -44,13 +44,13 @@ public class JackoLanterinoBlock extends HorizontalDirectionalBlock implements T
     }
 
     @Override
-    public ResourceLocation getTierName() { return tierName; }
+    public ResourceLocation getTier() { return tierName; }
 
     @Override
     public boolean hasTileEntity(final BlockState state) { return true; }
 
     @Override
-    public BlockEntity createTileEntity(final BlockState state, final BlockGetter world) { return new TorcherinoTileEntity(); }
+    public BlockEntity createTileEntity(final BlockState state, final BlockGetter world) { return new TorcherinoBlockEntity(); }
 
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder)
@@ -74,7 +74,7 @@ public class JackoLanterinoBlock extends HorizontalDirectionalBlock implements T
         if (stack.hasCustomHoverName())
         {
             final BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tile).setCustomName(stack.getDisplayName()); }
+            if (tile instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tile).setCustomName(stack.getDisplayName()); }
         }
         if (Config.INSTANCE.log_placement)
         {
@@ -89,7 +89,7 @@ public class JackoLanterinoBlock extends HorizontalDirectionalBlock implements T
     public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final Random random)
     {
         final BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tileEntity).tick(); }
+        if (tileEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tileEntity).tick(); }
     }
 
     @Override @SuppressWarnings("deprecation")
@@ -99,7 +99,7 @@ public class JackoLanterinoBlock extends HorizontalDirectionalBlock implements T
     public void onPlace(final BlockState state, final Level world, final BlockPos pos, final BlockState oldState, final boolean b)
     {
         final BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(state.getValue(POWERED)); }
+        if (tileEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tileEntity).setPoweredByRedstone(state.getValue(POWERED)); }
     }
 
     @Override @SuppressWarnings("ConstantConditions")
@@ -118,7 +118,7 @@ public class JackoLanterinoBlock extends HorizontalDirectionalBlock implements T
         {
             world.setBlockAndUpdate(pos, state.setValue(POWERED, powered));
             final BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof TorcherinoTileEntity) { ((TorcherinoTileEntity) tileEntity).setPoweredByRedstone(powered); }
+            if (tileEntity instanceof TorcherinoBlockEntity) { ((TorcherinoBlockEntity) tileEntity).setPoweredByRedstone(powered); }
         }
     }
 }

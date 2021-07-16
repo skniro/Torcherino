@@ -8,7 +8,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.block.tile.TorcherinoTileEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -41,10 +41,10 @@ public final class ValueUpdateMessage {
         {
             final Level world = context.getSender().level;
             final BlockEntity tileEntity = world.getBlockEntity(message.pos);
-            if (tileEntity instanceof TorcherinoTileEntity) {
-                final TorcherinoTileEntity torcherinoTileEntity = (TorcherinoTileEntity) tileEntity;
-                if (message.withinBounds(TorcherinoAPI.INSTANCE.getTiers().get(torcherinoTileEntity.getTierName()))) {
-                    torcherinoTileEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode);
+            if (tileEntity instanceof TorcherinoBlockEntity) {
+                final TorcherinoBlockEntity torcherinoBlockEntity = (TorcherinoBlockEntity) tileEntity;
+                if (message.withinBounds(TorcherinoAPI.INSTANCE.getTiers().get(torcherinoBlockEntity.getTierName()))) {
+                    torcherinoBlockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode);
                 }
             }
         });
@@ -52,7 +52,7 @@ public final class ValueUpdateMessage {
     }
 
     private boolean withinBounds(final Tier tier) {
-        if (xRange > tier.XZ_RANGE || zRange > tier.XZ_RANGE || yRange > tier.Y_RANGE || speed > tier.MAX_SPEED || redstoneMode > 3 ||
+        if (xRange > tier.getXZRange() || zRange > tier.getXZRange() || yRange > tier.getYRange() || speed > tier.getMaxSpeed() || redstoneMode > 3 ||
                 xRange < 0 || zRange < 0 || yRange < 0 || speed < 1 || redstoneMode < 0) {
             Torcherino.LOGGER.error("Data received from client is invalid.");
             return false;

@@ -20,14 +20,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.TorcherinoWallBlock;
-import torcherino.block.tile.CustomTileEntityType;
-import torcherino.block.tile.TorcherinoTileEntity;
+import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.temp.TocherinoBlockEntityType;
 
 @Mod.EventBusSubscriber(modid = Torcherino.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModContent {
@@ -42,11 +41,11 @@ public final class ModContent {
         PARTICLE_TYPES.register(bus);
         TILE_ENTITIES.register(bus);
         TILE_ENTITIES.register("torcherino", TORCHERINO_TILE_ENTITY.delegate);
-        TorcherinoAPI.INSTANCE.blacklistTileEntity(TORCHERINO_TILE_ENTITY);
+        TorcherinoAPI.INSTANCE.blacklistBlockEntity(TORCHERINO_TILE_ENTITY);
         TorcherinoAPI.INSTANCE.getTiers().keySet().forEach(ModContent::register);
-    }    @SuppressWarnings("ConstantConditions")
-    public static final BlockEntityType<TorcherinoTileEntity> TORCHERINO_TILE_ENTITY = new CustomTileEntityType<>(TorcherinoTileEntity::new,
-            block -> block instanceof TierSupplier, null);
+    }
+
+    public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_TILE_ENTITY = new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null);
 
     private static String getPath(final ResourceLocation tierID, final String type) {
         return (tierID.getPath().equals("normal") ? "" : tierID.getPath() + "_") + type;

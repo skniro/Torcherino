@@ -5,14 +5,15 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.api.impl.TorcherinoImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class S2CTierSyncMessage {
     private final Map<ResourceLocation, Tier> tiers;
 
@@ -48,6 +49,6 @@ public final class S2CTierSyncMessage {
     }
 
     private static void writeTier(final ResourceLocation name, final Tier tier, final FriendlyByteBuf buffer) {
-        buffer.writeResourceLocation(name).writeInt(tier.MAX_SPEED).writeInt(tier.XZ_RANGE).writeInt(tier.Y_RANGE);
+        buffer.writeResourceLocation(name).writeInt(tier.getMaxSpeed()).writeInt(tier.getXZRange()).writeInt(tier.getYRange());
     }
 }
