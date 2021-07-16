@@ -24,7 +24,8 @@ dependencies {
         this.crane("dev.architectury:crane:1.16.5+build.16")
     })
     forge("net.minecraftforge:forge:${properties["minecraft_version"]}-${properties["forge_version"]}")
-
+    // todo: remove when architectury loom updates to fix mcp annotation issue
+    compileOnly("dev.architectury:architectury-loom-forge-runtime:0.9.0.147")
     modRuntime("mezz.jei:jei-${properties["minecraft_version"]}:${properties["jei_version"]}")
 }
 
