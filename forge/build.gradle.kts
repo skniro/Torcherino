@@ -23,6 +23,9 @@ dependencies {
         this.officialMojangMappings()
         this.crane("dev.architectury:crane:1.16.5+build.16")
     })
+    forge("net.minecraftforge:forge:${properties["minecraft_version"]}-${properties["forge_version"]}")
+
+    modRuntime("mezz.jei:jei-${properties["minecraft_version"]}:${properties["jei_version"]}")
 }
 
 repositories {
@@ -38,12 +41,31 @@ repositories {
             includeGroup("mezz.jei")
         }
     }
+    exclusiveContent {
+        forRepository {
+            mavenCentral()
+        }
+        filter {
+            includeGroup("blue.endless")
+        }
+    }
+}
+
+configurations {
+    create("shade")
+    implementation.get().extendsFrom(configurations["shade"])
 }
 
 dependencies {
-    forge("net.minecraftforge:forge:${properties["minecraft_version"]}-${properties["forge_version"]}")
+    configurations["shade"]("blue.endless:jankson:1.2.0")
+}
 
-    modRuntime("mezz.jei:jei-${properties["minecraft_version"]}:${properties["jei_version"]}")
+tasks.withType<Jar>() {
+    configurations["shade"].forEach {
+        from(zipTree(it)) {
+            exclude("META-INF", "META-INF/**")
+        }
+    }
 }
 
 tasks.withType<ProcessResources>() {

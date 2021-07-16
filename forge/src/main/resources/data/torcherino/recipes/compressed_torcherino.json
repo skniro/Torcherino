@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "TTT",
+    "TTT",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "torcherino:torcherino"
+    }
+  },
+  "result": {
+    "item": "torcherino:compressed_torcherino"
+  }
+}
