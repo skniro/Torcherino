@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "torcherino.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MaybeTempWorldMixin",
+    "TempPlayerManagerMixin"
+  ],
+  "client": [
+    "ParticleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

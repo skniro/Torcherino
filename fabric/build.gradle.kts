@@ -15,6 +15,8 @@ loom {
             ideConfigGenerated(false)
         }
     }
+
+    accessWidener = file("src/main/resources/torcherino.accesswidener")
 }
 
 dependencies {
@@ -41,6 +43,17 @@ repositories {
             includeGroup("com.terraformersmc")
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "JitPack (Jankson-Fabric)"
+                url = uri("https://jitpack.io")
+            }
+        }
+        filter {
+            includeGroup("com.github.CottonMC")
+        }
+    }
 }
 
 val excludeFabric: (ExternalModuleDependency) -> Unit = {
@@ -49,13 +62,14 @@ val excludeFabric: (ExternalModuleDependency) -> Unit = {
 
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${properties["fabric_loader_version"]}")
-    modApi("net.fabricmc.fabric-api:fabric-api:${properties["fabric_api_version"]}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${properties["fabric_api_version"]}")
 
-
-    modCompileOnly("io.github.prospector:modmenu:${properties["modmenu_version"]}", excludeFabric)
     modRuntime("io.github.prospector:modmenu:${properties["modmenu_version"]}")
 
     modRuntime("me.shedaniel:RoughlyEnoughItems:${properties["rei_version"]}")
+
+    modImplementation("com.github.CottonMC:Jankson-Fabric:${properties["jankson_version"]}")
+    include("com.github.CottonMC:Jankson-Fabric:${properties["jankson_version"]}")
 }
 
 tasks.withType<ProcessResources>() {
