@@ -3,11 +3,11 @@
   "package": "torcherino.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MaybeTempWorldMixin",
-    "TempPlayerManagerMixin"
+    "BlockEntityAddedToLevelMixin",
+    "PlayerConnectionEventsMixin"
   ],
   "client": [
-    "ParticleMixin"
+    "ParticleProvidersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

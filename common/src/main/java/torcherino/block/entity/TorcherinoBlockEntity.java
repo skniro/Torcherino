@@ -3,7 +3,6 @@ package torcherino.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -23,9 +22,8 @@ import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
-import torcherino.temp.ExpandedBlockEntity;
 
-public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TickableBlockEntity, TierSupplier, ExpandedBlockEntity {
+public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TickableBlockEntity, TierSupplier {
     private static final String onlineMode = Config.INSTANCE.online_mode;
     public static int randomTicks;
     private Component customName;
@@ -67,7 +65,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         return hasCustomName() ? customName : new TranslatableComponent(getBlockState().getBlock().getDescriptionId());
     }
 
-    @Override
+    // Invoked by mixin or overrides forge's IForgeTileEntity#onLoad method
     public void onLoad() {
         if (level.isClientSide) {
             return;
@@ -130,6 +128,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
             this.redstoneMode = redstoneMode;
             area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
                     worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
+            this.getBlockState().neighborChanged(level, worldPosition, null, null, false);
             return true;
         }
         return false;
@@ -200,6 +199,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     }
 
     public void openTorcherinoScreen(ServerPlayer player) {
-        NetworkUtils.getInstance().s2c_openTorcherinoScreen((ServerPlayer) player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
+        NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
     }
 }

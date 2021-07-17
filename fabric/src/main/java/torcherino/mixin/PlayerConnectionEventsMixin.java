@@ -11,7 +11,8 @@ import torcherino.temp.PlayerConnectCallback;
 import torcherino.temp.PlayerDisconnectCallback;
 
 @Mixin(PlayerList.class)
-public abstract class TempPlayerManagerMixin
+// todo: replace with networking v1 connection events
+public abstract class PlayerConnectionEventsMixin
 {
     @Inject(method = "placeNewPlayer(Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;)V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/server/level/ServerLevel;addNewPlayer(Lnet/minecraft/server/level/ServerPlayer;)V"))

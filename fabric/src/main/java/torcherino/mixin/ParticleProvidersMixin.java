@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import torcherino.Torcherino;
 
 @Mixin(ParticleEngine.class)
-public abstract class ParticleMixin {
+// todo: consider replacing with fabric's api
+public abstract class ParticleProvidersMixin {
     @Shadow
     protected abstract <T extends ParticleOptions> void register(final ParticleType<T> particleType, final ParticleEngine.SpriteParticleRegistration<T> spriteParticleRegistration);
 
     @Inject(method = "registerProviders()V", at = @At("TAIL"))
     private void torcherino_registerAdditionalFactories(CallbackInfo ci) {
-        // todo: Maybe use fabric's api?
         Torcherino.particles.forEach(pt -> register(pt, FlameParticle.Provider::new));
     }
 }

@@ -9,6 +9,7 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.function.Supplier;
 
 // todo: nuke this
+@Deprecated
 @SuppressWarnings("SpellCheckingInspection")
 public class TocherinoBlockEntityType extends BlockEntityType<TorcherinoBlockEntity> {
     public TocherinoBlockEntityType(Supplier<TorcherinoBlockEntity> supplier, Type type) {

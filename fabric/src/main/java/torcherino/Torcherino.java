@@ -46,7 +46,7 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer {
             if (path.equals("normal_flame")) {
                 path = "flame";
             }
-            particles.add(Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(MOD_ID, path), new torcherino.particle.DefaultParticleType(false)));
+            particles.add(Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(MOD_ID, path), new SimpleParticleType(false)));
         });
         ModBlocks.INSTANCE.initialize();
         // todo: replace with networking v1
