@@ -3,8 +3,7 @@
   "package": "torcherino.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BlockEntityAddedToLevelMixin",
-    "PlayerConnectionEventsMixin"
+    "BlockEntityAddedToLevelMixin"
   ],
   "client": [
     "ParticleProvidersMixin"

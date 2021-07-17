@@ -1,12 +1,9 @@
 package torcherino;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,16 +13,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
-import torcherino.platform.NetworkUtils;
 import torcherino.platform.NetworkUtilsImpl;
-
-import java.util.HashSet;
 
 @Mod(Torcherino.MOD_ID)
 public final class Torcherino {
     public static final Logger LOGGER = LogManager.getLogger(Torcherino.class);
     public static final String MOD_ID = "torcherino";
-    private static final HashSet<String> allowedUuids = new HashSet<>();
 
     public Torcherino() {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -38,27 +31,6 @@ public final class Torcherino {
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
-        MinecraftForge.EVENT_BUS.addListener(this::playerLoggedIn);
-        MinecraftForge.EVENT_BUS.addListener(this::playerLoggedOut);
-    }
-
-    public void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            allowedUuids.add(player.getStringUUID());
-            NetworkUtils.getInstance().s2c_sendTorcherinoTiers(player);
-        }
-    }
-
-    public void playerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            if (Config.INSTANCE.online_mode.equals("ONLINE")) {
-                allowedUuids.remove(player.getStringUUID());
-            }
-        }
-    }
-
-    public static boolean hasIsOnline(String uuid) {
-        return allowedUuids.contains(uuid);
     }
 
     public static ResourceLocation getRl(final String path) {

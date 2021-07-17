@@ -12,14 +12,11 @@
     "sources": "https://github.com/NinjaPhenix/FabricMods/tree/1.16.4",
     "issues": "https://github.com/NinjaPhenix/FabricMods/issues"
   },
-  "license": "LGPL-3.0",
+  "license": "LGPL-3.0-only",
   "icon": "torcherino.png",
   "entrypoints": {
     "main": [
       "torcherino.Torcherino"
-    ],
-    "client": [
-      "torcherino.TorcherinoClient"
     ],
     "torcherinoInitializer": [
       "torcherino.Torcherino"

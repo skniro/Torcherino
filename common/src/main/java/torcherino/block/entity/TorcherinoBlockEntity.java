@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
@@ -24,7 +23,6 @@ import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TickableBlockEntity, TierSupplier {
-    private static final String onlineMode = Config.INSTANCE.online_mode;
     public static int randomTicks;
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
@@ -80,7 +78,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) {
             return;
         }
-        if (!onlineMode.equals("") && !Torcherino.hasIsOnline(getOwner())) {
+        if (!Config.INSTANCE.online_mode.equals("") && !NetworkUtils.getInstance().s_isPlayerOnline(this.getOwner())) {
             return;
         }
         // todo: get on load and then when updated
