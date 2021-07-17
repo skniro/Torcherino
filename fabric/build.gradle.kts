@@ -13,6 +13,7 @@ loom {
         named("server") {
             vmArgs("-XX:+IgnoreUnrecognizedVMOptions")
             ideConfigGenerated(false)
+            serverWithGui()
         }
     }
 

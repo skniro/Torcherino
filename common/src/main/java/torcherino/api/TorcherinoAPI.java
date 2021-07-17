@@ -37,11 +37,11 @@ public interface TorcherinoAPI {
     boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange);
 
     /**
-     * @param block The Resource Location of the block to be blacklisted.
+     * @param blockId The Resource Location of the block to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if no block exists or already on blacklist.
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
      */
-    boolean blacklistBlock(ResourceLocation block);
+    boolean blacklistBlock(ResourceLocation blockId);
 
     /**
      * @param block The block to be blacklisted.
@@ -51,13 +51,13 @@ public interface TorcherinoAPI {
     boolean blacklistBlock(Block block);
 
     /**
-     * @param blockEntityId The id of the block entity type to be blacklisted.
+     * @param blockEntityTypeId The id of the block entity type to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if no block entity type exists or already on blacklist.
      * @deprecated Removed in 15.0.0
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
      */
     @Deprecated
-    boolean blacklistTileEntity(ResourceLocation blockEntityId);
+    boolean blacklistTileEntity(ResourceLocation blockEntityTypeId);
 
     /**
      * @param blockEntityType The block entity type to be blacklisted.
@@ -86,11 +86,11 @@ public interface TorcherinoAPI {
 
     // todo: update version numbers
     /**
-     * @param blockEntityId The id of the block entity type to be blacklisted.
+     * @param blockEntityTypeId The id of the block entity type to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if already on blacklist.
      * @since FABRIC - 1.9.51, FORGE - 14.0.0
      */
-    boolean blacklistBlockEntity(ResourceLocation blockEntityId);
+    boolean blacklistBlockEntity(ResourceLocation blockEntityTypeId);
 
     /**
      * @param blockEntityType The block entity type to be blacklisted.

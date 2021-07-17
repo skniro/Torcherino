@@ -14,6 +14,7 @@ import torcherino.api.TorcherinoAPI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class TorcherinoImpl implements TorcherinoAPI {
@@ -23,7 +24,7 @@ public class TorcherinoImpl implements TorcherinoAPI {
     private final Set<BlockEntityType<?>> blacklistedTiles = new HashSet<>();
     private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
 
-    public boolean registerTier(final ResourceLocation name, final int maxSpeed, final int xzRange, final int yRange) {
+    public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange) {
         final Tier tier = new Tier(maxSpeed, xzRange, yRange);
         if (localTiers.containsKey(name)) {
             LOGGER.warn("Tier with id {} has already been registered.", name);
@@ -33,14 +34,14 @@ public class TorcherinoImpl implements TorcherinoAPI {
         return true;
     }
 
-    public boolean blacklistBlock(final ResourceLocation block) {
-        if (Registry.BLOCK.containsKey(block)) {
-            final Block b = Registry.BLOCK.get(block);
-            if (blacklistedBlocks.contains(b)) {
+    public boolean blacklistBlock(ResourceLocation blockId) {
+        Optional<Block> block = Registry.BLOCK.getOptional(blockId);
+        if (block.isPresent()) {
+            if (blacklistedBlocks.contains(block.get())) {
                 LOGGER.warn("Block with id {} is already blacklisted.", block);
                 return false;
             }
-            blacklistedBlocks.add(b);
+            blacklistedBlocks.add(block.get());
             return true;
         }
         LOGGER.warn("Block with id {} does not exist.", block);
@@ -48,7 +49,7 @@ public class TorcherinoImpl implements TorcherinoAPI {
     }
 
     @Override
-    public boolean blacklistBlock(final Block block) {
+    public boolean blacklistBlock(Block block) {
         if (blacklistedBlocks.contains(block)) {
             LOGGER.warn("Block with id {} is already blacklisted.", Registry.BLOCK.getKey(block));
             return false;
@@ -59,8 +60,8 @@ public class TorcherinoImpl implements TorcherinoAPI {
 
     // todo: remove in 15.0.0
     @Override
-    public boolean blacklistTileEntity(ResourceLocation blockEntityId) {
-        return this.blacklistBlockEntity(blockEntityId);
+    public boolean blacklistTileEntity(ResourceLocation blockEntityTypeId) {
+        return this.blacklistBlockEntity(blockEntityTypeId);
     }
 
     // todo: remove in 15.0.0
@@ -81,17 +82,17 @@ public class TorcherinoImpl implements TorcherinoAPI {
     }
 
     @Override
-    public boolean blacklistBlockEntity(ResourceLocation blockEntityId) {
-        if (Registry.BLOCK_ENTITY_TYPE.containsKey(blockEntityId)) {
-            final BlockEntityType<?> type = Registry.BLOCK_ENTITY_TYPE.get(blockEntityId);
-            if (blacklistedTiles.contains(type)) {
-                LOGGER.warn("BlockEntityType with id {} is already blacklisted.", blockEntityId);
+    public boolean blacklistBlockEntity(ResourceLocation blockEntityTypeId) {
+        Optional<BlockEntityType<?>> blockEntityType = Registry.BLOCK_ENTITY_TYPE.getOptional(blockEntityTypeId);
+        if (blockEntityType.isPresent()) {
+            if (blacklistedTiles.contains(blockEntityType.get())) {
+                LOGGER.warn("BlockEntityType with id {} is already blacklisted.", blockEntityTypeId);
                 return false;
             }
-            blacklistedTiles.add(type);
+            blacklistedTiles.add(blockEntityType.get());
             return true;
         }
-        LOGGER.warn("BlockEntityType with id {} does not exist.", blockEntityId);
+        LOGGER.warn("BlockEntityType with id {} does not exist.", blockEntityTypeId);
         return false;
     }
 
