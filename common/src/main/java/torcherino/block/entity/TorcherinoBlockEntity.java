@@ -18,17 +18,27 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
 
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
-    public static int randomTicks;
+    private static final int TICKS_PER_SECONDS = 20;
+    private static final int SECONDS_PER_UPDATE = 5;
+    public int randomTicks;
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
-    private Iterable<BlockPos> area;
+    private boolean areSettingsValid = false;
+    private Set<TickableBlock> tickableBlockCache;
+    private long lastCacheUpdate = -TICKS_PER_SECONDS * SECONDS_PER_UPDATE * 2;
     private boolean active;
     private ResourceLocation tierID;
     private String uuid = "";
@@ -37,16 +47,73 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         super(Registry.BLOCK_ENTITY_TYPE.get(new ResourceLocation("torcherino", "torcherino")), pos, state);
     }
 
+    private static record TickableBlock(@NotNull BlockPos pos, @Nullable BlockEntityTicker<BlockEntity> ticker) {
+        public boolean hasTicker() {
+            return ticker != null;
+        }
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, TorcherinoBlockEntity entity) {
-        if (!entity.active || entity.speed == 0 || (entity.xRange == 0 && entity.yRange == 0 && entity.zRange == 0)) {
-            return;
+        if (entity.active && entity.areSettingsValid && level instanceof ServerLevel serverLevel) {
+            if (!Config.INSTANCE.online_mode.equals("") && !NetworkUtils.getInstance().s_isPlayerOnline(entity.getOwner())) {
+                return;
+            }
+            if (level.getGameTime() - entity.lastCacheUpdate > SECONDS_PER_UPDATE * TICKS_PER_SECONDS) {
+                entity.tickableBlockCache = BlockPos.betweenClosedStream(pos.getX() - entity.xRange, pos.getY() - entity.yRange, pos.getZ() - entity.zRange, pos.getX() + entity.xRange, pos.getY() + entity.yRange, pos.getZ() + entity.zRange)
+                                                    .map(blockPos -> {
+                                                        var blockState = level.getBlockState(blockPos);
+                                                        var block = blockState.getBlock();
+                                                        if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) {
+                                                            return null;
+                                                        }
+                                                        if (block instanceof EntityBlock eBlock) {
+                                                            var blockEntity = level.getBlockEntity(blockPos);
+                                                            if (blockEntity != null) {
+                                                                if (TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType())) {
+                                                                    return null;
+                                                                }
+                                                                var ticker = (BlockEntityTicker<BlockEntity>) eBlock.getTicker(level, blockState, blockEntity.getType());
+                                                                return new TickableBlock(blockPos, ticker);
+                                                            }
+                                                        }
+                                                        return new TickableBlock(blockPos, null);
+                                                    })
+                                                    .filter(Objects::nonNull)
+                                                    .collect(Collectors.toSet());
+                // todo: get on load and then when updated
+                entity.randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+                entity.lastCacheUpdate = level.getGameTime();
+            }
+            for (TickableBlock tickableBlock : entity.tickableBlockCache) {
+                entity.tickBlock(serverLevel, tickableBlock, Mth.clamp(4096 / (entity.speed * Config.INSTANCE.random_tick_rate), 1, 4096));
+            }
         }
-        if (!Config.INSTANCE.online_mode.equals("") && !NetworkUtils.getInstance().s_isPlayerOnline(entity.getOwner())) {
-            return;
+
+    }
+
+    private void tickBlock(ServerLevel level, TickableBlock tickableBlock, int scaledTickRate) {
+        BlockState state = level.getBlockState(tickableBlock.pos);
+        Block block = state.getBlock();
+        // todo: should I special code checks for blocks like CropBLock which stop ticking once fully grown?
+        if (block.isRandomlyTicking(state) && level.getRandom().nextInt(scaledTickRate) < randomTicks) {
+            state.randomTick(level, tickableBlock.pos, level.getRandom());
         }
-        // todo: get on load and then when updated
-        randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
-        entity.area.forEach(entity::tickBlock);
+        if (tickableBlock.hasTicker()) {
+            BlockEntity entity = level.getBlockEntity(tickableBlock.pos);
+            if (entity == null || entity.isRemoved()) {
+                tickableBlockCache.remove(tickableBlock);
+            } else {
+                for (int i = 0; i < speed; i++) {
+                    if (entity.isRemoved()) {
+                        tickableBlockCache.remove(tickableBlock);
+                        break;
+                    }
+                    // invalid, tickableBlock.hasTicker checks for this.
+                    //noinspection ConstantConditions
+                    tickableBlock.ticker.tick(level, tickableBlock.pos, state, entity);
+                }
+            }
+        }
     }
 
     @Override
@@ -84,35 +151,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         }
     }
 
-    private void tickBlock(BlockPos pos) {
-        BlockState blockState = level.getBlockState(pos);
-        Block block = blockState.getBlock();
-        if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) {
-            return;
-        }
-        if (level instanceof ServerLevel && block.isRandomlyTicking(blockState) &&
-                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) {
-            blockState.randomTick((ServerLevel) level, pos, level.getRandom());
-        }
-        if (!(block instanceof EntityBlock entityBlock)) {
-            return;
-        }
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity != null) {
-            //noinspection unchecked
-            BlockEntityTicker<BlockEntity> ticker = (BlockEntityTicker<BlockEntity>) entityBlock.getTicker(level, blockState, blockEntity.getType());
-            if (blockEntity.isRemoved() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) || ticker == null) {
-                return;
-            }
-            for (int i = 0; i < speed; i++) {
-                if (blockEntity.isRemoved()) {
-                    break;
-                }
-                ticker.tick(level, pos, blockState, blockEntity);
-            }
-        }
-    }
-
     public boolean readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTier());
         if (this.valueInRange(xRange, 0, tier.xzRange()) &&
@@ -125,8 +163,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             this.yRange = yRange;
             this.speed = speed;
             this.redstoneMode = redstoneMode;
-            area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
-                    worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
+            this.areSettingsValid = true;
             this.getBlockState().neighborChanged(level, worldPosition, null, null, false);
             return true;
         }
@@ -186,9 +223,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         redstoneMode = tag.getInt("RedstoneMode");
         active = tag.getBoolean("Active");
         uuid = tag.getString("Owner");
-
-        area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
-                worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
+        this.areSettingsValid = true;
     }
 
     public void openTorcherinoScreen(ServerPlayer player) {
