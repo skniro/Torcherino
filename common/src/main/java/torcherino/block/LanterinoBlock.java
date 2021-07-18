@@ -95,10 +95,12 @@ public final class LanterinoBlock extends Lantern implements EntityBlock, TierSu
         TorcherinoLogic.onPlaced(level, pos, state, placer, stack, this);
     }
 
+    // todo: remove in 1.17
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
 
+    // todo: replace with newBlockEntity in 1.17
     @NotNull
     public BlockEntity createTileEntity(BlockState state, BlockGetter level) {
         return new TorcherinoBlockEntity();

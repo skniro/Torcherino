@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
@@ -75,11 +75,13 @@ public final class WallTorcherinoBlock extends WallTorchBlock implements EntityB
         TorcherinoLogic.onPlaced(level, pos, state, placer, stack, this);
     }
 
+    // todo: remove in 1.17
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
 
-    @Nullable
+    // todo: replace with newBlockEntity in 1.17
+    @NotNull
     public BlockEntity createTileEntity(BlockState state, BlockGetter level) {
         return new TorcherinoBlockEntity();
     }

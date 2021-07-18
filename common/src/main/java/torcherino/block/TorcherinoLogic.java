@@ -40,8 +40,7 @@ public final class TorcherinoLogic {
         return InteractionResult.SUCCESS;
     }
 
-    // todo: name boolean_1
-    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1,
+    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving,
                                       Consumer<TorcherinoBlockEntity> func) {
         if (world.isClientSide) {
             return;

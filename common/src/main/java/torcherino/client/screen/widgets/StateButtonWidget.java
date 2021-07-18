@@ -17,8 +17,6 @@ public abstract class StateButtonWidget extends Button {
     private Component narrationMessage;
 
     public StateButtonWidget(Screen screen, int x, int y) {
-        // todo: should this have a translation?
-        //  can I just use the parent `message` field?
         super(x, y, 20, 20, TextComponent.EMPTY, null);
         this.screen = screen;
         this.initialize();

@@ -147,7 +147,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     }
 
     public void setPoweredByRedstone(boolean powered) {
-        // todo: should this be an if statement?
         switch (redstoneMode) {
             case 0 -> active = !powered;
             case 1 -> active = powered;

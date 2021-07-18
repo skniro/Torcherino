@@ -106,46 +106,23 @@ public final class TorcherinoScreen extends Screen {
             }
 
             private void setButtonMessage() {
-                String translationKey;
-                // todo: should this be replaced with an if statement?
-                switch (TorcherinoScreen.this.redstoneMode) {
-                    case 0:
-                        translationKey = "gui.torcherino.mode.normal";
-                        break;
-                    case 1:
-                        translationKey = "gui.torcherino.mode.inverted";
-                        break;
-                    case 2:
-                        translationKey = "gui.torcherino.mode.ignored";
-                        break;
-                    case 3:
-                        translationKey = "gui.torcherino.mode.off";
-                        break;
-                    default:
-                        translationKey = "gui.torcherino.mode.error";
-                        break;
-                }
+                String translationKey = switch (TorcherinoScreen.this.redstoneMode) {
+                    case 0 -> "gui.torcherino.mode.normal";
+                    case 1 -> "gui.torcherino.mode.inverted";
+                    case 2 -> "gui.torcherino.mode.ignored";
+                    case 3 -> "gui.torcherino.mode.off";
+                    default -> "gui.torcherino.mode.error";
+                };
                 this.setNarrationMessage(new TranslatableComponent("gui.torcherino.mode", new TranslatableComponent(translationKey)));
             }
 
             private void setButtonIcon() {
-                // todo: should this be replaced with an if statement?
                 switch (TorcherinoScreen.this.redstoneMode) {
-                    case 0:
-                        this.buttonIcon = new ItemStack(Items.REDSTONE);
-                        break;
-                    case 1:
-                        this.buttonIcon = new ItemStack(Items.REDSTONE_TORCH);
-                        break;
-                    case 2:
-                        this.buttonIcon = new ItemStack(Items.GUNPOWDER);
-                        break;
-                    case 3:
-                        this.buttonIcon = new ItemStack(Items.REDSTONE_LAMP);
-                        break;
-                    default:
-                        this.buttonIcon = new ItemStack(Items.FURNACE);
-                        break;
+                    case 0 -> this.buttonIcon = new ItemStack(Items.REDSTONE);
+                    case 1 -> this.buttonIcon = new ItemStack(Items.REDSTONE_TORCH);
+                    case 2 -> this.buttonIcon = new ItemStack(Items.GUNPOWDER);
+                    case 3 -> this.buttonIcon = new ItemStack(Items.REDSTONE_LAMP);
+                    default -> this.buttonIcon = new ItemStack(Items.FURNACE);
                 }
             }
 

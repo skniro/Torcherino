@@ -9,7 +9,6 @@ public abstract class GradatedSliderWidget extends AbstractSliderButton {
     private final float nudgeAmount;
 
     protected GradatedSliderWidget(int x, int y, int width, double progress, int permutations) {
-        // todo: Should this have a translation?
         super(x, y, width, 20, TextComponent.EMPTY, progress);
         nudgeAmount = 1.0F / permutations;
         this.updateMessage();
