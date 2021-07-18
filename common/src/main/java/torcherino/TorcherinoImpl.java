@@ -24,14 +24,13 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     private final Set<BlockEntityType<?>> blacklistedTiles = new HashSet<>();
     private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
 
-    public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange) {
+    public void registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange) {
         if (localTiers.containsKey(name)) {
             logger.warn("Tier with id {} has already been registered.", name);
-            return false;
+            return;
         }
         Tier tier = new Tier(maxSpeed, xzRange, yRange);
         localTiers.put(name, tier);
-        return true;
     }
 
     public boolean blacklistBlock(ResourceLocation blockId) {

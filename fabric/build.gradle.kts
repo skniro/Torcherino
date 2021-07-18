@@ -59,7 +59,7 @@ dependencies {
     modRuntime("me.shedaniel:RoughlyEnoughItems:${properties["rei_version"]}")
 }
 
-tasks.withType<ProcessResources>() {
+tasks.withType<ProcessResources> {
     val props = mutableMapOf("version" to properties["mod_version"]) // Needs to be mutable
     inputs.properties(props)
     filesMatching("fabric.mod.json") {
