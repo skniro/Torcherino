@@ -1,5 +1,7 @@
 package torcherino;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -27,20 +29,27 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
     @Override
     public void onInitialize() {
         Config.initialize();
-        TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {
-            if (!id.getNamespace().equals(MOD_ID)) {
-                return;
-            }
-            String path = id.getPath() + "_flame";
-            if (path.equals("normal_flame")) {
-                path = "flame";
-            }
-            ParticleFactoryRegistry.getInstance().register(Registry.register(Registry.PARTICLE_TYPE, Torcherino.resloc(path), new SimpleParticleType(false)),
-                    FlameParticle.Provider::new);
-        });
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {
+                if (!id.getNamespace().equals(MOD_ID)) {
+                    return;
+                }
+                String path = id.getPath() + "_flame";
+                if (path.equals("normal_flame")) {
+                    path = "flame";
+                }
+                this.registerTorchParticle(path);
+            });
+        }
         ModBlocks.INSTANCE.initialize();
         FabricLoader.getInstance().getEntrypoints("torcherinoInitializer", TorcherinoInitializer.class).forEach(TorcherinoInitializer::onTorcherinoInitialize);
         NetworkUtilsImpl.getInstance().initialize();
+    }
+
+    @Environment(EnvType.CLIENT)
+    private void registerTorchParticle(String tier) {
+        ParticleFactoryRegistry.getInstance().register(Registry.register(Registry.PARTICLE_TYPE, Torcherino.resloc(tier), new SimpleParticleType(false)),
+                FlameParticle.Provider::new);
     }
 
     @Override
