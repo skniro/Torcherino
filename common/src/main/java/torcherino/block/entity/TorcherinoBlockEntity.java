@@ -32,15 +32,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
-    private static final int TICKS_PER_SECONDS = 20;
-    private static final int SECONDS_PER_UPDATE = 5;
+    private final int cacheUpdateDelay = Config.INSTANCE.cache_update_delay;
     public int randomTicks;
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
     private boolean areSettingsValid = false;
     private final Set<TickableBlock> tickableBlockCache = new HashSet<>();
     private final Map<TickableBlock, Boolean> pendingBlocks = new HashMap<>();
-    private long lastCacheUpdate = -TICKS_PER_SECONDS * SECONDS_PER_UPDATE * 2;
+    private long lastCacheUpdate = -cacheUpdateDelay * 2L;
     private boolean active;
     private ResourceLocation tierID;
     private String uuid = "";
@@ -54,7 +53,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             if (!Config.INSTANCE.online_mode.equals("") && !NetworkUtils.getInstance().s_isPlayerOnline(entity.getOwner())) {
                 return;
             }
-            if (level.getGameTime() - entity.lastCacheUpdate > SECONDS_PER_UPDATE * TICKS_PER_SECONDS) {
+            if (level.getGameTime() - entity.lastCacheUpdate > entity.cacheUpdateDelay) {
                 entity.pendingBlocks.clear();
                 entity.tickableBlockCache.clear();
                 for (BlockPos blockPos : BlockPos.betweenClosed(pos.getX() - entity.xRange, pos.getY() - entity.yRange, pos.getZ() - entity.zRange, pos.getX() + entity.xRange, pos.getY() + entity.yRange, pos.getZ() + entity.zRange)) {

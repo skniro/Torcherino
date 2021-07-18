@@ -36,6 +36,8 @@ public class Config {
     //@Comment("\nWhen set to ONLINE, Torcherino's only run if the player is currently online\nIf set to RESTART then Torcherino's will run for anyone who has logged in since the server started.\nAnything else then Torcherino's will act like previous versions.")
     public String online_mode = "";
 
+    public final int cache_update_delay = 20 * 5;
+
 
     public static void initialize() {
         Gson gson = new GsonBuilder().disableInnerClassSerialization()
