@@ -63,28 +63,33 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
                         if (blockEntity != null) {
                             if (!TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType())) {
                                 var ticker = (BlockEntityTicker<BlockEntity>) eBlock.getTicker(level, blockState, blockEntity.getType());
-                                entity.tickableBlockCache.add(new TickableBlock(blockPos, ticker));
+                                entity.tickableBlockCache.add(new TickableBlock(blockPos.immutable(), ticker));
                             }
                         }
-                    } else {
-                        entity.tickableBlockCache.add(new TickableBlock(blockPos, null));
+                    } else if (TorcherinoBlockEntity.doesRandomlyTick(blockState)) {
+                        entity.tickableBlockCache.add(new TickableBlock(blockPos.immutable(), null));
                     }
                 }
                 // todo: get on load and then when updated
                 entity.randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
                 entity.lastCacheUpdate = level.getGameTime();
             }
+            int scaledTickRate = Mth.clamp(4096 / (entity.speed * Config.INSTANCE.random_tick_rate), 1, 4096);
             for (TickableBlock tickableBlock : entity.tickableBlockCache) {
-                entity.tickBlock(serverLevel, tickableBlock, Mth.clamp(4096 / (entity.speed * Config.INSTANCE.random_tick_rate), 1, 4096));
+                entity.tickBlock(serverLevel, tickableBlock, scaledTickRate);
             }
         }
 
     }
 
+    // todo: should I special code checks for blocks like CropBLock which stop ticking once fully grown?
+    private static boolean doesRandomlyTick(BlockState state) {
+        return true;
+    }
+
     private void tickBlock(ServerLevel level, TickableBlock tickableBlock, int scaledTickRate) {
         BlockState state = level.getBlockState(tickableBlock.pos);
         Block block = state.getBlock();
-        // todo: should I special code checks for blocks like CropBLock which stop ticking once fully grown?
         if (block.isRandomlyTicking(state) && level.getRandom().nextInt(scaledTickRate) < randomTicks) {
             state.randomTick(level, tickableBlock.pos, level.getRandom());
         }
@@ -92,10 +97,16 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             BlockEntity entity = level.getBlockEntity(tickableBlock.pos);
             if (entity == null || entity.isRemoved()) {
                 tickableBlockCache.remove(tickableBlock);
+                if (TorcherinoBlockEntity.doesRandomlyTick(state)) {
+                    tickableBlockCache.add(new TickableBlock(tickableBlock.pos, null));
+                }
             } else {
                 for (int i = 0; i < speed; i++) {
                     if (entity.isRemoved()) {
                         tickableBlockCache.remove(tickableBlock);
+                        if (TorcherinoBlockEntity.doesRandomlyTick(state)) {
+                            tickableBlockCache.add(new TickableBlock(tickableBlock.pos, null));
+                        }
                         break;
                     }
                     // invalid, tickableBlock.hasTicker checks for this.
