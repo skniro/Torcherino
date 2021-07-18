@@ -21,7 +21,7 @@ public class PlatformUtilsImpl implements PlatformUtils {
     }
 
     @Override
-    public Path getConfigDirectory() {
+    public Path getConfigPath() {
         return FMLPaths.CONFIGDIR.get().resolve("sci4me/Torcherino.cfg");
     }
 }
