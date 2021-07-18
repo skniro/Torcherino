@@ -25,11 +25,11 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
 
     public boolean registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange) {
-        final Tier tier = new Tier(maxSpeed, xzRange, yRange);
         if (localTiers.containsKey(name)) {
             logger.warn("Tier with id {} has already been registered.", name);
             return false;
         }
+        Tier tier = new Tier(maxSpeed, xzRange, yRange);
         localTiers.put(name, tier);
         return true;
     }

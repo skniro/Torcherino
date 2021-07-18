@@ -29,7 +29,7 @@ public final class NetworkUtilsImpl implements NetworkUtils {
     }
 
     public void initialize() {
-        final String version = "2";
+        String version = "2";
         torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.getRl("channel"), () -> version, version::equals, version::equals);
         torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
         torcherinoChannel.registerMessage(1, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);

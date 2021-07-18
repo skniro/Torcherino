@@ -40,7 +40,7 @@ public final class OpenScreenMessage {
     }
 
     public static void handle(OpenScreenMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        final NetworkEvent.Context context = contextSupplier.get();
+        NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             OpenScreenMessage.openTorcherinoScreen(message);
             context.setPacketHandled(true);
