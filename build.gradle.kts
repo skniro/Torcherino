@@ -70,7 +70,6 @@ subprojects {
 
     val remapJarTask : Jar = tasks.getByName<Jar>("remapJar") {
         archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}-fat.jar")
-        from("LICENSE")
     }
 
     tasks.getByName<Jar>("jar") {
