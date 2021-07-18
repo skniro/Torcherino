@@ -46,10 +46,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         }
         // todo: get on load and then when updated
         randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
-        // todo: remove once onLoad is working
-        if (entity.area != null) {
-            entity.area.forEach(entity::tickBlock);
-        }
+        entity.area.forEach(entity::tickBlock);
     }
 
     @Override
@@ -79,14 +76,12 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         return hasCustomName() ? customName : new TranslatableComponent(getBlockState().getBlock().getDescriptionId());
     }
 
-    // Invoked by mixin or overrides forge's IForgeTileEntity#onLoad method
-    public void onLoad() {
-        if (level.isClientSide) {
-            return;
+    @Override
+    public void setLevel(Level level) {
+        super.setLevel(level);
+        if (!level.isClientSide()) {
+            level.getServer().tell(new TickTask(level.getServer().getTickCount(), () -> getBlockState().neighborChanged(level, worldPosition, null, null, false)));
         }
-        area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
-                worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
-        level.getServer().tell(new TickTask(level.getServer().getTickCount(), () -> getBlockState().neighborChanged(level, worldPosition, null, null, false)));
     }
 
     private void tickBlock(BlockPos pos) {
@@ -192,8 +187,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         active = tag.getBoolean("Active");
         uuid = tag.getString("Owner");
 
-        System.out.printf("Level: %s%n", level);
-        System.out.printf("State: %s%n", this.getBlockState());
+        area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
+                worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
     }
 
     public void openTorcherinoScreen(ServerPlayer player) {
