@@ -90,7 +90,7 @@ public class Config {
         }
     }
 
-    @SuppressWarnings("ClassCanBeRecord")
+    // todo: does gson support records?
     static class Tier {
         final String name;
         final int max_speed;

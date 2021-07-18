@@ -3,7 +3,6 @@ package torcherino.api;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import torcherino.TorcherinoImpl;
 
@@ -41,38 +40,11 @@ public interface TorcherinoAPI {
     boolean blacklistBlock(Block block);
 
     /**
-     * @param blockEntityTypeId The id of the block entity type to be blacklisted.
-     * @return TRUE if added to blacklist, FALSE if no block entity type exists or already on blacklist.
-     * @since FABRIC - 1.9.51, FORGE - 8.1.2
-     * @deprecated Removed in 15.0.0, minecraft 1.17
-     */
-    @Deprecated
-    boolean blacklistTileEntity(ResourceLocation blockEntityTypeId);
-
-    /**
-     * @param blockEntityType The block entity type to be blacklisted.
-     * @return TRUE if added to blacklist, FALSE if already on blacklist.
-     * @since FABRIC - 1.9.51, FORGE - 8.1.2
-     * @deprecated Removed in 15.0.0, minecraft 1.17
-     */
-    @Deprecated
-    boolean blacklistTileEntity(BlockEntityType<? extends BlockEntity> blockEntityType);
-
-    /**
      * @param block The block to check is blacklisted.
      * @return TRUE if blacklisted, FALSE otherwise.
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
      */
     boolean isBlockBlacklisted(Block block);
-
-    /**
-     * @param blockEntityType The block entity type to check is blacklisted.
-     * @return TRUE if blacklisted, FALSE otherwise.
-     * @since FABRIC - 1.9.51, FORGE - 8.1.2
-     * @deprecated Removed in 15.0.0, minecraft 1.17
-     */
-    @Deprecated
-    boolean isTileEntityBlacklisted(BlockEntityType<? extends BlockEntity> blockEntityType);
 
     /**
      * @param blockEntityTypeId The id of the block entity type to be blacklisted.

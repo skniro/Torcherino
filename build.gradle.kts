@@ -52,11 +52,6 @@ subprojects {
         }
     }
 
-    dependencies {
-        annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:0.4.1")
-        compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:0.4.1")
-    }
-
     val minecraft_java_version : String by project
     val isNotIdeaSync = System.getProperties().containsKey("idea.sync.active").not()
 
@@ -75,11 +70,11 @@ subprojects {
 
     val remapJarTask : Jar = tasks.getByName<Jar>("remapJar") {
         archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}-fat.jar")
+        from("LICENSE")
     }
 
     tasks.getByName<Jar>("jar") {
         archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}-dev.jar")
-        from("LICENSE")
     }
 
     val minifyJarTask = tasks.register<MinifyJsonTask>("minJar") {

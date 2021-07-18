@@ -12,9 +12,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
@@ -22,7 +24,7 @@ import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
 
-public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TickableBlockEntity, TierSupplier {
+public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
     public static int randomTicks;
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
@@ -31,8 +33,23 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     private ResourceLocation tierID;
     private String uuid = "";
 
-    public TorcherinoBlockEntity() {
-        super(Registry.BLOCK_ENTITY_TYPE.get(new ResourceLocation("torcherino", "torcherino")));
+    public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
+        super(Registry.BLOCK_ENTITY_TYPE.get(new ResourceLocation("torcherino", "torcherino")), pos, state);
+    }
+
+    public static void tick(Level level, BlockPos pos, BlockState state, TorcherinoBlockEntity entity) {
+        if (!entity.active || entity.speed == 0 || (entity.xRange == 0 && entity.yRange == 0 && entity.zRange == 0)) {
+            return;
+        }
+        if (!Config.INSTANCE.online_mode.equals("") && !NetworkUtils.getInstance().s_isPlayerOnline(entity.getOwner())) {
+            return;
+        }
+        // todo: get on load and then when updated
+        randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        // todo: remove once onLoad is working
+        if (entity.area != null) {
+            entity.area.forEach(entity::tickBlock);
+        }
     }
 
     @Override
@@ -72,19 +89,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         level.getServer().tell(new TickTask(level.getServer().getTickCount(), () -> getBlockState().neighborChanged(level, worldPosition, null, null, false)));
     }
 
-    @Override
-    public void tick() {
-        if (!active || speed == 0 || (xRange == 0 && yRange == 0 && zRange == 0)) {
-            return;
-        }
-        if (!Config.INSTANCE.online_mode.equals("") && !NetworkUtils.getInstance().s_isPlayerOnline(this.getOwner())) {
-            return;
-        }
-        // todo: get on load and then when updated
-        randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
-        area.forEach(this::tickBlock);
-    }
-
     private void tickBlock(BlockPos pos) {
         BlockState blockState = level.getBlockState(pos);
         Block block = blockState.getBlock();
@@ -95,28 +99,31 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
                 level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) {
             blockState.randomTick((ServerLevel) level, pos, level.getRandom());
         }
-        if (!block.isEntityBlock()) {
+        if (!(block instanceof EntityBlock entityBlock)) {
             return;
         }
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity == null || blockEntity.isRemoved() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) ||
-                !(blockEntity instanceof TickableBlockEntity tickableBlockEntity)) {
-            return;
-        }
-        for (int i = 0; i < speed; i++) {
-            if (blockEntity.isRemoved()) {
-                break;
+        if (blockEntity != null) {
+            //noinspection unchecked
+            BlockEntityTicker<BlockEntity> ticker = (BlockEntityTicker<BlockEntity>) entityBlock.getTicker(level, blockState, blockEntity.getType());
+            if (blockEntity.isRemoved() || TorcherinoAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType()) || ticker == null) {
+                return;
             }
-            tickableBlockEntity.tick();
+            for (int i = 0; i < speed; i++) {
+                if (blockEntity.isRemoved()) {
+                    break;
+                }
+                ticker.tick(level, pos, blockState, blockEntity);
+            }
         }
     }
 
     public boolean readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTier());
-        if (this.valueInRange(xRange, 0, tier.getXZRange()) &&
-                this.valueInRange(zRange, 0, tier.getXZRange()) &&
-                this.valueInRange(yRange, 0, tier.getYRange()) &&
-                this.valueInRange(speed, 0, tier.getMaxSpeed()) &&
+        if (this.valueInRange(xRange, 0, tier.xzRange()) &&
+                this.valueInRange(zRange, 0, tier.xzRange()) &&
+                this.valueInRange(yRange, 0, tier.yRange()) &&
+                this.valueInRange(speed, 0, tier.maxSpeed()) &&
                 this.valueInRange(redstoneMode, 0, 3)) {
             this.xRange = xRange;
             this.zRange = zRange;
@@ -172,8 +179,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
-        super.load(state, tag);
+    public void load(CompoundTag tag) {
+        super.load(tag);
         if (tag.contains("CustomName", 8)) {
             this.setCustomName(Component.Serializer.fromJson(tag.getString("CustomName")));
         }
@@ -184,6 +191,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
         redstoneMode = tag.getInt("RedstoneMode");
         active = tag.getBoolean("Active");
         uuid = tag.getString("Owner");
+
+        System.out.printf("Level: %s%n", level);
+        System.out.printf("State: %s%n", this.getBlockState());
     }
 
     public void openTorcherinoScreen(ServerPlayer player) {

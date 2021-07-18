@@ -48,7 +48,7 @@ public final class TorcherinoScreen extends Screen {
     protected void init() {
         left = (width - screenWidth) / 2;
         top = (height - screenHeight) / 2;
-        this.addButton(new GradatedSliderWidget(left + 8, top + 20, 205, (double) (speed - 1) / (tier.getMaxSpeed() - 1), tier.getMaxSpeed()) {
+        this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 20, 205, (double) (speed - 1) / (tier.maxSpeed() - 1), tier.maxSpeed()) {
             @Override
             protected void updateMessage() {
                 this.setMessage(new TranslatableComponent("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed));
@@ -56,11 +56,11 @@ public final class TorcherinoScreen extends Screen {
 
             @Override
             protected void applyValue() {
-                TorcherinoScreen.this.speed = 1 + (int) Math.round(value * (TorcherinoScreen.this.tier.getMaxSpeed() - 1));
-                value = (double) (speed - 1) / (tier.getMaxSpeed() - 1);
+                TorcherinoScreen.this.speed = 1 + (int) Math.round(value * (TorcherinoScreen.this.tier.maxSpeed() - 1));
+                value = (double) (speed - 1) / (tier.maxSpeed() - 1);
             }
         });
-        this.addButton(new GradatedSliderWidget(left + 8, top + 45, 205, (double) xRange / tier.getXZRange(), tier.getXZRange()) {
+        this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 45, 205, (double) xRange / tier.xzRange(), tier.xzRange()) {
             @Override
             protected void updateMessage() {
                 this.setMessage(new TranslatableComponent("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1));
@@ -68,11 +68,11 @@ public final class TorcherinoScreen extends Screen {
 
             @Override
             protected void applyValue() {
-                TorcherinoScreen.this.xRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
-                value = (double) xRange / tier.getXZRange();
+                TorcherinoScreen.this.xRange = (int) Math.round(value * TorcherinoScreen.this.tier.xzRange());
+                value = (double) xRange / tier.xzRange();
             }
         });
-        this.addButton(new GradatedSliderWidget(left + 8, top + 70, 205, (double) zRange / tier.getXZRange(), tier.getXZRange()) {
+        this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 70, 205, (double) zRange / tier.xzRange(), tier.xzRange()) {
             @Override
             protected void updateMessage() {
                 this.setMessage(new TranslatableComponent("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1));
@@ -80,11 +80,11 @@ public final class TorcherinoScreen extends Screen {
 
             @Override
             protected void applyValue() {
-                TorcherinoScreen.this.zRange = (int) Math.round(value * TorcherinoScreen.this.tier.getXZRange());
-                value = (double) zRange / tier.getXZRange();
+                TorcherinoScreen.this.zRange = (int) Math.round(value * TorcherinoScreen.this.tier.xzRange());
+                value = (double) zRange / tier.xzRange();
             }
         });
-        this.addButton(new GradatedSliderWidget(left + 8, top + 95, 205, (double) yRange / tier.getYRange(), tier.getYRange()) {
+        this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 95, 205, (double) yRange / tier.yRange(), tier.yRange()) {
             @Override
             protected void updateMessage() {
                 this.setMessage(new TranslatableComponent("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1));
@@ -92,11 +92,11 @@ public final class TorcherinoScreen extends Screen {
 
             @Override
             protected void applyValue() {
-                TorcherinoScreen.this.yRange = (int) Math.round(value * TorcherinoScreen.this.tier.getYRange());
-                value = (double) yRange / tier.getYRange();
+                TorcherinoScreen.this.yRange = (int) Math.round(value * TorcherinoScreen.this.tier.yRange());
+                value = (double) yRange / tier.yRange();
             }
         });
-        this.addButton(new StateButtonWidget(this, left + 217, top + 20) {
+        this.addRenderableWidget(new StateButtonWidget(this, left + 217, top + 20) {
             ItemStack buttonIcon;
 
             @Override
@@ -142,8 +142,8 @@ public final class TorcherinoScreen extends Screen {
     @Override
     public void render(PoseStack matrixStack, int x, int y, float partialTicks) {
         this.fillGradient(matrixStack, 0, 0, this.width, this.height, -1072689136, -804253680);
-        minecraft.getTextureManager().bind(SCREEN_TEXTURE);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
         this.blit(matrixStack, left, top, 0, 0, screenWidth, screenHeight);
         font.draw(matrixStack, cached_title.getVisualOrderText(), (width - font.width(cached_title)) / 2.0f, top + 6, 4210752);
         super.render(matrixStack, x, y, partialTicks);

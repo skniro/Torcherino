@@ -22,12 +22,12 @@ dependencies {
     minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
     mappings(loom.layered{
         this.officialMojangMappings()
-        this.crane("dev.architectury:crane:1.16.5+build.16")
+        this.crane("dev.architectury:crane:1.17.1+build.15")
     })
     forge("net.minecraftforge:forge:${properties["minecraft_version"]}-${properties["forge_version"]}")
     // todo: remove when architectury loom updates to fix mcp annotation issue
     compileOnly("dev.architectury:architectury-loom-forge-runtime:0.9.0.147")
-    modRuntime("mezz.jei:jei-${properties["minecraft_version"]}:${properties["jei_version"]}")
+    //modRuntime("mezz.jei:jei-${properties["minecraft_version"]}:${properties["jei_version"]}")
 }
 
 repositories {

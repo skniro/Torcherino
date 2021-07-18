@@ -4,26 +4,25 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
-
-import java.util.Random;
 
 @SuppressWarnings({"deprecation"})
 public final class TorcherinoBlock extends TorchBlock implements EntityBlock, TierSupplier {
@@ -39,9 +38,16 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
         return tierID;
     }
 
+    @NotNull
     @Override
-    public BlockEntity newBlockEntity(BlockGetter level) {
-        return new TorcherinoBlockEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TorcherinoBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return TorcherinoLogic.getTicker(level, state, type);
     }
 
     @Override
@@ -52,11 +58,6 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
     @Override
     public void onPlace(BlockState newState, Level level, BlockPos pos, BlockState state, boolean boolean_1) {
         this.neighborChanged(null, level, pos, null, null, false);
-    }
-
-    @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
-        TorcherinoLogic.scheduledTick(state, level, pos, random);
     }
 
     @Override
@@ -73,16 +74,5 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         TorcherinoLogic.onPlaced(level, pos, state, placer, stack, this);
-    }
-
-    // todo: remove in 1.17
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    // todo: replace with newBlockEntity in 1.17
-    @NotNull
-    public BlockEntity createTileEntity(BlockState state, BlockGetter level) {
-        return new TorcherinoBlockEntity();
     }
 }

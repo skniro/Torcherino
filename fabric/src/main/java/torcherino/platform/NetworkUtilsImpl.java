@@ -52,9 +52,9 @@ public class NetworkUtilsImpl implements NetworkUtils {
             buffer.writeInt(tiers.size());
             tiers.forEach((id, tier) -> {
                 buffer.writeResourceLocation(id);
-                buffer.writeInt(tier.getMaxSpeed());
-                buffer.writeInt(tier.getXZRange());
-                buffer.writeInt(tier.getYRange());
+                buffer.writeInt(tier.maxSpeed());
+                buffer.writeInt(tier.xzRange());
+                buffer.writeInt(tier.yRange());
             });
 
             sender.sendPacket(TORCHERINO_TIER_SYNC, buffer);

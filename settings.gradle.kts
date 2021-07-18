@@ -36,4 +36,4 @@ pluginManagement {
 rootProject.name = "torcherino"
 
 include("fabric")
-include("forge")
+//include("forge")

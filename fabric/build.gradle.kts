@@ -24,7 +24,7 @@ dependencies {
     minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
     mappings(loom.layered{
         this.officialMojangMappings()
-        this.crane("dev.architectury:crane:1.16.5+build.16")
+        this.crane("dev.architectury:crane:1.17.1+build.15")
     })
 }
 
@@ -54,9 +54,9 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${properties["fabric_loader_version"]}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${properties["fabric_api_version"]}")
 
-    modRuntime("io.github.prospector:modmenu:${properties["modmenu_version"]}")
+    //modRuntime("io.github.prospector:modmenu:${properties["modmenu_version"]}")
 
-    modRuntime("me.shedaniel:RoughlyEnoughItems:${properties["rei_version"]}")
+    //modRuntime("me.shedaniel:RoughlyEnoughItems:${properties["rei_version"]}")
 }
 
 tasks.withType<ProcessResources> {
