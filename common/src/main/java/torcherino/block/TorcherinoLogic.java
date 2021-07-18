@@ -16,7 +16,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
-import torcherino.platform.NetworkUtils;
 
 import java.util.Random;
 import java.util.function.Consumer;

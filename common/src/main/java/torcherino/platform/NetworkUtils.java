@@ -4,8 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.UUID;
-
 public interface NetworkUtils {
     static NetworkUtils getInstance() {
         return NetworkUtilsImpl.getInstance();

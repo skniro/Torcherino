@@ -32,6 +32,7 @@ import torcherino.temp.TocherinoBlockEntityType;
 
 @Mod.EventBusSubscriber(modid = Torcherino.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModContent {
+    private static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_TILE_ENTITY = new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null);
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torcherino.MOD_ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torcherino.MOD_ID);
     private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
@@ -46,8 +47,6 @@ public final class ModContent {
         TorcherinoAPI.INSTANCE.blacklistBlockEntity(TORCHERINO_TILE_ENTITY);
         TorcherinoAPI.INSTANCE.getTiers().keySet().forEach(ModContent::register);
     }
-
-    public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_TILE_ENTITY = new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null);
 
     private static String getPath(ResourceLocation tierID, String type) {
         return (tierID.getPath().equals("normal") ? "" : tierID.getPath() + "_") + type;

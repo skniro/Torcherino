@@ -43,8 +43,8 @@ public interface TorcherinoAPI {
     /**
      * @param blockEntityTypeId The id of the block entity type to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if no block entity type exists or already on blacklist.
-     * @deprecated Removed in 15.0.0
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
+     * @deprecated Removed in 15.0.0, minecraft 1.17
      */
     @Deprecated
     boolean blacklistTileEntity(ResourceLocation blockEntityTypeId);
@@ -52,8 +52,8 @@ public interface TorcherinoAPI {
     /**
      * @param blockEntityType The block entity type to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if already on blacklist.
-     * @deprecated Removed in 15.0.0
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
+     * @deprecated Removed in 15.0.0, minecraft 1.17
      */
     @Deprecated
     boolean blacklistTileEntity(BlockEntityType<? extends BlockEntity> blockEntityType);
@@ -68,13 +68,12 @@ public interface TorcherinoAPI {
     /**
      * @param blockEntityType The block entity type to check is blacklisted.
      * @return TRUE if blacklisted, FALSE otherwise.
-     * @deprecated Removed in 15.0.0
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
+     * @deprecated Removed in 15.0.0, minecraft 1.17
      */
     @Deprecated
     boolean isTileEntityBlacklisted(BlockEntityType<? extends BlockEntity> blockEntityType);
 
-    // todo: update version numbers
     /**
      * @param blockEntityTypeId The id of the block entity type to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if already on blacklist.
