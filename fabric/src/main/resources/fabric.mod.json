@@ -9,7 +9,7 @@
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/torcherino",
-    "sources": "https://github.com/NinjaPhenix/FabricMods/tree/1.16.4",
+    "sources": "https://github.com/NinjaPhenix/FabricMods/tree/release/1.16.4",
     "issues": "https://github.com/NinjaPhenix/FabricMods/issues"
   },
   "license": "LGPL-3.0-only",
