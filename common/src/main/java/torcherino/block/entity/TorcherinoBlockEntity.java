@@ -26,7 +26,9 @@ import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
@@ -36,7 +38,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
     private boolean areSettingsValid = false;
-    private Set<TickableBlock> tickableBlockCache = new HashSet<>();
+    private final Set<TickableBlock> tickableBlockCache = new HashSet<>();
+    private final Map<TickableBlock, Boolean> pendingBlocks = new HashMap<>();
     private long lastCacheUpdate = -TICKS_PER_SECONDS * SECONDS_PER_UPDATE * 2;
     private boolean active;
     private ResourceLocation tierID;
@@ -52,6 +55,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
                 return;
             }
             if (level.getGameTime() - entity.lastCacheUpdate > SECONDS_PER_UPDATE * TICKS_PER_SECONDS) {
+                entity.pendingBlocks.clear();
                 entity.tickableBlockCache.clear();
                 for (BlockPos blockPos : BlockPos.betweenClosed(pos.getX() - entity.xRange, pos.getY() - entity.yRange, pos.getZ() - entity.zRange, pos.getX() + entity.xRange, pos.getY() + entity.yRange, pos.getZ() + entity.zRange)) {
                     var blockState = level.getBlockState(blockPos);
@@ -73,6 +77,15 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
                 // todo: get on load and then when updated
                 entity.randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
                 entity.lastCacheUpdate = level.getGameTime();
+            } else if (entity.pendingBlocks.size() > 0) {
+                entity.pendingBlocks.forEach((tickableBlock, action) -> {
+                    if (action) {
+                        entity.tickableBlockCache.add(tickableBlock);
+                    } else {
+                        entity.tickableBlockCache.remove(tickableBlock);
+                    }
+                });
+                entity.pendingBlocks.clear();
             }
             int scaledTickRate = Mth.clamp(4096 / (entity.speed * Config.INSTANCE.random_tick_rate), 1, 4096);
             for (TickableBlock tickableBlock : entity.tickableBlockCache) {
@@ -82,30 +95,26 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
 
     }
 
-    // todo: should I special code checks for blocks like CropBLock which stop ticking once fully grown?
     private static boolean doesRandomlyTick(BlockState state) {
-        return true;
+        return state.isRandomlyTicking();
     }
 
     private void tickBlock(ServerLevel level, TickableBlock tickableBlock, int scaledTickRate) {
         BlockState state = level.getBlockState(tickableBlock.pos);
-        Block block = state.getBlock();
-        if (block.isRandomlyTicking(state) && level.getRandom().nextInt(scaledTickRate) < randomTicks) {
-            state.randomTick(level, tickableBlock.pos, level.getRandom());
-        }
-        if (tickableBlock.hasTicker()) {
+        boolean hasTicker = tickableBlock.hasTicker();
+        if (hasTicker) {
             BlockEntity entity = level.getBlockEntity(tickableBlock.pos);
             if (entity == null || entity.isRemoved()) {
-                tickableBlockCache.remove(tickableBlock);
+                pendingBlocks.put(tickableBlock, false);
                 if (TorcherinoBlockEntity.doesRandomlyTick(state)) {
-                    tickableBlockCache.add(new TickableBlock(tickableBlock.pos, null));
+                    pendingBlocks.put(new TickableBlock(tickableBlock.pos, null), true);
                 }
             } else {
                 for (int i = 0; i < speed; i++) {
                     if (entity.isRemoved()) {
-                        tickableBlockCache.remove(tickableBlock);
+                        pendingBlocks.put(tickableBlock, false);
                         if (TorcherinoBlockEntity.doesRandomlyTick(state)) {
-                            tickableBlockCache.add(new TickableBlock(tickableBlock.pos, null));
+                            pendingBlocks.put(new TickableBlock(tickableBlock.pos, null), true);
                         }
                         break;
                     }
@@ -114,6 +123,13 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
                     tickableBlock.ticker.tick(level, tickableBlock.pos, state, entity);
                 }
             }
+        }
+        if (TorcherinoBlockEntity.doesRandomlyTick(state)) {
+            if (level.getRandom().nextInt(scaledTickRate) < randomTicks) {
+                state.randomTick(level, tickableBlock.pos, level.getRandom());
+            }
+        } else if(!hasTicker) {
+            pendingBlocks.put(tickableBlock, false);
         }
     }
 
