@@ -79,7 +79,6 @@ subprojects {
 
     tasks.getByName<Jar>("jar") {
         archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}-dev.jar")
-        from("LICENSE")
     }
 
     val minifyJarTask = tasks.register<MinifyJsonTask>("minJar") {
