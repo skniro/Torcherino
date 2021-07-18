@@ -11,27 +11,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarvedPumpkinBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import torcherino.api.TierSupplier;
-import torcherino.block.TorcherinoLogic;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Random;
 
 @SuppressWarnings({"deprecation"})
-public class JackoLanterinoBlock extends CarvedPumpkinBlock implements EntityBlock, TierSupplier {
+public final class JackoLanterinoBlock extends CarvedPumpkinBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
 
-    // todo: take block properties as argument
-    public JackoLanterinoBlock(ResourceLocation tier) {
-        super(Properties.copy(Blocks.JACK_O_LANTERN));
+    public JackoLanterinoBlock(Properties properties, ResourceLocation tier) {
+        super(properties);
         this.tierID = tier;
     }
 
@@ -80,7 +77,7 @@ public class JackoLanterinoBlock extends CarvedPumpkinBlock implements EntityBlo
         return true;
     }
 
-    @Nullable
+    @NotNull
     public BlockEntity createTileEntity(BlockState state, BlockGetter level) {
         return new TorcherinoBlockEntity();
     }

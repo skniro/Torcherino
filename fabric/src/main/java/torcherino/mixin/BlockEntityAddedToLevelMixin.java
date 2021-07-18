@@ -11,7 +11,7 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 @Mixin(Level.class)
 public abstract class BlockEntityAddedToLevelMixin {
     @Inject(method = "addBlockEntity(Lnet/minecraft/world/level/block/entity/BlockEntity;)Z", at = @At("TAIL"))
-    private void torcherino_addBlockEntity(final BlockEntity be, final CallbackInfoReturnable<Boolean> cir) {
+    private void torcherino_addBlockEntity(BlockEntity be, CallbackInfoReturnable<Boolean> cir) {
         if (be instanceof TorcherinoBlockEntity blockEntity) {
             blockEntity.onLoad();
         }

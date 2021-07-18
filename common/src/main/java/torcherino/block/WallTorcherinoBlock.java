@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,18 +21,16 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
-import torcherino.block.TorcherinoLogic;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 import java.util.Random;
 
 @SuppressWarnings({"deprecation"})
-public class WallTorcherinoBlock extends WallTorchBlock implements EntityBlock, TierSupplier {
+public final class WallTorcherinoBlock extends WallTorchBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
 
-    // todo: take block properties as argument
-    public WallTorcherinoBlock(ResourceLocation tier, TorcherinoBlock torcherinoBlock, ParticleOptions particleEffect) {
-        super(Properties.copy(Blocks.WALL_TORCH).dropsLike(torcherinoBlock), particleEffect);
+    public WallTorcherinoBlock(Properties properties, ResourceLocation tier, ParticleOptions particleEffect) {
+        super(properties, particleEffect);
         this.tierID = tier;
     }
 

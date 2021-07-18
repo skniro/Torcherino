@@ -1,7 +1,9 @@
 package torcherino;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -14,11 +16,9 @@ import torcherino.blocks.ModBlocks;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtilsImpl;
 
-import java.util.ArrayList;
-public class Torcherino implements ModInitializer, TorcherinoInitializer {
+public final class Torcherino implements ModInitializer, TorcherinoInitializer {
     public static final String MOD_ID = "torcherino";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-    public static ArrayList<SimpleParticleType> particles = new ArrayList<>();
 
     public static ResourceLocation resloc(String path) {
         return new ResourceLocation(Torcherino.MOD_ID, path);
@@ -35,7 +35,8 @@ public class Torcherino implements ModInitializer, TorcherinoInitializer {
             if (path.equals("normal_flame")) {
                 path = "flame";
             }
-            particles.add(Registry.register(Registry.PARTICLE_TYPE, Torcherino.resloc(path), new SimpleParticleType(false)));
+            ParticleFactoryRegistry.getInstance().register(Registry.register(Registry.PARTICLE_TYPE, Torcherino.resloc(path), new SimpleParticleType(false)),
+                    FlameParticle.Provider::new);
         });
         ModBlocks.INSTANCE.initialize();
         FabricLoader.getInstance().getEntrypoints("torcherinoInitializer", TorcherinoInitializer.class).forEach(TorcherinoInitializer::onTorcherinoInitialize);

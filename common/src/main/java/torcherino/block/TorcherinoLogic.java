@@ -21,7 +21,7 @@ import torcherino.platform.NetworkUtils;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class TorcherinoLogic {
+public final class TorcherinoLogic {
     public static void scheduledTick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         if (world.isClientSide) {
             return;

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.MarkerManager;
+import torcherino.TorcherinoImpl;
 import torcherino.api.TorcherinoAPI;
 import torcherino.platform.PlatformUtils;
 
@@ -79,7 +80,7 @@ public class Config {
             online_mode = "";
         }
         for (Tier tier : tiers) {
-            TorcherinoAPI.INSTANCE.registerTier(new ResourceLocation("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
+            ((TorcherinoImpl) TorcherinoAPI.INSTANCE).registerTier(new ResourceLocation("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
         }
         for (ResourceLocation id : blacklisted_blocks) {
             TorcherinoAPI.INSTANCE.blacklistBlock(id);

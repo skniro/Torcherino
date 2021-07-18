@@ -17,7 +17,7 @@ import torcherino.client.screen.widgets.GradatedSliderWidget;
 import torcherino.client.screen.widgets.StateButtonWidget;
 import torcherino.platform.NetworkUtils;
 
-public class TorcherinoScreen extends Screen {
+public final class TorcherinoScreen extends Screen {
     private static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(Torcherino.MOD_ID, "textures/screens/torcherino.png");
     private static final int screenWidth = 245;
     private static final int screenHeight = 123;

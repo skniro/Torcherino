@@ -7,7 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
-public class PlatformUtilsImpl implements PlatformUtils {
+public final class PlatformUtilsImpl implements PlatformUtils {
     private static final Supplier<PlatformUtils> instance = Suppliers.memoize(PlatformUtilsImpl::new);
 
     public static PlatformUtils getInstance() {

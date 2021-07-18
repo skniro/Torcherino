@@ -2,6 +2,7 @@ package torcherino.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
@@ -33,13 +34,15 @@ public final class ValueUpdateMessage {
     @SuppressWarnings("ConstantConditions")
     public static void handle(ValueUpdateMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            if (context.getSender().level.getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
-                if (!blockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode)) {
-                    Torcherino.LOGGER.error("Data received from " + context.getSender().getName().getString() + "(" + context.getSender().getStringUUID() + ") is invalid.");
+        if (context.getDirection().getOriginationSide() == LogicalSide.CLIENT) {
+            context.enqueueWork(() -> {
+                if (context.getSender().level.getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
+                    if (!blockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode)) {
+                        Torcherino.LOGGER.error("Data received from " + context.getSender().getName().getString() + "(" + context.getSender().getStringUUID() + ") is invalid.");
+                    }
                 }
-            }
-        });
-        context.setPacketHandled(true);
+            });
+            context.setPacketHandled(true);
+        }
     }
 }

@@ -29,7 +29,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     private Iterable<BlockPos> area;
     private boolean active;
     private ResourceLocation tierID;
-    // todo: convert to UUID
     private String uuid = "";
 
     public TorcherinoBlockEntity() {
@@ -150,18 +149,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tick
     public void setPoweredByRedstone(boolean powered) {
         // todo: should this be an if statement?
         switch (redstoneMode) {
-            case 0:
-                active = !powered;
-                break;
-            case 1:
-                active = powered;
-                break;
-            case 2:
-                active = true;
-                break;
-            case 3:
-                active = false;
-                break;
+            case 0 -> active = !powered;
+            case 1 -> active = powered;
+            case 2 -> active = true;
+            case 3 -> active = false;
         }
     }
 

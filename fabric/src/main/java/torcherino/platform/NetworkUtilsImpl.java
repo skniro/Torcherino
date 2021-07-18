@@ -120,7 +120,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
 
     private static class ClientNetworking {
         private static void initialize() {
-            ClientPlayConnectionEvents.INIT.register((handler, client)  -> {
+            ClientPlayConnectionEvents.INIT.register((handler, client) -> {
                 ClientPlayNetworking.registerReceiver(NetworkUtilsImpl.OPEN_TORCHERINO_SCREEN, (client1, handler1, buffer, responseSender) -> {
                     Level world = Minecraft.getInstance().level;
                     BlockPos pos = buffer.readBlockPos();

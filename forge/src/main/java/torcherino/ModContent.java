@@ -12,7 +12,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,7 +37,7 @@ public final class ModContent {
     private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Torcherino.MOD_ID);
 
-    public static void initialise(final IEventBus bus) {
+    public static void initialise(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         PARTICLE_TYPES.register(bus);
@@ -47,24 +49,24 @@ public final class ModContent {
 
     public static final BlockEntityType<TorcherinoBlockEntity> TORCHERINO_TILE_ENTITY = new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null);
 
-    private static String getPath(final ResourceLocation tierID, final String type) {
+    private static String getPath(ResourceLocation tierID, String type) {
         return (tierID.getPath().equals("normal") ? "" : tierID.getPath() + "_") + type;
     }
 
-    private static void register(final ResourceLocation tierID) {
+    private static void register(ResourceLocation tierID) {
         if (tierID.getNamespace().equals(Torcherino.MOD_ID)) {
-            final SimpleParticleType particleType = new SimpleParticleType(false);
+            SimpleParticleType particleType = new SimpleParticleType(false);
             PARTICLE_TYPES.register(getPath(tierID, "flame"), particleType.delegate);
-            final TorcherinoBlock standingBlock = new TorcherinoBlock(tierID, particleType);
-            final WallTorcherinoBlock wallBlock = new WallTorcherinoBlock(tierID, standingBlock, particleType);
-            final Item torcherinoItem = new StandingAndWallBlockItem(standingBlock, wallBlock, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-            final JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(tierID);
-            final Item jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
-            final LanterinoBlock lanterinoBlock = new LanterinoBlock(tierID);
-            final Item lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-            final String torcherinoPath = getPath(tierID, "torcherino");
-            final String jackoLanterinoPath = getPath(tierID, "lanterino");
-            final String lanterinoPath = getPath(tierID, "lantern");
+            TorcherinoBlock standingBlock = new TorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.TORCH), tierID, particleType);
+            WallTorcherinoBlock wallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).dropsLike(standingBlock), tierID, particleType);
+            Item torcherinoItem = new StandingAndWallBlockItem(standingBlock, wallBlock, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.copy(Blocks.JACK_O_LANTERN), tierID);
+            Item jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
+            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN), tierID);
+            Item lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+            String torcherinoPath = getPath(tierID, "torcherino");
+            String jackoLanterinoPath = getPath(tierID, "lanterino");
+            String lanterinoPath = getPath(tierID, "lantern");
             BLOCKS.register(torcherinoPath, standingBlock.delegate);
             BLOCKS.register("wall_" + torcherinoPath, wallBlock.delegate);
             BLOCKS.register(jackoLanterinoPath, jackoLanterinoBlock.delegate);
@@ -74,8 +76,7 @@ public final class ModContent {
             TorcherinoAPI.INSTANCE.blacklistBlock(jackoLanterinoBlock);
             TorcherinoAPI.INSTANCE.blacklistBlock(lanterinoBlock);
             if (FMLLoader.getDist().isClient()) {
-                Minecraft.getInstance().submitAsync(() ->
-                {
+                Minecraft.getInstance().submitAsync(() -> {
                     ItemBlockRenderTypes.setRenderLayer(standingBlock, RenderType.cutout());
                     ItemBlockRenderTypes.setRenderLayer(wallBlock, RenderType.cutout());
                     ItemBlockRenderTypes.setRenderLayer(lanterinoBlock, RenderType.cutout());
