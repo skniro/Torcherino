@@ -9,5 +9,5 @@ public interface PlatformUtils {
 
     boolean isDedicatedServer();
 
-    Path getConfigDirectory();
+    Path getConfigPath();
 }

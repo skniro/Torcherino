@@ -43,31 +43,6 @@ repositories {
             includeGroup("mezz.jei")
         }
     }
-    exclusiveContent {
-        forRepository {
-            mavenCentral()
-        }
-        filter {
-            includeGroup("blue.endless")
-        }
-    }
-}
-
-configurations {
-    create("shade")
-    implementation.get().extendsFrom(configurations["shade"])
-}
-
-dependencies {
-    configurations["shade"]("blue.endless:jankson:1.2.0")
-}
-
-tasks.withType<Jar>() {
-    configurations["shade"].forEach {
-        from(zipTree(it)) {
-            exclude("META-INF", "META-INF/**")
-        }
-    }
 }
 
 tasks.withType<ProcessResources>() {

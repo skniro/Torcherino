@@ -44,17 +44,6 @@ repositories {
             includeGroup("com.terraformersmc")
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "JitPack (Jankson-Fabric)"
-                url = uri("https://jitpack.io")
-            }
-        }
-        filter {
-            includeGroup("com.github.CottonMC")
-        }
-    }
 }
 
 val excludeFabric: (ExternalModuleDependency) -> Unit = {
@@ -68,9 +57,6 @@ dependencies {
     modRuntime("io.github.prospector:modmenu:${properties["modmenu_version"]}")
 
     modRuntime("me.shedaniel:RoughlyEnoughItems:${properties["rei_version"]}")
-
-    modImplementation("com.github.CottonMC:Jankson-Fabric:${properties["jankson_version"]}")
-    include("com.github.CottonMC:Jankson-Fabric:${properties["jankson_version"]}")
 }
 
 tasks.withType<ProcessResources>() {

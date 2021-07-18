@@ -1,55 +1,75 @@
 package torcherino.config;
 
-import blue.endless.jankson.Comment;
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.MarkerManager;
 import torcherino.api.TorcherinoAPI;
 import torcherino.platform.PlatformUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
 public class Config {
     public static Config INSTANCE;
 
-    @Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
-    public final Integer random_tick_rate = 4;
+    //@Comment("\nDefines how much faster randoms ticks are applied compared to what they should be.\nValid Range: 1 to 4096")
+    public final int random_tick_rate = 4;
 
-    @Comment("Log torcherino placement (Intended for server use)")
-    public final Boolean log_placement = PlatformUtils.getInstance().isDedicatedServer();
+    //@Comment("Log torcherino placement (Intended for server use)")
+    public final boolean log_placement = PlatformUtils.getInstance().isDedicatedServer();
 
-    @Comment("\nAdd a block by identifier to the blacklist.\nExamples: \"minecraft:dirt\", \"minecraft:furnace\"")
+    //@Comment("\nAdd a block by identifier to the blacklist.\nExamples: \"minecraft:dirt\", \"minecraft:furnace\"")
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     private final ResourceLocation[] blacklisted_blocks = new ResourceLocation[]{};
 
-    @Comment("\nAdd a block entity by identifier to the blacklist.\nExamples: \"minecraft:furnace\", \"minecraft:mob_spawner\"")
+    //@Comment("\nAdd a block entity by identifier to the blacklist.\nExamples: \"minecraft:furnace\", \"minecraft:mob_spawner\"")
+    @SuppressWarnings({"MismatchedReadAndWriteOfArray", "SpellCheckingInspection"})
     private final ResourceLocation[] blacklisted_blockentities = new ResourceLocation[]{};
 
-    @Comment("\nAllows new custom torcherino tiers to be added.\nThis also allows for each tier to have their own max max_speed and ranges.")
+    //@Comment("\nAllows new custom torcherino tiers to be added.\nThis also allows for each tier to have their own max max_speed and ranges.")
     private final Tier[] tiers = new Tier[]{new Tier("normal", 4, 4, 1), new Tier("compressed", 36, 4, 1), new Tier("double_compressed", 324, 4, 1)};
 
-    @Comment("\nWhen set to ONLINE, Torcherino's only run if the player is currently online\nIf set to RESTART then Torcherino's will run for anyone who has logged in since the server started.\nAnything else then Torcherino's will act like previous versions.")
+    //@Comment("\nWhen set to ONLINE, Torcherino's only run if the player is currently online\nIf set to RESTART then Torcherino's will run for anyone who has logged in since the server started.\nAnything else then Torcherino's will act like previous versions.")
     public String online_mode = "";
 
 
     public static void initialize() {
-        JanksonConfigParser parser = new JanksonConfigParser.Builder()
-                .deSerializer(JsonPrimitive.class, ResourceLocation.class, (it, marshaller) -> new ResourceLocation(it.asString()),
-                        ((identifier, marshaller) -> marshaller.serialize(identifier.toString())))
-                .deSerializer(JsonObject.class, Tier.class, (it, marshaller) -> {
-                    String name = it.get(String.class, "name");
-                    Integer max_speed = it.get(Integer.class, "max_speed");
-                    Integer xz_range = it.get(Integer.class, "xz_range");
-                    Integer y_range = it.get(Integer.class, "y_range");
-                    return new Tier(name, max_speed < 1 ? 1 : max_speed, xz_range < 0 ? 0 : xz_range, y_range < 0 ? 0 : y_range);
-                }, (tier, marshaller) -> {
-                    final JsonObject rv = new JsonObject();
-                    rv.put("name", new JsonPrimitive(tier.name));
-                    rv.put("max_speed", new JsonPrimitive(tier.max_speed));
-                    rv.put("xz_range", new JsonPrimitive(tier.xz_range));
-                    rv.put("y_range", new JsonPrimitive(tier.y_range));
-                    return rv;
-                }).build();
-        INSTANCE = parser.load(Config.class, Config::new, PlatformUtils.getInstance().getConfigDirectory(),
-                new MarkerManager.Log4jMarker("torcherino"));
+        Gson gson = new GsonBuilder().disableInnerClassSerialization()
+                                     .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+                                     .setPrettyPrinting()
+                                     .create();
+        var configDir = PlatformUtils.getInstance().getConfigPath();
+        var logger = LogManager.getLogger("torcherino-config");
+        var marker = new MarkerManager.Log4jMarker("torcherino");
+        Config config = null;
+        try {
+            Files.createDirectories(configDir.getParent());
+        } catch (IOException e) {
+            logger.warn(marker, "Failed to create directory required for torcherino config, using default config.");
+            config = new Config();
+        }
+        if (config == null) {
+            if (Files.exists(configDir)) {
+                try (var reader = Files.newBufferedReader(configDir)) {
+                    config = gson.fromJson(reader, Config.class);
+                } catch (IOException e) {
+                    logger.warn(marker, "Failed to read torcherino config file, using default config.");
+                    config = new Config();
+                }
+            } else {
+                config = new Config();
+                try (var writer = Files.newBufferedWriter(configDir, StandardOpenOption.CREATE_NEW)) {
+                    gson.toJson(config, writer);
+                } catch (IOException e) {
+                    logger.warn(marker, "Failed to save default torcherino config file.");
+                }
+            }
+
+        }
+        INSTANCE = config;
         INSTANCE.onConfigLoaded();
     }
 

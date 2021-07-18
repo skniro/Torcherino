@@ -20,7 +20,7 @@ public class PlatformUtilsImpl implements PlatformUtils {
     }
 
     @Override
-    public Path getConfigDirectory() {
+    public Path getConfigPath() {
         return FabricLoader.getInstance().getConfigDir().resolve("sci4me/Torcherino.cfg");
     }
 }
