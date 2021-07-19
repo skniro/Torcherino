@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "torcherino:lantern",
+    "torcherino:compressed_lantern",
+    "torcherino:double_compressed_lantern"
+  ]
+}
