@@ -168,11 +168,11 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     public boolean readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(getTier());
+        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(this.getTier());
         if (this.valueInRange(xRange, 0, tier.xzRange()) &&
                 this.valueInRange(zRange, 0, tier.xzRange()) &&
                 this.valueInRange(yRange, 0, tier.yRange()) &&
-                this.valueInRange(speed, 0, tier.maxSpeed()) &&
+                this.valueInRange(speed, 1, tier.maxSpeed()) &&
                 this.valueInRange(redstoneMode, 0, 3)) {
             this.xRange = xRange;
             this.zRange = zRange;
@@ -232,11 +232,12 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         if (tag.contains("CustomName", 8)) {
             this.setCustomName(Component.Serializer.fromJson(tag.getString("CustomName")));
         }
-        xRange = tag.getInt("XRange");
-        zRange = tag.getInt("ZRange");
-        yRange = tag.getInt("YRange");
-        speed = tag.getInt("Speed");
-        redstoneMode = tag.getInt("RedstoneMode");
+        Tier tier = TorcherinoAPI.INSTANCE.getTiers().get(this.getTier());
+        xRange = Mth.clamp(tag.getInt("XRange"), 0, tier.xzRange());
+        zRange = Mth.clamp(tag.getInt("ZRange"), 0, tier.xzRange());
+        yRange = Mth.clamp(tag.getInt("YRange"), 0, tier.yRange());
+        speed = Mth.clamp(tag.getInt("Speed"), 1, tier.maxSpeed());
+        redstoneMode = Mth.clamp(tag.getInt("RedstoneMode"), 0, 3);
         active = tag.getBoolean("Active");
         uuid = tag.getString("Owner");
         this.areSettingsValid = true;
