@@ -14,4 +14,6 @@ public interface NetworkUtils {
     void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos worldPosition, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode);
 
     boolean s_isPlayerOnline(String uuid);
+
+    void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos worldPosition, Component name, int xRange, int zRange, int yRange, int speed);
 }

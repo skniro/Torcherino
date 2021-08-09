@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
-import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.block.entity.RedstoneControlledTorcherinoBlockEntity;
 
 @SuppressWarnings({"deprecation"})
 public final class WallTorcherinoBlock extends WallTorchBlock implements EntityBlock, TierSupplier {
@@ -41,7 +41,7 @@ public final class WallTorcherinoBlock extends WallTorchBlock implements EntityB
     @NotNull
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TorcherinoBlockEntity(pos, state);
+        return new RedstoneControlledTorcherinoBlockEntity(pos, state);
     }
 
     @Nullable

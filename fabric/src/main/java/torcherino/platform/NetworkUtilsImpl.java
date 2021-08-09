@@ -20,7 +20,7 @@ import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.block.entity.RedstoneControlledTorcherinoBlockEntity;
 import torcherino.client.screen.TorcherinoScreen;
 import torcherino.config.Config;
 
@@ -74,7 +74,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
                 int speed = buffer.readInt();
                 int redstoneMode = buffer.readInt();
                 server1.submit(() -> {
-                    if (level.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
+                    if (level.getBlockEntity(pos) instanceof RedstoneControlledTorcherinoBlockEntity blockEntity) {
                         if (!blockEntity.readClientData(xRange, zRange, yRange, speed, redstoneMode)) {
                             Torcherino.LOGGER.error("Data received from " + player.getName().getString() + "(" + player.getStringUUID() + ") is invalid.");
                         }
@@ -132,7 +132,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
                     int redstoneMode = buffer.readInt();
                     buffer.retain();
                     client1.execute(() -> {
-                        if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
+                        if (world.getBlockEntity(pos) instanceof RedstoneControlledTorcherinoBlockEntity blockEntity) {
                             Minecraft.getInstance().setScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
                         }
                         buffer.release();

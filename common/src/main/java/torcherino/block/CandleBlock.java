@@ -1,8 +1,7 @@
 package torcherino.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -12,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,15 +19,15 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import torcherino.Torcherino;
 import torcherino.api.TierSupplier;
-import torcherino.block.entity.RedstoneControlledTorcherinoBlockEntity;
+import torcherino.block.entity.CandleBlockEntity;
 
-@SuppressWarnings({"deprecation"})
-public final class TorcherinoBlock extends TorchBlock implements EntityBlock, TierSupplier {
+public class CandleBlock extends net.minecraft.world.level.block.CandleBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
 
-    public TorcherinoBlock(Properties properties, ResourceLocation tier, ParticleOptions particleEffect) {
-        super(properties, particleEffect);
+    public CandleBlock(Properties properties, ResourceLocation tier) {
+        super(properties);
         tierID = tier;
     }
 
@@ -41,7 +39,7 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
     @NotNull
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new RedstoneControlledTorcherinoBlockEntity(pos, state);
+        return new CandleBlockEntity(Registry.BLOCK_ENTITY_TYPE.get(Torcherino.resloc("candle")), pos, state);
     }
 
     @Nullable
@@ -67,8 +65,8 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1) {
-        TorcherinoLogic.neighborUpdate(state, level, pos, neighborBlock, neighborPos, boolean_1, (be) ->
-                be.setPoweredByRedstone(level.hasSignal(pos.below(), Direction.UP)));
+        TorcherinoLogic.<CandleBlockEntity>neighborUpdate(state, level, pos, neighborBlock, neighborPos, boolean_1, (be) ->
+                be.setCandleLit(level.hasNeighborSignal(pos)));
     }
 
     @Override

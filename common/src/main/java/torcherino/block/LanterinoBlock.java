@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
-import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.block.entity.RedstoneControlledTorcherinoBlockEntity;
 
 public final class LanterinoBlock extends LanternBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
@@ -44,7 +44,7 @@ public final class LanterinoBlock extends LanternBlock implements EntityBlock, T
     @NotNull
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TorcherinoBlockEntity(pos, state);
+        return new RedstoneControlledTorcherinoBlockEntity(pos, state);
     }
 
     @Nullable

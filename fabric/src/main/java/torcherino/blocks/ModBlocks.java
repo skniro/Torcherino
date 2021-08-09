@@ -23,7 +23,7 @@ import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
-import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.block.entity.RedstoneControlledTorcherinoBlockEntity;
 import torcherino.temp.TocherinoBlockEntityType;
 
 import java.util.Map;
@@ -63,7 +63,7 @@ public final class ModBlocks {
             Registry.register(Registry.ITEM, lanterinoId, lanterinoItem);
         });
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(Torcherino.MOD_ID, "torcherino"),
-                new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null));
+                new TocherinoBlockEntityType(RedstoneControlledTorcherinoBlockEntity::new, null));
     }
 
     @Environment(EnvType.CLIENT)

@@ -9,6 +9,7 @@ import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,8 @@ import torcherino.api.entrypoints.TorcherinoInitializer;
 import torcherino.blocks.ModBlocks;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtilsImpl;
+
+import java.util.Arrays;
 
 public final class Torcherino implements ModInitializer, TorcherinoInitializer {
     public static final String MOD_ID = "torcherino";
@@ -28,6 +31,7 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
 
     @Override
     public void onInitialize() {
+        System.out.println(Arrays.toString(DyeColor.values()));
         Config.initialize();
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             TorcherinoAPI.INSTANCE.getTiers().forEach((id, tier) -> {

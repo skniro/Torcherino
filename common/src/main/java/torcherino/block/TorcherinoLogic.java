@@ -33,12 +33,12 @@ public final class TorcherinoLogic {
         return InteractionResult.SUCCESS;
     }
 
-    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving,
-                                      Consumer<TorcherinoBlockEntity> func) {
+    public static <T extends BlockEntity> void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving,
+                                      Consumer<T> func) {
         if (world.isClientSide) {
             return;
         }
-        if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
+        if (world.getBlockEntity(pos) instanceof T blockEntity) {
             func.accept(blockEntity);
         }
     }
@@ -62,7 +62,7 @@ public final class TorcherinoLogic {
     }
 
     public static <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (type instanceof TocherinoBlockEntityType) {
+        if (type instanceof TocherinoBlockEntityType<T>) {
             return (level1, pos, state1, entity) -> TorcherinoBlockEntity.tick(level1, pos, state1, (TorcherinoBlockEntity) entity);
         }
         return null;
