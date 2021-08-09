@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
@@ -49,6 +49,6 @@ public final class S2CTierSyncMessage {
     }
 
     private static void writeTier(ResourceLocation name, Tier tier, FriendlyByteBuf buffer) {
-        buffer.writeResourceLocation(name).writeInt(tier.getMaxSpeed()).writeInt(tier.getXZRange()).writeInt(tier.getYRange());
+        buffer.writeResourceLocation(name).writeInt(tier.maxSpeed()).writeInt(tier.xzRange()).writeInt(tier.yRange());
     }
 }

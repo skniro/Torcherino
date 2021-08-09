@@ -1,10 +1,11 @@
-import com.gitlab.ninjaphenix.gradle.task.MinifyJsonTask
+import com.gitlab.ninjaphenix.gradle.api.task.MinifyJsonTask
+import com.gitlab.ninjaphenix.gradle.api.task.ParamLocalObfuscatorTask
 import org.gradle.jvm.tasks.Jar
 
 plugins {
     java
-    id("dev.architectury.loom").version("0.9.0.147").apply(false)
-    id("com.gitlab.ninjaphenix.gradle-utils").version("0.0.20")
+    id("dev.architectury.loom").version("0.7.4-SNAPSHOT").apply(false)
+    id("com.gitlab.ninjaphenix.gradle-utils").version("0.1.0-beta.4")
 }
 
 subprojects {
@@ -68,7 +69,7 @@ subprojects {
         })
     }
 
-    val remapJarTask : Jar = tasks.getByName<Jar>("remapJar") {
+    val remapJarTask : net.fabricmc.loom.task.RemapJarTask = tasks.getByName<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
         archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}-fat.jar")
     }
 
@@ -77,14 +78,20 @@ subprojects {
     }
 
     val minifyJarTask = tasks.register<MinifyJsonTask>("minJar") {
-        parent.set(remapJarTask.outputs.files.singleFile)
-        filePatterns.set(listOf("**/*.json", "**/*.mcmeta"))
-        archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}.jar")
+        input.set(remapJarTask.outputs.files.singleFile)
+        archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}-min.jar")
         dependsOn(remapJarTask)
     }
 
-    tasks.getByName("build") {
+    val releaseJarTask = tasks.register<ParamLocalObfuscatorTask>("releaseJar") {
+        input.set(minifyJarTask.get().outputs.files.singleFile)
+        archiveFileName.set("${properties["archivesBaseName"]}-${properties["mod_version"]}+${properties["minecraft_version"]}.jar")
+        from(rootDir.resolve("LICENSE"))
         dependsOn(minifyJarTask)
+    }
+
+    tasks.getByName("build") {
+        dependsOn(releaseJarTask)
     }
 }
 

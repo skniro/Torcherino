@@ -25,24 +25,6 @@ dependencies {
         this.crane("dev.architectury:crane:1.17.1+build.15")
     })
     forge("net.minecraftforge:forge:${properties["minecraft_version"]}-${properties["forge_version"]}")
-    // todo: remove when architectury loom updates to fix mcp annotation issue
-    compileOnly("dev.architectury:architectury-loom-forge-runtime:0.9.0.147")
-    //modRuntime("mezz.jei:jei-${properties["minecraft_version"]}:${properties["jei_version"]}")
-}
-
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven {
-                // JEI maven
-                name = "Progwml6 maven"
-                url = uri("https://dvs1.progwml6.com/files/maven/")
-            }
-        }
-        filter {
-            includeGroup("mezz.jei")
-        }
-    }
 }
 
 tasks.withType<ProcessResources> {

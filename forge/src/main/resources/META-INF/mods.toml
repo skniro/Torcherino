@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[37,)"
 license="LGPL-3.0-only"
 [[mods]]
   modId="torcherino"
@@ -13,12 +13,12 @@ license="LGPL-3.0-only"
 [[dependencies.torcherino]]
   modId="forge"
   mandatory=true
-  versionRange="[34,)"
+  versionRange="[37,)"
   ordering="NONE"
   side="BOTH"
 [[dependencies.torcherino]]
   modId="minecraft"
   mandatory=true
-  versionRange="[1.16.4,1.17)"
+  versionRange="[1.17.1,1.18)"
   ordering="NONE"
   side="BOTH"
