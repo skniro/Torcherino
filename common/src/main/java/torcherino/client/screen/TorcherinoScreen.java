@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.lwjgl.glfw.GLFW;
-import torcherino.Torcherino;
+import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.client.screen.widgets.GradatedSliderWidget;
@@ -18,7 +18,7 @@ import torcherino.client.screen.widgets.StateButtonWidget;
 import torcherino.platform.NetworkUtils;
 
 public final class TorcherinoScreen extends Screen {
-    private static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(Torcherino.MOD_ID, "textures/screens/torcherino.png");
+    private static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(TorcherinoImpl.MOD_ID, "textures/screens/torcherino.png");
     private static final int screenWidth = 245;
     private static final int screenHeight = 123;
 

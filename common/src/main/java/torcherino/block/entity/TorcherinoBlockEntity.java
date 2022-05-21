@@ -158,8 +158,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        super.save(tag);
+    public void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
         if (this.hasCustomName()) {
             tag.putString("CustomName", Component.Serializer.toJson(getCustomName()));
         }
@@ -170,7 +170,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         tag.putInt("RedstoneMode", redstoneMode);
         tag.putBoolean("Active", active);
         tag.putString("Owner", getOwner() == null ? "" : getOwner());
-        return tag;
     }
 
     @Override

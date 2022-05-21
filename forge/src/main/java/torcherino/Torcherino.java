@@ -26,11 +26,6 @@ public final class Torcherino {
         ModContent.initialise(eventBus);
         NetworkUtilsImpl.getInstance().initialize();
         eventBus.addListener(this::processIMC);
-        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.WATER);
-        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.LAVA);
-        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.AIR);
-        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
-        TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
     }
 
     public static ResourceLocation getRl(String path) {

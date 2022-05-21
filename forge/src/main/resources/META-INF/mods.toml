@@ -1,24 +1,23 @@
 modLoader="javafml"
-loaderVersion="[37,)"
+loaderVersion="[38,)"
 license="LGPL-3.0-only"
 [[mods]]
   modId="torcherino"
-  version="${version}"
+  version="16.0.0"
   displayName="Torcherino"
-  #updateJSONURL="https://raw.githubusercontent.com/NinjaPhenix/Torcherino/master/update.json"
   displayURL="https://www.curseforge.com/minecraft/mc-mods/torcherino"
   logoFile="torcherino.png"
-  authors="NinjaPhenix, sci4me, Moze_Intel"
+  authors="LukeGrahamLandry#6888, NinjaPhenix, sci4me, Moze_Intel"
   description="Adds blocks which speed up tile entities."
 [[dependencies.torcherino]]
   modId="forge"
   mandatory=true
-  versionRange="[37,)"
+  versionRange="[38,)"
   ordering="NONE"
   side="BOTH"
 [[dependencies.torcherino]]
   modId="minecraft"
   mandatory=true
-  versionRange="[1.17.1,1.18)"
+  versionRange="[1.18,1.19)"
   ordering="NONE"
   side="BOTH"

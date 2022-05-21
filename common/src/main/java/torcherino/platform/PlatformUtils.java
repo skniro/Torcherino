@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public interface PlatformUtils {
     static PlatformUtils getInstance() {
-        return PlatformUtilsImpl.getInstance();
+        return Services.PLATFORM;
     }
 
     boolean isDedicatedServer();

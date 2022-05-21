@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;

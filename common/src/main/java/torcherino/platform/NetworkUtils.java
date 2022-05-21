@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public interface NetworkUtils {
     static NetworkUtils getInstance() {
-        return NetworkUtilsImpl.getInstance();
+        return Services.NETWORK;
     }
 
     void c2s_updateTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode);

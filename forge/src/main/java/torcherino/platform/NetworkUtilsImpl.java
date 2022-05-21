@@ -6,9 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import torcherino.Torcherino;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 public final class NetworkUtilsImpl implements NetworkUtils {
     private static final Supplier<NetworkUtilsImpl> instance = Suppliers.memoize(NetworkUtilsImpl::new);
     private final HashSet<String> allowedUuids = new HashSet<>();
-    public SimpleChannel torcherinoChannel;
+    public static SimpleChannel torcherinoChannel;
 
     public static NetworkUtilsImpl getInstance() {
         return instance.get();

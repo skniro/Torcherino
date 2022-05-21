@@ -15,10 +15,10 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import torcherino.Torcherino;
+import torcherino.TorcherinoImpl;
+import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.config.Config;
-import torcherino.temp.TocherinoBlockEntityType;
 
 import java.util.function.Consumer;
 
@@ -57,13 +57,17 @@ public final class TorcherinoLogic {
         }
         if (Config.INSTANCE.log_placement) {
             String prefix = placer == null ? "Something" : placer.getDisplayName().getString() + "(" + placer.getStringUUID() + ")";
-            Torcherino.LOGGER.info("[Torcherino] {} placed a {} at {}, {}, {}.", prefix, Registry.BLOCK.getKey(block), pos.getX(), pos.getY(), pos.getZ());
+            TorcherinoImpl.LOGGER.info("[Torcherino] {} placed a {} at {}, {}, {}.", prefix, Registry.BLOCK.getKey(block), pos.getX(), pos.getY(), pos.getZ());
         }
     }
 
     public static <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (type instanceof TocherinoBlockEntityType) {
-            return (level1, pos, state1, entity) -> TorcherinoBlockEntity.tick(level1, pos, state1, (TorcherinoBlockEntity) entity);
+        if (state.getBlock() instanceof TierSupplier) {
+            try {
+                return (level1, pos, state1, entity) -> TorcherinoBlockEntity.tick(level1, pos, state1, (TorcherinoBlockEntity) entity);
+            } catch (ClassCastException e){
+                return null;
+            }
         }
         return null;
     }
