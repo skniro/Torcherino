@@ -19,8 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
@@ -41,13 +39,11 @@ public final class LanterinoBlock extends LanternBlock implements EntityBlock, T
         return tierID;
     }
 
-    @NotNull
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TorcherinoBlockEntity(pos, state);
     }
 
-    @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return TorcherinoLogic.getTicker(level, state, type);

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -73,7 +72,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
 
     @Override
     public Component getName() {
-        return hasCustomName() ? customName : new TranslatableComponent(getBlockState().getBlock().getDescriptionId());
+        return hasCustomName() ? customName : Component.translatable(getBlockState().getBlock().getDescriptionId());
     }
 
     @Override

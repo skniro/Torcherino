@@ -7,8 +7,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 
 public abstract class StateButtonWidget extends Button {
@@ -17,7 +15,7 @@ public abstract class StateButtonWidget extends Button {
     private Component narrationMessage;
 
     public StateButtonWidget(Screen screen, int x, int y) {
-        super(x, y, 20, 20, TextComponent.EMPTY, null);
+        super(x, y, 20, 20, Component.empty(), null);
         this.screen = screen;
         this.initialize();
     }
@@ -46,7 +44,7 @@ public abstract class StateButtonWidget extends Button {
 
     @Override
     public MutableComponent createNarrationMessage() {
-        return new TranslatableComponent("gui.narrate.button", narrationMessage);
+        return Component.translatable("gui.narrate.button", narrationMessage);
     }
 
     protected void setNarrationMessage(Component narrationMessage) {

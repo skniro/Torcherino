@@ -1,9 +1,9 @@
 modLoader="javafml"
-loaderVersion="[38,)"
+loaderVersion="[41,)"
 license="LGPL-3.0-only"
 [[mods]]
   modId="torcherino"
-  version="16.0.0"
+  version="17.0.0"
   displayName="Torcherino"
   displayURL="https://www.curseforge.com/minecraft/mc-mods/torcherino"
   logoFile="torcherino.png"
@@ -12,12 +12,12 @@ license="LGPL-3.0-only"
 [[dependencies.torcherino]]
   modId="forge"
   mandatory=true
-  versionRange="[38,)"
+  versionRange="[41,)"
   ordering="NONE"
   side="BOTH"
 [[dependencies.torcherino]]
   modId="minecraft"
   mandatory=true
-  versionRange="[1.18,1.19)"
+  versionRange="[1.19,1.20)"
   ordering="NONE"
   side="BOTH"

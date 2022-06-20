@@ -1,6 +1,6 @@
 # Torcherino
 
-- forge/fabric 1.18.2
+- forge/fabric 1.19
 
 ## Features
 

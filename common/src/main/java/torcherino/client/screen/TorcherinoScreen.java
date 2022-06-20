@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -51,7 +50,7 @@ public final class TorcherinoScreen extends Screen {
         this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 20, 205, (double) (speed - 1) / (tier.maxSpeed() - 1), tier.maxSpeed()) {
             @Override
             protected void updateMessage() {
-                this.setMessage(new TranslatableComponent("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed));
+                this.setMessage(Component.translatable("gui.torcherino.speed", 100 * TorcherinoScreen.this.speed));
             }
 
             @Override
@@ -63,7 +62,7 @@ public final class TorcherinoScreen extends Screen {
         this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 45, 205, (double) xRange / tier.xzRange(), tier.xzRange()) {
             @Override
             protected void updateMessage() {
-                this.setMessage(new TranslatableComponent("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1));
+                this.setMessage(Component.translatable("gui.torcherino.x_range", TorcherinoScreen.this.xRange * 2 + 1));
             }
 
             @Override
@@ -75,7 +74,7 @@ public final class TorcherinoScreen extends Screen {
         this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 70, 205, (double) zRange / tier.xzRange(), tier.xzRange()) {
             @Override
             protected void updateMessage() {
-                this.setMessage(new TranslatableComponent("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1));
+                this.setMessage(Component.translatable("gui.torcherino.z_range", TorcherinoScreen.this.zRange * 2 + 1));
             }
 
             @Override
@@ -87,7 +86,7 @@ public final class TorcherinoScreen extends Screen {
         this.addRenderableWidget(new GradatedSliderWidget(left + 8, top + 95, 205, (double) yRange / tier.yRange(), tier.yRange()) {
             @Override
             protected void updateMessage() {
-                this.setMessage(new TranslatableComponent("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1));
+                this.setMessage(Component.translatable("gui.torcherino.y_range", TorcherinoScreen.this.yRange * 2 + 1));
             }
 
             @Override
@@ -113,7 +112,7 @@ public final class TorcherinoScreen extends Screen {
                     case 3 -> "gui.torcherino.mode.off";
                     default -> "gui.torcherino.mode.error";
                 };
-                this.setNarrationMessage(new TranslatableComponent("gui.torcherino.mode", new TranslatableComponent(translationKey)));
+                this.setNarrationMessage(Component.translatable("gui.torcherino.mode", Component.translatable(translationKey)));
             }
 
             private void setButtonIcon() {
