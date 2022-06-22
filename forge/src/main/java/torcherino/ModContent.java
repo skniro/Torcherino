@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -24,13 +23,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import torcherino.api.TorcherinoAPI;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
-import torcherino.temp.TocherinoBlockEntityType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,8 +48,8 @@ public final class ModContent {
         PARTICLE_TYPES.register(bus);
         TILE_ENTITIES.register(bus);
 
-        TILE_ENTITIES.register("torcherino", () ->  new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null));
-        toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, "torcherino"));
+
+        TILE_ENTITIES.register("torcherino", () ->  BlockEntityType.Builder.of(TorcherinoBlockEntity::new, BLOCKS.getEntries().stream().map(RegistryObject::get).toList().toArray(new Block[0])).build(null));toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, "torcherino"));
         TorcherinoAPI.INSTANCE.getTiers().keySet().forEach(ModContent::register);
     }
 
