@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
@@ -24,12 +25,14 @@ import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
-import torcherino.temp.TocherinoBlockEntityType;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class ModBlocks {
     public static final ModBlocks INSTANCE = new ModBlocks();
+    Set<Block> allBlocks = new HashSet<>();
 
     public void initialize() {
         Map<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
@@ -63,7 +66,7 @@ public final class ModBlocks {
             Registry.register(Registry.ITEM, lanterinoId, lanterinoItem);
         });
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(Torcherino.MOD_ID, "torcherino"),
-                new TocherinoBlockEntityType(TorcherinoBlockEntity::new, null));
+                BlockEntityType.Builder.of(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));
     }
 
     @Environment(EnvType.CLIENT)
@@ -74,6 +77,7 @@ public final class ModBlocks {
     private void registerAndBlacklist(ResourceLocation id, Block block) {
         Registry.register(Registry.BLOCK, id, block);
         TorcherinoAPI.INSTANCE.blacklistBlock(id);
+        allBlocks.add(block);
     }
 
     private ResourceLocation id(ResourceLocation tierID, String type) {
