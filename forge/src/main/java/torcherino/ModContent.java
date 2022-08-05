@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -40,7 +40,7 @@ public final class ModContent {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torcherino.MOD_ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torcherino.MOD_ID);
     private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
-    private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Torcherino.MOD_ID);
+    private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Torcherino.MOD_ID);
 
     public static void initialise(IEventBus bus) {
         BLOCKS.register(bus);
@@ -107,7 +107,7 @@ public final class ModContent {
     }
 
     @SubscribeEvent
-    public static void registerParticleFactories(final ParticleFactoryRegisterEvent event) {
+    public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
         PARTICLE_TYPES.getEntries().forEach(registryObject -> Minecraft.getInstance().particleEngine.register((SimpleParticleType) registryObject.get(),
                 FlameParticle.Provider::new));
     }

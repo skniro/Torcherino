@@ -19,10 +19,13 @@ Settings should be the same on the client and server as they are not synced.
 - `blacklisted_blockentities` (list): identifiers of block entities that should not be sped up
 - `online_mode` (string): When set to ONLINE, Torcherinos only run its owner is currently online. If set to RESTART then Torcherinos will run for anyone who has logged in since the server started. Any value allows them to run whenever their chunk is loaded. 
 - `tiers` (list): additional tiers of torcherino to register. 
-  - `name` (string): will be included in registry name. must be unique
-  - `max_speed` (int): max multiplier on tick speed caused by this tier 
-  - `xz_range` (int): horizontal radius in blocks for this tier to effect
-  - `y_range` (int): vertical range in blocks for thier tier to effect
+
+Tier definition format:
+
+- `name` (string): will be included in registry name. must be unique
+- `max_speed` (int): max multiplier on tick speed caused by this tier 
+- `xz_range` (int): horizontal radius in blocks for this tier to effect
+- `y_range` (int): vertical range in blocks for thier tier to effect
 
 You must provide block state, model, texture, lang, loot table, and recipe files for any non-default tiers you add. 
 All generated blocks will be automatically added to the internal blacklist and their identifiers will be as follows:
