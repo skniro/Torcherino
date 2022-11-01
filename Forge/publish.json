@@ -1,0 +1,14 @@
+{
+  "loader": "forge",
+  "mc_versions": ["1.19.2", "1.19.1", "1.19"],
+  "changelogUrl": "https://github.com/LukeGrahamLandry/Torcherino/wiki/Changelog",
+  "releaseType": "release",
+  "curseforge": {
+    "id": "236794"
+  },
+  "github": {
+    "owner": "LukeGrahamLandry",
+    "repo": "Torcherino",
+    "branch": "1.19"
+  }
+}

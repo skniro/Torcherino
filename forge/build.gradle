@@ -4,11 +4,11 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+archivesBaseName = "${project.mod_name}-forge-${project.minecraft_version}"
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
-    
+
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
         // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
@@ -101,3 +101,4 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 apply from: "https://moddingtutorials.org/applesilicon.gradle"
+apply from: "https://moddingtutorials.org/publish.gradle"
