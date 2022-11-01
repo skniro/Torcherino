@@ -10,8 +10,8 @@
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/torcherino",
-    "sources": "https://github.com/NinjaPhenix/Torcherino/tree/release/1.17.1",
-    "issues": "https://github.com/NinjaPhenix/FabricMods/issues"
+    "sources": "https://github.com/LukeGrahamLandryMC/Torcherino",
+    "issues": "https://github.com/LukeGrahamLandryMC/Torcherino/issues"
   },
   "license": "LGPL-3.0-only",
   "icon": "torcherino.png",

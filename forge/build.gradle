@@ -1,22 +1,12 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-    }
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
 }
-apply plugin: 'java'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
-    
+
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
         // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
@@ -77,6 +67,9 @@ dependencies {
     compileOnly project(":Common")
 }
 
+
+archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
 }
@@ -104,4 +97,9 @@ publishing {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
 apply from: "https://moddingtutorials.org/applesilicon.gradle"
+apply from: "https://moddingtutorials.org/publish.gradle"

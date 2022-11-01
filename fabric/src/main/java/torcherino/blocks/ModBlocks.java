@@ -36,6 +36,7 @@ public final class ModBlocks {
 
     public void initialize() {
         Map<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
+
         tiers.forEach((tierId, tier) -> {
             if (!tierId.getNamespace().equals(Torcherino.MOD_ID)) {
                 return;
