@@ -1,9 +1,5 @@
 package torcherino;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.FlameParticle;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,7 +34,7 @@ import java.util.function.Supplier;
 public final class ModContent {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torcherino.MOD_ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torcherino.MOD_ID);
-    private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Torcherino.MOD_ID);
 
     public static void initialise(IEventBus bus) {
@@ -83,11 +78,9 @@ public final class ModContent {
             ITEMS.register(lanterinoPath, () -> new BlockItem(lanterinoBlock.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
 
             if (FMLLoader.getDist().isClient()) {
-                Minecraft.getInstance().submitAsync(() -> {
-                    ItemBlockRenderTypes.setRenderLayer(standingBlock.get(), RenderType.cutout());
-                    ItemBlockRenderTypes.setRenderLayer(wallBlock.get(), RenderType.cutout());
-                    ItemBlockRenderTypes.setRenderLayer(lanterinoBlock.get(), RenderType.cutout());
-                });
+                ClientHelper.registerCutout(standingBlock);
+                ClientHelper.registerCutout(wallBlock);
+                ClientHelper.registerCutout(lanterinoBlock);
             }
         }
     }
@@ -104,11 +97,5 @@ public final class ModContent {
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
-    }
-
-    @SubscribeEvent
-    public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
-        PARTICLE_TYPES.getEntries().forEach(registryObject -> Minecraft.getInstance().particleEngine.register((SimpleParticleType) registryObject.get(),
-                FlameParticle.Provider::new));
     }
 }

@@ -4,8 +4,6 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-archivesBaseName = "${project.mod_name}-forge-${project.minecraft_version}"
-
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
@@ -68,6 +66,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
 }
+
+
+archivesBaseName = "${mod_name}-forge-${minecraft_version}"
 
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
