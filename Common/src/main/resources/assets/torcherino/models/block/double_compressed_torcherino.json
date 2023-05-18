@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_torch",
   "textures": {
-    "torch": "torcherino:blocks/double_compressed_torcherino"
+    "torch": "torcherino:block/double_compressed_torcherino"
   }
 }

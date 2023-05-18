@@ -2,6 +2,7 @@ package torcherino;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -35,7 +36,7 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     }
 
     public boolean blacklistBlock(ResourceLocation blockId) {
-        Optional<Block> block = Registry.BLOCK.getOptional(blockId);
+        Optional<Block> block = BuiltInRegistries.BLOCK.getOptional(blockId);
         if (block.isPresent()) {
             if (blacklistedBlocks.contains(block.get())) {
                 LOGGER.warn("Block with id {} is already blacklisted.", block);
@@ -51,7 +52,7 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     @Override
     public boolean blacklistBlock(Block block) {
         if (blacklistedBlocks.contains(block)) {
-            LOGGER.warn("Block with id {} is already blacklisted.", Registry.BLOCK.getKey(block));
+            LOGGER.warn("Block with id {} is already blacklisted.", BuiltInRegistries.BLOCK.getKey(block));
             return false;
         }
         blacklistedBlocks.add(block);
@@ -65,7 +66,7 @@ public final class TorcherinoImpl implements TorcherinoAPI {
 
     @Override
     public boolean blacklistBlockEntity(ResourceLocation blockEntityTypeId) {
-        Optional<BlockEntityType<?>> blockEntityType = Registry.BLOCK_ENTITY_TYPE.getOptional(blockEntityTypeId);
+        Optional<BlockEntityType<?>> blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getOptional(blockEntityTypeId);
         if (blockEntityType.isPresent()) {
             if (blacklistedTiles.contains(blockEntityType.get())) {
                 LOGGER.warn("BlockEntityType with id {} is already blacklisted.", blockEntityTypeId);
@@ -81,7 +82,7 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     @Override
     public boolean blacklistBlockEntity(BlockEntityType<?> blockEntityType) {
         if (blacklistedTiles.contains(blockEntityType)) {
-            LOGGER.warn("BlockEntityType with id {} is already blacklisted.", Registry.BLOCK_ENTITY_TYPE.getKey(blockEntityType));
+            LOGGER.warn("BlockEntityType with id {} is already blacklisted.", BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityType));
             return false;
         }
         blacklistedTiles.add(blockEntityType);

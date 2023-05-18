@@ -1,16 +1,19 @@
 package torcherino;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -73,9 +76,9 @@ public final class ModContent {
             Supplier<JackoLanterinoBlock> jackoLanterinoBlock = BLOCKS.register(jackoLanterinoPath, () -> new JackoLanterinoBlock(BlockBehaviour.Properties.copy(Blocks.JACK_O_LANTERN), tierID));
             Supplier<LanterinoBlock> lanterinoBlock = BLOCKS.register(lanterinoPath, () -> new LanterinoBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN), tierID));
 
-            ITEMS.register(torcherinoPath, () -> new StandingAndWallBlockItem(standingBlock.get(), wallBlock.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
-            ITEMS.register(jackoLanterinoPath, () -> new BlockItem(jackoLanterinoBlock.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-            ITEMS.register(lanterinoPath, () -> new BlockItem(lanterinoBlock.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+            ITEMS.register(torcherinoPath, () -> new StandingAndWallBlockItem(standingBlock.get(), wallBlock.get(), new Item.Properties(), Direction.DOWN));
+            ITEMS.register(jackoLanterinoPath, () -> new BlockItem(jackoLanterinoBlock.get(), new Item.Properties()));
+            ITEMS.register(lanterinoPath, () -> new BlockItem(lanterinoBlock.get(), new Item.Properties()));
 
             if (FMLLoader.getDist().isClient()) {
                 ClientHelper.registerCutout(standingBlock);
@@ -97,5 +100,12 @@ public final class ModContent {
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
+    }
+
+    @SubscribeEvent
+    public static void creativeTab(CreativeModeTabEvent.BuildContents event){
+        if (event.getTab() == CreativeModeTabs.FUNCTIONAL_BLOCKS){
+            ITEMS.getEntries().stream().map(RegistryObject::get).forEach(event::accept);
+        }
     }
 }

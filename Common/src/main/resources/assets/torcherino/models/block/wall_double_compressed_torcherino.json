@@ -1,8 +1,8 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "torch": "torcherino:blocks/double_compressed_torcherino",
-    "particle": "torcherino:blocks/double_compressed_torcherino"
+    "torch": "torcherino:block/double_compressed_torcherino",
+    "particle": "torcherino:block/double_compressed_torcherino"
   },
   "elements": [
     {

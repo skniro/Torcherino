@@ -2,6 +2,7 @@ package torcherino.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     private String uuid = "";
 
     public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
-        super(Registry.BLOCK_ENTITY_TYPE.get(new ResourceLocation("torcherino", "torcherino")), pos, state);
+        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(new ResourceLocation("torcherino", "torcherino")), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TorcherinoBlockEntity entity) {

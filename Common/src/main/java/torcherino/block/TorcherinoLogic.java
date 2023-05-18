@@ -2,6 +2,7 @@ package torcherino.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -57,7 +58,7 @@ public final class TorcherinoLogic {
         }
         if (Config.INSTANCE.log_placement) {
             String prefix = placer == null ? "Something" : placer.getDisplayName().getString() + "(" + placer.getStringUUID() + ")";
-            TorcherinoImpl.LOGGER.info("[Torcherino] {} placed a {} at {}, {}, {}.", prefix, Registry.BLOCK.getKey(block), pos.getX(), pos.getY(), pos.getZ());
+            TorcherinoImpl.LOGGER.info("[Torcherino] {} placed a {} at {}, {}, {}.", prefix, BuiltInRegistries.BLOCK.getKey(block), pos.getX(), pos.getY(), pos.getZ());
         }
     }
 

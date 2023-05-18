@@ -15,7 +15,7 @@ public abstract class StateButtonWidget extends Button {
     private Component narrationMessage;
 
     public StateButtonWidget(Screen screen, int x, int y) {
-        super(x, y, 20, 20, Component.empty(), null);
+        super(x, y, 20, 20, Component.empty(), (b) -> {}, Button.DEFAULT_NARRATION);
         this.screen = screen;
         this.initialize();
     }
@@ -30,9 +30,9 @@ public abstract class StateButtonWidget extends Button {
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             super.render(matrixStack, mouseX, mouseY, partialTicks);
-            itemRenderer.renderAndDecorateItem(this.getButtonIcon(), x + 2, y + 2);
+            itemRenderer.renderAndDecorateItem(this.getButtonIcon(), getX() + 2, getY() + 2);
             if (this.isHovered) {
-                screen.renderTooltip(matrixStack, narrationMessage, x + 14, y + 18);
+                screen.renderTooltip(matrixStack, narrationMessage, getX() + 14, getY() + 18);
             }
         }
     }

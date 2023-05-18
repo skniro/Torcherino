@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "top": "block/pumpkin_top",
-    "front": "torcherino:blocks/lanterino",
+    "front": "torcherino:block/lanterino",
     "side": "block/pumpkin_side"
   }
 }
