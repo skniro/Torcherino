@@ -15,11 +15,17 @@ public abstract class StateButtonWidget extends Button {
     private static final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
     private final Screen screen;
     private Component narrationMessage;
+    private Font font;
 
-    public StateButtonWidget(Screen screen, int x, int y) {
+    public StateButtonWidget(Screen screen, int x, int y, Font font) {
         super(x, y, 20, 20, Component.empty(), (b) -> {}, Button.DEFAULT_NARRATION);
         this.screen = screen;
+        this.font = font;
         this.initialize();
+    }
+
+    public Font getFont() {
+        return this.font;
     }
 
     protected abstract void initialize();
@@ -28,13 +34,12 @@ public abstract class StateButtonWidget extends Button {
 
     protected abstract ItemStack getButtonIcon();
 
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks, Font font) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             super.render(context, mouseX, mouseY, partialTicks);
-            context.renderItemDecorations(font ,this.getButtonIcon(),getX() + 2, getY() + 2);
+            context.renderItemDecorations(this.getFont() ,this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
-                screen.render(context, getX() + 14, getY() + 18, partialTicks);
-                screen.getNarrationMessage();
+                context.renderTooltip(this.getFont(), narrationMessage ,getX() + 14, getY() + 18);
             }
         }
     }

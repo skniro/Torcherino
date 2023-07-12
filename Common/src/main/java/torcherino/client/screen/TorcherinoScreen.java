@@ -1,10 +1,8 @@
 package torcherino.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -97,7 +95,7 @@ public final class TorcherinoScreen extends Screen {
                 value = (double) yRange / tier.yRange();
             }
         });
-        this.addRenderableWidget(new StateButtonWidget(this, left + 217, top + 20) {
+        this.addRenderableWidget(new StateButtonWidget(this, left + 217, top + 20, font) {
             ItemStack buttonIcon;
 
             @Override
