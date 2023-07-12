@@ -2,6 +2,8 @@ package torcherino.client.screen.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -26,13 +28,13 @@ public abstract class StateButtonWidget extends Button {
 
     protected abstract ItemStack getButtonIcon();
 
-    @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks, Font font) {
         if (visible) {
-            super.render(matrixStack, mouseX, mouseY, partialTicks);
-            itemRenderer.renderAndDecorateItem(matrixStack,this.getButtonIcon(),getX() + 2, getY() + 2);
+            super.render(context, mouseX, mouseY, partialTicks);
+            context.renderItemDecorations(font ,this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
-                screen.renderTooltip(matrixStack, narrationMessage, getX() + 14, getY() + 18);
+                screen.render(context, getX() + 14, getY() + 18, partialTicks);
+                screen.getNarrationMessage();
             }
         }
     }

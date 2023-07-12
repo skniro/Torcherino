@@ -66,7 +66,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
         });
         ServerPlayConnectionEvents.INIT.register((handler, server) -> {
             ServerPlayNetworking.registerReceiver(handler, NetworkUtilsImpl.UPDATE_TORCHERINO_VALUES, (server1, player, handler1, buffer, responseSender) -> {
-                Level level = player.getLevel();
+                Level level = player.level();
                 BlockPos pos = buffer.readBlockPos();
                 int xRange = buffer.readInt();
                 int zRange = buffer.readInt();

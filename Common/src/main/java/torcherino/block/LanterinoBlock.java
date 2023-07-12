@@ -49,7 +49,6 @@ public final class LanterinoBlock extends LanternBlock implements EntityBlock, T
         return TorcherinoLogic.getTicker(level, state, type);
     }
 
-    @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.IGNORE;
     }

@@ -46,7 +46,6 @@ public final class WallTorcherinoBlock extends WallTorchBlock implements EntityB
         return TorcherinoLogic.getTicker(level, state, type);
     }
 
-    @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.IGNORE;
     }
