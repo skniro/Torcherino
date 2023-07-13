@@ -144,7 +144,7 @@ public final class TorcherinoScreen extends Screen {
         RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         context.blit(SCREEN_TEXTURE,left, top, 0, 0, screenWidth,screenHeight);
-        context.drawString(font, cached_title.getVisualOrderText(), (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752);
+        context.drawString(font, cached_title.getVisualOrderText(), (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
         super.render(context, x, y, partialTicks);
     }
 
