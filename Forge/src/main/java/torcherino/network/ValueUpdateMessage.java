@@ -36,7 +36,7 @@ public final class ValueUpdateMessage {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getOriginationSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                if (context.getSender().level.getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
+                if (context.getSender().level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
                     if (!blockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode)) {
                         Torcherino.LOGGER.error("Data received from " + context.getSender().getName().getString() + "(" + context.getSender().getStringUUID() + ") is invalid.");
                     }
