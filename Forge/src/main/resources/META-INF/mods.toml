@@ -3,7 +3,7 @@ loaderVersion="[47,)"
 license="LGPL-3.0-only"
 [[mods]]
   modId="torcherino"
-  version="20.0.0"
+  version="20.0.1"
   displayName="Torcherino"
   displayURL="https://www.curseforge.com/minecraft/mc-mods/torcherino"
   logoFile="torcherino.png"
