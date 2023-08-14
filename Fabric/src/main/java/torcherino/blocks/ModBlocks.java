@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
@@ -50,13 +51,13 @@ public final class ModBlocks {
             ResourceLocation jackoLanterinoId = id(tierId, "lanterino");
             ResourceLocation lanterinoId = id(tierId, "lantern");
             ParticleOptions particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(id(tierId, "flame"));
-            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.TORCH), tierId, particleEffect);
+            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
-            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).dropsLike(torcherinoBlock), tierId, particleEffect);
+            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(torcherinoBlock), tierId, particleEffect);
             this.registerAndBlacklist(new ResourceLocation(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
-            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.copy(Blocks.JACK_O_LANTERN), tierId);
+            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.copy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
-            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN), tierId);
+            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 this.setRenderType(torcherinoBlock);

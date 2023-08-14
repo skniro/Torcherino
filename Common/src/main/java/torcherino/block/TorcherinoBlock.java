@@ -46,7 +46,8 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
         return TorcherinoLogic.getTicker(level, state, type);
     }
 
-    public PushReaction getPistonPushReaction(BlockState state) {
+    @Deprecated
+    public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
     }
 
