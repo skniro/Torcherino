@@ -30,7 +30,7 @@ public abstract class StateButtonWidget extends Button {
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             super.render(matrixStack, mouseX, mouseY, partialTicks);
-            itemRenderer.renderAndDecorateItem(this.getButtonIcon(), getX() + 2, getY() + 2);
+            itemRenderer.renderAndDecorateItem(matrixStack,this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
                 screen.renderTooltip(matrixStack, narrationMessage, getX() + 14, getY() + 18);
             }
