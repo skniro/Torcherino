@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -43,10 +44,11 @@ public final class JackoLanterinoBlock extends CarvedPumpkinBlock implements Ent
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return TorcherinoLogic.getTicker(level, state, type);
     }
-
-    public PushReaction getPistonPushReaction(BlockState state) {
+    @Deprecated
+    public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
     }
+
 
     @Override
     public void onPlace(BlockState newState, Level level, BlockPos pos, BlockState state, boolean boolean_1) {
