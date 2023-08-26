@@ -44,7 +44,6 @@ public final class JackoLanterinoBlock extends CarvedPumpkinBlock implements Ent
         return TorcherinoLogic.getTicker(level, state, type);
     }
 
-    @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.IGNORE;
     }

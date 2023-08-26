@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
@@ -66,7 +67,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
         });
         ServerPlayConnectionEvents.INIT.register((handler, server) -> {
             ServerPlayNetworking.registerReceiver(handler, NetworkUtilsImpl.UPDATE_TORCHERINO_VALUES, (server1, player, handler1, buffer, responseSender) -> {
-                Level level = player.getLevel();
+                Level level = player.level();
                 BlockPos pos = buffer.readBlockPos();
                 int xRange = buffer.readInt();
                 int zRange = buffer.readInt();

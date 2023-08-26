@@ -51,7 +51,7 @@ public final class OpenScreenMessage {
     private static void openTorcherinoScreen(OpenScreenMessage message) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.submitAsync(() -> {
-            if (minecraft.player.level.getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
+            if (minecraft.player.level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
                 TorcherinoScreen screen = new TorcherinoScreen(message.title, message.xRange, message.zRange, message.yRange,
                         message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTier());
                 minecraft.setScreen(screen);

@@ -5,7 +5,6 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
@@ -13,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -103,8 +102,8 @@ public final class ModContent {
     }
 
     @SubscribeEvent
-    public static void creativeTab(CreativeModeTabEvent.BuildContents event){
-        if (event.getTab() == CreativeModeTabs.FUNCTIONAL_BLOCKS){
+    public static void creativeTab(BuildCreativeModeTabContentsEvent event){
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS){
             ITEMS.getEntries().stream().map(RegistryObject::get).forEach(event::accept);
         }
     }

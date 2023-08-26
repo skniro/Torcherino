@@ -1,7 +1,7 @@
 package torcherino.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -95,7 +95,7 @@ public final class TorcherinoScreen extends Screen {
                 value = (double) yRange / tier.yRange();
             }
         });
-        this.addRenderableWidget(new StateButtonWidget(this, left + 217, top + 20) {
+        this.addRenderableWidget(new StateButtonWidget(this, left + 217, top + 20, font) {
             ItemStack buttonIcon;
 
             @Override
@@ -139,13 +139,13 @@ public final class TorcherinoScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int x, int y, float partialTicks) {
-        this.fillGradient(matrixStack, 0, 0, this.width, this.height, -1072689136, -804253680);
+    public void render(GuiGraphics context, int x, int y, float partialTicks) {
+        context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
         RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
         RenderSystem.setShaderColor(1, 1, 1, 1);
-        this.blit(matrixStack, left, top, 0, 0, screenWidth, screenHeight);
-        font.draw(matrixStack, cached_title.getVisualOrderText(), (width - font.width(cached_title)) / 2.0f, top + 6, 4210752);
-        super.render(matrixStack, x, y, partialTicks);
+        context.blit(SCREEN_TEXTURE,left, top, 0, 0, screenWidth,screenHeight);
+        context.drawString(font, cached_title.getVisualOrderText(), (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
+        super.render(context, x, y, partialTicks);
     }
 
     @Override
