@@ -3,6 +3,7 @@ package torcherino.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,8 +27,8 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 public final class TorcherinoBlock extends TorchBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
 
-    public TorcherinoBlock(Properties properties, ResourceLocation tier, ParticleOptions particleEffect) {
-        super(properties, particleEffect);
+    public TorcherinoBlock(Properties properties, ResourceLocation tier, SimpleParticleType simpleParticleType) {
+        super(simpleParticleType,properties);
         tierID = tier;
     }
 

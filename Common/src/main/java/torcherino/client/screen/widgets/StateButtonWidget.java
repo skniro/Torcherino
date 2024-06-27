@@ -34,9 +34,9 @@ public abstract class StateButtonWidget extends Button {
 
     protected abstract ItemStack getButtonIcon();
 
-    public void render(GuiGraphics context, int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public final void renderWidget(GuiGraphics context, int mouseX, int mouseY, float partialTicks){
         if (visible) {
-            super.render(context, mouseX, mouseY, partialTicks);
             context.renderItem(this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
                 context.renderTooltip(this.getFont(), narrationMessage ,getX() + 14, getY() + 18);

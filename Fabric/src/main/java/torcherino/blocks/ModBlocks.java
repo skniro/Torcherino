@@ -50,14 +50,14 @@ public final class ModBlocks {
             ResourceLocation torcherinoId = id(tierId, "torcherino");
             ResourceLocation jackoLanterinoId = id(tierId, "lanterino");
             ResourceLocation lanterinoId = id(tierId, "lantern");
-            ParticleOptions particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(id(tierId, "flame"));
-            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierId, particleEffect);
+            SimpleParticleType particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(id(tierId, "flame"));
+            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
-            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(torcherinoBlock), tierId, particleEffect);
+            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(torcherinoBlock), tierId, particleEffect);
             this.registerAndBlacklist(new ResourceLocation(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
-            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.copy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierId);
+            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
-            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierId);
+            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 this.setRenderType(torcherinoBlock);

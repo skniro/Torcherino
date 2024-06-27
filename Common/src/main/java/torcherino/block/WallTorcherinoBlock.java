@@ -2,6 +2,7 @@ package torcherino.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,8 +27,8 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 public final class WallTorcherinoBlock extends WallTorchBlock implements EntityBlock, TierSupplier {
     private final ResourceLocation tierID;
 
-    public WallTorcherinoBlock(Properties properties, ResourceLocation tier, ParticleOptions particleEffect) {
-        super(properties, particleEffect);
+    public WallTorcherinoBlock( Properties properties, ResourceLocation tier,SimpleParticleType simpleParticleType) {
+        super(simpleParticleType,properties);
         this.tierID = tier;
     }
 

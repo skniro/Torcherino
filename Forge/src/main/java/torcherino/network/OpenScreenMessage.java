@@ -6,8 +6,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.screen.TorcherinoScreen;
 
@@ -39,8 +39,8 @@ public final class OpenScreenMessage {
                 buffer.readInt());
     }
 
-    public static void handle(OpenScreenMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
+    public static void handle(OpenScreenMessage message, Supplier<CustomPayloadEvent.Context> contextSupplier) {
+        CustomPayloadEvent.Context context = contextSupplier.get();
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             OpenScreenMessage.openTorcherinoScreen(message);
             context.setPacketHandled(true);
