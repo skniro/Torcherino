@@ -1,5 +1,6 @@
 package torcherino.blocks;
 
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -8,12 +9,10 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
@@ -54,7 +53,7 @@ public final class ModBlocks {
             TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
             WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(torcherinoBlock), tierId, particleEffect);
-            this.registerAndBlacklist(new ResourceLocation(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
+            this.registerAndBlacklist(ResourceLocation.fromNamespaceAndPath(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
             JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
             LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierId);
@@ -71,7 +70,7 @@ public final class ModBlocks {
             BlockItem lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties());
             Registry.register(BuiltInRegistries.ITEM, lanterinoId, lanterinoItem);
         });
-        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(Torcherino.MOD_ID, "torcherino"),
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"),
                 BlockEntityType.Builder.of(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));
     }
 
@@ -88,8 +87,8 @@ public final class ModBlocks {
 
     private ResourceLocation id(ResourceLocation tierID, String type) {
         if (tierID.getPath().equals("normal")) {
-            return new ResourceLocation(Torcherino.MOD_ID, type);
+            return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, type);
         }
-        return new ResourceLocation(Torcherino.MOD_ID, tierID.getPath() + '_' + type);
+        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, tierID.getPath() + '_' + type);
     }
 }

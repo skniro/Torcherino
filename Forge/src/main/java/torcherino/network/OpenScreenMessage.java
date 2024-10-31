@@ -41,10 +41,8 @@ public final class OpenScreenMessage {
 
     public static void handle(OpenScreenMessage message, Supplier<CustomPayloadEvent.Context> contextSupplier) {
         CustomPayloadEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             OpenScreenMessage.openTorcherinoScreen(message);
             context.setPacketHandled(true);
-        }
     }
 
     @OnlyIn(Dist.CLIENT)

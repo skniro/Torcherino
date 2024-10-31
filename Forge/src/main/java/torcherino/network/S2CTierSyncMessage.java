@@ -38,10 +38,8 @@ public final class S2CTierSyncMessage {
 
     public static void handle(S2CTierSyncMessage message, Supplier<CustomPayloadEvent.Context> contextSupplier) {
         CustomPayloadEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(message.tiers));
             context.setPacketHandled(true);
-        }
     }
 
     private static Pair<ResourceLocation, Tier> readTier(FriendlyByteBuf buffer) {

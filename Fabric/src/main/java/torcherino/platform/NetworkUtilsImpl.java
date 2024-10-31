@@ -12,11 +12,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
@@ -24,6 +22,9 @@ import torcherino.api.TorcherinoAPI;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.screen.TorcherinoScreen;
 import torcherino.config.Config;
+import torcherino.platform.payload.OpenTorchrinoScreenPayload;
+import torcherino.platform.payload.TorchrinoTierPayload;
+import torcherino.platform.payload.UpdateTorchrinoPayload;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,14 +32,27 @@ import java.util.function.Supplier;
 
 public class NetworkUtilsImpl implements NetworkUtils {
     private static final Supplier<NetworkUtilsImpl> instance = Suppliers.memoize(NetworkUtilsImpl::new);
-    private static final ResourceLocation UPDATE_TORCHERINO_VALUES = Torcherino.resloc("update_torcherino_values");
-    private static final ResourceLocation TORCHERINO_TIER_SYNC = Torcherino.resloc("torcherino_tier_sync");
-    private static final ResourceLocation OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
+
     private final HashSet<String> allowedUuids = new HashSet<>();
 
     public static NetworkUtilsImpl getInstance() {
         return instance.get();
     }
+
+    @Override
+    public void c2s_updateTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
+        if (ClientPlayNetworking.canSend(UpdateTorchrinoPayload.TYPE)) {
+            ClientPlayNetworking.send(new UpdateTorchrinoPayload(pos, xRange, zRange, yRange, speed, redstoneMode));
+        }
+    }
+
+    @Override
+    public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, String name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
+        if (ClientPlayNetworking.canSend(OpenTorchrinoScreenPayload.TYPE)) {
+            NetworkManager.sendToPlayer(new OpenTorchrinoScreenPayload(pos, name, xRange, zRange, yRange, speed, redstoneMode), player);
+        }
+    }
+
 
     public void initialize() {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
@@ -47,7 +61,6 @@ public class NetworkUtilsImpl implements NetworkUtils {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayer player = handler.player;
             allowedUuids.add(player.getStringUUID());
-
             ImmutableMap<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeInt(tiers.size());
@@ -57,61 +70,27 @@ public class NetworkUtilsImpl implements NetworkUtils {
                 buffer.writeInt(tier.xzRange());
                 buffer.writeInt(tier.yRange());
             });
-
-            sender.sendPacket(TORCHERINO_TIER_SYNC, buffer);
+            sender.sendPacket(new TorchrinoTierPayload(buffer));
         });
+
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             if (Config.INSTANCE.online_mode.equals("ONLINE")) {
                 allowedUuids.remove(handler.player.getStringUUID());
             }
         });
+
         ServerPlayConnectionEvents.INIT.register((handler, server) -> {
-            ServerPlayNetworking.registerReceiver(handler, NetworkUtilsImpl.UPDATE_TORCHERINO_VALUES, (server1, player, handler1, buffer, responseSender) -> {
-                Level level = player.level();
-                BlockPos pos = buffer.readBlockPos();
-                int xRange = buffer.readInt();
-                int zRange = buffer.readInt();
-                int yRange = buffer.readInt();
-                int speed = buffer.readInt();
-                int redstoneMode = buffer.readInt();
-                server1.submit(() -> {
-                    if (level.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-                        if (!blockEntity.readClientData(xRange, zRange, yRange, speed, redstoneMode)) {
-                            Torcherino.LOGGER.error("Data received from " + player.getName().getString() + "(" + player.getStringUUID() + ") is invalid.");
+            ServerPlayNetworking.registerReceiver(handler, UpdateTorchrinoPayload.TYPE, (payload, context) -> {
+                Level level = context.player().level();
+                context.server().execute(() -> {
+                    if (level.getBlockEntity(payload.blockPos()) instanceof TorcherinoBlockEntity blockEntity) {
+                        if(!blockEntity.readClientData(payload.xRange(), payload.zRange(), payload.yRange(), payload.speed(), payload.redstoneMode())) {
+                            Torcherino.LOGGER.error("Data received from " + context.player().getName().getString() + "(" + context.player().getStringUUID() + ") is invalid.");
                         }
                     }
                 });
             });
         });
-    }
-
-    @Override
-    public void c2s_updateTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        if (ClientPlayNetworking.canSend(NetworkUtilsImpl.UPDATE_TORCHERINO_VALUES)) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            buffer.writeBlockPos(pos);
-            buffer.writeInt(xRange);
-            buffer.writeInt(zRange);
-            buffer.writeInt(yRange);
-            buffer.writeInt(speed);
-            buffer.writeInt(redstoneMode);
-            ClientPlayNetworking.send(NetworkUtilsImpl.UPDATE_TORCHERINO_VALUES, buffer);
-        }
-    }
-
-    @Override
-    public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        if (ServerPlayNetworking.canSend(player, NetworkUtilsImpl.OPEN_TORCHERINO_SCREEN)) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            buffer.writeBlockPos(pos);
-            buffer.writeComponent(name);
-            buffer.writeInt(xRange);
-            buffer.writeInt(zRange);
-            buffer.writeInt(yRange);
-            buffer.writeInt(speed);
-            buffer.writeInt(redstoneMode);
-            ServerPlayNetworking.send(player, NetworkUtilsImpl.OPEN_TORCHERINO_SCREEN, buffer);
-        }
     }
 
     @Override
@@ -122,35 +101,19 @@ public class NetworkUtilsImpl implements NetworkUtils {
     private static class ClientNetworking {
         private static void initialize() {
             ClientPlayConnectionEvents.INIT.register((handler, client) -> {
-                ClientPlayNetworking.registerReceiver(NetworkUtilsImpl.OPEN_TORCHERINO_SCREEN, (client1, handler1, buffer, responseSender) -> {
+                ClientPlayNetworking.registerReceiver(OpenTorchrinoScreenPayload.TYPE, (payload, context) -> {
                     Level world = Minecraft.getInstance().level;
-                    BlockPos pos = buffer.readBlockPos();
-                    Component title = buffer.readComponent();
-                    int xRange = buffer.readInt();
-                    int zRange = buffer.readInt();
-                    int yRange = buffer.readInt();
-                    int speed = buffer.readInt();
-                    int redstoneMode = buffer.readInt();
-                    buffer.retain();
-                    client1.execute(() -> {
-                        if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-                            Minecraft.getInstance().setScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
+                    context.client().execute(() -> {
+                        if (world.getBlockEntity(payload.blockPos()) instanceof TorcherinoBlockEntity blockEntity) {
+                            Minecraft.getInstance().setScreen(new TorcherinoScreen(payload.title(), payload.xRange(), payload.zRange(), payload.yRange(), payload.speed(), payload.redstoneMode(), payload.blockPos(), blockEntity.getTier()));
                         }
-                        buffer.release();
                     });
                 });
 
-                ClientPlayNetworking.registerReceiver(NetworkUtilsImpl.TORCHERINO_TIER_SYNC, (client1, handler1, buffer, responseSender) -> {
+                ClientPlayNetworking.registerReceiver(TorchrinoTierPayload.TYPE, (payload, context) -> {
                     HashMap<ResourceLocation, Tier> tiers = new HashMap<>();
-                    int count = buffer.readInt();
-                    for (int i = 0; i < count; i++) {
-                        ResourceLocation id = buffer.readResourceLocation();
-                        int maxSpeed = buffer.readInt();
-                        int xzRange = buffer.readInt();
-                        int yRange = buffer.readInt();
-                        tiers.put(id, new Tier(maxSpeed, xzRange, yRange));
-                    }
-                    client1.execute(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(tiers));
+                    tiers.put(payload.resourceLocation(), new Tier(payload.maxSpeed(), payload.xzRange(), payload.yRange()));
+                    context.client().execute(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(tiers));
                 });
             });
         }

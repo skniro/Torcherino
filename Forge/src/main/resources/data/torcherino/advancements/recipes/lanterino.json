@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "torcherino:lanterino"
+    ]
+  },
+  "criteria": {
+    "has_torcherino": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "torcherino:torcherino"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "torcherino:lanterino"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_torcherino",
+      "has_the_recipe"
+    ]
+  ]
+}
