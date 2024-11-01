@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import torcherino.Torcherino;
 import torcherino.platform.NetworkUtilsImpl;
 
-public record OpenTorchrinoScreenPayload(BlockPos blockPos,String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
+public record OpenTorchrinoScreenPayload(BlockPos blockPos,String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode, FriendlyByteBuf buf) implements CustomPacketPayload {
     public static final ResourceLocation OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
     public static final Type<OpenTorchrinoScreenPayload> TYPE = new Type<>(OPEN_TORCHERINO_SCREEN);
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenTorchrinoScreenPayload> CODEC = CustomPacketPayload.codec(OpenTorchrinoScreenPayload::write, OpenTorchrinoScreenPayload::new);
@@ -23,9 +23,10 @@ public record OpenTorchrinoScreenPayload(BlockPos blockPos,String title,  int xR
              buf.readInt(),
              buf.readInt(),
              buf.readInt(),
-             buf.readInt()
+             buf.readInt(),
+             buf.retain()
              );
-        buf.retain();
+        ;
     }
 
     public void write(FriendlyByteBuf buffer) {

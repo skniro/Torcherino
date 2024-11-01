@@ -6,6 +6,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
@@ -200,6 +204,13 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     public void openTorcherinoScreen(ServerPlayer player) {
-        NetworkUtilsImpl.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName().getString(), xRange, zRange, yRange, speed, redstoneMode);
+        NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName().getString(), xRange, zRange, yRange, speed, redstoneMode);
     }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
 }

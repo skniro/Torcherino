@@ -36,8 +36,8 @@ public final class S2CTierSyncMessage {
         return new S2CTierSyncMessage(localTiers);
     }
 
-    public static void handle(S2CTierSyncMessage message, Supplier<CustomPayloadEvent.Context> contextSupplier) {
-        CustomPayloadEvent.Context context = contextSupplier.get();
+    public static void handle(S2CTierSyncMessage message, CustomPayloadEvent.Context contextSupplier) {
+        CustomPayloadEvent.Context context = contextSupplier;
             context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(message.tiers));
             context.setPacketHandled(true);
     }

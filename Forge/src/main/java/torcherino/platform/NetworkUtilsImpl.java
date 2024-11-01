@@ -6,6 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.network.Channel;
+import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -30,12 +32,12 @@ public final class NetworkUtilsImpl implements NetworkUtils {
     }
 
     public void initialize() {
-        String version = "2";
-        torcherinoChannel = NetworkRegistry.ChannelBuilder
+        int version = Integer.parseInt("2");
+        torcherinoChannel = ChannelBuilder
                 .named(Torcherino.getRl("channel")) // 传入资源定位符 (ResourceLocation)
-                .networkProtocolVersion(() -> version) // 定义协议版本
-                .clientAcceptedVersions(version::equals) // 客户端协议版本验证
-                .serverAcceptedVersions(version::equals) // 服务器协议版本验证
+                .networkProtocolVersion(version) // 定义协议版本
+                .clientAcceptedVersions(Channel.VersionTest.exact(version)) // 客户端协议版本验证
+                .serverAcceptedVersions(Channel.VersionTest.exact(version)) // 服务器协议版本验证
                 .simpleChannel();
         torcherinoChannel.messageBuilder(ValueUpdateMessage.class, 0)
                          .encoder(ValueUpdateMessage::encode)
@@ -80,7 +82,7 @@ public final class NetworkUtilsImpl implements NetworkUtils {
 
     @Override
     public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        torcherinoChannel.send(new OpenScreenMessage(pos, name, xRange, zRange, yRange, speed, redstoneMode), player.connection.getConnection());
+        torcherinoChannel.send(new OpenScreenMessage(pos, name.getString(), xRange, zRange, yRange, speed, redstoneMode), player.connection.getConnection());
     }
 
     @Override

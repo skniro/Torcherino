@@ -23,11 +23,11 @@ public final class TorcherinoScreen extends Screen {
 
     private final BlockPos blockPos;
     private final Tier tier;
-    private final String cached_title;
+    private final Component cached_title;
     private int xRange, zRange, yRange, speed, redstoneMode, left, top;
 
-    public TorcherinoScreen(String title, int xRange, int zRange, int yRange, int speed, int redstoneMode, BlockPos pos, ResourceLocation tierID) {
-        super(Component.nullToEmpty(title));
+    public TorcherinoScreen(Component title, int xRange, int zRange, int yRange, int speed, int redstoneMode, BlockPos pos, ResourceLocation tierID) {
+        super(title);
         this.tier = TorcherinoAPI.INSTANCE.getTier(tierID);
         this.blockPos = pos;
         this.xRange = xRange;

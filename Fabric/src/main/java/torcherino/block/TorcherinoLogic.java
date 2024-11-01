@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
@@ -31,9 +32,10 @@ public final class TorcherinoLogic {
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
             blockEntity.openTorcherinoScreen((ServerPlayer) player);
-            return InteractionResult.SUCCESS;
+            Torcherino.LOGGER.error("open srcreen");
         }
-        return InteractionResult.PASS;
+        Torcherino.LOGGER.error("not open srcreen");
+        return InteractionResult.SUCCESS;
     }
 
     public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving,
