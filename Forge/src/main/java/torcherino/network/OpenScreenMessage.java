@@ -39,8 +39,8 @@ public final class OpenScreenMessage {
                 buffer.readInt());
     }
 
-    public static void handle(OpenScreenMessage message, Supplier<CustomPayloadEvent.Context> contextSupplier) {
-        CustomPayloadEvent.Context context = contextSupplier.get();
+    public static void handle(OpenScreenMessage message, CustomPayloadEvent.Context contextSupplier) {
+        CustomPayloadEvent.Context context = contextSupplier;
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             OpenScreenMessage.openTorcherinoScreen(message);
             context.setPacketHandled(true);

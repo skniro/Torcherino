@@ -32,8 +32,8 @@ public final class ValueUpdateMessage {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static void handle(ValueUpdateMessage message, Supplier<CustomPayloadEvent.Context> contextSupplier) {
-        CustomPayloadEvent.Context context = contextSupplier.get();
+    public static void handle(ValueUpdateMessage message, CustomPayloadEvent.Context contextSupplier) {
+        CustomPayloadEvent.Context context = contextSupplier;
         if (context.getDirection().getOriginationSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
                 if (context.getSender().level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {

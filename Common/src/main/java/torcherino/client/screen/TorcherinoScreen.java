@@ -3,6 +3,7 @@ package torcherino.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -141,6 +142,7 @@ public final class TorcherinoScreen extends Screen {
     @Override
     public void render(GuiGraphics context, int x, int y, float partialTicks) {
         context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         context.blit(SCREEN_TEXTURE,left, top, 0, 0, screenWidth,screenHeight);

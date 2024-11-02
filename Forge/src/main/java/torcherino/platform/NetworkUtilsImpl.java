@@ -6,9 +6,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.Channel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.SimpleChannel;
 import torcherino.Torcherino;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
@@ -29,11 +30,28 @@ public final class NetworkUtilsImpl implements NetworkUtils {
     }
 
     public void initialize() {
-        String version = "2";
-        torcherinoChannel = NetworkRegistry.newSimpleChannel(Torcherino.getRl("channel"), () -> version, version::equals, version::equals);
-        torcherinoChannel.registerMessage(0, ValueUpdateMessage.class, ValueUpdateMessage::encode, ValueUpdateMessage::decode, ValueUpdateMessage::handle);
-        torcherinoChannel.registerMessage(1, OpenScreenMessage.class, OpenScreenMessage::encode, OpenScreenMessage::decode, OpenScreenMessage::handle);
-        torcherinoChannel.registerMessage(2, S2CTierSyncMessage.class, S2CTierSyncMessage::encode, S2CTierSyncMessage::decode, S2CTierSyncMessage::handle);
+        int version = Integer.parseInt("2");
+        torcherinoChannel = ChannelBuilder
+                .named(Torcherino.getRl("channel")) // 传入资源定位符 (ResourceLocation)
+                .networkProtocolVersion(version) // 定义协议版本
+                .clientAcceptedVersions(Channel.VersionTest.exact(version)) // 客户端协议版本验证
+                .serverAcceptedVersions(Channel.VersionTest.exact(version)) // 服务器协议版本验证
+                .simpleChannel();
+        torcherinoChannel.messageBuilder(ValueUpdateMessage.class, 0)
+                         .encoder(ValueUpdateMessage::encode)
+                         .decoder(ValueUpdateMessage::decode)
+                         .consumerMainThread(ValueUpdateMessage::handle)
+                         .add();
+        torcherinoChannel.messageBuilder(OpenScreenMessage.class, 1)
+                         .encoder(OpenScreenMessage::encode)
+                         .decoder(OpenScreenMessage::decode)
+                         .consumerMainThread(OpenScreenMessage::handle)
+                         .add();
+        torcherinoChannel.messageBuilder(S2CTierSyncMessage.class, 2)
+                         .encoder(S2CTierSyncMessage::encode)
+                         .decoder(S2CTierSyncMessage::decode)
+                         .consumerMainThread(S2CTierSyncMessage::handle)
+                         .add();
         MinecraftForge.EVENT_BUS.addListener(this::playerLoggedIn);
         MinecraftForge.EVENT_BUS.addListener(this::playerLoggedOut);
     }
@@ -42,7 +60,7 @@ public final class NetworkUtilsImpl implements NetworkUtils {
         if (event.getEntity() instanceof ServerPlayer player) {
             allowedUuids.add(player.getStringUUID());
             S2CTierSyncMessage message = new S2CTierSyncMessage(TorcherinoAPI.INSTANCE.getTiers());
-            torcherinoChannel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+            torcherinoChannel.send(message, player.connection.getConnection());
         }
     }
 
@@ -56,12 +74,12 @@ public final class NetworkUtilsImpl implements NetworkUtils {
 
     @Override
     public void c2s_updateTorcherinoValues(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        torcherinoChannel.sendToServer(new ValueUpdateMessage(pos, xRange, zRange, yRange, speed, redstoneMode));
+        torcherinoChannel.send(new ValueUpdateMessage(pos, xRange, zRange, yRange, speed, redstoneMode), PacketDistributor.SERVER.noArg());
     }
 
     @Override
     public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        torcherinoChannel.sendTo(new OpenScreenMessage(pos, name, xRange, zRange, yRange, speed, redstoneMode), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        torcherinoChannel.send(new OpenScreenMessage(pos, name, xRange, zRange, yRange, speed, redstoneMode), player.connection.getConnection());
     }
 
     @Override
