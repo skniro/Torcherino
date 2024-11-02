@@ -1,13 +1,11 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "torcherino:double_compressed_torcherino"
-    }
-  ],
-  "result": {
-    "id":  "torcherino:compressed_torcherino",
-    "count": 9
-  },
-  "group": "torcherino:compressed_torcherino"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        "torcherino:double_compressed_torcherino"
+    ],
+    "result": {
+        "id": "torcherino:compressed_torcherino",
+        "count": 9
+    },
+    "group": "torcherino:compressed_torcherino"
 }

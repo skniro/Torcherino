@@ -40,7 +40,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     private String uuid = "";
 
     public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
-        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")), pos, state);
+        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
         this.isRandomlyTicking = state.isRandomlyTicking();
     }
 
@@ -52,7 +52,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             return;
         }
         // todo: get on load and then when updated
-        randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        if (level instanceof ServerLevel serverlevel) {
+            randomTicks = serverlevel.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        }
         entity.area.forEach(entity::tickBlock);
     }
 
@@ -87,7 +89,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     public void setLevel(@NotNull Level level) {
         super.setLevel(level);
         if (!level.isClientSide()) {
-            level.getServer().tell(new TickTask(level.getServer().getTickCount(), () -> getBlockState().handleNeighborChanged(level, worldPosition, null, null, false)));
+            level.getServer().schedule(new TickTask(level.getServer().getTickCount(), () -> getBlockState().handleNeighborChanged(level, worldPosition, null, null, false)));
         }
     }
 

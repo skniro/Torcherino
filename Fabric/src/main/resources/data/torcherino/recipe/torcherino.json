@@ -1,20 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " C ",
-    "CTC",
-    " C "
-  ],
-  "key": {
-    "T": {
-      "item": "minecraft:torch"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " C ",
+        "CTC",
+        " C "
+    ],
+    "key": {
+        "T": "minecraft:torch",
+        "C": "minecraft:clock"
     },
-    "C": {
-      "item": "minecraft:clock"
-    }
-  },
-  "result": {
-    "id":  "torcherino:torcherino"
-  },
-  "group": "torcherino:torcherino"
+    "result": {
+        "id": "torcherino:torcherino"
+    },
+    "group": "torcherino:torcherino"
 }

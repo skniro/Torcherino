@@ -1,14 +1,10 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:lantern"
-    },
-    {
-      "item": "torcherino:double_compressed_torcherino"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        "minecraft:lantern",
+        "torcherino:double_compressed_torcherino"
+    ],
+    "result": {
+        "id": "torcherino:double_compressed_lantern"
     }
-  ],
-  "result": {
-    "id":  "torcherino:double_compressed_lantern"
-  }
 }

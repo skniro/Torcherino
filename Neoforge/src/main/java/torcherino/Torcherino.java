@@ -1,6 +1,9 @@
 package torcherino;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -20,6 +23,14 @@ public final class Torcherino {
 
     public static ResourceLocation resloc(String path) {
         return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+    }
+
+    public static ResourceKey<Block> KeyofBlock(String path) {
+        return ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+    }
+
+    public static ResourceKey<Item> KeyofItem(String path) {
+        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
     }
 
     public Torcherino(IEventBus eventBus) {

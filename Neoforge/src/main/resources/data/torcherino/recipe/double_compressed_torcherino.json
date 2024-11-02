@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "TTT",
-    "TTT",
-    "TTT"
-  ],
-  "key": {
-    "T": {
-      "item": "torcherino:compressed_torcherino"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "TTT",
+        "TTT",
+        "TTT"
+    ],
+    "key": {
+        "T": "torcherino:compressed_torcherino"
+    },
+    "result": {
+        "id": "torcherino:double_compressed_torcherino"
     }
-  },
-  "result": {
-    "id":  "torcherino:double_compressed_torcherino"
-  }
 }
