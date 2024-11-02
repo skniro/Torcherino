@@ -5,10 +5,10 @@
       "item": "minecraft:lantern"
     },
     {
-      "item": "torcherino:compressed_torcherino"
+      "item": "torcherino:torcherino"
     }
   ],
   "result": {
-    "item": "torcherino:compressed_lantern"
+    "id":  "torcherino:lantern"
   }
 }

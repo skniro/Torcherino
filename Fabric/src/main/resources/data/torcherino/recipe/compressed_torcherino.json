@@ -7,10 +7,11 @@
   ],
   "key": {
     "T": {
-      "item": "torcherino:compressed_torcherino"
+      "item": "torcherino:torcherino"
     }
   },
   "result": {
-    "item": "torcherino:double_compressed_torcherino"
-  }
+    "id":  "torcherino:compressed_torcherino"
+  },
+  "group": "torcherino:compressed_torcherino"
 }

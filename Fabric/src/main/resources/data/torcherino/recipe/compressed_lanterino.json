@@ -5,10 +5,10 @@
       "item": "minecraft:carved_pumpkin"
     },
     {
-      "item": "torcherino:double_compressed_torcherino"
+      "item": "torcherino:compressed_torcherino"
     }
   ],
   "result": {
-    "item": "torcherino:double_compressed_lanterino"
+    "id": "torcherino:compressed_lanterino"
   }
 }

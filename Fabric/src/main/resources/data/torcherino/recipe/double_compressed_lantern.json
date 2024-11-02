@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:carved_pumpkin"
+      "item": "minecraft:lantern"
     },
     {
       "item": "torcherino:double_compressed_torcherino"
     }
   ],
   "result": {
-    "item": "torcherino:double_compressed_lanterino"
+    "id":  "torcherino:double_compressed_lantern"
   }
 }
