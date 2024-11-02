@@ -6,7 +6,7 @@ plugins {
 }
 
 java {
-    archivesBaseName = "${project.archives_base_name}"
+    archivesBaseName = "${mod_name}-forge-${minecraft_version}"
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
@@ -118,9 +118,17 @@ publishing {
             artifact jar
         }
     }
+
     repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
+        if (System.getenv("MAVEN_URL")) {
+            maven {
+                name = 'mavenLocal2'
+                url System.getenv("MAVEN_URL")
+                // Add repositories to publish to here.
+                // Notice: This block does NOT have the same function as the block in the top level.
+                // The repositories here will be used for publishing your artifact, not for
+                // retrieving dependencies.
+            }
         }
     }
 }
