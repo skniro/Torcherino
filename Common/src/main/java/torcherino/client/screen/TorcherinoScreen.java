@@ -140,13 +140,23 @@ public final class TorcherinoScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(GuiGraphics p_300197_, int p_297538_, int p_300104_, float p_298759_) {
+        this.renderTransparentBackground(p_300197_);
+        this.renderBg(p_300197_, p_297538_, p_300104_, p_298759_);
+    }
+
+    protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
+        context.blit(SCREEN_TEXTURE, left, top, 0, 0, screenWidth,screenHeight);
+        RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+    }
+
+
+    @Override
     public void render(GuiGraphics context, int x, int y, float partialTicks) {
         context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-        RenderSystem.setShader(GameRenderer::getPositionShader);
-        RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
-        RenderSystem.setShaderColor(1, 1, 1, 1);
-        context.blit(SCREEN_TEXTURE,left, top, 0, 0, screenWidth,screenHeight);
-        context.drawString(font, cached_title.getVisualOrderText(), (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
         super.render(context, x, y, partialTicks);
     }
 

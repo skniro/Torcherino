@@ -6,7 +6,8 @@
   "description": "Adds torches which speeds up block entities around them.",
   "authors": [
     "LukeGrahamLandry#6888",
-    "NinjaPhenix"
+    "NinjaPhenix",
+    "skniro"
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/torcherino",
