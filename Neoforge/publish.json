@@ -1,0 +1,13 @@
+{
+  "loader": "forge",
+  "mc_versions": ["1.19.3"],
+  "releaseType": "release",
+  "curseforge": {
+    "id": "236794"
+  },
+  "github": {
+    "owner": "LukeGrahamLandry",
+    "repo": "Torcherino",
+    "branch": "1.19.3"
+  }
+}

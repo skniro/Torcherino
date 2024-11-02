@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "torcherino:block/double_compressed_lanterino_top",
+    "front": "torcherino:block/double_compressed_lanterino",
+    "side": "torcherino:block/double_compressed_lanterino_side"
+  }
+}

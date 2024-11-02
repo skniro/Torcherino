@@ -27,9 +27,7 @@ import torcherino.platform.payload.OpenTorchrinoScreenPayload;
 import torcherino.platform.payload.TorchrinoTierPayload;
 import torcherino.platform.payload.UpdateTorchrinoPayload;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class NetworkUtilsImpl implements NetworkUtils {
@@ -49,7 +47,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
     }
 
     @Override
-    public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, String name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
+    public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         if (ServerPlayNetworking.canSend(player, OpenTorchrinoScreenPayload.TYPE)) {
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             ServerPlayNetworking.send(player, new OpenTorchrinoScreenPayload(pos, name, xRange, zRange, yRange, speed, redstoneMode, buffer));
@@ -65,16 +63,8 @@ public class NetworkUtilsImpl implements NetworkUtils {
             ServerPlayer player = handler.player;
             allowedUuids.add(player.getStringUUID());
             ImmutableMap<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            buffer.writeInt(tiers.size());
-            tiers.forEach((id, tier) -> {
-                buffer.writeResourceLocation(id);
-                buffer.writeInt(tier.maxSpeed());
-                buffer.writeInt(tier.xzRange());
-                buffer.writeInt(tier.yRange());
-                sender.sendPacket(new TorchrinoTierPayload(tiers.size(), id, tier.maxSpeed(), tier.xzRange(), tier.yRange()));
-            });
-            ;
+            sender.sendPacket(new TorchrinoTierPayload(tiers));
+            Torcherino.LOGGER.info(tiers);
         });
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
@@ -108,31 +98,24 @@ public class NetworkUtilsImpl implements NetworkUtils {
                 ClientPlayNetworking.registerReceiver(OpenTorchrinoScreenPayload.TYPE, (payload, context) -> {
                     Level world = Minecraft.getInstance().level;
                     BlockPos pos = payload.blockPos();
-                    Component title = Component.nullToEmpty(payload.title());
+                    Component title = payload.title();
                     int xRange = payload.xRange();
                     int zRange = payload.zRange();
                     int yRange = payload.yRange();
                     int speed = payload.speed();
                     int redstoneMode = payload.redstoneMode();
+                    payload.retain();
                     context.client().execute(() -> {
-                        if (world != null && world.getBlockEntity(payload.blockPos()) instanceof TorcherinoBlockEntity blockEntity) {
+                        if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
+                            Torcherino.LOGGER.info(blockEntity.getTier());
                             Minecraft.getInstance().setScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
                         }
-                        payload.buf().release();
+                        payload.release();
                     });
                 });
 
                 ClientPlayNetworking.registerReceiver(TorchrinoTierPayload.TYPE, (payload, context) -> {
-                    HashMap<ResourceLocation, Tier> tiers = new HashMap<>();
-                    int count = payload.size();
-                    for (int i = 0; i < count; i++) {
-                        ResourceLocation id = payload.resourceLocation();
-                        int maxSpeed = payload.maxSpeed();
-                        int xzRange = payload.xzRange();
-                        int yRange = payload.xzRange();
-                        tiers.put(id, new Tier(maxSpeed, xzRange, yRange));
-                    }
-                    context.client().execute(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(tiers));
+                    context.client().execute(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(payload.tiers()));
                 });
             });
         }

@@ -2,6 +2,7 @@ package torcherino.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -32,9 +33,7 @@ public final class TorcherinoLogic {
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
             blockEntity.openTorcherinoScreen((ServerPlayer) player);
-            Torcherino.LOGGER.error("open srcreen");
         }
-        Torcherino.LOGGER.error("not open srcreen");
         return InteractionResult.SUCCESS;
     }
 
@@ -53,9 +52,9 @@ public final class TorcherinoLogic {
             return;
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-/*            if (stack.hasCustomHoverName()) {
+            if (stack.has(DataComponents.CUSTOM_NAME)) {
                 blockEntity.setCustomName(stack.getHoverName());
-            }*/
+            }
             if (!Config.INSTANCE.online_mode.equals("")) {
                 blockEntity.setOwner(placer == null ? "" : placer.getStringUUID());
             }

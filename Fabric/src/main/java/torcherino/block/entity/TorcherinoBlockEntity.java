@@ -204,7 +204,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     public void openTorcherinoScreen(ServerPlayer player) {
-        NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName().getString(), xRange, zRange, yRange, speed, redstoneMode);
+        NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
     }
 
     @Nullable
