@@ -1,4 +1,4 @@
-package torcherino.platform;
+package torcherino.network;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -6,9 +6,6 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import torcherino.Torcherino;
-import torcherino.network.OpenScreenMessage;
-import torcherino.network.S2CTierSyncMessage;
-import torcherino.network.ValueUpdateMessage;
 
 @EventBusSubscriber(modid = Torcherino.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class Networking {

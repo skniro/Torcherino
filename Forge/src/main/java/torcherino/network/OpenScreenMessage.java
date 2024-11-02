@@ -3,30 +3,26 @@ package torcherino.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.screen.TorcherinoScreen;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
-public final class OpenScreenMessage {
-    private final BlockPos pos;
-    private final String title;
-    private final int xRange, zRange, yRange, speed, redstoneMode;
+public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
+    public static final ResourceLocation OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
+    public static final CustomPacketPayload.Type<OpenScreenMessage> TYPE = new CustomPacketPayload.Type<>(OPEN_TORCHERINO_SCREEN);
+    public static final StreamCodec<FriendlyByteBuf, OpenScreenMessage> CODEC = CustomPacketPayload.codec(OpenScreenMessage::encode, OpenScreenMessage::decode);
 
-    public OpenScreenMessage(BlockPos pos, String title, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        this.pos = pos;
-        this.title = title;
-        this.xRange = xRange;
-        this.zRange = zRange;
-        this.yRange = yRange;
-        this.speed = speed;
-        this.redstoneMode = redstoneMode;
-    }
 
     public static void encode(OpenScreenMessage message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos).writeUtf(message.title).writeInt(message.xRange)
@@ -54,5 +50,10 @@ public final class OpenScreenMessage {
                 minecraft.setScreen(screen);
             }
         });
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -26,28 +26,6 @@ public final class NetworkUtilsImpl implements NetworkUtils {
     }
 
     public void initialize() {
-/*        int version = Integer.parseInt("2");
-        torcherinoChannel = ChannelBuilder
-                .named(Torcherino.getRl("channel")) // 传入资源定位符 (ResourceLocation)
-                .networkProtocolVersion(version) // 定义协议版本
-                .clientAcceptedVersions(Channel.VersionTest.exact(version)) // 客户端协议版本验证
-                .serverAcceptedVersions(Channel.VersionTest.exact(version)) // 服务器协议版本验证
-                .simpleChannel();
-        torcherinoChannel.messageBuilder(ValueUpdateMessage.class, 0)
-                         .encoder(ValueUpdateMessage::encode)
-                         .decoder(ValueUpdateMessage::decode)
-                         .consumerMainThread(ValueUpdateMessage::handle)
-                         .add();
-        torcherinoChannel.messageBuilder(OpenScreenMessage.class, 1)
-                         .encoder(OpenScreenMessage::encode)
-                         .decoder(OpenScreenMessage::decode)
-                         .consumerMainThread(OpenScreenMessage::handle)
-                         .add();
-        torcherinoChannel.messageBuilder(S2CTierSyncMessage.class, 2)
-                         .encoder(S2CTierSyncMessage::encode)
-                         .decoder(S2CTierSyncMessage::decode)
-                         .consumerMainThread(S2CTierSyncMessage::handle)
-                         .add();*/
         NeoForge.EVENT_BUS.addListener(this::playerLoggedIn);
         NeoForge.EVENT_BUS.addListener(this::playerLoggedOut);
     }

@@ -56,8 +56,8 @@ public final class JackoLanterinoBlock extends CarvedPumpkinBlock implements Ent
 
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        InteractionHand hand = InteractionHand.OFF_HAND;
-        return TorcherinoLogic.onUse(state, level, pos, player,hand, hit);
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        return TorcherinoLogic.useWithoutItem(state, level, pos, player, hand, hit);
     }
 
     @Override

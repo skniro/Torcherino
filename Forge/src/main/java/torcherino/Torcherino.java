@@ -19,6 +19,10 @@ public final class Torcherino {
     public static final Logger LOGGER = LogManager.getLogger(Torcherino.class);
     public static final String MOD_ID = "torcherino";
 
+    public static ResourceLocation resloc(String path) {
+        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+    }
+
     public Torcherino() {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         Config.initialize();

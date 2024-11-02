@@ -2,6 +2,10 @@ package torcherino.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
 import torcherino.Torcherino;
@@ -10,18 +14,11 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
-public final class ValueUpdateMessage {
-    private final BlockPos pos;
-    private final int xRange, zRange, yRange, speed, redstoneMode;
+public record ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
+    private static final ResourceLocation UPDATE_TORCHERINO_VALUES = Torcherino.resloc("update_torcherino_values");
+    public static final Type<ValueUpdateMessage> TYPE = new Type<>(UPDATE_TORCHERINO_VALUES);
+    public static final StreamCodec<FriendlyByteBuf, ValueUpdateMessage> CODEC = CustomPacketPayload.codec(ValueUpdateMessage::encode, ValueUpdateMessage::decode);
 
-    public ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
-        this.pos = pos;
-        this.xRange = xRange;
-        this.zRange = zRange;
-        this.yRange = yRange;
-        this.speed = speed;
-        this.redstoneMode = redstoneMode;
-    }
 
     public static void encode(ValueUpdateMessage message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos).writeInt(message.xRange).writeInt(message.zRange).writeInt(message.yRange).writeInt(message.speed).writeInt(message.redstoneMode);
@@ -42,5 +39,10 @@ public final class ValueUpdateMessage {
                 }
             });
             context.setPacketHandled(true);
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

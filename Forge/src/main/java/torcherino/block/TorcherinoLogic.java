@@ -1,6 +1,7 @@
 package torcherino.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -23,7 +24,7 @@ import torcherino.config.Config;
 import java.util.function.Consumer;
 
 public final class TorcherinoLogic {
-    public static InteractionResult onUse(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public static InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.isClientSide || hand == InteractionHand.OFF_HAND) {
             return InteractionResult.SUCCESS;
         }
@@ -48,9 +49,9 @@ public final class TorcherinoLogic {
             return;
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-/*            if (stack.hasCustomHoverName()) {
+            if (stack.has(DataComponents.CUSTOM_NAME)) {
                 blockEntity.setCustomName(stack.getHoverName());
-            }*/
+            }
             if (!Config.INSTANCE.online_mode.equals("")) {
                 blockEntity.setOwner(placer == null ? "" : placer.getStringUUID());
             }

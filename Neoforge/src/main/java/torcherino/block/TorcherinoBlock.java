@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
@@ -58,10 +57,11 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
     }
 
     @Override
-    public @NotNull InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        InteractionHand hand = InteractionHand.OFF_HAND;
-        return TorcherinoLogic.onUse(state, level, pos, player, hand, hit);
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        return TorcherinoLogic.useWithoutItem(state, level, pos, player, hand, hit);
     }
+
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1) {

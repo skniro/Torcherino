@@ -2,6 +2,7 @@ package torcherino.platform;
 
 import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +21,9 @@ import torcherino.network.S2CTierSyncMessage;
 import torcherino.network.ValueUpdateMessage;
 
 import java.util.HashSet;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class NetworkUtilsImpl implements NetworkUtils {
@@ -40,18 +44,15 @@ public final class NetworkUtilsImpl implements NetworkUtils {
                 .serverAcceptedVersions(Channel.VersionTest.exact(version)) // 服务器协议版本验证
                 .simpleChannel();
         torcherinoChannel.messageBuilder(ValueUpdateMessage.class, 0)
-                         .encoder(ValueUpdateMessage::encode)
-                         .decoder(ValueUpdateMessage::decode)
+                         .codec(ValueUpdateMessage.CODEC)
                          .consumerMainThread(ValueUpdateMessage::handle)
                          .add();
         torcherinoChannel.messageBuilder(OpenScreenMessage.class, 1)
-                         .encoder(OpenScreenMessage::encode)
-                         .decoder(OpenScreenMessage::decode)
+                         .codec(OpenScreenMessage.CODEC)
                          .consumerMainThread(OpenScreenMessage::handle)
                          .add();
         torcherinoChannel.messageBuilder(S2CTierSyncMessage.class, 2)
-                         .encoder(S2CTierSyncMessage::encode)
-                         .decoder(S2CTierSyncMessage::decode)
+                         .codec(S2CTierSyncMessage.CODEC)
                          .consumerMainThread(S2CTierSyncMessage::handle)
                          .add();
         MinecraftForge.EVENT_BUS.addListener(this::playerLoggedIn);
@@ -88,5 +89,17 @@ public final class NetworkUtilsImpl implements NetworkUtils {
     @Override
     public boolean s_isPlayerOnline(String uuid) {
         return allowedUuids.contains(uuid);
+    }
+
+    public static <M> void registerS2C(Class<M> messageType, BiConsumer<FriendlyByteBuf, M> encoder,
+                                       Function<FriendlyByteBuf, M> decoder,
+                                       Consumer<M> messageConsumer) {
+        torcherinoChannel.messageBuilder(messageType)
+                .decoder(decoder)
+                .encoder(((m, friendlyByteBuf) -> encoder.accept(friendlyByteBuf, m)))
+                .consumerNetworkThread((m, context) -> {
+                    context.enqueueWork(() -> messageConsumer.accept(m));
+                    context.setPacketHandled(true);
+                }).add();
     }
 }

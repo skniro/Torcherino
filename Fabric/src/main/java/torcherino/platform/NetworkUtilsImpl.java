@@ -50,7 +50,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
     public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         if (ServerPlayNetworking.canSend(player, OpenTorchrinoScreenPayload.TYPE)) {
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            ServerPlayNetworking.send(player, new OpenTorchrinoScreenPayload(pos, name, xRange, zRange, yRange, speed, redstoneMode, buffer));
+            ServerPlayNetworking.send(player, new OpenTorchrinoScreenPayload(pos, name.getString(), xRange, zRange, yRange, speed, redstoneMode, buffer));
         }
     }
 
@@ -98,7 +98,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
                 ClientPlayNetworking.registerReceiver(OpenTorchrinoScreenPayload.TYPE, (payload, context) -> {
                     Level world = Minecraft.getInstance().level;
                     BlockPos pos = payload.blockPos();
-                    Component title = payload.title();
+                    String title = payload.title();
                     int xRange = payload.xRange();
                     int zRange = payload.zRange();
                     int yRange = payload.yRange();
@@ -108,7 +108,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
                     context.client().execute(() -> {
                         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
                             Torcherino.LOGGER.info(blockEntity.getTier());
-                            Minecraft.getInstance().setScreen(new TorcherinoScreen(title, xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
+                            Minecraft.getInstance().setScreen(new TorcherinoScreen(Component.translatable(title), xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
                         }
                         payload.release();
                     });

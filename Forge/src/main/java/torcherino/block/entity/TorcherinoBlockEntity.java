@@ -5,16 +5,15 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.Nameable;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
@@ -79,12 +79,12 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return hasCustomName() ? customName : Component.translatable(getBlockState().getBlock().getDescriptionId());
     }
 
     @Override
-    public void setLevel(Level level) {
+    public void setLevel(@NotNull Level level) {
         super.setLevel(level);
         if (!level.isClientSide()) {
             level.getServer().tell(new TickTask(level.getServer().getTickCount(), () -> getBlockState().handleNeighborChanged(level, worldPosition, null, null, false)));
@@ -98,8 +98,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             return;
         }
         if (level instanceof ServerLevel && this.isRandomlyTicking(blockState) &&
-                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) {
-            blockState.randomTick((ServerLevel) level, pos, level.getRandom());
+                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks * speed) {
+                blockState.randomTick((ServerLevel) level, pos, level.getRandom());
         }
         if (!(block instanceof EntityBlock entityBlock)) {
             return;
@@ -205,8 +205,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
     }
 
+    @Nullable
     @Override
-    public Component getDisplayName() {
-        return Component.translatable("gui.growableores.cane_converter");
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
+
 }

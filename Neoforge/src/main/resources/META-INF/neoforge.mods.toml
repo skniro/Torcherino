@@ -23,7 +23,7 @@ license="${mod_license}"
 modId="torcherino" #mandatory
 
 # The version number of the mod
-version="${project.neoforge_mod_version}" #mandatory
+version="${project.version}" #mandatory
 
 # A display name for the mod
 displayName="${project.mod_name}" #mandatory
@@ -41,7 +41,7 @@ displayName="${project.mod_name}" #mandatory
 #credits="" #optional
 
 # A text field displayed in the mod UI
-authors="${project.mod_author}" #optional
+authors="${project.mod_authors}" #optional
 
 # Display Test controls the display for your mod in the server connection screen
 # MATCH_VERSION means that your mod will cause a red X if the versions on client and server differ. This is the default behaviour and should be what you choose if you have server and client elements to your mod.
