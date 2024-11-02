@@ -2,13 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:lantern"
-    },
-    {
       "item": "torcherino:compressed_torcherino"
     }
   ],
   "result": {
-    "item": "torcherino:compressed_lantern"
-  }
+    "id":  "torcherino:torcherino",
+    "count": 9
+  },
+  "group": "torcherino:torcherino"
 }
