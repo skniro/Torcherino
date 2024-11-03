@@ -1,13 +1,11 @@
 package torcherino.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,8 +15,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
-import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
@@ -37,7 +35,7 @@ public final class TorcherinoLogic {
         return InteractionResult.SUCCESS;
     }
 
-    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving,
+    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, Orientation orientation, boolean isMoving,
                                       Consumer<TorcherinoBlockEntity> func) {
         if (world.isClientSide) {
             return;

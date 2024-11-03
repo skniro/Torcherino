@@ -2,7 +2,6 @@ package torcherino.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,7 +28,6 @@ import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
-import torcherino.platform.NetworkUtilsImpl;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
     public static int randomTicks;
@@ -42,7 +40,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     private String uuid = "";
 
     public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
-        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")), pos, state);
+        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
         this.isRandomlyTicking = state.isRandomlyTicking();
     }
 
@@ -54,7 +52,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             return;
         }
         // todo: get on load and then when updated
-        randomTicks = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        if (level instanceof ServerLevel serverlevel) {
+            randomTicks = serverlevel.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        }
         entity.area.forEach(entity::tickBlock);
     }
 
@@ -89,7 +89,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     public void setLevel(@NotNull Level level) {
         super.setLevel(level);
         if (!level.isClientSide()) {
-            level.getServer().tell(new TickTask(level.getServer().getTickCount(), () -> getBlockState().handleNeighborChanged(level, worldPosition, null, null, false)));
+            level.getServer().schedule(new TickTask(level.getServer().getTickCount(), () -> getBlockState().handleNeighborChanged(level, worldPosition, null, null, false)));
         }
     }
 
@@ -100,8 +100,8 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             return;
         }
         if (level instanceof ServerLevel && this.isRandomlyTicking(blockState) &&
-                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) {
-            blockState.randomTick((ServerLevel) level, pos, level.getRandom());
+                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks * speed) {
+                blockState.randomTick((ServerLevel) level, pos, level.getRandom());
         }
         if (!(block instanceof EntityBlock entityBlock)) {
             return;

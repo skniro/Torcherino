@@ -3,7 +3,6 @@ package torcherino.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -11,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.lwjgl.glfw.GLFW;
-import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
@@ -39,7 +37,6 @@ public final class TorcherinoScreen extends Screen {
         this.speed = speed == 0 ? 1 : speed;
         this.redstoneMode = redstoneMode;
         this.cached_title = title;
-        Torcherino.LOGGER.info(TorcherinoAPI.INSTANCE.getTier(tierID));
     }
 
     @Override
@@ -149,12 +146,11 @@ public final class TorcherinoScreen extends Screen {
     }
 
     protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
-        context.blit(RenderType::guiTextured, SCREEN_TEXTURE, left, top, 1.0F,1.0F, 0, 0, screenWidth,screenHeight);
+        context.blit(RenderType::guiTextured, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
         RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
         context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
         RenderSystem.setShaderColor(1, 1, 1, 1);
     }
-
 
     @Override
     public void render(GuiGraphics context, int x, int y, float partialTicks) {

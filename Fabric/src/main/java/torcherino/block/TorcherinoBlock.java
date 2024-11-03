@@ -1,13 +1,10 @@
 package torcherino.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
@@ -29,7 +27,7 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
     private final ResourceLocation tierID;
 
     public TorcherinoBlock(Properties properties, ResourceLocation tier, SimpleParticleType simpleParticleType) {
-        super(simpleParticleType,properties);
+        super(simpleParticleType, properties);
         tierID = tier;
     }
 
@@ -64,11 +62,10 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
         return TorcherinoLogic.useWithoutItem(state, level, pos, player, hand, hit);
     }
 
-
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean boolean_1) {
-        TorcherinoLogic.neighborUpdate(state, level, pos, neighborBlock, neighborPos, boolean_1, (be) ->
-                be.setPoweredByRedstone(level.hasSignal(pos.below(), Direction.UP)));
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, Orientation orientation, boolean boolean_1) {
+        TorcherinoLogic.neighborUpdate(state, level, pos, neighborBlock, orientation, boolean_1, (be) ->
+                be.setPoweredByRedstone(level.hasNeighborSignal(pos)));
     }
 
     @Override

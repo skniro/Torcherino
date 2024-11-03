@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
@@ -49,29 +50,29 @@ public final class ModBlocks {
             ResourceLocation torcherinoId = id(tierId, "torcherino");
             ResourceLocation jackoLanterinoId = id(tierId, "lanterino");
             ResourceLocation lanterinoId = id(tierId, "lantern");
-            SimpleParticleType particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(id(tierId, "flame"));
-            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierId, particleEffect);
+            SimpleParticleType particleEffect = new SimpleParticleType(false);
+            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(torcherinoId.getPath())), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
-            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(torcherinoBlock), tierId, particleEffect);
+            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock("wall_" + torcherinoId.getPath())).overrideDescription(torcherinoBlock.getDescriptionId()).overrideLootTable(torcherinoBlock.getLootTable()), tierId, particleEffect);
             this.registerAndBlacklist(ResourceLocation.fromNamespaceAndPath(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
-            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierId);
+            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).setId(Torcherino.KeyofBlock(jackoLanterinoId.getPath())).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
-            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierId);
+            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(lanterinoId.getPath())), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 this.setRenderType(torcherinoBlock);
                 this.setRenderType(torcherinoWallBlock);
                 this.setRenderType(lanterinoBlock);
             }
-            StandingAndWallBlockItem torcherinoItem = new StandingAndWallBlockItem(torcherinoBlock, torcherinoWallBlock, new Item.Properties(), Direction.DOWN);
+            StandingAndWallBlockItem torcherinoItem = new StandingAndWallBlockItem(torcherinoBlock, torcherinoWallBlock, Direction.DOWN, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(torcherinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, torcherinoId, torcherinoItem);
-            BlockItem jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties());
+            BlockItem jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(jackoLanterinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, jackoLanterinoId, jackoLanterinoItem);
-            BlockItem lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties());
+            BlockItem lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(lanterinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, lanterinoId, lanterinoItem);
         });
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"),
-                BlockEntityType.Builder.of(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));
+                FabricBlockEntityTypeBuilder.create(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));
     }
 
     @Environment(EnvType.CLIENT)

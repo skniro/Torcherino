@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import torcherino.TorcherinoImpl;
 import torcherino.api.TierSupplier;
@@ -34,7 +35,7 @@ public final class TorcherinoLogic {
         return InteractionResult.SUCCESS;
     }
 
-    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving,
+    public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, Orientation orientation, boolean isMoving,
                                       Consumer<TorcherinoBlockEntity> func) {
         if (world.isClientSide) {
             return;

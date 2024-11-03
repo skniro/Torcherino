@@ -1,6 +1,9 @@
 package torcherino;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,8 +26,16 @@ public final class Torcherino {
         return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
     }
 
-    public Torcherino() {
-        final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public static ResourceKey<Block> KeyofBlock(String path) {
+        return ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+    }
+
+    public static ResourceKey<Item> KeyofItem(String path) {
+        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+    }
+
+    public Torcherino(FMLJavaModLoadingContext context) {
+        final IEventBus eventBus = context.getModEventBus();
         Config.initialize();
         ModContent.initialise(eventBus);
         NetworkUtilsImpl.getInstance().initialize();

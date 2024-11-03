@@ -9,7 +9,11 @@ import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +30,14 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
 
     public static ResourceLocation resloc(String path) {
         return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+    }
+
+    public static ResourceKey<Block> KeyofBlock(String path) {
+        return ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+    }
+
+    public static ResourceKey<Item> KeyofItem(String path) {
+        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
     }
 
     @Override

@@ -47,7 +47,8 @@ public final class ModContent {
         TILE_ENTITIES.register(bus);
 
 
-        TILE_ENTITIES.register("torcherino", () ->  BlockEntityType.Builder.of(TorcherinoBlockEntity::new, BLOCKS.getEntries().stream().map(RegistryObject::get).toList().toArray(new Block[0])).build(null));toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"));
+        TILE_ENTITIES.register("torcherino", () -> new BlockEntityType<TorcherinoBlockEntity>(TorcherinoBlockEntity::new, Set.of(BLOCKS.getEntries().stream().map(Supplier::get).toList().toArray(new Block[0]))));
+        toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"));
         TorcherinoAPI.INSTANCE.getTiers().keySet().forEach(ModContent::register);
     }
 
@@ -71,14 +72,14 @@ public final class ModContent {
             Supplier<SimpleParticleType> particleType = () -> new SimpleParticleType(false);
             PARTICLE_TYPES.register(getPath(tierID, "flame"), particleType);
 
-            Supplier<TorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierID, particleType.get()));
-            Supplier<WallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(standingBlock.get()), tierID, particleType.get()));
-            Supplier<JackoLanterinoBlock> jackoLanterinoBlock = BLOCKS.register(jackoLanterinoPath, () -> new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierID));
-            Supplier<LanterinoBlock> lanterinoBlock = BLOCKS.register(lanterinoPath, () -> new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierID));
+            Supplier<TorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(torcherinoPath)), tierID, particleType.get()));
+            Supplier<WallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock("wall_" + torcherinoPath)).overrideDescription(standingBlock.get().getDescriptionId()).overrideLootTable(standingBlock.get().getLootTable()), tierID, particleType.get()));
+            Supplier<JackoLanterinoBlock> jackoLanterinoBlock = BLOCKS.register(jackoLanterinoPath, () -> new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(jackoLanterinoPath)), tierID));
+            Supplier<LanterinoBlock> lanterinoBlock = BLOCKS.register(lanterinoPath, () -> new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(lanterinoPath)), tierID));
 
-            ITEMS.register(torcherinoPath, () -> new StandingAndWallBlockItem(standingBlock.get(), wallBlock.get(), new Item.Properties(), Direction.DOWN));
-            ITEMS.register(jackoLanterinoPath, () -> new BlockItem(jackoLanterinoBlock.get(), new Item.Properties()));
-            ITEMS.register(lanterinoPath, () -> new BlockItem(lanterinoBlock.get(), new Item.Properties()));
+            ITEMS.register(torcherinoPath, () -> new StandingAndWallBlockItem(standingBlock.get(), wallBlock.get(), Direction.DOWN, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(torcherinoPath))));
+            ITEMS.register(jackoLanterinoPath, () -> new BlockItem(jackoLanterinoBlock.get(), new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(jackoLanterinoPath))));
+            ITEMS.register(lanterinoPath, () -> new BlockItem(lanterinoBlock.get(), new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(lanterinoPath))));
 
             if (FMLLoader.getDist().isClient()) {
                 ClientHelper.registerCutout(standingBlock);
