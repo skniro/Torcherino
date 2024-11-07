@@ -44,14 +44,16 @@ public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRa
 
 
     @OnlyIn(Dist.CLIENT)
-    private static void openTorcherinoScreen(OpenScreenMessage message) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.submitAsync(() -> {
-            if (minecraft.player.level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
-                TorcherinoScreen screen = new TorcherinoScreen(Component.translatable(message.title), message.xRange, message.zRange, message.yRange,
-                        message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTier());
-                minecraft.setScreen(screen);
-            }
+    public static void openTorcherinoScreen(OpenScreenMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.submitAsync(() -> {
+                if (Dist.CLIENT.isClient() && minecraft.player.level().getBlockEntity(message.pos()) instanceof TorcherinoBlockEntity blockEntity) {
+                    TorcherinoScreen screen = new TorcherinoScreen(Component.translatable(message.title()), message.xRange(), message.zRange(), message.yRange(),
+                            message.speed(), message.redstoneMode(), blockEntity.getBlockPos(), blockEntity.getTier());
+                    minecraft.setScreen(screen);
+                }
+            });
         });
     }
 
