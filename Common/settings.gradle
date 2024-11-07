@@ -15,6 +15,3 @@ pluginManagement {
         }
     }
 }
-
-rootProject.name = 'Torcherino'
-include("Common", "Fabric", "Forge")

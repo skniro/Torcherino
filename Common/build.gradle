@@ -8,9 +8,9 @@ archivesBaseName = "${mod_name}-common-${minecraft_version}"
 
 minecraft {
     version(minecraft_version)
-    runs {   
+    runs {
         if (project.hasProperty('common_runs_enabled') ? project.findProperty('common_runs_enabled').toBoolean() : true) {
-        
+
             server(project.hasProperty('common_server_run_name') ? project.findProperty('common_server_run_name') : 'vanilla_server') {
                 workingDirectory(this.file("run"))
             }
@@ -22,8 +22,8 @@ minecraft {
 }
 
 dependencies {
-     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
-     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 }
 
 processResources {
@@ -46,8 +46,15 @@ publishing {
     }
 
     repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
+        if (System.getenv("MAVEN_URL")) {
+            maven {
+                name = 'mavenLocal2'
+                url System.getenv("MAVEN_URL")
+                // Add repositories to publish to here.
+                // Notice: This block does NOT have the same function as the block in the top level.
+                // The repositories here will be used for publishing your artifact, not for
+                // retrieving dependencies.
+            }
         }
     }
 }
