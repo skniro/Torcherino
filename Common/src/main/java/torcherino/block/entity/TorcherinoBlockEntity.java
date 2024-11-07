@@ -25,7 +25,7 @@ import torcherino.config.Config;
 import torcherino.platform.NetworkUtils;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
-    public static int randomTicks;
+    public static float randomTicks;
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
     private Iterable<BlockPos> area;
@@ -90,7 +90,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) {
             return;
         }
-        if (level instanceof ServerLevel && block.isRandomlyTicking(blockState) &&
+        if (level instanceof ServerLevel && block.isRandomlyTicking(blockState) && level.tickRateManager().runsNormally() &&
                 level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) {
             blockState.randomTick((ServerLevel) level, pos, level.getRandom());
         }
