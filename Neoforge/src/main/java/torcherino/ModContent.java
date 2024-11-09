@@ -22,11 +22,14 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import torcherino.api.TorcherinoAPI;
+import torcherino.block.ForgeTorcherinoBlock;
+import torcherino.block.ForgeWallTorcherinoBlock;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.particle.TorcherinoParticleTypes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,13 +39,12 @@ import java.util.function.Supplier;
 public final class ModContent {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, Torcherino.MOD_ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Torcherino.MOD_ID);
-    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, Torcherino.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Torcherino.MOD_ID);
 
     public static void initialise(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
-        PARTICLE_TYPES.register(bus);
+        TorcherinoParticleTypes.PARTICLE_TYPES.register(bus);
         TILE_ENTITIES.register(bus);
 
 
@@ -67,11 +69,9 @@ public final class ModContent {
             toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, lanterinoPath));
 
 
-            Supplier<SimpleParticleType> particleType = () -> new SimpleParticleType(false);
-            PARTICLE_TYPES.register(getPath(tierID, "flame"), particleType);
 
-            Supplier<TorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierID, particleType.get()));
-            Supplier<WallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(standingBlock.get()), tierID, particleType.get()));
+            Supplier<ForgeTorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new ForgeTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierID));
+            Supplier<ForgeWallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new ForgeWallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(standingBlock.get()), tierID));
             Supplier<JackoLanterinoBlock> jackoLanterinoBlock = BLOCKS.register(jackoLanterinoPath, () -> new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierID));
             Supplier<LanterinoBlock> lanterinoBlock = BLOCKS.register(lanterinoPath, () -> new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierID));
 
