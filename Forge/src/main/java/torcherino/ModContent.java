@@ -1,8 +1,6 @@
 package torcherino;
 
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -23,11 +21,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import torcherino.api.TorcherinoAPI;
+import torcherino.block.ForgeTorcherinoBlock;
+import torcherino.block.ForgeWallTorcherinoBlock;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
-import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.particle.TorcherinoParticleTypes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,13 +37,12 @@ import java.util.function.Supplier;
 public final class ModContent {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torcherino.MOD_ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torcherino.MOD_ID);
-    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Torcherino.MOD_ID);
 
     public static void initialise(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
-        PARTICLE_TYPES.register(bus);
+        TorcherinoParticleTypes.PARTICLE_TYPES.register(bus);
         TILE_ENTITIES.register(bus);
 
 
@@ -56,6 +55,9 @@ public final class ModContent {
     }
 
     static Supplier<TorcherinoBlock> b;
+
+
+
     private static void register(ResourceLocation tierID) {
         if (tierID.getNamespace().equals(Torcherino.MOD_ID)) {
             String torcherinoPath = getPath(tierID, "torcherino");
@@ -67,12 +69,8 @@ public final class ModContent {
             toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, jackoLanterinoPath));
             toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, lanterinoPath));
 
-
-            Supplier<SimpleParticleType> particleType = () -> new SimpleParticleType(false);
-            PARTICLE_TYPES.register(getPath(tierID, "flame"), particleType);
-
-            Supplier<TorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new TorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierID, particleType.get()));
-            Supplier<WallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new WallTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(standingBlock.get()), tierID, particleType.get()));
+            RegistryObject<ForgeTorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new ForgeTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierID));
+            RegistryObject<ForgeWallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new ForgeWallTorcherinoBlock(BlockBehaviour.Properties.copy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(standingBlock.get()), tierID));
             Supplier<JackoLanterinoBlock> jackoLanterinoBlock = BLOCKS.register(jackoLanterinoPath, () -> new JackoLanterinoBlock(BlockBehaviour.Properties.copy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierID));
             Supplier<LanterinoBlock> lanterinoBlock = BLOCKS.register(lanterinoPath, () -> new LanterinoBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierID));
 
