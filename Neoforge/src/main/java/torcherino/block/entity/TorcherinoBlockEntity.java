@@ -31,7 +31,6 @@ import torcherino.platform.NetworkUtils;
 
 public class TorcherinoBlockEntity extends BlockEntity implements Nameable, TierSupplier {
     public static int randomTicks;
-    protected final boolean isRandomlyTicking;
     private Component customName;
     private int xRange, yRange, zRange, speed, redstoneMode;
     private Iterable<BlockPos> area;
@@ -41,7 +40,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
 
     public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
         super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
-        this.isRandomlyTicking = state.isRandomlyTicking();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TorcherinoBlockEntity entity) {
@@ -99,9 +97,9 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         if (TorcherinoAPI.INSTANCE.isBlockBlacklisted(block)) {
             return;
         }
-        if (level instanceof ServerLevel && this.isRandomlyTicking(blockState) &&
-                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks * speed) {
-                blockState.randomTick((ServerLevel) level, pos, level.getRandom());
+        if (level instanceof ServerLevel && blockState.isRandomlyTicking() && level.tickRateManager().runsNormally() &&
+                level.getRandom().nextInt(Mth.clamp(4096 / (speed * Config.INSTANCE.random_tick_rate), 1, 4096)) < randomTicks) {
+            blockState.randomTick((ServerLevel) level, pos, level.getRandom());
         }
         if (!(block instanceof EntityBlock entityBlock)) {
             return;
@@ -120,10 +118,6 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
                 ticker.tick(level, pos, blockState, blockEntity);
             }
         }
-    }
-
-    protected boolean isRandomlyTicking(BlockState blockState) {
-        return this.isRandomlyTicking;
     }
 
     public boolean readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode) {

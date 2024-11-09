@@ -1,6 +1,7 @@
 package torcherino.blocks;
 
 
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -10,6 +11,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +52,7 @@ public final class ModBlocks {
             ResourceLocation torcherinoId = id(tierId, "torcherino");
             ResourceLocation jackoLanterinoId = id(tierId, "lanterino");
             ResourceLocation lanterinoId = id(tierId, "lantern");
-            SimpleParticleType particleEffect = new SimpleParticleType(false);
+            SimpleParticleType particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.getValue(id(tierId, "flame"));
             TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(torcherinoId.getPath())), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
             WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock("wall_" + torcherinoId.getPath())).overrideDescription(torcherinoBlock.getDescriptionId()).overrideLootTable(torcherinoBlock.getLootTable()), tierId, particleEffect);
