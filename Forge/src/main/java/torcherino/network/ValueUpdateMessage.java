@@ -2,12 +2,10 @@ package torcherino.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
-
-import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
 public final class ValueUpdateMessage {
@@ -32,8 +30,8 @@ public final class ValueUpdateMessage {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static void handle(ValueUpdateMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
+    public static void handle(ValueUpdateMessage message, CustomPayloadEvent.Context contextSupplier) {
+        CustomPayloadEvent.Context context = contextSupplier;
         if (context.getDirection().getOriginationSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
                 if (context.getSender().level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {

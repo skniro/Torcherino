@@ -3,15 +3,14 @@ package torcherino.network;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
 public final class S2CTierSyncMessage {
@@ -36,8 +35,8 @@ public final class S2CTierSyncMessage {
         return new S2CTierSyncMessage(localTiers);
     }
 
-    public static void handle(S2CTierSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
+    public static void handle(S2CTierSyncMessage message, CustomPayloadEvent.Context contextSupplier) {
+        CustomPayloadEvent.Context context = contextSupplier;
         if (context.getDirection().getOriginationSide() == LogicalSide.SERVER) {
             context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(message.tiers));
             context.setPacketHandled(true);
