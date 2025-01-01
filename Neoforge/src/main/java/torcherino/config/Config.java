@@ -80,7 +80,7 @@ public class Config {
             online_mode = "";
         }
         for (Tier tier : tiers) {
-            ((TorcherinoImpl) TorcherinoAPI.INSTANCE).registerTier(ResourceLocation.fromNamespaceAndPath("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
+            ((TorcherinoImpl) TorcherinoAPI.INSTANCE).registerTier(new ResourceLocation("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
         }
         for (ResourceLocation id : blacklisted_blocks) {
             TorcherinoAPI.INSTANCE.blacklistBlock(id);

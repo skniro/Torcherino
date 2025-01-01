@@ -25,7 +25,7 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public static ResourceLocation resloc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+        return new ResourceLocation(Torcherino.MOD_ID, path);
     }
 
     @Override
@@ -62,8 +62,8 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
         if (FabricLoader.getInstance().isModLoaded("computercraft")) {
-            TorcherinoAPI.INSTANCE.blacklistBlockEntity(ResourceLocation.fromNamespaceAndPath("computercraft", "turtle_normal"));
-            TorcherinoAPI.INSTANCE.blacklistBlockEntity(ResourceLocation.fromNamespaceAndPath("computercraft", "turtle_advanced"));
+            TorcherinoAPI.INSTANCE.blacklistBlockEntity(new ResourceLocation("computercraft", "turtle_normal"));
+            TorcherinoAPI.INSTANCE.blacklistBlockEntity(new ResourceLocation("computercraft", "turtle_advanced"));
         }
         Packets.register();
     }

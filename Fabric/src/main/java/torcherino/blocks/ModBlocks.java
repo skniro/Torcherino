@@ -53,7 +53,7 @@ public final class ModBlocks {
             TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
             WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).dropsLike(torcherinoBlock), tierId, particleEffect);
-            this.registerAndBlacklist(ResourceLocation.fromNamespaceAndPath(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
+            this.registerAndBlacklist(new ResourceLocation(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
             JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).pushReaction(PushReaction.IGNORE), tierId);
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
             LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE), tierId);
@@ -70,7 +70,7 @@ public final class ModBlocks {
             BlockItem lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties());
             Registry.register(BuiltInRegistries.ITEM, lanterinoId, lanterinoItem);
         });
-        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"),
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(Torcherino.MOD_ID, "torcherino"),
                 BlockEntityType.Builder.of(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));
     }
 
@@ -87,8 +87,8 @@ public final class ModBlocks {
 
     private ResourceLocation id(ResourceLocation tierID, String type) {
         if (tierID.getPath().equals("normal")) {
-            return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, type);
+            return new ResourceLocation(Torcherino.MOD_ID, type);
         }
-        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, tierID.getPath() + '_' + type);
+        return new ResourceLocation(Torcherino.MOD_ID, tierID.getPath() + '_' + type);
     }
 }

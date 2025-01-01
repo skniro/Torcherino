@@ -175,11 +175,11 @@ public final class ForgeWallTorcherinoBlock extends ForgeTorcherinoBlock impleme
         Direction $$10 = $$4.getOpposite();
         $$1.addParticle(ParticleTypes.SMOKE, $$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
         ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey($$0.getBlock());
-        if (blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_torcherino"))) {
+        if (blockName != null && blockName.equals(new ResourceLocation(Torcherino.MOD_ID, "wall_torcherino"))) {
             $$1.addParticle(TorcherinoParticleTypes.Normal_Torcherino_Flame.get(),$$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
-        } else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_compressed_torcherino"))){
+        } else if(blockName != null && blockName.equals(new ResourceLocation(Torcherino.MOD_ID, "wall_compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Compressed_Torcherino_Flame.get(), $$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
-        }else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_double_compressed_torcherino"))){
+        }else if(blockName != null && blockName.equals(new ResourceLocation(Torcherino.MOD_ID, "wall_double_compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Double_Compressed_Torcherino_Flame.get(), $$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
         }
     }

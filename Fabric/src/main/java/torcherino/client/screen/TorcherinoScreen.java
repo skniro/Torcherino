@@ -19,7 +19,7 @@ import torcherino.client.screen.widgets.StateButtonWidget;
 import torcherino.platform.NetworkUtils;
 
 public final class TorcherinoScreen extends Screen {
-    private static final ResourceLocation SCREEN_TEXTURE = ResourceLocation.fromNamespaceAndPath(TorcherinoImpl.MOD_ID, "textures/screens/torcherino.png");
+    private static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(TorcherinoImpl.MOD_ID, "textures/screens/torcherino.png");
     private static final int screenWidth = 245;
     private static final int screenHeight = 123;
 

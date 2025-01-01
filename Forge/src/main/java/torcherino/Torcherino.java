@@ -20,7 +20,7 @@ public final class Torcherino {
     public static final String MOD_ID = "torcherino";
 
     public static ResourceLocation resloc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+        return new ResourceLocation(Torcherino.MOD_ID, path);
     }
 
     public Torcherino() {
@@ -32,7 +32,7 @@ public final class Torcherino {
     }
 
     public static ResourceLocation getRl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+        return new ResourceLocation(MOD_ID, path);
     }
 
     @SubscribeEvent

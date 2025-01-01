@@ -48,7 +48,7 @@ public final class ModContent {
         TILE_ENTITIES.register(bus);
 
 
-        TILE_ENTITIES.register("torcherino", () ->  BlockEntityType.Builder.of(TorcherinoBlockEntity::new, BLOCKS.getEntries().stream().map(Supplier::get).toList().toArray(new Block[0])).build(null));toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"));
+        TILE_ENTITIES.register("torcherino", () ->  BlockEntityType.Builder.of(TorcherinoBlockEntity::new, BLOCKS.getEntries().stream().map(Supplier::get).toList().toArray(new Block[0])).build(null));toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, "torcherino"));
         TorcherinoAPI.INSTANCE.getTiers().keySet().forEach(ModContent::register);
     }
 
@@ -63,10 +63,10 @@ public final class ModContent {
             String jackoLanterinoPath = getPath(tierID, "lanterino");
             String lanterinoPath = getPath(tierID, "lantern");
 
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, torcherinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_" + torcherinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, jackoLanterinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, lanterinoPath));
+            toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, torcherinoPath));
+            toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, "wall_" + torcherinoPath));
+            toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, jackoLanterinoPath));
+            toBlacklist.add(new ResourceLocation(Torcherino.MOD_ID, lanterinoPath));
 
 
 

@@ -106,11 +106,11 @@ public class ForgeTorcherinoBlock extends Block implements EntityBlock, TierSupp
         double $$6 = (double)$$2.getZ() + 0.5;
         $$1.addParticle(ParticleTypes.SMOKE, $$4, $$5, $$6, 0.0, 0.0, 0.0);
         ResourceLocation blockName = BuiltInRegistries.BLOCK.getKey($$0.getBlock());
-        if (blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"))) {
+        if (blockName != null && blockName.equals(new ResourceLocation(Torcherino.MOD_ID, "torcherino"))) {
             $$1.addParticle(TorcherinoParticleTypes.Normal_Torcherino_Flame.get(), $$4, $$5, $$6, 0.0, 0.0, 0.0);
-        } else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "compressed_torcherino"))){
+        } else if(blockName != null && blockName.equals(new ResourceLocation(Torcherino.MOD_ID, "compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Compressed_Torcherino_Flame.get(), $$4, $$5, $$6, 0.0, 0.0, 0.0);
-        }else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "double_compressed_torcherino"))){
+        }else if(blockName != null && blockName.equals(new ResourceLocation(Torcherino.MOD_ID, "double_compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Double_Compressed_Torcherino_Flame.get(), $$4, $$5, $$6, 0.0, 0.0, 0.0);
         }
     }
