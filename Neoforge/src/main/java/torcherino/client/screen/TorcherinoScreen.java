@@ -148,7 +148,7 @@ public final class TorcherinoScreen extends Screen {
 
     protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
         context.blit(RenderType::guiTextured, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
-        RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
+        //RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
         context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
         RenderSystem.setShaderColor(1, 1, 1, 1);
     }

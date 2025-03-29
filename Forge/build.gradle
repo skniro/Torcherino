@@ -140,4 +140,3 @@ sourceSets.each {
     it.java.destinationDirectory = dir
 }
 
-apply from: "https://moddingtutorials.org/publish.gradle"

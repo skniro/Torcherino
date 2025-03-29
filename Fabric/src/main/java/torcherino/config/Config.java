@@ -39,7 +39,7 @@ public class Config {
 
     public static void initialize() {
         Gson gson = new GsonBuilder().disableInnerClassSerialization()
-                                     .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+                                     .registerTypeAdapter(ResourceLocation.class, new ResourceLocationAdapter())
                                      .setPrettyPrinting()
                                      .create();
         var configDir = PlatformUtils.getInstance().getConfigPath();

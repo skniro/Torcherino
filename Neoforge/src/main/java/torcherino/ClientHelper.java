@@ -24,6 +24,10 @@ public class ClientHelper {
     }
 
     public static void registerCutout(Supplier<? extends Block> block){
+        if (Minecraft.getInstance() == null) {
+            return;
+        }
+
         Minecraft.getInstance().submitAsync(() -> {
             ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
         });
