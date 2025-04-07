@@ -182,16 +182,16 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        if (tag.contains("CustomName", 8)) {
-            this.setCustomName(Component.Serializer.fromJson(tag.getString("CustomName"), provider));
+        if (tag.contains("CustomName")) {
+            this.setCustomName(Component.Serializer.fromJson(String.valueOf(tag.getString("CustomName")), provider));
         }
-        xRange = tag.getInt("XRange");
-        zRange = tag.getInt("ZRange");
-        yRange = tag.getInt("YRange");
-        speed = tag.getInt("Speed");
-        redstoneMode = tag.getInt("RedstoneMode");
-        active = tag.getBoolean("Active");
-        uuid = tag.getString("Owner");
+        xRange = tag.getInt("XRange").orElse(0);
+        zRange = tag.getInt("ZRange").orElse(0);
+        yRange = tag.getInt("YRange").orElse(0);
+        speed = tag.getInt("Speed").orElse(1);
+        redstoneMode = tag.getInt("RedstoneMode").orElse(0);
+        active = tag.getBoolean("Active").orElse(false);
+        uuid = String.valueOf(tag.getString("Owner"));
 
         area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
                 worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
