@@ -1,9 +1,11 @@
 package torcherino.client.screen;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -11,12 +13,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.lwjgl.glfw.GLFW;
+import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
+import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.screen.widgets.GradatedSliderWidget;
 import torcherino.client.screen.widgets.StateButtonWidget;
 import torcherino.platform.NetworkUtils;
+
+import java.util.logging.Logger;
 
 public final class TorcherinoScreen extends Screen {
     private static final ResourceLocation SCREEN_TEXTURE = ResourceLocation.fromNamespaceAndPath(TorcherinoImpl.MOD_ID, "textures/screens/torcherino.png");
@@ -147,16 +153,12 @@ public final class TorcherinoScreen extends Screen {
     }
 
     protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
-        context.blit(RenderType::guiTextured, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
-        //RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
+        context.blit(RenderPipelines.GUI_TEXTURED, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
         context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
-        RenderSystem.setShaderColor(1, 1, 1, 1);
     }
-
 
     @Override
     public void render(GuiGraphics context, int x, int y, float partialTicks) {
-        context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
         super.render(context, x, y, partialTicks);
     }
 

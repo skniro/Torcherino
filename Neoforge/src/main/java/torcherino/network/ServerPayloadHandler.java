@@ -20,14 +20,6 @@ public class ServerPayloadHandler {
 
     public static void handleData(final OpenScreenMessage data, final IPayloadContext context) {
         context.enqueueWork(() -> {
-/*            Minecraft minecraft = Minecraft.getInstance();
-            minecraft.submitAsync(() -> {
-                if (minecraft.player.level().getBlockEntity(data.pos()) instanceof TorcherinoBlockEntity blockEntity) {
-                    TorcherinoScreen screen = new TorcherinoScreen(Component.translatable(data.title()), data.xRange(), data.zRange(), data.yRange(),
-                            data.speed(), data.redstoneMode(), blockEntity.getBlockPos(), blockEntity.getTier());
-                    minecraft.setScreen(screen);
-                }
-            });*/
         });
     }
 

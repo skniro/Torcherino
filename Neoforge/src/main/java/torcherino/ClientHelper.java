@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,7 +30,7 @@ public class ClientHelper {
         }
 
         Minecraft.getInstance().submitAsync(() -> {
-            ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(block.get(), ChunkSectionLayer.CUTOUT);
         });
     }
 }

@@ -2,7 +2,6 @@ package torcherino;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -14,8 +13,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -28,7 +27,6 @@ import torcherino.block.ForgeWallTorcherinoBlock;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
 import torcherino.block.TorcherinoBlock;
-import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.particle.TorcherinoParticleTypes;
 
@@ -43,7 +41,7 @@ public final class ModContent {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Torcherino.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Torcherino.MOD_ID);
 
-    public static void initialise(IEventBus bus) {
+    public static void initialise(BusGroup bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         TorcherinoParticleTypes.PARTICLE_TYPES.register(bus);

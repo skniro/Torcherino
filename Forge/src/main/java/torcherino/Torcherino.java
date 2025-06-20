@@ -6,8 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -35,11 +34,11 @@ public final class Torcherino {
     }
 
     public Torcherino(FMLJavaModLoadingContext context) {
-        final IEventBus eventBus = context.getModEventBus();
+        final var eventBus = context.getModBusGroup();
         Config.initialize();
         ModContent.initialise(eventBus);
         NetworkUtilsImpl.getInstance().initialize();
-        eventBus.addListener(this::processIMC);
+        InterModProcessEvent.getBus(eventBus).addListener(this::processIMC);
     }
 
     public static ResourceLocation getRl(String path) {

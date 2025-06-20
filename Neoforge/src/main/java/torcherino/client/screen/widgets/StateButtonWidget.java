@@ -39,7 +39,7 @@ public abstract class StateButtonWidget extends Button {
         if (visible) {
             context.renderItem(this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
-                context.renderTooltip(this.getFont(), narrationMessage ,getX() + 14, getY() + 18);
+                context.setTooltipForNextFrame(this.getFont(), narrationMessage ,getX() + 14, getY() + 18);
             }
         }
     }

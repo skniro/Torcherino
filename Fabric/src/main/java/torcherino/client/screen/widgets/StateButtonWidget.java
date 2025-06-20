@@ -5,11 +5,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public abstract class StateButtonWidget extends Button {
     private static final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
@@ -39,7 +45,7 @@ public abstract class StateButtonWidget extends Button {
         if (visible) {
             context.renderItem(this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
-                context.renderTooltip(this.getFont(), narrationMessage ,getX() + 14, getY() + 18);
+                context.setTooltipForNextFrame(this.getFont(), narrationMessage,getX() + 14, getY() + 18);
             }
         }
     }

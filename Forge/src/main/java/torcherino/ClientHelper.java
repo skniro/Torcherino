@@ -5,10 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import torcherino.particle.TorcherinoParticleTypes;
 
@@ -25,7 +26,7 @@ public class ClientHelper {
 
     public static void registerCutout(Supplier<? extends Block> block){
         Minecraft.getInstance().submitAsync(() -> {
-            ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(block.get(), ChunkSectionLayer.CUTOUT);
         });
     }
 }

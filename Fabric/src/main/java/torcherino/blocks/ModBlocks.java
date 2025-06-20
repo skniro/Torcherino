@@ -1,17 +1,16 @@
 package torcherino.blocks;
 
 
-import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import torcherino.Torcherino;
@@ -79,7 +77,7 @@ public final class ModBlocks {
 
     @Environment(EnvType.CLIENT)
     private void setRenderType(Block block) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutoutMipped());
+        BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
     }
 
     private void registerAndBlacklist(ResourceLocation id, Block block) {

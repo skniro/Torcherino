@@ -55,8 +55,8 @@ public final class NetworkUtilsImpl implements NetworkUtils {
                          .codec(S2CTierSyncMessage.CODEC)
                          .consumerMainThread(S2CTierSyncMessage::handle)
                          .add();
-        MinecraftForge.EVENT_BUS.addListener(this::playerLoggedIn);
-        MinecraftForge.EVENT_BUS.addListener(this::playerLoggedOut);
+        PlayerEvent.PlayerLoggedInEvent.BUS.addListener(this::playerLoggedIn);
+        PlayerEvent.PlayerLoggedOutEvent.BUS.addListener(this::playerLoggedOut);
     }
 
     private void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {

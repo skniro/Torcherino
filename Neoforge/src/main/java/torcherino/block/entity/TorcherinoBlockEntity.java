@@ -1,10 +1,13 @@
 package torcherino.block.entity;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -21,8 +24,11 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
@@ -165,10 +171,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    public void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (this.hasCustomName()) {
-            tag.putString("CustomName", Component.Serializer.toJson(getCustomName(), provider));
+            tag.storeNullable("CustomName", ComponentSerialization.CODEC, this.getCustomName());
         }
         tag.putInt("XRange", xRange);
         tag.putInt("ZRange", zRange);
@@ -180,17 +186,15 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        if (tag.contains("CustomName")) {
-            this.setCustomName(Component.Serializer.fromJson(String.valueOf(tag.getString("CustomName")), provider));
-        }
+    public void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        this.setCustomName(parseCustomNameSafe(tag, "CustomName"));
         xRange = tag.getInt("XRange").orElse(0);
         zRange = tag.getInt("ZRange").orElse(0);
         yRange = tag.getInt("YRange").orElse(0);
         speed = tag.getInt("Speed").orElse(1);
         redstoneMode = tag.getInt("RedstoneMode").orElse(0);
-        active = tag.getBoolean("Active").orElse(false);
+        active = tag.getBooleanOr("Active",false);
         uuid = String.valueOf(tag.getString("Owner"));
 
         area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
