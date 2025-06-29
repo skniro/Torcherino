@@ -1,24 +1,22 @@
 package torcherino.client.screen.widgets;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.List;
 
 public abstract class StateButtonWidget extends Button {
     private static final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+    private static final WidgetSprites SPRITES = new WidgetSprites(ResourceLocation.withDefaultNamespace("widget/button"), ResourceLocation.withDefaultNamespace("widget/button_disabled"), ResourceLocation.withDefaultNamespace("widget/button_highlighted"));
     private final Screen screen;
     private Component narrationMessage;
     private Font font;
@@ -43,6 +41,7 @@ public abstract class StateButtonWidget extends Button {
     @Override
     public final void renderWidget(GuiGraphics context, int mouseX, int mouseY, float partialTicks){
         if (visible) {
+            context.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight(), ARGB.white(this.alpha));
             context.renderItem(this.getButtonIcon(),getX() + 2, getY() + 2);
             if (this.isHovered) {
                 context.setTooltipForNextFrame(this.getFont(), narrationMessage,getX() + 14, getY() + 18);

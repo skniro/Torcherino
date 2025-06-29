@@ -71,6 +71,10 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         return customName;
     }
 
+    public Component getDisplayName() {
+        return this.getName();
+    }
+
     public void setCustomName(Component name) {
         customName = name;
     }

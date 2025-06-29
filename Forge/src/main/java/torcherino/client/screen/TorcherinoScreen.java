@@ -148,15 +148,12 @@ public final class TorcherinoScreen extends Screen {
 
     protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
         context.blit(RenderPipelines.GUI_TEXTURED, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
-        //RenderSystem.setShaderTexture(0, SCREEN_TEXTURE);
-        context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
-        //RenderSystem.setShaderColor(1, 1, 1, 1);
+        context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, -12566464,false);
     }
 
 
     @Override
     public void render(GuiGraphics context, int x, int y, float partialTicks) {
-        context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
         super.render(context, x, y, partialTicks);
     }
 

@@ -154,7 +154,7 @@ public final class TorcherinoScreen extends Screen {
 
     protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
         context.blit(RenderPipelines.GUI_TEXTURED, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
-        context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, 4210752,false);
+        context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, -12566464,false);
     }
 
     @Override
