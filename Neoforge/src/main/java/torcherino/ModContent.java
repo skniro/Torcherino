@@ -37,7 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid = Torcherino.MOD_ID)
+@EventBusSubscriber(modid = Torcherino.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class ModContent {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, Torcherino.MOD_ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Torcherino.MOD_ID);
