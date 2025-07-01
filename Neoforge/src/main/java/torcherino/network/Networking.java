@@ -3,11 +3,10 @@ package torcherino.network;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import torcherino.Torcherino;
 
-@EventBusSubscriber(modid = Torcherino.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Torcherino.MOD_ID)
 public class Networking {
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
@@ -15,28 +14,22 @@ public class Networking {
         registrar.playBidirectional(
                 OpenScreenMessage.TYPE,
                 OpenScreenMessage.CODEC,
-                new DirectionalPayloadHandler<>(
-                        ClientPayloadHandler::handleData,
-                        ServerPayloadHandler::handleData
-                )
+                ServerPayloadHandler::handleData,
+                ClientPayloadHandler::handleData
         );
 
         registrar.playBidirectional(
                 S2CTierSyncMessage.TYPE,
                 S2CTierSyncMessage.CODEC,
-                new DirectionalPayloadHandler<>(
-                        ClientPayloadHandler::handleTier,
-                        ServerPayloadHandler::handleTier
-                )
+                ServerPayloadHandler::handleTier,
+                ClientPayloadHandler::handleTier
         );
 
         registrar.playBidirectional(
                 ValueUpdateMessage.TYPE,
                 ValueUpdateMessage.CODEC,
-                new DirectionalPayloadHandler<>(
-                        ClientPayloadHandler::handleValue,
-                        ServerPayloadHandler::handleValue
-                )
+                ServerPayloadHandler::handleValue,
+                ClientPayloadHandler::handleValue
         );
     }
 
