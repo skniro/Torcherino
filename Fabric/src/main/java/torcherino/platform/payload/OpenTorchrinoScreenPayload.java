@@ -37,7 +37,6 @@ public record OpenTorchrinoScreenPayload(BlockPos blockPos, String title,  int x
         buffer.writeInt(yRange);
         buffer.writeInt(speed);
         buffer.writeInt(redstoneMode);
-        buffer.retain();
     }
 
     public void retain() {
