@@ -11,25 +11,22 @@ public class Networking {
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(Torcherino.MOD_ID);
-        registrar.playBidirectional(
+        registrar.playToClient(
                 OpenScreenMessage.TYPE,
                 OpenScreenMessage.CODEC,
-                ServerPayloadHandler::handleData,
                 ClientPayloadHandler::handleData
         );
 
-        registrar.playBidirectional(
+        registrar.playToClient(
                 S2CTierSyncMessage.TYPE,
                 S2CTierSyncMessage.CODEC,
-                ServerPayloadHandler::handleTier,
                 ClientPayloadHandler::handleTier
         );
 
-        registrar.playBidirectional(
+        registrar.playToServer(
                 ValueUpdateMessage.TYPE,
                 ValueUpdateMessage.CODEC,
-                ServerPayloadHandler::handleValue,
-                ClientPayloadHandler::handleValue
+                ServerPayloadHandler::handleValue
         );
     }
 
