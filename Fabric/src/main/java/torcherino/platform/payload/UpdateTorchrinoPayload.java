@@ -3,15 +3,10 @@ package torcherino.platform.payload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import torcherino.Torcherino;
-import torcherino.api.Tier;
-import torcherino.platform.NetworkUtilsImpl;
-
-import java.util.HashMap;
 
 public record UpdateTorchrinoPayload(BlockPos blockPos, int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
     private static final ResourceLocation UPDATE_TORCHERINO_VALUES = Torcherino.resloc("update_torcherino_values");

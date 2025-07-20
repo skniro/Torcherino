@@ -15,14 +15,11 @@ public class Packets {
 
 	private static void clientbound(PayloadTypeRegistry<RegistryFriendlyByteBuf> registry) {
         registry.register(TorchrinoTierPayload.TYPE, TorchrinoTierPayload.CODEC);
-        registry.register(UpdateTorchrinoPayload.TYPE, UpdateTorchrinoPayload.CODEC);
         registry.register(OpenTorchrinoScreenPayload.TYPE, OpenTorchrinoScreenPayload.CODEC);
 	}
 
 	private static void serverbound(PayloadTypeRegistry<RegistryFriendlyByteBuf> registry) {
-        registry.register(TorchrinoTierPayload.TYPE, TorchrinoTierPayload.CODEC);
         registry.register(UpdateTorchrinoPayload.TYPE, UpdateTorchrinoPayload.CODEC);
-        registry.register(OpenTorchrinoScreenPayload.TYPE, OpenTorchrinoScreenPayload.CODEC);
 	}
 
 }
