@@ -17,5 +17,5 @@ pluginManagement {
 }
 
 rootProject.name = 'Torcherino'
-//include("Fabric","Neoforge")
-include("Fabric","Forge","Neoforge")
+include("Fabric")
+//include("Fabric","Forge","Neoforge")

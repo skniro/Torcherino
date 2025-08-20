@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 public final class TorcherinoLogic {
     public static InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (world.isClientSide || hand == InteractionHand.OFF_HAND) {
+        if (world.isClientSide() || hand == InteractionHand.OFF_HAND) {
             return InteractionResult.SUCCESS;
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
@@ -37,7 +37,7 @@ public final class TorcherinoLogic {
 
     public static void neighborUpdate(BlockState state, Level world, BlockPos pos, Block neighborBlock, Orientation orientation, boolean isMoving,
                                       Consumer<TorcherinoBlockEntity> func) {
-        if (world.isClientSide) {
+        if (world.isClientSide()) {
             return;
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
@@ -46,7 +46,7 @@ public final class TorcherinoLogic {
     }
 
     public static void onPlaced(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, Block block) {
-        if (world.isClientSide) {
+        if (world.isClientSide()) {
             return;
         }
         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
