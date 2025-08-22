@@ -79,7 +79,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         customName = name;
     }
 
-    private String getOwner() {
+    public String getOwner() {
         return uuid;
     }
 
@@ -219,6 +219,40 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     public void openTorcherinoScreen(ServerPlayer player) {
         NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
     }
+
+    public static class Data {
+        public final Component customName;
+        public final int xRange, yRange, zRange, speed, redstoneMode;
+        public final boolean active;
+        public final String uuid;
+
+        private Data(Component customName, int xRange, int yRange, int zRange,
+                     int speed, int redstoneMode, boolean active, String uuid) {
+            this.customName = customName;
+            this.xRange = xRange;
+            this.yRange = yRange;
+            this.zRange = zRange;
+            this.speed = speed;
+            this.redstoneMode = redstoneMode;
+            this.active = active;
+            this.uuid = uuid;
+        }
+
+        public static Data from(TorcherinoBlockEntity be) {
+            return new Data(be.getCustomName(), be.xRange, be.yRange, be.zRange,
+                    be.speed, be.redstoneMode, be.active, be.getOwner());
+        }
+    }
+
+    public void restore(Data data) {
+        if (data.customName != null) {
+            this.setCustomName(data.customName);
+        }
+        this.readClientData(data.xRange, data.zRange, data.yRange, data.speed, data.redstoneMode);
+        this.active = data.active;
+        this.setOwner(data.uuid);
+    }
+
 
     @Nullable
     @Override

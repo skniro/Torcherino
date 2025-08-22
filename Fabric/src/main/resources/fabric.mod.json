@@ -24,6 +24,9 @@
       "torcherino.Torcherino"
     ]
   },
+  "mixins": [
+    "torcherino.mixins.json"
+  ],
   "accessWidener": "torcherino.accesswidener",
   "depends": {
     "fabric": ">=0.76.0+1.19.3",
