@@ -3,9 +3,7 @@ package torcherino.block.entity;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
@@ -28,7 +26,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TierSupplier;
 import torcherino.api.TorcherinoAPI;
@@ -72,11 +69,15 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         return customName;
     }
 
+    public Component getDisplayName() {
+        return this.getName();
+    }
+
     public void setCustomName(Component name) {
         customName = name;
     }
 
-    private String getOwner() {
+    public String getOwner() {
         return uuid;
     }
 
@@ -174,7 +175,12 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     public void saveAdditional(ValueOutput tag) {
         super.saveAdditional(tag);
         if (this.hasCustomName()) {
-            tag.storeNullable("CustomName", ComponentSerialization.CODEC, this.getCustomName());
+            Component customName = this.getCustomName();
+            JsonElement json = ComponentSerialization.CODEC.encodeStart(JsonOps.INSTANCE, customName)
+                                                           .getOrThrow(error -> {
+                                                               throw new IllegalStateException("Failed to serialize component: " + error);
+                                                           });
+            tag.putString("CustomName", json.toString());
         }
         tag.putInt("XRange", xRange);
         tag.putInt("ZRange", zRange);
@@ -188,13 +194,20 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     @Override
     public void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
-        this.setCustomName(parseCustomNameSafe(tag, "CustomName"));
+        if (tag.equals("CustomName")) {
+            String jsonString = String.valueOf(tag.getString("CustomName"));
+            Component name = ComponentSerialization.CODEC.parse(JsonOps.INSTANCE, com.google.gson.JsonParser.parseString(jsonString))
+                                                         .getOrThrow( error -> {
+                                                             throw new IllegalStateException("Failed to deserialize component: " + error);
+                                                         });
+            this.setCustomName(name);
+        }
         xRange = tag.getInt("XRange").orElse(0);
         zRange = tag.getInt("ZRange").orElse(0);
         yRange = tag.getInt("YRange").orElse(0);
         speed = tag.getInt("Speed").orElse(1);
         redstoneMode = tag.getInt("RedstoneMode").orElse(0);
-        active = tag.getBooleanOr("Active",false);
+        active = tag.getBooleanOr("Active", false);
         uuid = String.valueOf(tag.getString("Owner"));
 
         area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
@@ -204,6 +217,40 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     public void openTorcherinoScreen(ServerPlayer player) {
         NetworkUtils.getInstance().s2c_openTorcherinoScreen(player, worldPosition, this.getName(), xRange, zRange, yRange, speed, redstoneMode);
     }
+
+    public static class Data {
+        public final Component customName;
+        public final int xRange, yRange, zRange, speed, redstoneMode;
+        public final boolean active;
+        public final String uuid;
+
+        private Data(Component customName, int xRange, int yRange, int zRange,
+                     int speed, int redstoneMode, boolean active, String uuid) {
+            this.customName = customName;
+            this.xRange = xRange;
+            this.yRange = yRange;
+            this.zRange = zRange;
+            this.speed = speed;
+            this.redstoneMode = redstoneMode;
+            this.active = active;
+            this.uuid = uuid;
+        }
+
+        public static Data from(TorcherinoBlockEntity be) {
+            return new Data(be.getCustomName(), be.xRange, be.yRange, be.zRange,
+                    be.speed, be.redstoneMode, be.active, be.getOwner());
+        }
+    }
+
+    public void restore(Data data) {
+        if (data.customName != null) {
+            this.setCustomName(data.customName);
+        }
+        this.readClientData(data.xRange, data.zRange, data.yRange, data.speed, data.redstoneMode);
+        this.active = data.active;
+        this.setOwner(data.uuid);
+    }
+
 
     @Nullable
     @Override

@@ -13,6 +13,7 @@ import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
+import torcherino.block.api.LanterinoOxidizableRegistry;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtilsImpl;
 

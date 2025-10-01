@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "torcherino:block/exposed_compressed_copper_lantern"
+    },
+    "hanging=true": {
+      "model": "torcherino:block/exposed_compressed_copper_lantern_hanging"
+    }
+  }
+}

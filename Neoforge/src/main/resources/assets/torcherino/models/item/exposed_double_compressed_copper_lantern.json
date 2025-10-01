@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "torcherino:item/exposed_double_compressed_copper_lantern"
+  }
+}

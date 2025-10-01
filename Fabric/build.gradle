@@ -75,5 +75,3 @@ publishing {
         }
     }
 }
-
-apply from: "https://moddingtutorials.org/publish.gradle"
