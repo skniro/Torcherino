@@ -1,9 +1,9 @@
 package torcherino.client.screen.widgets;
 
 import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import org.lwjgl.glfw.GLFW;
 
 public abstract class GradatedSliderWidget extends AbstractSliderButton {
     private final float nudgeAmount;
@@ -15,9 +15,9 @@ public abstract class GradatedSliderWidget extends AbstractSliderButton {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        boolean pressedLeft = keyCode == GLFW.GLFW_KEY_LEFT;
-        if (pressedLeft || keyCode == GLFW.GLFW_KEY_RIGHT) {
+    public boolean keyPressed(KeyEvent keyCode) {
+        boolean pressedLeft = keyCode.isLeft();
+        if (pressedLeft || keyCode.isRight()) {
             this.setValue(this.value + (pressedLeft ? -nudgeAmount : nudgeAmount));
         }
         return false;
