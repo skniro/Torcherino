@@ -5,6 +5,8 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
 }
 
+apply plugin: 'org.spongepowered.mixin'
+
 java {
     archivesBaseName = "${mod_name}-forge-${minecraft_version}"
     toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -65,6 +67,13 @@ minecraft {
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
+
+
+mixin {
+    add sourceSets.main, "torcherino.refmap.json"
+
+    config "torcherino.mixins.json"
+}
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"

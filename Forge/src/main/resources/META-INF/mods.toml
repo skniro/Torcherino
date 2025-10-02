@@ -1,6 +1,8 @@
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
+[[mixins]]
+config="torcherino.mixins.json"
 [[mods]]
   modId="torcherino"
   version="${forge_mod_version}"

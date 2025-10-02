@@ -16,8 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import torcherino.ModContent;
-import torcherino.block.CopperLanterinoBlock;
 import torcherino.block.WeatheringLanterinoBlock;
 import torcherino.block.api.LanterinoOxidizableRegistry;
 

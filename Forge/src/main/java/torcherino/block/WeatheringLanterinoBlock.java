@@ -8,7 +8,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -24,11 +27,11 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 import java.util.Optional;
 
 public class WeatheringLanterinoBlock extends CopperLanterinoBlock implements LanterinoDegradable, EntityBlock, TierSupplier {
-    private final LanterinoDegradable.DegradationLevel weatherState;
+    private final DegradationLevel weatherState;
     private final ResourceLocation tierID;
 
 
-    public WeatheringLanterinoBlock(LanterinoDegradable.DegradationLevel weatherState, Properties properties, ResourceLocation tier) {
+    public WeatheringLanterinoBlock(DegradationLevel weatherState, Properties properties, ResourceLocation tier) {
         super(properties, tier);
         this.weatherState = weatherState;
         this.tierID = tier;

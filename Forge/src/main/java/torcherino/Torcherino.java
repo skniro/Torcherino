@@ -8,11 +8,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import torcherino.api.TorcherinoAPI;
+import torcherino.block.api.LanterinoOxidizableRegistry;
 import torcherino.config.Config;
 import torcherino.platform.NetworkUtilsImpl;
 
@@ -38,9 +40,16 @@ public final class Torcherino {
         Config.initialize();
         ModContent.initialise(eventBus);
         NetworkUtilsImpl.getInstance().initialize();
+        FMLCommonSetupEvent.getBus(eventBus).addListener(this::init);
         InterModProcessEvent.getBus(eventBus).addListener(this::processIMC);
     }
 
+    @SubscribeEvent
+    public void init(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            LanterinoOxidizableRegistry.init();
+        });
+    }
     public static ResourceLocation getRl(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }

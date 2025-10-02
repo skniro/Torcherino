@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,7 +39,15 @@ public final class Torcherino {
         Config.initialize();
         ModContent.initialise(eventBus);
         NetworkUtilsImpl.getInstance().initialize();
+        eventBus.addListener(this::init);
         eventBus.addListener(this::processIMC);
+    }
+
+    @SubscribeEvent
+    public void init(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            LanterinoOxidizableRegistry.init();
+        });
     }
 
     public static ResourceLocation getRl(String path) {
