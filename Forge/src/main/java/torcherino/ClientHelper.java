@@ -15,7 +15,7 @@ import torcherino.particle.TorcherinoParticleTypes;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Torcherino.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Torcherino.MOD_ID, value = Dist.CLIENT)
 public class ClientHelper {
     @SubscribeEvent
     public static void onParticleFactoryRegistration(RegisterParticleProvidersEvent event) {
