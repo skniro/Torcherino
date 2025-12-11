@@ -5,7 +5,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -41,11 +41,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, TierSupplier {
-    private final ResourceLocation tierID;
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> NEXT_BY_TIER = new HashMap<>();
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> PREVIOUS_BY_TIER = new HashMap<>();
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> WAXABLES_BY_TIER = new HashMap<>();
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> UNWAXABLES_BY_TIER = new HashMap<>();
+    private final Identifier tierID;
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> NEXT_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> PREVIOUS_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> WAXABLES_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> UNWAXABLES_BY_TIER = new HashMap<>();
 /*
     public static final Supplier<BiMap<Block, Block>> WAXABLES = Suppliers.memoize(() -> {
         return ImmutableBiMap.<Block, Block>builder()
@@ -68,7 +68,7 @@ public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, T
 */
 
 
-    public CopperLanterinoBlock(Properties properties, ResourceLocation tier) {
+    public CopperLanterinoBlock(Properties properties, Identifier tier) {
         super(properties);
         this.tierID = tier;
     }
@@ -78,7 +78,7 @@ public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, T
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 
@@ -159,11 +159,11 @@ public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, T
         return handled ? InteractionResult.SUCCESS : super.useItemOn(itemStack, state, level, pos, player, hand, hit);
     }
 
-/*    public static BiMap<Block, Block> getWaxOff(ResourceLocation tierID) {
+/*    public static BiMap<Block, Block> getWaxOff(Identifier tierID) {
         return ModContent.WAXABLES.get(tierID).inverse();
     }
 
-    public static BiMap<Block, Block> getPreviousByBlock(ResourceLocation tierID) {
+    public static BiMap<Block, Block> getPreviousByBlock(Identifier tierID) {
         return ModContent.NEXT_BY_BLOCK.get(tierID).inverse();
     }*/
 

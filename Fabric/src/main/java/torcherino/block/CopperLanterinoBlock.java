@@ -3,7 +3,7 @@ package torcherino.block;
 import com.google.common.collect.BiMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,9 +32,9 @@ import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, TierSupplier {
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
-    public CopperLanterinoBlock(Properties properties, ResourceLocation tier) {
+    public CopperLanterinoBlock(Properties properties, Identifier tier) {
         super(properties);
         this.tierID = tier;
     }
@@ -44,7 +44,7 @@ public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, T
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 

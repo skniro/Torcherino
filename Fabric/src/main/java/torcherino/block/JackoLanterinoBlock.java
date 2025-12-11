@@ -1,7 +1,7 @@
 package torcherino.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,15 +23,15 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 
 @SuppressWarnings({"deprecation"})
 public final class JackoLanterinoBlock extends CarvedPumpkinBlock implements EntityBlock, TierSupplier {
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
-    public JackoLanterinoBlock(Properties properties, ResourceLocation tier) {
+    public JackoLanterinoBlock(Properties properties, Identifier tier) {
         super(properties);
         this.tierID = tier;
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 

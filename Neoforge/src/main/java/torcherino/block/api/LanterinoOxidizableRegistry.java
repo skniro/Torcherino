@@ -3,7 +3,7 @@ package torcherino.block.api;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import torcherino.block.CopperLanterinoBlock;
 import torcherino.block.WeatheringLanterinoBlock;
@@ -16,14 +16,14 @@ import java.util.function.Supplier;
 
 public class LanterinoOxidizableRegistry {
 
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> NEXT_BY_TIER = new HashMap<>();
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> PREVIOUS_BY_TIER = new HashMap<>();
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> WAXABLES_BY_TIER = new HashMap<>();
-    private static final Map<ResourceLocation, Supplier<BiMap<Block, Block>>> UNWAXABLES_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> NEXT_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> PREVIOUS_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> WAXABLES_BY_TIER = new HashMap<>();
+    private static final Map<Identifier, Supplier<BiMap<Block, Block>>> UNWAXABLES_BY_TIER = new HashMap<>();
 
     private static final List<Runnable> pendingRegistrations = new ArrayList<>();
 
-    public static void addPendingTier(ResourceLocation tierID,
+    public static void addPendingTier(Identifier tierID,
                                       Supplier<WeatheringLanterinoBlock> copper,
                                       Supplier<WeatheringLanterinoBlock> exposed,
                                       Supplier<WeatheringLanterinoBlock> weathered,
@@ -47,7 +47,7 @@ public class LanterinoOxidizableRegistry {
     public static void debugPrintAll() {
         System.out.println("===== LanterinoOxidizableRegistry DEBUG =====");
 
-        for (ResourceLocation tierID : NEXT_BY_TIER.keySet()) {
+        for (Identifier tierID : NEXT_BY_TIER.keySet()) {
             System.out.println("Tier: " + tierID);
 
             BiMap<Block, Block> next = NEXT_BY_TIER.get(tierID).get();
@@ -78,7 +78,7 @@ public class LanterinoOxidizableRegistry {
         System.out.println("===== END DEBUG =====");
     }
 
-    private static void registerTier(ResourceLocation tierID,
+    private static void registerTier(Identifier tierID,
                                      Supplier<WeatheringLanterinoBlock> copper,
                                      Supplier<WeatheringLanterinoBlock> exposed,
                                      Supplier<WeatheringLanterinoBlock> weathered,
@@ -108,19 +108,19 @@ public class LanterinoOxidizableRegistry {
         UNWAXABLES_BY_TIER.put(tierID, Suppliers.memoize(() -> waxMap.get().inverse()));
     }
 
-    public static BiMap<Block, Block> getNextByBlock(ResourceLocation tierID) {
+    public static BiMap<Block, Block> getNextByBlock(Identifier tierID) {
         return NEXT_BY_TIER.getOrDefault(tierID, Suppliers.memoize(ImmutableBiMap::of)).get();
     }
 
-    public static BiMap<Block, Block> getPreviousByBlock(ResourceLocation tierID) {
+    public static BiMap<Block, Block> getPreviousByBlock(Identifier tierID) {
         return PREVIOUS_BY_TIER.getOrDefault(tierID, Suppliers.memoize(ImmutableBiMap::of)).get();
     }
 
-    public static BiMap<Block, Block> getWaxMap(ResourceLocation tierID) {
+    public static BiMap<Block, Block> getWaxMap(Identifier tierID) {
         return WAXABLES_BY_TIER.getOrDefault(tierID, Suppliers.memoize(ImmutableBiMap::of)).get();
     }
 
-    public static BiMap<Block, Block> getUnwaxMap(ResourceLocation tierID) {
+    public static BiMap<Block, Block> getUnwaxMap(Identifier tierID) {
         return UNWAXABLES_BY_TIER.getOrDefault(tierID, Suppliers.memoize(ImmutableBiMap::of)).get();
     }
 }

@@ -4,7 +4,6 @@ package torcherino;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;

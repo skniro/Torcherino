@@ -2,7 +2,7 @@ package torcherino;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -23,16 +23,16 @@ public final class Torcherino {
     public static final Logger LOGGER = LogManager.getLogger(Torcherino.class);
     public static final String MOD_ID = "torcherino";
 
-    public static ResourceLocation resloc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+    public static Identifier resloc(String path) {
+        return Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path);
     }
 
     public static ResourceKey<Block> KeyofBlock(String path) {
-        return ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path));
     }
 
     public static ResourceKey<Item> KeyofItem(String path) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path));
     }
 
     public Torcherino(IEventBus eventBus) {
@@ -50,8 +50,8 @@ public final class Torcherino {
         });
     }
 
-    public static ResourceLocation getRl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier getRl(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @SubscribeEvent
@@ -61,20 +61,20 @@ public final class Torcherino {
             String method = message.method();
             Object value = message.messageSupplier().get();
             if (method.equals("blacklist_block")) {
-                if (value instanceof ResourceLocation) {
-                    TorcherinoAPI.INSTANCE.blacklistBlock((ResourceLocation) value);
+                if (value instanceof Identifier) {
+                    TorcherinoAPI.INSTANCE.blacklistBlock((Identifier) value);
                 } else if (value instanceof Block) {
                     TorcherinoAPI.INSTANCE.blacklistBlock((Block) value);
                 } else {
-                    LOGGER.error("Received blacklist_block message with invalid value, must be either a Block or ResourceLocation.");
+                    LOGGER.error("Received blacklist_block message with invalid value, must be either a Block or Identifier.");
                 }
             } else if (method.equals("blacklist_tile")) {
-                if (value instanceof ResourceLocation) {
-                    TorcherinoAPI.INSTANCE.blacklistBlockEntity((ResourceLocation) value);
+                if (value instanceof Identifier) {
+                    TorcherinoAPI.INSTANCE.blacklistBlockEntity((Identifier) value);
                 } else if (value instanceof BlockEntityType) {
                     TorcherinoAPI.INSTANCE.blacklistBlockEntity((BlockEntityType<?>) value);
                 } else {
-                    LOGGER.error("Received blacklist_tile message with invalid value, must be either a TileEntityType or ResourceLocation.");
+                    LOGGER.error("Received blacklist_tile message with invalid value, must be either a TileEntityType or Identifier.");
                 }
             } else {
                 LOGGER.error("Received IMC message with invalid method, must be either: \"blacklist_block\" or \"blacklist_tile\".");

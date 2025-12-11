@@ -49,13 +49,13 @@ TorcherinoAPI api = TorcherinoAPI.INSTANCE;
 
 These methods should only be called after blocks are registered. 
 
-Blocks may be added to the blacklist with `blacklistBlock(ResourceLocation)` or `blacklistBlock(Block)`. 
-Block entities may be added to the blacklist with `blacklistBlockEntity(ResourceLocation)` or `blacklistBlockEntity(BlockEntityType)`. 
+Blocks may be added to the blacklist with `blacklistBlock(Identifier)` or `blacklistBlock(Block)`. 
+Block entities may be added to the blacklist with `blacklistBlockEntity(Identifier)` or `blacklistBlockEntity(BlockEntityType)`. 
 These entries will be applied in addition to the configured blacklists above. 
 
 You can check if something is blacklisted with `isBlockBlacklisted(Block)` or `isBlockEntityBlacklisted(BlockEntityType)`.
 
 #### Tiers 
 
-`ImmutableMap<ResourceLocation, Tier> tiers = api.getTiers()` will provide all currently registered torcherino tiers. `getTier(ResourceLocation)` will provide data on a specific registered tier. 
+`ImmutableMap<Identifier, Tier> tiers = api.getTiers()` will provide all currently registered torcherino tiers. `getTier(Identifier)` will provide data on a specific registered tier. 
 

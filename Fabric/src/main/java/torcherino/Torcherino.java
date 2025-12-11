@@ -12,7 +12,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,16 +29,16 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
     public static final String MOD_ID = "torcherino";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
-    public static ResourceLocation resloc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path);
+    public static Identifier resloc(String path) {
+        return Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path);
     }
 
     public static ResourceKey<Block> KeyofBlock(String path) {
-        return ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path));
     }
 
     public static ResourceKey<Item> KeyofItem(String path) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, path));
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path));
     }
 
     @Override
@@ -75,8 +75,8 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
         if (FabricLoader.getInstance().isModLoaded("computercraft")) {
-            TorcherinoAPI.INSTANCE.blacklistBlockEntity(ResourceLocation.fromNamespaceAndPath("computercraft", "turtle_normal"));
-            TorcherinoAPI.INSTANCE.blacklistBlockEntity(ResourceLocation.fromNamespaceAndPath("computercraft", "turtle_advanced"));
+            TorcherinoAPI.INSTANCE.blacklistBlockEntity(Identifier.fromNamespaceAndPath("computercraft", "turtle_normal"));
+            TorcherinoAPI.INSTANCE.blacklistBlockEntity(Identifier.fromNamespaceAndPath("computercraft", "turtle_advanced"));
         }
         Packets.register();
     }

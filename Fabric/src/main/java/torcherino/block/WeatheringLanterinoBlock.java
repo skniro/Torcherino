@@ -9,7 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -47,7 +47,7 @@ import java.util.Optional;
 public class WeatheringLanterinoBlock extends CopperLanterinoBlock implements WeatheringCopper, EntityBlock, TierSupplier {
     private final WeatheringCopper.WeatherState weatherState;
 
-    public WeatheringLanterinoBlock(WeatheringCopper.WeatherState weatherState, BlockBehaviour.Properties properties, ResourceLocation tier) {
+    public WeatheringLanterinoBlock(WeatheringCopper.WeatherState weatherState, BlockBehaviour.Properties properties, Identifier tier) {
         super(properties, tier);
         this.weatherState = weatherState;
     }

@@ -1,7 +1,7 @@
 package torcherino.api;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import torcherino.TorcherinoImpl;
@@ -37,7 +37,7 @@ public interface TorcherinoAPI {
      * @return Immutable map of tierID -> tier
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
      */
-    ImmutableMap<ResourceLocation, Tier> getTiers();
+    ImmutableMap<Identifier, Tier> getTiers();
 
     /**
      * Returns the tier for the given tierName.
@@ -46,14 +46,14 @@ public interface TorcherinoAPI {
      * @return The tier or null if it does not exist.
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
      */
-    Tier getTier(ResourceLocation name);
+    Tier getTier(Identifier name);
 
     /**
      * @param blockId The Resource Location of the block to be blacklisted.
      * @return TRUE if added to blacklist, FALSE if no block exists or already on blacklist.
      * @since FABRIC - 1.9.51, FORGE - 8.1.2
      */
-    boolean blacklistBlock(ResourceLocation blockId);
+    boolean blacklistBlock(Identifier blockId);
 
     /**
      * @param block The block to be blacklisted.
@@ -74,7 +74,7 @@ public interface TorcherinoAPI {
      * @return TRUE if added to blacklist, FALSE if already on blacklist.
      * @since FABRIC - 1.9.51, FORGE - 14.0.0
      */
-    boolean blacklistBlockEntity(ResourceLocation blockEntityTypeId);
+    boolean blacklistBlockEntity(Identifier blockEntityTypeId);
 
     /**
      * @param blockEntityType The block entity type to be blacklisted.

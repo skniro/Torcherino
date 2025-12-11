@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableBiMap;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -67,17 +67,17 @@ public final class ModContent {
 
 
         TILE_ENTITIES.register("torcherino", () ->  new BlockEntityType<>(TorcherinoBlockEntity::new, BLOCKS.getEntries().stream().map(Supplier::get).toList().toArray(new Block[0])));
-        toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"));
+        toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"));
         TorcherinoAPI.INSTANCE.getTiers().keySet().forEach(ModContent::register);
     }
 
-    private static String getPath(ResourceLocation tierID, String type) {
+    private static String getPath(Identifier tierID, String type) {
         return (tierID.getPath().equals("normal") ? "" : tierID.getPath() + "_") + type;
     }
 
 
     static Supplier<TorcherinoBlock> b;
-    private static void register(ResourceLocation tierID) {
+    private static void register(Identifier tierID) {
         if (tierID.getNamespace().equals(Torcherino.MOD_ID)) {
             String torcherinoPath = getPath(tierID, "torcherino");
             String jackoLanterinoPath = getPath(tierID, "lanterino");
@@ -91,19 +91,19 @@ public final class ModContent {
             String waxedweatheredCopperId = "waxed_weathered_" + copperLanterinoId;
             String waxedoxidizedCopperId = "waxed_oxidized_" + copperLanterinoId;
 
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, torcherinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_" + torcherinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, jackoLanterinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, lanterinoPath));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, copperLanterinoId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, exposedCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, weatheredCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, oxidizedCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, waxedCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, waxedexposedCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, waxedweatheredCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, waxedoxidizedCopperId));
-            toBlacklist.add(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, copperLanterinoId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, torcherinoPath));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_" + torcherinoPath));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, jackoLanterinoPath));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, lanterinoPath));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, copperLanterinoId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, exposedCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, weatheredCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, oxidizedCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, waxedCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, waxedexposedCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, waxedweatheredCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, waxedoxidizedCopperId));
+            toBlacklist.add(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, copperLanterinoId));
 
             Supplier<ForgeTorcherinoBlock> standingBlock = BLOCKS.register(torcherinoPath, () -> new ForgeTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(torcherinoPath)), tierID));
             Supplier<ForgeWallTorcherinoBlock> wallBlock = BLOCKS.register("wall_" + torcherinoPath, () -> new ForgeWallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock("wall_" + torcherinoPath)).overrideDescription(standingBlock.get().getDescriptionId()).overrideLootTable(standingBlock.get().getLootTable()), tierID));
@@ -163,13 +163,13 @@ public final class ModContent {
         }
     }
 
-    private static final Set<ResourceLocation> toBlacklist = new HashSet<>();
-    //public static final Map<ResourceLocation, BiMap<Block, Block>> WAXABLES = new HashMap<>();
-    //public static final Map<ResourceLocation, BiMap<Block, Block>> NEXT_BY_BLOCK = new HashMap<>();
+    private static final Set<Identifier> toBlacklist = new HashSet<>();
+    //public static final Map<Identifier, BiMap<Block, Block>> WAXABLES = new HashMap<>();
+    //public static final Map<Identifier, BiMap<Block, Block>> NEXT_BY_BLOCK = new HashMap<>();
 
     @SubscribeEvent
     public static void blackliststuff(final FMLCommonSetupEvent event) {
-        for (ResourceLocation block : toBlacklist){
+        for (Identifier block : toBlacklist){
             TorcherinoAPI.INSTANCE.blacklistBlock(block);
         }
         TorcherinoAPI.INSTANCE.blacklistBlock(Blocks.WATER);

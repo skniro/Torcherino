@@ -2,7 +2,7 @@ package torcherino.mixin;
 
 import com.google.common.collect.BiMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +34,7 @@ public abstract class AxeItemMixin {
         ItemStack stack = useOnContext.getItemInHand();
         if (state.getBlock() instanceof CopperLanterinoBlock copperLanterinoBlock) {
             if (!level.isClientSide()) {
-                ResourceLocation tierID = copperLanterinoBlock.getTier();
+                Identifier tierID = copperLanterinoBlock.getTier();
                 BiMap<Block, Block> waxOffMap = (BiMap<Block, Block>) LanterinoOxidizableRegistry.getUnwaxMap(tierID);
                 Block unwaxed = waxOffMap.get(state.getBlock());
                 if (unwaxed != null) {
@@ -47,7 +47,7 @@ public abstract class AxeItemMixin {
             }
             if (state.getBlock() instanceof WeatheringLanterinoBlock weatheringLanterinoBlock) {
                 if (!level.isClientSide()) {
-                    ResourceLocation tierID = weatheringLanterinoBlock.getTier();
+                    Identifier tierID = weatheringLanterinoBlock.getTier();
                     BiMap<Block, Block> prevMap = (BiMap<Block, Block>) LanterinoOxidizableRegistry.getPreviousByBlock(tierID);
                     Block prev = prevMap.get(state.getBlock());
                     if (prev != null) {

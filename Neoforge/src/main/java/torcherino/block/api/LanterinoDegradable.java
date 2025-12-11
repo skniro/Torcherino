@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +24,7 @@ public interface LanterinoDegradable extends ChangeOverTimeBlock<LanterinoDegrad
 
     static Optional<Block> getPrevious(Block pBlock) {
         if (pBlock instanceof WeatheringLanterinoBlock weatheringLanterinoBlock) {
-            ResourceLocation tierID = weatheringLanterinoBlock.getTier();
+            Identifier tierID = weatheringLanterinoBlock.getTier();
             return Optional.ofNullable(LanterinoOxidizableRegistry.getPreviousByBlock(tierID).get(pBlock));
         }
         return Optional.empty();
@@ -33,7 +33,7 @@ public interface LanterinoDegradable extends ChangeOverTimeBlock<LanterinoDegrad
     static Block getFirst(Block pBlock) {
         Block block = pBlock;
         if (block instanceof WeatheringLanterinoBlock weatheringLanterinoBlock) {
-            ResourceLocation tierID = weatheringLanterinoBlock.getTier();
+            Identifier tierID = weatheringLanterinoBlock.getTier();
             for (Block block1 = LanterinoOxidizableRegistry.getPreviousByBlock(tierID).get(pBlock); block1 != null; block1 = LanterinoOxidizableRegistry.getPreviousByBlock(tierID).get(block1)) {
                 block = block1;
             }
@@ -47,7 +47,7 @@ public interface LanterinoDegradable extends ChangeOverTimeBlock<LanterinoDegrad
         });
     }
 
-    static Optional<Block> getNext(Block pBlock, ResourceLocation tierID) {
+    static Optional<Block> getNext(Block pBlock, Identifier tierID) {
         return Optional.ofNullable(LanterinoOxidizableRegistry.getNextByBlock(tierID).get(pBlock));
     }
 
@@ -57,7 +57,7 @@ public interface LanterinoDegradable extends ChangeOverTimeBlock<LanterinoDegrad
 
     default Optional<BlockState> getNext(BlockState pState) {
         if (pState.getBlock() instanceof WeatheringLanterinoBlock weatheringLanterinoBlock) {
-            ResourceLocation tierID = weatheringLanterinoBlock.getTier();
+            Identifier tierID = weatheringLanterinoBlock.getTier();
             return getNext(pState.getBlock(), tierID).map((p_154896_) -> {
                 return p_154896_.withPropertiesOf(pState);
             });

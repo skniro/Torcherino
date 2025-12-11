@@ -2,7 +2,7 @@ package torcherino.block;
 
 import com.google.common.collect.BiMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -28,16 +28,16 @@ import java.util.Optional;
 
 public class WeatheringLanterinoBlock extends CopperLanterinoBlock implements LanterinoDegradable, EntityBlock, TierSupplier {
     private final DegradationLevel weatherState;
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
 
-    public WeatheringLanterinoBlock(DegradationLevel weatherState, Properties properties, ResourceLocation tier) {
+    public WeatheringLanterinoBlock(DegradationLevel weatherState, Properties properties, Identifier tier) {
         super(properties, tier);
         this.weatherState = weatherState;
         this.tierID = tier;
     }
 
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 

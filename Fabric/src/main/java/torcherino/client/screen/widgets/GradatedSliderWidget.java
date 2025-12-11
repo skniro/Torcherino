@@ -24,7 +24,8 @@ public abstract class GradatedSliderWidget extends AbstractSliderButton {
         return false;
     }
 
-    private void setValue(double newValue) {
+    @Override
+    public void setValue(double newValue) {
         double currentValue = this.value;
         value = Mth.clamp(newValue, 0, 1);
         if (currentValue != this.value) {

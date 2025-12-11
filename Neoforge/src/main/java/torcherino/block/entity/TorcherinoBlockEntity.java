@@ -9,19 +9,19 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Nameable;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
@@ -38,11 +38,11 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     private int xRange, yRange, zRange, speed, redstoneMode;
     private Iterable<BlockPos> area;
     private boolean active;
-    private ResourceLocation tierID;
+    private Identifier tierID;
     private String uuid = "";
 
     public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
-        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
+        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TorcherinoBlockEntity entity) {
@@ -54,7 +54,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
         }
         // todo: get on load and then when updated
         if (level instanceof ServerLevel serverlevel) {
-            randomTicks = serverlevel.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+            randomTicks = serverlevel.getGameRules().get(GameRules.RANDOM_TICK_SPEED);
         }
         entity.area.forEach(entity::tickBlock);
     }
@@ -152,7 +152,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         if (tierID == null) {
             Block block = this.getBlockState().getBlock();
             if (block instanceof TierSupplier supplier) {

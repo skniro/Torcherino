@@ -2,7 +2,7 @@ package torcherino.mixin;
 
 import com.google.common.collect.BiMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +35,7 @@ public abstract class HoneycombItemMixin {
         ItemStack stack = useOnContext.getItemInHand();
         if (state.getBlock() instanceof WeatheringLanterinoBlock weatheringLanterinoBlock) {
             if (!level.isClientSide()) {
-                ResourceLocation tierID = weatheringLanterinoBlock.getTier();
+                Identifier tierID = weatheringLanterinoBlock.getTier();
                 BiMap<Block, Block> waxables = (BiMap<Block, Block>) LanterinoOxidizableRegistry.getWaxMap(tierID);
                 Block waxed = waxables.get(state.getBlock());
                 if (waxed != null) {

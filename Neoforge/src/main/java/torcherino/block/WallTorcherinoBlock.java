@@ -2,7 +2,7 @@ package torcherino.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,15 +25,15 @@ import torcherino.block.entity.TorcherinoBlockEntity;
 
 @SuppressWarnings({"deprecation"})
 public final class WallTorcherinoBlock extends WallTorchBlock implements EntityBlock, TierSupplier {
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
-    public WallTorcherinoBlock( Properties properties, ResourceLocation tier,SimpleParticleType simpleParticleType) {
+    public WallTorcherinoBlock( Properties properties, Identifier tier,SimpleParticleType simpleParticleType) {
         super(simpleParticleType,properties);
         this.tierID = tier;
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 

@@ -3,7 +3,7 @@ package torcherino;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.apache.logging.log4j.LogManager;
@@ -21,12 +21,12 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     public static final String MOD_ID = "torcherino";
 
     public static final Logger LOGGER = LogManager.getLogger("torcherino-api");
-    private final Map<ResourceLocation, Tier> localTiers = new HashMap<>();
+    private final Map<Identifier, Tier> localTiers = new HashMap<>();
     private final Set<Block> blacklistedBlocks = new HashSet<>();
     private final Set<BlockEntityType<?>> blacklistedTiles = new HashSet<>();
-    private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
+    private Map<Identifier, Tier> remoteTiers = new HashMap<>();
 
-    public void registerTier(ResourceLocation name, int maxSpeed, int xzRange, int yRange) {
+    public void registerTier(Identifier name, int maxSpeed, int xzRange, int yRange) {
         if (localTiers.containsKey(name)) {
             LOGGER.warn("Tier with id {} has already been registered.", name);
             return;
@@ -35,7 +35,7 @@ public final class TorcherinoImpl implements TorcherinoAPI {
         localTiers.put(name, tier);
     }
 
-    public boolean blacklistBlock(ResourceLocation blockId) {
+    public boolean blacklistBlock(Identifier blockId) {
         Optional<Block> block = BuiltInRegistries.BLOCK.getOptional(blockId);
         if (block.isPresent()) {
             if (blacklistedBlocks.contains(block.get())) {
@@ -65,7 +65,7 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     }
 
     @Override
-    public boolean blacklistBlockEntity(ResourceLocation blockEntityTypeId) {
+    public boolean blacklistBlockEntity(Identifier blockEntityTypeId) {
         Optional<BlockEntityType<?>> blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getOptional(blockEntityTypeId);
         if (blockEntityType.isPresent()) {
             if (blacklistedTiles.contains(blockEntityType.get())) {
@@ -95,16 +95,16 @@ public final class TorcherinoImpl implements TorcherinoAPI {
     }
 
     // Do not use
-    public void setRemoteTiers(Map<ResourceLocation, Tier> tiers) {
+    public void setRemoteTiers(Map<Identifier, Tier> tiers) {
         remoteTiers = tiers;
     }
 
-    public ImmutableMap<ResourceLocation, Tier> getTiers() {
+    public ImmutableMap<Identifier, Tier> getTiers() {
         return ImmutableMap.copyOf(localTiers);
     }
 
     @Override
-    public Tier getTier(ResourceLocation name) {
+    public Tier getTier(Identifier name) {
         return remoteTiers.getOrDefault(name, null);
     }
 }

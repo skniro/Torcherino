@@ -1,6 +1,6 @@
 package torcherino.api;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * MIT License
@@ -26,5 +26,5 @@ import net.minecraft.resources.ResourceLocation;
  * SOFTWARE.
  */
 public interface TierSupplier {
-    ResourceLocation getTier();
+    Identifier getTier();
 }

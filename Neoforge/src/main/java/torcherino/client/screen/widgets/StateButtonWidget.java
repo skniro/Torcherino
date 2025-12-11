@@ -11,13 +11,13 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.item.ItemStack;
 
 public abstract class StateButtonWidget extends Button {
     private static final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-    private static final WidgetSprites SPRITES = new WidgetSprites(ResourceLocation.withDefaultNamespace("widget/button"), ResourceLocation.withDefaultNamespace("widget/button_disabled"), ResourceLocation.withDefaultNamespace("widget/button_highlighted"));
+    private static final WidgetSprites SPRITES = new WidgetSprites(Identifier.withDefaultNamespace("widget/button"), Identifier.withDefaultNamespace("widget/button_disabled"), Identifier.withDefaultNamespace("widget/button_highlighted"));
     private final Screen screen;
     private Component narrationMessage;
     private Font font;
@@ -39,8 +39,9 @@ public abstract class StateButtonWidget extends Button {
 
     protected abstract ItemStack getButtonIcon();
 
+
     @Override
-    public final void renderWidget(GuiGraphics context, int mouseX, int mouseY, float partialTicks){
+    protected final void renderContents(GuiGraphics context, int mouseX, int mouseY, float partialTicks){
         if (visible) {
             context.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight(), ARGB.white(this.alpha));
             context.renderItem(this.getButtonIcon(),getX() + 2, getY() + 2);

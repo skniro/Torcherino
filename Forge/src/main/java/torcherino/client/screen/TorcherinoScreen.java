@@ -6,7 +6,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import torcherino.TorcherinoImpl;
@@ -17,7 +17,7 @@ import torcherino.client.screen.widgets.StateButtonWidget;
 import torcherino.platform.NetworkUtils;
 
 public final class TorcherinoScreen extends Screen {
-    private static final ResourceLocation SCREEN_TEXTURE = ResourceLocation.fromNamespaceAndPath(TorcherinoImpl.MOD_ID, "textures/screens/torcherino.png");
+    private static final Identifier SCREEN_TEXTURE = Identifier.fromNamespaceAndPath(TorcherinoImpl.MOD_ID, "textures/screens/torcherino.png");
     private static final int screenWidth = 245;
     private static final int screenHeight = 123;
 
@@ -26,7 +26,7 @@ public final class TorcherinoScreen extends Screen {
     private final Component cached_title;
     private int xRange, zRange, yRange, speed, redstoneMode, left, top;
 
-    public TorcherinoScreen(Component title, int xRange, int zRange, int yRange, int speed, int redstoneMode, BlockPos pos, ResourceLocation tierID) {
+    public TorcherinoScreen(Component title, int xRange, int zRange, int yRange, int speed, int redstoneMode, BlockPos pos, Identifier tierID) {
         super(title);
         this.tier = TorcherinoAPI.INSTANCE.getTier(tierID);
         this.blockPos = pos;

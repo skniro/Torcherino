@@ -5,11 +5,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import torcherino.Torcherino;
 
 public record OpenTorchrinoScreenPayload(BlockPos blockPos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode, FriendlyByteBuf buf) implements CustomPacketPayload {
-    public static final ResourceLocation OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
+    public static final Identifier OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
     public static final Type<OpenTorchrinoScreenPayload> TYPE = new Type<>(OPEN_TORCHERINO_SCREEN);
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenTorchrinoScreenPayload> CODEC = CustomPacketPayload.codec(OpenTorchrinoScreenPayload::write, OpenTorchrinoScreenPayload::new);
 

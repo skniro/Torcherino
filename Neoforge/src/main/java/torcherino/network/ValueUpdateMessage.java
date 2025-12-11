@@ -5,14 +5,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 @SuppressWarnings("ClassCanBeRecord")
 public record ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload{
-    private static final ResourceLocation UPDATE_TORCHERINO_VALUES = Torcherino.resloc("update_torcherino_values");
+    private static final Identifier UPDATE_TORCHERINO_VALUES = Torcherino.resloc("update_torcherino_values");
     public static final Type<ValueUpdateMessage> TYPE = new Type<>(UPDATE_TORCHERINO_VALUES);
     public static final StreamCodec<RegistryFriendlyByteBuf, ValueUpdateMessage> CODEC = CustomPacketPayload.codec(ValueUpdateMessage::write, ValueUpdateMessage::new);
 

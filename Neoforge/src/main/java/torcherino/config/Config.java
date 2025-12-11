@@ -2,7 +2,7 @@ package torcherino.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.MarkerManager;
 import torcherino.TorcherinoImpl;
@@ -24,11 +24,11 @@ public class Config {
 
     //@Comment("\nAdd a block by identifier to the blacklist.\nExamples: \"minecraft:dirt\", \"minecraft:furnace\"")
     @SuppressWarnings("MismatchedReadAndWriteOfArray")
-    private final ResourceLocation[] blacklisted_blocks = new ResourceLocation[]{};
+    private final Identifier[] blacklisted_blocks = new Identifier[]{};
 
     //@Comment("\nAdd a block entity by identifier to the blacklist.\nExamples: \"minecraft:furnace\", \"minecraft:mob_spawner\"")
     @SuppressWarnings({"MismatchedReadAndWriteOfArray", "SpellCheckingInspection"})
-    private final ResourceLocation[] blacklisted_blockentities = new ResourceLocation[]{};
+    private final Identifier[] blacklisted_blockentities = new Identifier[]{};
 
     //@Comment("\nAllows new custom torcherino tiers to be added.\nThis also allows for each tier to have their own max max_speed and ranges.")
     private final Tier[] tiers = new Tier[]{new Tier("normal", 4, 4, 1), new Tier("compressed", 36, 4, 1), new Tier("double_compressed", 324, 4, 1)};
@@ -39,7 +39,7 @@ public class Config {
 
     public static void initialize() {
         Gson gson = new GsonBuilder().disableInnerClassSerialization()
-                                     .registerTypeAdapter(ResourceLocation.class, new ResourceLocationAdapter())
+                                     .registerTypeAdapter(Identifier.class, new IdentifierAdapter())
                                      .setPrettyPrinting()
                                      .create();
         var configDir = PlatformUtils.getInstance().getConfigPath();
@@ -80,12 +80,12 @@ public class Config {
             online_mode = "";
         }
         for (Tier tier : tiers) {
-            ((TorcherinoImpl) TorcherinoAPI.INSTANCE).registerTier(ResourceLocation.fromNamespaceAndPath("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
+            ((TorcherinoImpl) TorcherinoAPI.INSTANCE).registerTier(Identifier.fromNamespaceAndPath("torcherino", tier.name), tier.max_speed, tier.xz_range, tier.y_range);
         }
-        for (ResourceLocation id : blacklisted_blocks) {
+        for (Identifier id : blacklisted_blocks) {
             TorcherinoAPI.INSTANCE.blacklistBlock(id);
         }
-        for (ResourceLocation id : blacklisted_blockentities) {
+        for (Identifier id : blacklisted_blockentities) {
             TorcherinoAPI.INSTANCE.blacklistBlockEntity(id);
         }
     }

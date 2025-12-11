@@ -2,7 +2,7 @@ package torcherino.network;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.slf4j.Logger;
 import torcherino.Torcherino;
@@ -25,7 +25,7 @@ public class ServerPayloadHandler {
 
     public static void handleTier(final S2CTierSyncMessage message, IPayloadContext contextSupplier) {
         IPayloadContext context = contextSupplier;
-        ImmutableMap<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
+        ImmutableMap<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
         context.enqueueWork(() -> (
                 new S2CTierSyncMessage(tiers))
         );

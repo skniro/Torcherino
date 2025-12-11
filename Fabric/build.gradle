@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'fabric-loom' version '1.14-SNAPSHOT'
     id 'maven-publish'
     id 'idea'
 }
 
-archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
+base.archivesName = "${mod_name}-fabric-${minecraft_version}"
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -56,7 +56,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
-            artifactId project.archivesBaseName
+            artifactId "${mod_name}-fabric-${minecraft_version}"
             version project.version
             from components.java
         }

@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.network.CustomPayloadEvent;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
 public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
-    public static final ResourceLocation OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
+    public static final Identifier OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
     public static final CustomPacketPayload.Type<OpenScreenMessage> TYPE = new CustomPacketPayload.Type<>(OPEN_TORCHERINO_SCREEN);
     public static final StreamCodec<FriendlyByteBuf, OpenScreenMessage> CODEC = CustomPacketPayload.codec(OpenScreenMessage::encode, OpenScreenMessage::decode);
 

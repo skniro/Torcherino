@@ -1,104 +1,97 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
+    id 'java'
     id 'idea'
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.minecraftforge.gradle' version '7.0.0-beta.+'
+    id 'net.minecraftforge.jarjar' version '0.2.3'
 }
 
-apply plugin: 'org.spongepowered.mixin'
-
-java {
-    archivesBaseName = "${mod_name}-forge-${minecraft_version}"
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
-    copyIdeResources = true
-    if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
-        // This location is hardcoded in Forge and can not be changed.
-        // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-        project.logger.debug('Forge Access Transformers are enabled for this project.')
-    }
+
 
     runs {
-        client {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'forge.enabledGameTestNamespaces', 'torcherino'
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                }
-            }
+        configureEach {
+            workingDir.convention layout.projectDirectory.dir('run')
+
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            systemProperty 'forge.logging.console.level', 'debug'
+
+            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+
+            args "-mixin.config=${mod_id}.mixins.json"
         }
 
-        server {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                }
-            }
+        forgeclient {
+            register('client')
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
         }
 
-        data {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                }
-            }
+        forgeserver {
+            register('server')
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+
+        }
+
+        forgedata {
+            register('data')
+            workingDir = layout.projectDirectory.dir('run-data')
+            args '--mod', mod_id, '--all', '--output', layout.projectDirectory.dir('src/generated/resources'), '--existing', layout.projectDirectory.dir('src/main/resources')
         }
     }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+jarJar.register() {
+    archiveClassifier = null
+}
 
-mixin {
-    add sourceSets.main, "torcherino.refmap.json"
+repositories {
+    maven minecraft.mavenizer
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Sponge'
+                url = 'https://repo.spongepowered.org/repository/maven-public'
+            }
+        }
+        filter {
+            includeGroupAndSubgroups('org.spongepowered')
+        }
+    }
+    mavenCentral()
+    mavenLocal()
 
-    config "torcherino.mixins.json"
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
+    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
+    // NOTE: Support for local dependencies is still experimental in ForgeGradle 7.
+    //flatDir {
+    //    dir 'libs'
+    //}
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    implementation minecraft.dependency("net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.10'
 }
 
 
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+base.archivesName = "${mod_name}-forge-${minecraft_version}"
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-tasks.named('processResources', ProcessResources).configure {
+tasks.named('processResources', ProcessResources) {
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version: forge_version, forge_version_range: forge_version_range,
@@ -106,14 +99,14 @@ tasks.named('processResources', ProcessResources).configure {
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, forge_mod_version: version,
             mod_authors: mod_authors, mod_description: mod_description,
     ]
-    inputs.properties replaceProperties
+    inputs.property('replaceProperties', replaceProperties)
 
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
+        expand replaceProperties
     }
 }
 
-tasks.named('jar', Jar).configure {
+tasks.named('jar', Jar) {
     manifest {
         attributes([
                 'Specification-Title'     : mod_id,
@@ -123,14 +116,17 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Version'  : project.version,
                 'Implementation-Vendor'   : mod_authors
         ])
+        attributes['MixinConfigs'] = "${mod_id}.mixins.json"
     }
+
+    archiveClassifier = 'slim'
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
-            artifactId project.archivesBaseName
+            artifactId "${project.mod_name}-forge-${project.minecraft_version}"
             version project.version
             artifact jar
         }
@@ -153,6 +149,8 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+idea.module { downloadJavadoc = downloadSources = true }
 
 sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")

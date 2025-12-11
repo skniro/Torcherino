@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,9 +37,9 @@ import torcherino.particle.TorcherinoParticleTypes;
 public class ForgeTorcherinoBlock extends Block implements EntityBlock, TierSupplier {
     protected static final int AABB_STANDING_OFFSET = 2;
     protected static final VoxelShape AABB = Block.box(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
-    public ForgeTorcherinoBlock(Properties properties, ResourceLocation tier) {
+    public ForgeTorcherinoBlock(Properties properties, Identifier tier) {
         super(properties);
         tierID = tier;
     }
@@ -60,7 +60,7 @@ public class ForgeTorcherinoBlock extends Block implements EntityBlock, TierSupp
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 
@@ -107,12 +107,12 @@ public class ForgeTorcherinoBlock extends Block implements EntityBlock, TierSupp
         double $$5 = (double)$$2.getY() + 0.7;
         double $$6 = (double)$$2.getZ() + 0.5;
         $$1.addParticle(ParticleTypes.SMOKE, $$4, $$5, $$6, 0.0, 0.0, 0.0);
-        ResourceLocation blockName = BuiltInRegistries.BLOCK.getKey($$0.getBlock());
-        if (blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"))) {
+        Identifier blockName = BuiltInRegistries.BLOCK.getKey($$0.getBlock());
+        if (blockName != null && blockName.equals(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"))) {
             $$1.addParticle(TorcherinoParticleTypes.Normal_Torcherino_Flame.get(), $$4, $$5, $$6, 0.0, 0.0, 0.0);
-        } else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "compressed_torcherino"))){
+        } else if(blockName != null && blockName.equals(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Compressed_Torcherino_Flame.get(), $$4, $$5, $$6, 0.0, 0.0, 0.0);
-        }else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "double_compressed_torcherino"))){
+        }else if(blockName != null && blockName.equals(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "double_compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Double_Compressed_Torcherino_Flame.get(), $$4, $$5, $$6, 0.0, 0.0, 0.0);
         }
     }

@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import torcherino.Torcherino;
@@ -62,7 +62,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayer player = handler.player;
             allowedUuids.add(player.getStringUUID());
-            ImmutableMap<ResourceLocation, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
+            ImmutableMap<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
             sender.sendPacket(new TorchrinoTierPayload(tiers));
             Torcherino.LOGGER.info(tiers);
         });

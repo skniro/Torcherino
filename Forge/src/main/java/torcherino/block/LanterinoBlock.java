@@ -2,7 +2,7 @@ package torcherino.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,9 +24,9 @@ import torcherino.api.TierSupplier;
 import torcherino.block.entity.TorcherinoBlockEntity;
 
 public final class LanterinoBlock extends LanternBlock implements EntityBlock, TierSupplier {
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
-    public LanterinoBlock(Properties properties, ResourceLocation tier) {
+    public LanterinoBlock(Properties properties, Identifier tier) {
         super(properties);
         this.tierID = tier;
     }
@@ -36,7 +36,7 @@ public final class LanterinoBlock extends LanternBlock implements EntityBlock, T
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 

@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,9 +49,9 @@ public final class ForgeWallTorcherinoBlock extends ForgeTorcherinoBlock impleme
     public static final EnumProperty<Direction> FACING;
     protected static final float AABB_OFFSET = 2.5F;
     private static final Map<Direction, VoxelShape> AABBS;
-    private final ResourceLocation tierID;
+    private final Identifier tierID;
 
-    public ForgeWallTorcherinoBlock(Properties properties, ResourceLocation tier) {
+    public ForgeWallTorcherinoBlock(Properties properties, Identifier tier) {
         super(properties, tier);
         this.tierID = tier;
         this.registerDefaultState((BlockState)((BlockState)this.stateDefinition.any()).setValue(FACING, Direction.NORTH));
@@ -119,7 +119,7 @@ public final class ForgeWallTorcherinoBlock extends ForgeTorcherinoBlock impleme
     }
 
     @Override
-    public ResourceLocation getTier() {
+    public Identifier getTier() {
         return tierID;
     }
 
@@ -169,12 +169,12 @@ public final class ForgeWallTorcherinoBlock extends ForgeTorcherinoBlock impleme
         double $$9 = 0.27;
         Direction $$10 = $$4.getOpposite();
         $$1.addParticle(ParticleTypes.SMOKE, $$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
-        ResourceLocation blockName = BuiltInRegistries.BLOCK.getKey($$0.getBlock());
-        if (blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_torcherino"))) {
+        Identifier blockName = BuiltInRegistries.BLOCK.getKey($$0.getBlock());
+        if (blockName != null && blockName.equals(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_torcherino"))) {
             $$1.addParticle(TorcherinoParticleTypes.Normal_Torcherino_Flame.get(),$$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
-        } else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_compressed_torcherino"))){
+        } else if(blockName != null && blockName.equals(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Compressed_Torcherino_Flame.get(), $$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
-        }else if(blockName != null && blockName.equals(ResourceLocation.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_double_compressed_torcherino"))){
+        }else if(blockName != null && blockName.equals(Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "wall_double_compressed_torcherino"))){
             $$1.addParticle(TorcherinoParticleTypes.Double_Compressed_Torcherino_Flame.get(), $$5 + 0.27 * (double)$$10.getStepX(), $$6 + 0.22, $$7 + 0.27 * (double)$$10.getStepZ(), 0.0, 0.0, 0.0);
         }
     }
