@@ -128,6 +128,7 @@ publishing {
             groupId project.group
             artifactId "${project.mod_name}-forge-${project.minecraft_version}"
             version project.version
+            from components.jarJar
             artifact jar
         }
     }
