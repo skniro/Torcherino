@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": {
+    "torcherino:copper_lantern": {
+      "next_oxidation_stage": "torcherino:exposed_copper_lantern"
+    },
+    "torcherino:exposed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:weathered_copper_lantern"
+    },
+    "torcherino:weathered_copper_lantern": {
+      "next_oxidation_stage": "torcherino:oxidized_copper_lantern"
+    },
+    "torcherino:compressed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:exposed_compressed_copper_lantern"
+    },
+    "torcherino:exposed_compressed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:weathered_compressed_copper_lantern"
+    },
+    "torcherino:weathered_compressed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:oxidized_compressed_copper_lantern"
+    },
+
+    "torcherino:double_compressed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:exposed_double_compressed_copper_lantern"
+    },
+    "torcherino:exposed_double_compressed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:weathered_double_compressed_copper_lantern"
+    },
+    "torcherino:weathered_double_compressed_copper_lantern": {
+      "next_oxidation_stage": "torcherino:oxidized_double_compressed_copper_lantern"
+    }
+  }
+}
