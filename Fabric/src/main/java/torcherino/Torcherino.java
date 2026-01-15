@@ -3,12 +3,11 @@ package torcherino;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -63,7 +62,7 @@ public final class Torcherino implements ModInitializer, TorcherinoInitializer {
 
     @Environment(EnvType.CLIENT)
     private void registerTorchParticle(String tier) {
-        ParticleFactoryRegistry.getInstance().register(Registry.register(BuiltInRegistries.PARTICLE_TYPE, Torcherino.resloc(tier), FabricParticleTypes.simple()),
+        ParticleProviderRegistry.getInstance().register(Registry.register(BuiltInRegistries.PARTICLE_TYPE, Torcherino.resloc(tier), FabricParticleTypes.simple()),
                 FlameParticle.Provider::new);
     }
 

@@ -6,13 +6,13 @@ import net.minecraft.world.level.block.WeatheringCopperBlocks;
 public class LanterinoOxidizableRegistry {
 
     public static void registerWeatheringSet(WeatheringCopperBlocks blocks) {
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(blocks.unaffected(), blocks.exposed());
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(blocks.exposed(), blocks.weathered());
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(blocks.weathered(), blocks.oxidized());
+        OxidizableBlocksRegistry.registerNextStage(blocks.unaffected(), blocks.exposed());
+        OxidizableBlocksRegistry.registerNextStage(blocks.exposed(), blocks.weathered());
+        OxidizableBlocksRegistry.registerNextStage(blocks.weathered(), blocks.oxidized());
 
-        OxidizableBlocksRegistry.registerWaxableBlockPair(blocks.unaffected(), blocks.waxed());
-        OxidizableBlocksRegistry.registerWaxableBlockPair(blocks.exposed(), blocks.waxedExposed());
-        OxidizableBlocksRegistry.registerWaxableBlockPair(blocks.weathered(), blocks.waxedWeathered());
-        OxidizableBlocksRegistry.registerWaxableBlockPair(blocks.oxidized(), blocks.waxedOxidized());
+        OxidizableBlocksRegistry.registerWaxable(blocks.unaffected(), blocks.waxed());
+        OxidizableBlocksRegistry.registerWaxable(blocks.exposed(), blocks.waxedExposed());
+        OxidizableBlocksRegistry.registerWaxable(blocks.weathered(), blocks.waxedWeathered());
+        OxidizableBlocksRegistry.registerWaxable(blocks.oxidized(), blocks.waxedOxidized());
     }
 }

@@ -3,8 +3,8 @@ package torcherino.blocks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -48,7 +48,7 @@ public final class ModBlocks {
 
     public void initialize() {
         Map<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> allBlocks.forEach((entries::accept)));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> allBlocks.forEach((entries::accept)));
 
         tiers.forEach((tierId, tier) -> {
             if (!tierId.getNamespace().equals(Torcherino.MOD_ID)) {
@@ -109,7 +109,7 @@ public final class ModBlocks {
 
     @Environment(EnvType.CLIENT)
     private void setRenderType(Block block) {
-        BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
+        ChunkSectionLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
     }
 
     private Block register(String id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties settings) {
