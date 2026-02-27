@@ -3,7 +3,6 @@ package torcherino.blocks;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -35,6 +34,7 @@ import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
 import torcherino.block.WeatheringLanterinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
+import torcherino.client.ModItemBlockRenderTypes;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -109,7 +109,7 @@ public final class ModBlocks {
 
     @Environment(EnvType.CLIENT)
     private void setRenderType(Block block) {
-        ChunkSectionLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
+        ModItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.CUTOUT);
     }
 
     private Block register(String id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties settings) {

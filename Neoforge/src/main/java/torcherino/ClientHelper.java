@@ -3,13 +3,13 @@ package torcherino;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import torcherino.client.ModItemBlockRenderTypes;
 import torcherino.particle.TorcherinoParticleTypes;
 
 import java.util.function.Supplier;
@@ -29,7 +29,7 @@ public class ClientHelper {
         }
 
         Minecraft.getInstance().submitAsync(() -> {
-            ItemBlockRenderTypes.setRenderLayer(block.get(), ChunkSectionLayer.CUTOUT);
+            ModItemBlockRenderTypes.setRenderLayer(block.get(), ChunkSectionLayer.CUTOUT);
         });
     }
 }
