@@ -1,6 +1,6 @@
 package torcherino.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -96,6 +96,7 @@ public final class TorcherinoScreen extends Screen {
             }
         });
         this.addRenderableWidget(new StateButtonWidget(this, left + 217, top + 20, font) {
+
             ItemStack buttonIcon;
 
             @Override
@@ -139,20 +140,19 @@ public final class TorcherinoScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics context, int x, int y, float partialTicks) {
-        this.renderTransparentBackground(context);
+    public void extractBackground(GuiGraphicsExtractor context, int x, int y, float partialTicks) {
+        this.extractTransparentBackground(context);
         this.renderBg(context, x, y, partialTicks);
     }
 
-
-    protected void renderBg(GuiGraphics context, int x, int y, float partialTicks) {
+    protected void renderBg(GuiGraphicsExtractor context, int x, int y, float partialTicks) {
         context.blit(RenderPipelines.GUI_TEXTURED, SCREEN_TEXTURE, left, top, 0,0, screenWidth,screenHeight, 256, 256);
-        context.drawString(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, -12566464,false);
+        context.text(font, cached_title, (int) ((width - font.width(cached_title)) / 2.0f), top + 6, -12566464,false);
     }
 
     @Override
-    public void render(GuiGraphics context, int x, int y, float partialTicks) {
-        super.render(context, x, y, partialTicks);
+    public void extractRenderState(GuiGraphicsExtractor context, int x, int y, float partialTicks) {
+        super.extractRenderState(context, x, y, partialTicks);
     }
 
     @Override

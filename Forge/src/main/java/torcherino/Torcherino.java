@@ -58,8 +58,8 @@ public final class Torcherino {
     public void processIMC(InterModProcessEvent event) {
         event.getIMCStream().forEach((message) ->
         {
-            String method = message.getMethod();
-            Object value = message.getMessageSupplier().get();
+            String method = message.method();
+            Object value = message.messageSupplier().get();
             if (method.equals("blacklist_block")) {
                 if (value instanceof Identifier) {
                     TorcherinoAPI.INSTANCE.blacklistBlock((Identifier) value);
