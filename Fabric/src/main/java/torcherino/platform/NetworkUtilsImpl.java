@@ -49,8 +49,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
     @Override
     public void s2c_openTorcherinoScreen(ServerPlayer player, BlockPos pos, Component name, int xRange, int zRange, int yRange, int speed, int redstoneMode) {
         if (ServerPlayNetworking.canSend(player, OpenTorchrinoScreenPayload.TYPE)) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            ServerPlayNetworking.send(player, new OpenTorchrinoScreenPayload(pos, name.getString(), xRange, zRange, yRange, speed, redstoneMode, buffer));
+            ServerPlayNetworking.send(player, new OpenTorchrinoScreenPayload(pos, name.getString(), xRange, zRange, yRange, speed, redstoneMode));
         }
     }
 
@@ -64,7 +63,6 @@ public class NetworkUtilsImpl implements NetworkUtils {
             allowedUuids.add(player.getStringUUID());
             ImmutableMap<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
             sender.sendPacket(new TorchrinoTierPayload(tiers));
-            Torcherino.LOGGER.info(tiers);
         });
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
@@ -104,13 +102,10 @@ public class NetworkUtilsImpl implements NetworkUtils {
                     int yRange = payload.yRange();
                     int speed = payload.speed();
                     int redstoneMode = payload.redstoneMode();
-                    payload.retain();
                     context.client().execute(() -> {
                         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-                            Torcherino.LOGGER.info(blockEntity.getTier());
                             Minecraft.getInstance().setScreen(new TorcherinoScreen(Component.translatable(title), xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
                         }
-                        payload.release();
                     });
                 });
 

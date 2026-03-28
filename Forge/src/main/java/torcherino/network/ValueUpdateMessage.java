@@ -2,16 +2,12 @@ package torcherino.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.LogicalSide;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
-
-import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
 public record ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
@@ -31,14 +27,12 @@ public record ValueUpdateMessage(BlockPos pos, int xRange, int zRange, int yRang
     @SuppressWarnings("ConstantConditions")
     public static void handle(ValueUpdateMessage message, CustomPayloadEvent.Context contextSupplier) {
         CustomPayloadEvent.Context context = contextSupplier;
-            context.enqueueWork(() -> {
-                if (context.getSender().level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
-                    if (!blockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode)) {
-                        Torcherino.LOGGER.error("Data received from " + context.getSender().getName().getString() + "(" + context.getSender().getStringUUID() + ") is invalid.");
-                    }
-                }
-            });
-            context.setPacketHandled(true);
+        if (context.getSender().level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
+            if (!blockEntity.readClientData(message.xRange, message.zRange, message.yRange, message.speed, message.redstoneMode)) {
+                Torcherino.LOGGER.error("Data received from " + context.getSender().getName().getString() + "(" + context.getSender().getStringUUID() + ") is invalid.");
+            }
+        }
+        context.setPacketHandled(true);
     }
 
     @Override

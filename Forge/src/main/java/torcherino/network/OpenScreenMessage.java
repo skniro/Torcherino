@@ -3,7 +3,6 @@ package torcherino.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -14,8 +13,6 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 import torcherino.Torcherino;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.screen.TorcherinoScreen;
-
-import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
 public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
@@ -36,20 +33,18 @@ public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRa
 
     public static void handle(OpenScreenMessage message, CustomPayloadEvent.Context contextSupplier) {
         CustomPayloadEvent.Context context = contextSupplier;
-            OpenScreenMessage.openTorcherinoScreen(message);
-            context.setPacketHandled(true);
+        OpenScreenMessage.openTorcherinoScreen(message);
+        context.setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)
     private static void openTorcherinoScreen(OpenScreenMessage message) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.submitAsync(() -> {
-            if (minecraft.player.level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
-                TorcherinoScreen screen = new TorcherinoScreen(Component.translatable(message.title), message.xRange, message.zRange, message.yRange,
-                        message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTier());
-                minecraft.setScreen(screen);
-            }
-        });
+        if (minecraft.player.level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
+            TorcherinoScreen screen = new TorcherinoScreen(Component.translatable(message.title), message.xRange, message.zRange, message.yRange,
+                    message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTier());
+            minecraft.setScreen(screen);
+        }
     }
 
     @Override

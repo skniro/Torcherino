@@ -2,12 +2,10 @@ package torcherino.network;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.LogicalSide;
 import torcherino.Torcherino;
 import torcherino.TorcherinoImpl;
 import torcherino.api.Tier;
@@ -15,7 +13,6 @@ import torcherino.api.TorcherinoAPI;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 @SuppressWarnings("ClassCanBeRecord")
 public record S2CTierSyncMessage(Map<Identifier, Tier> tiers) implements CustomPacketPayload {
@@ -40,8 +37,8 @@ public record S2CTierSyncMessage(Map<Identifier, Tier> tiers) implements CustomP
 
     public static void handle(S2CTierSyncMessage message, CustomPayloadEvent.Context contextSupplier) {
         CustomPayloadEvent.Context context = contextSupplier;
-            context.enqueueWork(() -> ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(message.tiers));
-            context.setPacketHandled(true);
+        ((TorcherinoImpl) TorcherinoAPI.INSTANCE).setRemoteTiers(message.tiers);
+        context.setPacketHandled(true);
     }
 
     private static Pair<Identifier, Tier> readTier(FriendlyByteBuf buffer) {

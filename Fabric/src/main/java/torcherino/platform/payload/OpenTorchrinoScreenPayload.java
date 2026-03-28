@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import torcherino.Torcherino;
 
-public record OpenTorchrinoScreenPayload(BlockPos blockPos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode, FriendlyByteBuf buf) implements CustomPacketPayload {
+public record OpenTorchrinoScreenPayload(BlockPos blockPos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
     public static final Identifier OPEN_TORCHERINO_SCREEN = Torcherino.resloc("open_torcherino_screen");
     public static final Type<OpenTorchrinoScreenPayload> TYPE = new Type<>(OPEN_TORCHERINO_SCREEN);
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenTorchrinoScreenPayload> CODEC = CustomPacketPayload.codec(OpenTorchrinoScreenPayload::write, OpenTorchrinoScreenPayload::new);
@@ -20,8 +20,7 @@ public record OpenTorchrinoScreenPayload(BlockPos blockPos, String title,  int x
              buf.readInt(),
              buf.readInt(),
              buf.readInt(),
-             buf.readInt(),
-             buf.retain()
+             buf.readInt()
         );
     }
 
@@ -33,14 +32,6 @@ public record OpenTorchrinoScreenPayload(BlockPos blockPos, String title,  int x
         buffer.writeInt(yRange);
         buffer.writeInt(speed);
         buffer.writeInt(redstoneMode);
-    }
-
-    public void retain() {
-        buf.retain();
-    }
-
-    public void release() {
-        buf.release();
     }
 
     @Override
