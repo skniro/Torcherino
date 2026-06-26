@@ -1,7 +1,7 @@
 package torcherino.block.api;
 
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
-import net.minecraft.world.level.block.WeatheringCopperBlocks;
+import torcherino.block.WeatheringCopperBlocks;
 
 public class LanterinoOxidizableRegistry {
 
