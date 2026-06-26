@@ -8,7 +8,6 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import torcherino.Torcherino;
 import torcherino.api.TorcherinoAPI;
 import torcherino.config.Config;
 import torcherino.network.OpenScreenMessage;
