@@ -104,7 +104,7 @@ public class NetworkUtilsImpl implements NetworkUtils {
                     int redstoneMode = payload.redstoneMode();
                     context.client().execute(() -> {
                         if (world.getBlockEntity(pos) instanceof TorcherinoBlockEntity blockEntity) {
-                            Minecraft.getInstance().setScreen(new TorcherinoScreen(Component.translatable(title), xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
+                            Minecraft.getInstance().gui.setScreen(new TorcherinoScreen(Component.translatable(title), xRange, zRange, yRange, speed, redstoneMode, pos, blockEntity.getTier()));
                         }
                     });
                 });
