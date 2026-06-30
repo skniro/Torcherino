@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_hanging_lantern",
+  "textures": {
+    "lantern": "torcherino:block/exposed_double_compressed_copper_lantern"
+  }
+}
