@@ -1,10 +1,7 @@
 package torcherino.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -12,10 +9,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import torcherino.Torcherino;
-import torcherino.block.entity.TorcherinoBlockEntity;
-import torcherino.client.screen.TorcherinoScreen;
 
-import java.util.function.Supplier;
+import java.lang.reflect.InvocationTargetException;
 
 @SuppressWarnings("ClassCanBeRecord")
 public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRange, int yRange, int speed, int redstoneMode) implements CustomPacketPayload {
@@ -34,20 +29,21 @@ public record OpenScreenMessage(BlockPos pos, String title,  int xRange, int zRa
                 buffer.readInt());
     }
 
-    public static void handle(OpenScreenMessage message, CustomPayloadEvent.Context contextSupplier) {
-        CustomPayloadEvent.Context context = contextSupplier;
-            OpenScreenMessage.openTorcherinoScreen(message);
+    public static void handle(OpenScreenMessage message, CustomPayloadEvent.Context context) {
+            OpenScreenMessage.openTorcherinoScreen(message, context);
             context.setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void openTorcherinoScreen(OpenScreenMessage message) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.submitAsync(() -> {
-            if (minecraft.player.level().getBlockEntity(message.pos) instanceof TorcherinoBlockEntity blockEntity) {
-                TorcherinoScreen screen = new TorcherinoScreen(Component.translatable(message.title), message.xRange, message.zRange, message.yRange,
-                        message.speed, message.redstoneMode, blockEntity.getBlockPos(), blockEntity.getTier());
-                minecraft.setScreen(screen);
+    public static void openTorcherinoScreen(OpenScreenMessage message, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
+            try {
+                Class<?> cls = Class.forName("torcherino.network.ClientOpenScreenHandler");
+                cls.getMethod("open", OpenScreenMessage.class, CustomPayloadEvent.Context.class).invoke(null, message, context);
+            } catch (ClassNotFoundException ignored) {
+                // Dedicated servers must not resolve client-only screen classes.
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                Torcherino.LOGGER.error("Failed to invoke ClientOpenScreenHandler", e);
             }
         });
     }
