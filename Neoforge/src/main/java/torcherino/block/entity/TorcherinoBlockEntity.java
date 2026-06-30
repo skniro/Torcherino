@@ -142,6 +142,7 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
             area = BlockPos.betweenClosed(worldPosition.getX() - xRange, worldPosition.getY() - yRange, worldPosition.getZ() - zRange,
                     worldPosition.getX() + xRange, worldPosition.getY() + yRange, worldPosition.getZ() + zRange);
             this.getBlockState().handleNeighborChanged(level, worldPosition, null, null, false);
+            this.setChanged();
             return true;
         }
         return false;
