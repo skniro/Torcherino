@@ -4,11 +4,11 @@ import com.google.common.collect.BiMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -85,7 +85,7 @@ public class WeatheringLanterinoBlock extends CopperLanterinoBlock implements La
         }
 
 
-        if (item instanceof AxeItem) {
+        if (stack.is(ItemTags.AXES)) {
             if (!level.isClientSide()) {
                 BiMap<Block, Block> waxOffMap = (BiMap<Block, Block>) LanterinoOxidizableRegistry.getUnwaxMap(getTier());
                 Block unwaxed = waxOffMap.get(state.getBlock());

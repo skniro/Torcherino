@@ -59,13 +59,13 @@ public final class ModBlocks {
             Identifier lanterinoId = id(tierId, "lantern");
             Identifier copperlanterinoId = id(tierId, "copper_lantern");
             SimpleParticleType particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.getValue(id(tierId, "flame"));
-            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(torcherinoId.getPath())), tierId, particleEffect);
+            TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE_ENTITY).setId(Torcherino.KeyofBlock(torcherinoId.getPath())), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
-            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock("wall_" + torcherinoId.getPath())).overrideDescription(torcherinoBlock.getDescriptionId()).overrideLootTable(torcherinoBlock.getLootTable()), tierId, particleEffect);
+            WallTorcherinoBlock torcherinoWallBlock = new WallTorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WALL_TORCH).pushReaction(PushReaction.IGNORE_ENTITY).setId(Torcherino.KeyofBlock("wall_" + torcherinoId.getPath())).overrideDescription(torcherinoBlock.getDescriptionId()).overrideLootTable(torcherinoBlock.getLootTable()), tierId, particleEffect);
             this.registerAndBlacklist(Identifier.fromNamespaceAndPath(torcherinoId.getNamespace(), "wall_" + torcherinoId.getPath()), torcherinoWallBlock);
-            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).setId(Torcherino.KeyofBlock(jackoLanterinoId.getPath())).pushReaction(PushReaction.IGNORE), tierId);
+            JackoLanterinoBlock jackoLanterinoBlock = new JackoLanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.JACK_O_LANTERN).setId(Torcherino.KeyofBlock(jackoLanterinoId.getPath())).pushReaction(PushReaction.IGNORE_ENTITY), tierId);
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
-            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(lanterinoId.getPath())), tierId);
+            LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE_ENTITY).setId(Torcherino.KeyofBlock(lanterinoId.getPath())), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
             this.copperLanterino = WeatheringCopperBlocks.create(
                     copperlanterinoId.getPath(),
@@ -79,7 +79,7 @@ public final class ModBlocks {
                                                                .sound(SoundType.LANTERN)
                                                                .lightLevel(state -> 15)
                                                                .noOcclusion()
-                                                               .pushReaction(PushReaction.IGNORE)
+                                                               .pushReaction(PushReaction.IGNORE_ENTITY)
                                                                .randomTicks()
             );
             LanterinoOxidizableRegistry.registerWeatheringSet(copperLanterino);

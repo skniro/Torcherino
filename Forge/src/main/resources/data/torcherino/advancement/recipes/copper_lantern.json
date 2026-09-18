@@ -14,7 +14,7 @@
         "has_the_recipe": {
             "trigger": "minecraft:recipe_unlocked",
             "conditions": {
-                "recipe": "torcherino:copper_lantern"
+                "recipes": "torcherino:copper_lantern"
             }
         }
     },

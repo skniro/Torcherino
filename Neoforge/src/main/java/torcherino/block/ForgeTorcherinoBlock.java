@@ -76,7 +76,7 @@ public class ForgeTorcherinoBlock extends Block implements EntityBlock, TierSupp
 
     @Deprecated
     public PushReaction getPistonPushReaction() {
-        return PushReaction.IGNORE;
+        return PushReaction.IGNORE_ENTITY;
     }
 
     @Override
