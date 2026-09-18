@@ -7,11 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -94,7 +94,7 @@ public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, T
 
     @Deprecated
     public PushReaction getPistonPushReaction() {
-        return PushReaction.IGNORE_ENTITY;
+        return PushReaction.IGNORE;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class CopperLanterinoBlock extends LanternBlock implements EntityBlock, T
         }
 
 
-        if (stack.is(ItemTags.AXES)) {
+        if (item instanceof AxeItem) {
             if (!level.isClientSide()) {
                 BiMap<Block, Block> waxOffMap = (BiMap<Block, Block>) LanterinoOxidizableRegistry.getUnwaxMap(tierID);
                 Block unwaxed = waxOffMap.get(state.getBlock());

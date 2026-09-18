@@ -134,7 +134,7 @@ public final class ForgeWallTorcherinoBlock extends ForgeTorcherinoBlock impleme
     }
     @Deprecated
     public PushReaction getPistonPushReaction(BlockState state) {
-        return PushReaction.IGNORE_ENTITY;
+        return PushReaction.IGNORE;
     }
 
     @Override

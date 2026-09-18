@@ -48,7 +48,7 @@ public final class TorcherinoBlock extends TorchBlock implements EntityBlock, Ti
 
     @Deprecated
     public PushReaction getPistonPushReaction() {
-        return PushReaction.IGNORE_ENTITY;
+        return PushReaction.IGNORE;
     }
 
     @Override

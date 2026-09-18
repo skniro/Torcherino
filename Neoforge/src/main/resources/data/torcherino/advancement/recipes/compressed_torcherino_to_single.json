@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipes": "torcherino:compressed_torcherino_to_single"
+        "recipe": "torcherino:compressed_torcherino_to_single"
       }
     }
   },

@@ -4,6 +4,7 @@ import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import org.lwjgl.glfw.GLFW;
 
 public abstract class GradatedSliderWidget extends AbstractSliderButton {
     private final float nudgeAmount;

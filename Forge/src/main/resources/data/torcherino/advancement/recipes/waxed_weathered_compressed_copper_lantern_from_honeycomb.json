@@ -14,7 +14,7 @@
         "has_the_recipe": {
             "trigger": "minecraft:recipe_unlocked",
             "conditions": {
-                "recipes": "torcherino:waxed_weathered_compressed_copper_lantern_from_honeycomb"
+                "recipe": "torcherino:waxed_weathered_compressed_copper_lantern_from_honeycomb"
             }
         }
     },

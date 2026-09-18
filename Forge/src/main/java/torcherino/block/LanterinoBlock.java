@@ -52,7 +52,7 @@ public final class LanterinoBlock extends LanternBlock implements EntityBlock, T
 
     @Deprecated
     public PushReaction getPistonPushReaction() {
-        return PushReaction.IGNORE_ENTITY;
+        return PushReaction.IGNORE;
     }
 
     @Override

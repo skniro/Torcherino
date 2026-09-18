@@ -4,14 +4,15 @@ import com.google.common.collect.BiMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,8 +24,8 @@ import torcherino.block.api.LanterinoOxidizableRegistry;
 
 import static torcherino.block.WeatheringLanterinoBlock.swapPreserveTorcherinoBE;
 
-@Mixin(Item.class)
-public abstract class ItemMixin {
+@Mixin(AxeItem.class)
+public abstract class AxeItemMixin {
 
     @Inject(method = "useOn", at = @At("HEAD"), cancellable = true)
     public void useOn(UseOnContext useOnContext, CallbackInfoReturnable<InteractionResult> cir) {
@@ -33,9 +34,6 @@ public abstract class ItemMixin {
         BlockState state = useOnContext.getLevel().getBlockState(pos);
         Player player = useOnContext.getPlayer();
         ItemStack stack = useOnContext.getItemInHand();
-        if (!stack.is(ItemTags.AXES)) {
-            return;
-        }
         if (state.getBlock() instanceof CopperLanterinoBlock copperLanterinoBlock) {
             if (!level.isClientSide()) {
                 Identifier tierID = copperLanterinoBlock.getTier();
