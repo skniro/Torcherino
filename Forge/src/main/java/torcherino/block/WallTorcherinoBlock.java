@@ -47,7 +47,7 @@ public final class WallTorcherinoBlock extends WallTorchBlock implements EntityB
     }
     @Deprecated
     public PushReaction getPistonPushReaction(BlockState state) {
-        return PushReaction.IGNORE;
+        return PushReaction.IGNORE_ENTITY;
     }
 
     @Override
