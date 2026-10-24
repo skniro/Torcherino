@@ -18,33 +18,25 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.block.CopperLanterinoBlock;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
-import torcherino.block.WeatheringCopperBlocks;
-import torcherino.block.api.LanterinoOxidizableRegistry;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
-import torcherino.block.WeatheringLanterinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.ModItemBlockRenderTypes;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 public final class ModBlocks {
     public static final ModBlocks INSTANCE = new ModBlocks();
     Set<Block> allBlocks = new HashSet<>();
-    public WeatheringCopperBlocks copperLanterino;
 
     public void initialize() {
         Map<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
@@ -57,7 +49,6 @@ public final class ModBlocks {
             Identifier torcherinoId = id(tierId, "torcherino");
             Identifier jackoLanterinoId = id(tierId, "lanterino");
             Identifier lanterinoId = id(tierId, "lantern");
-            Identifier copperlanterinoId = id(tierId, "copper_lantern");
             SimpleParticleType particleEffect = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.getValue(id(tierId, "flame"));
             TorcherinoBlock torcherinoBlock = new TorcherinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).pushReaction(PushReaction.IGNORE_ENTITY).setId(Torcherino.KeyofBlock(torcherinoId.getPath())), tierId, particleEffect);
             this.registerAndBlacklist(torcherinoId, torcherinoBlock);
@@ -67,27 +58,10 @@ public final class ModBlocks {
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
             LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE_ENTITY).setId(Torcherino.KeyofBlock(lanterinoId.getPath())), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
-            this.copperLanterino = WeatheringCopperBlocks.create(
-                    copperlanterinoId.getPath(),
-                    this::register,
-                    (props) -> new CopperLanterinoBlock(props, tierId),
-                    (state, props) -> new WeatheringLanterinoBlock(state, props, tierId),
-                    (weatherState) -> BlockBehaviour.Properties.of()
-                                                               .mapColor(MapColor.METAL)
-                                                               .forceSolidOn()
-                                                               .strength(3.5F)
-                                                               .sound(SoundType.LANTERN)
-                                                               .lightLevel(state -> 15)
-                                                               .noOcclusion()
-                                                               .pushReaction(PushReaction.IGNORE_ENTITY)
-                                                               .randomTicks()
-            );
-            LanterinoOxidizableRegistry.registerWeatheringSet(copperLanterino);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 this.setRenderType(torcherinoBlock);
                 this.setRenderType(torcherinoWallBlock);
                 this.setRenderType(lanterinoBlock);
-                copperLanterino.forEach(this::setRenderType);
             }
             StandingAndWallBlockItem torcherinoItem = new StandingAndWallBlockItem(torcherinoBlock, torcherinoWallBlock, Direction.DOWN, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(torcherinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, torcherinoId, torcherinoItem);
@@ -95,13 +69,6 @@ public final class ModBlocks {
             Registry.register(BuiltInRegistries.ITEM, jackoLanterinoId, jackoLanterinoItem);
             BlockItem lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(lanterinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, lanterinoId, lanterinoItem);
-            copperLanterino.forEach(block -> {
-                Identifier itemId = BuiltInRegistries.BLOCK.getKey(block);
-                BlockItem item = new BlockItem(block, new Item.Properties()
-                        .useBlockDescriptionPrefix()
-                        .setId(Torcherino.KeyofItem(itemId.getPath())));
-                Registry.register(BuiltInRegistries.ITEM, itemId, item);
-            });
         });
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"),
                 FabricBlockEntityTypeBuilder.create(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));
@@ -110,13 +77,6 @@ public final class ModBlocks {
     @Environment(EnvType.CLIENT)
     private void setRenderType(Block block) {
         ModItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.CUTOUT);
-    }
-
-    private Block register(String id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties settings) {
-        Block block = (Block)factory.apply(settings.setId(Torcherino.KeyofBlock(id)));
-        TorcherinoAPI.INSTANCE.blacklistBlock(block);
-        allBlocks.add(block);
-        return Registry.register(BuiltInRegistries.BLOCK, Torcherino.KeyofBlock(id), block);
     }
 
     private void registerAndBlacklist(Identifier id, Block block) {

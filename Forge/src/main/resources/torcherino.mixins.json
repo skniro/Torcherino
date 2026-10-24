@@ -4,8 +4,6 @@
   "package": "torcherino.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ItemMixin",
-    "HoneycombItemMixin",
     "AbstractBlockAccessor",
     "BlockStateBaseMixin"
   ],

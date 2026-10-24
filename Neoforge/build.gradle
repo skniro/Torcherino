@@ -17,6 +17,23 @@ base {
     archivesName = "${mod_name}-neoforge-${minecraft_version}"
 }
 
+def parentClassesJar = tasks.register('parentClassesJar', Jar) {
+    from(sourceSets.main.output)
+    archiveClassifier = 'classes'
+    destinationDirectory = layout.buildDirectory.dir('internal')
+}
+
+configurations {
+    parentOutput {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+artifacts {
+    parentOutput parentClassesJar
+}
+
 // Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 

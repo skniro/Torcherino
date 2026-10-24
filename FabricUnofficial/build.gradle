@@ -1,0 +1,67 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
+    id 'maven-publish'
+    id 'idea'
+}
+
+base.archivesName = "${mod_name}-fabric-${minecraft_version}-unofficial"
+
+def fabricParentJar = project(':Fabric').tasks.named('jar')
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    compileOnly project(path: ':Fabric', configuration: 'parentOutput')
+    include project(':Fabric')
+    localRuntime files(fabricParentJar)
+}
+
+loom {
+    runs {
+        FabricUnofficialClient {
+            client()
+            setConfigName("Fabric Unofficial Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        FabricUnofficialServer {
+            server()
+            setConfigName("Fabric Unofficial Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId "${mod_name}-fabric-${minecraft_version}-unofficial"
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        if (System.getenv("MAVEN_URL")) {
+            maven {
+                name = 'mavenLocal2'
+                url System.getenv("MAVEN_URL")
+                // Add repositories to publish to here.
+                // Notice: This block does NOT have the same function as the block in the top level.
+                // The repositories here will be used for publishing your artifact, not for
+                // retrieving dependencies.
+            }
+        }
+    }
+}
