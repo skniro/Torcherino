@@ -8,7 +8,7 @@ config="torcherino_unofficial.mixins.json"
   version="${mod_version}"
   displayName="Torcherino Unofficial"
   authors="${mod_authors}"
-  description='''Copper lantern content for Torcherino.'''
+  description='''Additional content for Torcherino.'''
   displayURL="https://www.curseforge.com/minecraft/mc-mods/torcherino-unofficial"
   logoFile="torcherino_unofficial.png"
 [[dependencies.torcherino_unofficial]]
