@@ -1,0 +1,150 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '7.0.+'
+    id 'net.minecraftforge.jarjar' version '0.2.3'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    runs {
+        configureEach {
+            workingDir.convention layout.projectDirectory.dir('run')
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+
+        register('unofficialClient'){
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        register('unofficialServer'){
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+
+    }
+}
+
+tasks.matching { it.name.startsWith('slimeLauncherMetadataFor') }.configureEach { metadataTask ->
+    def runsJsonFile = metadataTask.outputs.files.files.find { it.name == 'runs.json' }
+
+    doLast {
+        def json = new groovy.json.JsonSlurper().parse(runsJsonFile, 'UTF-8')
+        def aliases = [:]
+        ['client', 'server', 'data', 'gameTestServer'].each { runName ->
+            def config = json[runName]
+            if (config instanceof Map)
+                aliases["unofficial${runName.capitalize()}"] = new LinkedHashMap(config)
+        }
+        json.putAll(aliases)
+        runsJsonFile.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json)), 'UTF-8')
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+jarJar.register() {
+    archiveClassifier = null
+}
+
+repositories {
+    maven minecraft.mavenizer
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Sponge'
+                url = 'https://repo.spongepowered.org/repository/maven-public'
+            }
+        }
+        filter {
+            includeGroupAndSubgroups('org.spongepowered')
+        }
+    }
+    mavenCentral()
+    mavenLocal()
+}
+
+def forgeParentJar = project(':Forge').tasks.named('jar')
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.10'
+    compileOnly project(path: ':Forge', configuration: 'parentOutput')
+    jarJar(project(':Forge')) {
+        transitive = false
+    }
+    runtimeOnly files(forgeParentJar)
+}
+
+base.archivesName = "${mod_name}-forge-${minecraft_version}"
+
+tasks.named('processResources', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: 'torcherino_unofficial', mod_name: 'Torcherino Unofficial',
+            mod_license: mod_license, mod_version: version,
+            mod_authors: mod_authors, mod_description: 'Copper lantern content for Torcherino.',
+    ]
+    inputs.property('replaceProperties', replaceProperties)
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties
+    }
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes([
+                'Specification-Title'     : 'torcherino_unofficial',
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'Implementation-Vendor'   : mod_authors
+        ])
+        attributes['MixinConfigs'] = 'torcherino_unofficial.mixins.json'
+    }
+
+    archiveClassifier = 'slim'
+}
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId "${project.mod_name}-forge-${project.minecraft_version}-unofficial"
+            version project.version
+            from components.jarJar
+            artifact jar
+        }
+    }
+
+    repositories {
+        if (System.getenv("MAVEN_URL")) {
+            maven {
+                name = 'mavenLocal2'
+                url System.getenv("MAVEN_URL")
+                // Add repositories to publish to here.
+                // Notice: This block does NOT have the same function as the block in the top level.
+                // The repositories here will be used for publishing your artifact, not for
+                // retrieving dependencies.
+            }
+        }
+    }
+}

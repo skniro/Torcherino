@@ -1,10 +1,27 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.19-SNAPSHOT'
     id 'maven-publish'
     id 'idea'
 }
 
 base.archivesName = "${mod_name}-fabric-${minecraft_version}"
+
+def parentClassesJar = tasks.register('parentClassesJar', Jar) {
+    from(sourceSets.main.output)
+    archiveClassifier = 'classes'
+    destinationDirectory = layout.buildDirectory.dir('internal')
+}
+
+configurations {
+    parentOutput {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+artifacts {
+    parentOutput parentClassesJar
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
