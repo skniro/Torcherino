@@ -25,14 +25,10 @@ import net.minecraft.world.level.material.PushReaction;
 import torcherino.Torcherino;
 import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
-import torcherino.block.CopperLanterinoBlock;
 import torcherino.block.JackoLanterinoBlock;
 import torcherino.block.LanterinoBlock;
-import torcherino.block.WeatheringCopperBlocks;
-import torcherino.block.api.LanterinoOxidizableRegistry;
 import torcherino.block.TorcherinoBlock;
 import torcherino.block.WallTorcherinoBlock;
-import torcherino.block.WeatheringLanterinoBlock;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.ModItemBlockRenderTypes;
 
@@ -44,7 +40,6 @@ import java.util.function.Function;
 public final class ModBlocks {
     public static final ModBlocks INSTANCE = new ModBlocks();
     Set<Block> allBlocks = new HashSet<>();
-    public WeatheringCopperBlocks copperLanterino;
 
     public void initialize() {
         Map<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
@@ -67,41 +62,13 @@ public final class ModBlocks {
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
             LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(lanterinoId.getPath())), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
-            this.copperLanterino = WeatheringCopperBlocks.create(
-                    copperlanterinoId.getPath(),
-                    this::register,
-                    (props) -> new CopperLanterinoBlock(props, tierId),
-                    (state, props) -> new WeatheringLanterinoBlock(state, props, tierId),
-                    (weatherState) -> BlockBehaviour.Properties.of()
-                                                               .mapColor(MapColor.METAL)
-                                                               .forceSolidOn()
-                                                               .strength(3.5F)
-                                                               .sound(SoundType.LANTERN)
-                                                               .lightLevel(state -> 15)
-                                                               .noOcclusion()
-                                                               .pushReaction(PushReaction.IGNORE)
-                                                               .randomTicks()
-            );
-            LanterinoOxidizableRegistry.registerWeatheringSet(copperLanterino);
-            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-                this.setRenderType(torcherinoBlock);
-                this.setRenderType(torcherinoWallBlock);
-                this.setRenderType(lanterinoBlock);
-                copperLanterino.forEach(this::setRenderType);
-            }
+
             StandingAndWallBlockItem torcherinoItem = new StandingAndWallBlockItem(torcherinoBlock, torcherinoWallBlock, Direction.DOWN, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(torcherinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, torcherinoId, torcherinoItem);
             BlockItem jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(jackoLanterinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, jackoLanterinoId, jackoLanterinoItem);
             BlockItem lanterinoItem = new BlockItem(lanterinoBlock, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(lanterinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, lanterinoId, lanterinoItem);
-            copperLanterino.forEach(block -> {
-                Identifier itemId = BuiltInRegistries.BLOCK.getKey(block);
-                BlockItem item = new BlockItem(block, new Item.Properties()
-                        .useBlockDescriptionPrefix()
-                        .setId(Torcherino.KeyofItem(itemId.getPath())));
-                Registry.register(BuiltInRegistries.ITEM, itemId, item);
-            });
         });
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "torcherino"),
                 FabricBlockEntityTypeBuilder.create(TorcherinoBlockEntity::new, allBlocks.toArray(new Block[0])).build(null));

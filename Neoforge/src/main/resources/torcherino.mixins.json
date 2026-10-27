@@ -4,8 +4,6 @@
   "package": "torcherino.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AxeItemMixin",
-    "HoneycombItemMixin"
   ],
   "client": [
   ],
