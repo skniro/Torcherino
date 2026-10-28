@@ -1,10 +1,29 @@
 plugins {
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'fabric-loom' version '1.19-SNAPSHOT'
     id 'maven-publish'
     id 'idea'
 }
 
-archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
+base.archivesName = "${mod_name}-fabric-${minecraft_version}"
+
+// Exposes the compiled classes to the unofficial addon for compile-time access
+// without pulling the full mod into its runtime classpath.
+def parentClassesJar = tasks.register('parentClassesJar', Jar) {
+    from(sourceSets.main.output)
+    archiveClassifier = 'classes'
+    destinationDirectory = layout.buildDirectory.dir('internal')
+}
+
+configurations {
+    parentOutput {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+artifacts {
+    parentOutput parentClassesJar
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -37,6 +56,9 @@ loom {
 
 
 processResources {
+    // Gradle 9 fails the build on duplicate resources (e.g. the mod icon exists
+    // in both this module and Common).
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from project(":Common").sourceSets.main.resources
     inputs.property "version", project.version
 
@@ -59,7 +81,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
-            artifactId project.archivesBaseName
+            artifactId "${mod_name}-fabric-${minecraft_version}"
             version project.version
             from components.java
         }
@@ -78,5 +100,3 @@ publishing {
         }
     }
 }
-
-apply from: "https://moddingtutorials.org/publish.gradle"

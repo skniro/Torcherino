@@ -1,0 +1,148 @@
+plugins {
+    id 'idea'
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '7.0.+'
+    // ForgeGradle 7 no longer provides Jar-in-Jar; use the standalone plugin.
+    id 'net.minecraftforge.jarjar' version '0.2.3'
+}
+
+base {
+    archivesName = "${mod_name}-forge-${minecraft_version}-unofficial"
+}
+
+// The dev jar is only for development runs; production uses the renamed jar.
+def forgeParentJar = project(':Forge').tasks.named('jar')
+def forgeRenamedJar = project(':Forge').tasks.named('renameJar')
+def jarJarExt = extensions.getByType(net.minecraftforge.jarjar.gradle.JarJarExtension)
+
+// Must be registered before the dependency is added so the jarJar configuration exists.
+jarJar.register() {
+    archiveClassifier = null
+}
+
+// Forge 1.20.2's userdev launch handler only discovers development mods through
+// the MOD_CLASSES environment variable (ClasspathLocator ignores directories).
+// ForgeGradle 7 never sets it, so without this the addon itself is not loaded in
+// the dev runs and only the bundled/classpath torcherino jar shows up.
+def devModClasses = ([sourceSets.main.output.resourcesDir] + sourceSets.main.output.classesDirs.files)
+        .findAll { it != null }
+        .collect { "torcherino_unofficial%%${it.absolutePath}" }
+        .join(File.pathSeparator)
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    runs {
+        configureEach {
+            workingDir.convention layout.projectDirectory.dir('run')
+            environment 'MOD_CLASSES', devModClasses
+        }
+
+        register('unofficialClient')
+        register('unofficialServer') {
+            args '--nogui'
+        }
+    }
+}
+
+tasks.matching { it.name.startsWith('slimeLauncherMetadataFor') }.configureEach { metadataTask ->
+    def runsJsonFile = metadataTask.outputs.files.files.find { it.name == 'runs.json' }
+
+    doLast {
+        def json = new groovy.json.JsonSlurper().parse(runsJsonFile, 'UTF-8')
+        def aliases = [:]
+        ['client', 'server', 'data', 'gameTestServer'].each { runName ->
+            def config = json[runName]
+            if (config instanceof Map)
+                aliases["unofficial${runName.capitalize()}"] = new LinkedHashMap(config)
+        }
+        json.putAll(aliases)
+        runsJsonFile.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json)), 'UTF-8')
+    }
+}
+
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Sponge'
+                url = 'https://repo.spongepowered.org/repository/maven-public'
+            }
+        }
+        filter {
+            includeGroupAndSubgroups('org.spongepowered')
+        }
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    compileOnly project(path: ':Forge', configuration: 'parentOutput')
+    // Bundle the SRG-renamed official mod inside the unofficial jar (Jar-in-Jar).
+    jarJar(files(forgeRenamedJar))
+    // Load the official mod in the development runs.
+    runtimeOnly files(forgeParentJar)
+}
+
+// Describe the file dependency for the generated Jar-in-Jar metadata.
+configurations.jarJar.dependencies.each { dep ->
+    jarJarExt.configure(dep) {
+        module {
+            group = project.group.toString()
+            name = "torcherino-forge-${minecraft_version}"
+        }
+        version = project.version.toString()
+        range = "[${project.version},)"
+    }
+}
+
+tasks.named('jar', Jar) {
+    archiveClassifier = 'slim'
+}
+
+tasks.named('processResources', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range, mod_id: 'torcherino_unofficial',
+            mod_name: 'Torcherino Unofficial', mod_license: mod_license,
+            mod_version: project.version, mod_authors: mod_authors,
+            mod_description: 'Additional content for Torcherino.',
+    ]
+    inputs.property('replaceProperties', replaceProperties)
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId "${mod_name}-forge-${minecraft_version}-unofficial"
+            version project.version
+            artifact tasks.jarJar
+            artifact tasks.jar
+        }
+    }
+
+    repositories {
+        if (System.getenv("MAVEN_URL")) {
+            maven {
+                name = 'mavenLocal2'
+                url System.getenv("MAVEN_URL")
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}

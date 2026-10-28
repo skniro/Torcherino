@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "torcherino_unofficial",
+  "version": "${version}",
+  "name": "Torcherino Unofficial",
+  "description": "Additional content for Torcherino.",
+  "authors": [
+    "LukeGrahamLandry#6888",
+    "NinjaPhenix",
+    "skniro"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/torcherino-unofficial",
+    "sources": "https://github.com/skniro/Torcherino",
+    "issues": "https://github.com/skniro/Torcherino/issues"
+  },
+  "license": "LGPL-3.0-only",
+  "icon": "torcherino_unofficial.png",
+  "entrypoints": {
+    "main": [
+      "torcherino_unofficial.TorcherinoUnofficial"
+    ]
+  },
+  "depends": {
+    "torcherino": ">=20.0.3",
+    "fabricloader": ">=0.15.6",
+    "minecraft": ">=1.20"
+  }
+}
