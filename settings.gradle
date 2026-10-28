@@ -18,3 +18,4 @@ pluginManagement {
 
 rootProject.name = 'Torcherino'
 include("Common", "Fabric", "Forge")
+include("FabricUnofficial", "ForgeUnofficial")

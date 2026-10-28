@@ -2,115 +2,146 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.minecraftforge.gradle' version '7.0.+'
+    // ForgeGradle 7 requires this plugin for legacy (1.20.4 and older) reobfuscation.
+    id 'net.minecraftforge.renamer' version '1.1.8'
+}
+
+base {
+    archivesName = "${mod_name}-forge-${minecraft_version}"
+}
+
+// Exposes the compiled classes to the unofficial addon for compile-time access
+// without pulling the full mod into its runtime classpath.
+def parentClassesJar = tasks.register('parentClassesJar', Jar) {
+    from(sourceSets.main.output)
+    archiveClassifier = 'classes'
+    destinationDirectory = layout.buildDirectory.dir('internal')
+}
+
+configurations {
+    parentOutput {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+artifacts {
+    parentOutput parentClassesJar
 }
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
-        // This location is hardcoded in Forge and can not be changed.
-        // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+        accessTransformer = true
         project.logger.debug('Forge Access Transformers are enabled for this project.')
     }
 
     runs {
-        client {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+        configureEach {
+            workingDir.convention layout.projectDirectory.dir('run')
         }
 
-        server {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+        register('forgeClient') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
         }
 
-        data {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+        register('forgeServer') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
         }
+
+        register('forgeData') {
+            workingDir = layout.projectDirectory.dir('run-data')
+            args '--mod', mod_id, '--all', '--output', layout.projectDirectory.dir('src/generated/resources'), '--existing', layout.projectDirectory.dir('src/main/resources')
+        }
+    }
+}
+
+tasks.matching { it.name.startsWith('slimeLauncherMetadataFor') }.configureEach { metadataTask ->
+    def runsJsonFile = metadataTask.outputs.files.files.find { it.name == 'runs.json' }
+
+    doLast {
+        def json = new groovy.json.JsonSlurper().parse(runsJsonFile, 'UTF-8')
+        def aliases = [:]
+        ['client', 'server', 'data', 'gameTestServer'].each { runName ->
+            def config = json[runName]
+            if (config instanceof Map)
+                aliases["forge${runName.capitalize()}"] = new LinkedHashMap(config)
+        }
+        json.putAll(aliases)
+        runsJsonFile.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json)), 'UTF-8')
     }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Sponge'
+                url = 'https://repo.spongepowered.org/repository/maven-public'
+            }
+        }
+        filter {
+            includeGroupAndSubgroups('org.spongepowered')
+        }
+    }
+    mavenCentral()
+}
+
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
     compileOnly project(":Common")
 }
 
+// Renamer Gradle provides the SRG-renamed production jar for legacy (pre-1.20.5) Forge.
+renamer.mappings.from minecraft.dependency.toSrgFile
 
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+renamer.classes(tasks.named('jar', Jar)) {
+    map.from minecraft.dependency.toSrgFile
+    archiveClassifier = 'srg'
+}
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     source(project(":Common").sourceSets.main.allSource)
+    options.encoding = 'UTF-8'
 }
 
-processResources {
+tasks.named('processResources', ProcessResources) {
+    // Gradle 9 fails the build on duplicate resources (e.g. the mod icon exists
+    // in both this module and Common).
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from project(":Common").sourceSets.main.resources
-}
 
-tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version: forge_version, forge_version_range: forge_version_range,
-            loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, forge_mod_version: version,
+            loader_version_range: loader_version_range, mod_id: mod_id,
+            mod_name: mod_name, mod_license: mod_license, mod_version: project.version,
             mod_authors: mod_authors, mod_description: mod_description,
     ]
-    inputs.properties replaceProperties
+    inputs.property('replaceProperties', replaceProperties)
 
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
+        expand replaceProperties
     }
 }
-
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                'Specification-Title'     : mod_id,
-                'Specification-Vendor'    : mod_authors,
-                'Specification-Version'   : '1',
-                'Implementation-Title'    : project.name,
-                'Implementation-Version'  : project.version,
-                'Implementation-Vendor'   : mod_authors
-        ])
-    }
-}
-
-
-jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
-            artifactId project.archivesBaseName
+            artifactId base.archivesName.get()
             version project.version
+            // The dev jar cannot run in production; publish the SRG-renamed jar as well.
             artifact jar
+            artifact renameJar
         }
     }
     repositories {
@@ -125,8 +156,4 @@ publishing {
             }
         }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

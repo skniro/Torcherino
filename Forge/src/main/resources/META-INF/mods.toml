@@ -3,7 +3,7 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 [[mods]]
   modId="torcherino"
-  version="${forge_mod_version}"
+  version="${mod_version}"
   displayName="${mod_name}"
   authors="${mod_authors}"
   description='''${mod_description}'''
