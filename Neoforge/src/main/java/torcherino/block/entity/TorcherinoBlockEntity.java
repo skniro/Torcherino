@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -42,7 +43,11 @@ public class TorcherinoBlockEntity extends BlockEntity implements Nameable, Tier
     private String uuid = "";
 
     public TorcherinoBlockEntity(BlockPos pos, BlockState state) {
-        super(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
+        this(BuiltInRegistries.BLOCK_ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath("torcherino", "torcherino")).get().value(), pos, state);
+    }
+
+    public TorcherinoBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TorcherinoBlockEntity entity) {

@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mixins]]
+config="torcherino_unofficial.mixins.json"
+[[mods]]
+  modId="torcherino_unofficial"
+  version="${mod_version}"
+  displayName="Torcherino Unofficial"
+  authors="${mod_authors}"
+  description='''Additional content for Torcherino.'''
+  displayURL="https://www.curseforge.com/minecraft/mc-mods/torcherino-unofficial"
+  logoFile="torcherino_unofficial.png"
+[[dependencies.torcherino_unofficial]]
+  modId="torcherino"
+  mandatory=true
+  versionRange="[1,)"
+  ordering="AFTER"
+  side="BOTH"
+[[dependencies.torcherino_unofficial]]
+  modId="forge"
+  mandatory=true
+  versionRange="${forge_version_range}"
+  ordering="NONE"
+  side="BOTH"
+[[dependencies.torcherino_unofficial]]
+  modId="minecraft"
+  mandatory=true
+  versionRange="${minecraft_version_range}"
+  ordering="NONE"
+  side="BOTH"
