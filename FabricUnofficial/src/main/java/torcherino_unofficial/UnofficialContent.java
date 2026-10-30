@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import torcherino.Torcherino;
+import torcherino.api.Tier;
 import torcherino.api.TorcherinoAPI;
 import torcherino_unofficial.block.CopperLanterinoBlock;
 import torcherino_unofficial.block.WeatheringLanterinoBlock;
@@ -26,79 +27,77 @@ import torcherino_unofficial.block.api.LanterinoOxidizableRegistry;
 import torcherino.block.entity.TorcherinoBlockEntity;
 import torcherino.client.ModItemBlockRenderTypes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 public final class UnofficialContent {
-    private static final List<Block> COPPER_BLOCKS = new ArrayList<>();
-    private static final List<Item> COPPER_ITEMS = new ArrayList<>();
+    public static final UnofficialContent INSTANCE = new UnofficialContent();
+    Set<Block> allBlocks = new HashSet<>();
+    public WeatheringCopperBlocks copperLanterino;
 
-    public static void initialise() {
-        TorcherinoAPI.INSTANCE.getTiers().forEach((tierId, tier) -> {
+    public void initialise() {
+        Map<Identifier, Tier> tiers = TorcherinoAPI.INSTANCE.getTiers();
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> allBlocks.forEach((entries::accept)));
+        tiers.forEach((tierId, tier) -> {
             if (!tierId.getNamespace().equals(Torcherino.MOD_ID)) {
                 return;
             }
-            Identifier copperId = id(tierId, "copper_lantern");
-            WeatheringCopperBlocks copper = WeatheringCopperBlocks.create(
-                    copperId.getPath(),
-                    (path, factory, props) -> {
-                        Block block = factory.apply(props.setId(Torcherino.KeyofBlock(path)));
-                        TorcherinoAPI.INSTANCE.blacklistBlock(block);
-                        COPPER_BLOCKS.add(block);
-                        return Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, path), block);
-                    },
-                    props -> new CopperLanterinoBlock(props, tierId),
+            Identifier copperlanterinoId = id(tierId, "copper_lantern");
+            this.copperLanterino = WeatheringCopperBlocks.create(
+                    copperlanterinoId.getPath(),
+                    this::register,
+                    (props) -> new CopperLanterinoBlock(props, tierId),
                     (state, props) -> new WeatheringLanterinoBlock(state, props, tierId),
-                    weatherState -> copperProperties()
+                    (weatherState) -> BlockBehaviour.Properties.of()
+                                                               .mapColor(MapColor.METAL)
+                                                               .forceSolidOn()
+                                                               .strength(3.5F)
+                                                               .sound(SoundType.LANTERN)
+                                                               .lightLevel(state -> 15)
+                                                               .noOcclusion()
+                                                               .pushReaction(PushReaction.IGNORE)
+                                                               .randomTicks()
             );
-            LanterinoOxidizableRegistry.registerWeatheringSet(copper);
-            copper.forEach(block -> {
+            LanterinoOxidizableRegistry.registerWeatheringSet(copperLanterino);
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                copperLanterino.forEach(this::setRenderType);
+            }
+            copperLanterino.forEach(block -> {
                 Identifier itemId = BuiltInRegistries.BLOCK.getKey(block);
                 BlockItem item = new BlockItem(block, new Item.Properties()
                         .useBlockDescriptionPrefix()
                         .setId(Torcherino.KeyofItem(itemId.getPath())));
                 Registry.register(BuiltInRegistries.ITEM, itemId, item);
-                COPPER_ITEMS.add(item);
             });
-            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-                copper.forEach(UnofficialContent::setRenderType);
-            }
         });
-
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
-                .register(entries -> COPPER_ITEMS.forEach(entries::accept));
-
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, "copper_lantern"),
-                FabricBlockEntityTypeBuilder.create(
-                        (pos, state) -> new TorcherinoBlockEntity(CopperLanterinoBlock.copperBlockEntityType(), pos, state),
-                        COPPER_BLOCKS.toArray(new Block[0])
-                ).build(null));
-    }
-
-    private static BlockBehaviour.Properties copperProperties() {
-        return BlockBehaviour.Properties.of()
-                .mapColor(MapColor.METAL)
-                .forceSolidOn()
-                .strength(3.5F)
-                .sound(SoundType.LANTERN)
-                .lightLevel(state -> 15)
-                .noOcclusion()
-                .pushReaction(PushReaction.IGNORE)
-                .randomTicks();
+                FabricBlockEntityTypeBuilder.create((pos, state) -> new TorcherinoBlockEntity(CopperLanterinoBlock.copperBlockEntityType(), pos, state), allBlocks.toArray(new Block[0])).build(null));
     }
 
     @Environment(EnvType.CLIENT)
-    private static void setRenderType(Block block) {
+    private void setRenderType(Block block) {
         ModItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.CUTOUT);
     }
 
-    private static Identifier id(Identifier tierID, String type) {
+    private Block register(String id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties settings) {
+        Block block = (Block)factory.apply(settings.setId(Torcherino.KeyofBlock(id)));
+        TorcherinoAPI.INSTANCE.blacklistBlock(block);
+        allBlocks.add(block);
+        return Registry.register(BuiltInRegistries.BLOCK, Torcherino.KeyofBlock(id), block);
+    }
+
+    private void registerAndBlacklist(Identifier id, Block block) {
+        Registry.register(BuiltInRegistries.BLOCK, id, block);
+        TorcherinoAPI.INSTANCE.blacklistBlock(id);
+        allBlocks.add(block);
+    }
+
+    private Identifier id(Identifier tierID, String type) {
         if (tierID.getPath().equals("normal")) {
             return Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, type);
         }
         return Identifier.fromNamespaceAndPath(Torcherino.MOD_ID, tierID.getPath() + '_' + type);
-    }
-
-    private UnofficialContent() {
     }
 }
