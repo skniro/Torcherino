@@ -1,0 +1,93 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.+'
+}
+
+version = "${project.version}"
+group = group
+
+base.archivesName = "${mod_name}-neoforge-${minecraft_version}-unofficial"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+neoForge {
+    version = project.neo_version
+
+    mods {
+        torcherino_unofficial {
+            sourceSet(sourceSets.main)
+        }
+    }
+
+    runs {
+        neounofficialclient {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'torcherino_unofficial'
+        }
+        neounofficialserver {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'torcherino_unofficial'
+        }
+    }
+}
+
+def neoforgeParentJar = project(':Neoforge').tasks.named('jar')
+
+dependencies {
+    compileOnly project(path: ':Neoforge', configuration: 'parentOutput')
+    jarJar(project(':Neoforge')) {
+        transitive = false
+    }
+    runtimeOnly files(neoforgeParentJar)
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version         : neo_version, neo_version_range: neo_version_range,
+            loader_version_range: loader_version_range,
+            mod_id              : 'torcherino_unofficial', mod_name: 'Torcherino Unofficial',
+            mod_license         : mod_license, mod_version: version,
+            mod_authors         : mod_authors, mod_description: 'Copper lantern content for Torcherino.',
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes['MixinConfigs'] = 'torcherino_unofficial.mixins.json'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId "${mod_name}-neoforge-${minecraft_version}-unofficial"
+            version project.version
+            artifact jar
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        if (System.getenv("MAVEN_URL")) {
+            maven {
+                name = 'mavenLocal2'
+                url System.getenv("MAVEN_URL")
+                // Add repositories to publish to here.
+                // Notice: This block does NOT have the same function as the block in the top level.
+                // The repositories here will be used for publishing your artifact, not for
+                // retrieving dependencies.
+            }
+        }
+    }
+}
