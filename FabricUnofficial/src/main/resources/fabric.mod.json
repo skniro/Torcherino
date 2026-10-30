@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "torcherino_unofficial.TorcherinoUnofficial"
+    ],
+    "torcherinoInitializer": [
+      "torcherino_unofficial.TorcherinoUnofficial"
     ]
   },
   "mixins": [
