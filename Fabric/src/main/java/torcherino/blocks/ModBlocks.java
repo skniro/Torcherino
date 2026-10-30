@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -59,7 +60,11 @@ public final class ModBlocks {
             this.registerAndBlacklist(jackoLanterinoId, jackoLanterinoBlock);
             LanterinoBlock lanterinoBlock = new LanterinoBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).pushReaction(PushReaction.IGNORE).setId(Torcherino.KeyofBlock(lanterinoId.getPath())), tierId);
             this.registerAndBlacklist(lanterinoId, lanterinoBlock);
-
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                this.setRenderType(torcherinoBlock);
+                this.setRenderType(torcherinoWallBlock);
+                this.setRenderType(lanterinoBlock);
+            }
             StandingAndWallBlockItem torcherinoItem = new StandingAndWallBlockItem(torcherinoBlock, torcherinoWallBlock, Direction.DOWN, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(torcherinoId.getPath())));
             Registry.register(BuiltInRegistries.ITEM, torcherinoId, torcherinoItem);
             BlockItem jackoLanterinoItem = new BlockItem(jackoLanterinoBlock, new Item.Properties().useBlockDescriptionPrefix().setId(Torcherino.KeyofItem(jackoLanterinoId.getPath())));
