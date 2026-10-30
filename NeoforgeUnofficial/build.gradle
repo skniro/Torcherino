@@ -11,8 +11,6 @@ group = group
 
 base.archivesName = "${mod_name}-neoforge-${minecraft_version}-unofficial"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
-
 neoForge {
     version = project.neo_version
 
