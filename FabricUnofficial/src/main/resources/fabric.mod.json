@@ -16,7 +16,7 @@
   },
   "license": "LGPL-3.0-only",
   "entrypoints": {
-    "main": [
+    "torcherinoInitializer": [
       "torcherino_unofficial.TorcherinoUnofficial"
     ]
   },
