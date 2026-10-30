@@ -40,9 +40,14 @@ subprojects {
     
 
     tasks.withType(JavaCompile).configureEach {
-    
+
         it.options.encoding = 'UTF-8'
         it.options.release = 21
+    }
+
+    // Gradle 9 fails test tasks that have sources but discover no tests.
+    tasks.withType(Test).configureEach {
+        failOnNoDiscoveredTests = false
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The
